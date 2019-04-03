@@ -22,7 +22,7 @@ namespace CryV.Net.Client
         {
             CryVNative.Plugin = plugin;
 
-            World.SetWeather(WeatherType.Thunder);
+            World.SetWeather(WeatherType.Extrasunny);
 
             LocalPlayer.SetPosition(827.74f, 1295.68f, 364.34f);
 
@@ -38,6 +38,7 @@ namespace CryV.Net.Client
                 ThreadHelper.Run(() =>
                 {
                     Utility.Log($"There are currently {World.GetAllPeds().Count} peds!");
+                    Utility.Log($"There are currently {World.GetAllVehicles().Count} vehicles!");
                 });
             }
         }

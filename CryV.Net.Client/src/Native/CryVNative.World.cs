@@ -12,5 +12,8 @@ namespace CryV.Net.Client.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr Native_World_GetAllPeds(IntPtr plugin);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr Native_World_GetAllVehicles(IntPtr plugin);
+
     }
 }
