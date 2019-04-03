@@ -9,5 +9,8 @@ namespace CryV.Net.Client.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_World_SetWeather(IntPtr plugin, IntPtr weather);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr Native_World_GetAllPeds(IntPtr plugin);
+
     }
 }
