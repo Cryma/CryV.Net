@@ -35,7 +35,7 @@ namespace CryV.Net.Client
             {
                 await Task.Delay(TimeSpan.FromMilliseconds(500));
 
-                MainThreadQueue.Enqueue(() =>
+                ThreadHelper.Run(() =>
                 {
                     Utility.Log($"There are currently {World.GetAllPeds().Count} peds!");
                 });
@@ -44,19 +44,7 @@ namespace CryV.Net.Client
 
         public static void PluginTick()
         {
-            var actions = 0;
-
-            while (MainThreadQueue.TryDequeue(out var action))
-            {
-                actions++;
-
-                action();
-            }
-
-            if (actions != 0)
-            {
-                Utility.Log($"Completed {actions} this tick!");
-            }
+            ThreadHelper.Work();
         }
 
     }
