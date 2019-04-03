@@ -85,6 +85,21 @@ namespace CryV.Net.Client
         public static void PluginTick()
         {
             ThreadHelper.Work();
+
+            CleanupTick();
+        }
+
+        private static void CleanupTick()
+        {
+            World.SetRandomTrains(false);
+            World.SetRandomBoats(false);
+            World.SetNumberOfParkedVehicles(-1);
+            World.SetParkedVehicleDensityMultiplierThisFrame(0.0f);
+            World.SetRandomVehicleDensityMultiplierThisFrame(0.0f);
+            World.SetVehicleDensityMultiplierThisFrame(0.0f);
+            World.SetFarDrawVehicles(false);
+            World.SetAllLowPriorityVehicleGeneratorsActive(false);
+            World.DisplayDistantVehicles(false);
         }
 
     }

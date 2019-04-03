@@ -72,6 +72,51 @@ namespace CryV.Net.Client.Elements
             return vehicleList;
         }
 
+        public static void SetRandomTrains(bool enabled)
+        {
+            CryVNative.Native_World_SetRandomTrains(CryVNative.Plugin, enabled);
+        }
+
+        public static void SetRandomBoats(bool enabled)
+        {
+            CryVNative.Native_World_SetRandomBoats(CryVNative.Plugin, enabled);
+        }
+
+        public static void SetNumberOfParkedVehicles(int amount)
+        {
+            CryVNative.Native_World_SetNumberOfParkedVehicles(CryVNative.Plugin, amount);
+        }
+
+        public static void SetParkedVehicleDensityMultiplierThisFrame(float multiplier)
+        {
+            CryVNative.Native_World_SetParkedVehicleDensityMultiplierThisFrame(CryVNative.Plugin, multiplier);
+        }
+
+        public static void SetRandomVehicleDensityMultiplierThisFrame(float multiplier)
+        {
+            CryVNative.Native_World_SetRandomVehicleDensityMultiplierThisFrame(CryVNative.Plugin, multiplier);
+        }
+
+        public static void SetVehicleDensityMultiplierThisFrame(float multiplier)
+        {
+            CryVNative.Native_World_SetVehicleDensityMultiplierThisFrame(CryVNative.Plugin, multiplier);
+        }
+
+        public static void SetFarDrawVehicles(bool enabled)
+        {
+            CryVNative.Native_World_SetFarDrawVehicles(CryVNative.Plugin, enabled);
+        }
+
+        public static void SetAllLowPriorityVehicleGeneratorsActive(bool active)
+        {
+            CryVNative.Native_World_SetAllLowPriorityVehicleGeneratorsActive(CryVNative.Plugin, active);
+        }
+
+        public static void DisplayDistantVehicles(bool enabled)
+        {
+            CryVNative.Native_World_DisplayDistantVehicles(CryVNative.Plugin, enabled);
+        }
+
         private static string ConvertWeatherTypeToName(WeatherType weatherType)
         {
             if(Enum.IsDefined(typeof(WeatherType), weatherType) == false)
