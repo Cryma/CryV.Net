@@ -100,6 +100,11 @@ namespace CryV.Net.Client
             World.SetFarDrawVehicles(false);
             World.SetAllLowPriorityVehicleGeneratorsActive(false);
             World.DisplayDistantVehicles(false);
+
+            World.SetCreateRandomCops(false);
+            World.CanCreateRandomPed(false);
+            World.SetPedDensityMultiplierThisFrame(0.0f);
+            World.SetScenarioPedDensityMultiplierThisFrame(0.0f, 0.0f);
         }
 
     }

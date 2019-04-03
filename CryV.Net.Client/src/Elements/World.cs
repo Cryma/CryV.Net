@@ -117,6 +117,26 @@ namespace CryV.Net.Client.Elements
             CryVNative.Native_World_DisplayDistantVehicles(CryVNative.Plugin, enabled);
         }
 
+        public static void SetCreateRandomCops(bool enabled)
+        {
+            CryVNative.Native_World_SetCreateRandomCops(CryVNative.Plugin, enabled);
+        }
+
+        public static void CanCreateRandomPed(bool p1)
+        {
+            CryVNative.Native_World_CanCreateRandomPed(CryVNative.Plugin, p1);
+        }
+
+        public static void SetPedDensityMultiplierThisFrame(float multiplier)
+        {
+            CryVNative.Native_World_SetPedDensityMultiplierThisFrame(CryVNative.Plugin, multiplier);
+        }
+
+        public static void SetScenarioPedDensityMultiplierThisFrame(float p1, float p2)
+        {
+            CryVNative.Native_World_SetScenarioPedDensityMultiplierThisFrame(CryVNative.Plugin, p1, p2);
+        }
+
         private static string ConvertWeatherTypeToName(WeatherType weatherType)
         {
             if(Enum.IsDefined(typeof(WeatherType), weatherType) == false)

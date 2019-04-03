@@ -44,5 +44,19 @@ namespace CryV.Net.Client.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr Native_World_DisplayDistantVehicles(IntPtr plugin, bool enabled);
 
+        //
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr Native_World_SetCreateRandomCops(IntPtr plugin, bool enabled);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr Native_World_CanCreateRandomPed(IntPtr plugin, bool p1);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr Native_World_SetPedDensityMultiplierThisFrame(IntPtr plugin, float multiplier);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr Native_World_SetScenarioPedDensityMultiplierThisFrame(IntPtr plugin, float p1, float p2);
+
     }
 }
