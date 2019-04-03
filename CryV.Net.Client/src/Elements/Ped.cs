@@ -1,18 +1,10 @@
 ﻿namespace CryV.Net.Client.Elements
 {
-    public class Ped
+    public class Ped : Entity
     {
 
-        private readonly int _handle;
-
-        public Ped(int handle)
+        public Ped(int handle) : base(handle)
         {
-            _handle = handle;
-        }
-
-        public static implicit operator int(Ped ped)
-        {
-            return ped._handle;
         }
 
     }

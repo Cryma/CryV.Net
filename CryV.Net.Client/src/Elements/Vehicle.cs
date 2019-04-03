@@ -1,18 +1,9 @@
 ﻿namespace CryV.Net.Client.Elements
 {
-    public class Vehicle
+    public class Vehicle : Entity
     {
-
-        private readonly int _handle;
-
-        public Vehicle(int handle)
+        public Vehicle(int handle) : base(handle)
         {
-            _handle = handle;
-        }
-
-        public static implicit operator int(Vehicle vehicle)
-        {
-            return vehicle._handle;
         }
 
     }
