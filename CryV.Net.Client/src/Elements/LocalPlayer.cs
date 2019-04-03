@@ -23,5 +23,35 @@ namespace CryV.Net.Client.Elements
             CryVNative.Native_Entity_SetEntityPosition(CryVNative.Plugin, PedId(), x, y, z);
         }
 
+        public static void _0xD2B315B6689D537D(bool p1)
+        {
+            CryVNative.Native_LocalPlayer__0xD2B315B6689D537D(CryVNative.Plugin, PlayerId(), p1);
+        }
+
+        public static void SetAutoGiveParachuteWhenEnterPlane(bool enabled)
+        {
+            CryVNative.Native_LocalPlayer_SetAutoGiveParachuteWhenEnterPlane(CryVNative.Plugin, PlayerId(), enabled);
+        }
+
+        public static void SetHealthRechargeMultiplier(float multiplier)
+        {
+            CryVNative.Native_LocalPlayer_SetPlayerHealthRechargeMultiplier(CryVNative.Plugin, PlayerId(), multiplier);
+        }
+
+        public static void SetWantedLevel(int wantedLevel, bool disableNoMission)
+        {
+            CryVNative.Native_LocalPlayer_SetPlayerWantedLevel(CryVNative.Plugin, PlayerId(), wantedLevel, disableNoMission);
+        }
+
+        public static void SetWantedLevelNow(bool p1)
+        {
+            CryVNative.Native_LocalPlayer_SetPlayerWantedLevelNow(CryVNative.Plugin, PlayerId(), p1);
+        }
+
+        public static void SetMaxWantedLevel(int maxWantedLevel)
+        {
+            CryVNative.Native_LocalPlayer_SetMaxWantedLevel(CryVNative.Plugin, maxWantedLevel);
+        }
+
     }
 }

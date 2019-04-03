@@ -105,6 +105,14 @@ namespace CryV.Net.Client
             World.CanCreateRandomPed(false);
             World.SetPedDensityMultiplierThisFrame(0.0f);
             World.SetScenarioPedDensityMultiplierThisFrame(0.0f, 0.0f);
+
+            LocalPlayer._0xD2B315B6689D537D(false);
+            LocalPlayer.SetAutoGiveParachuteWhenEnterPlane(false);
+            LocalPlayer.SetHealthRechargeMultiplier(0.0f);
+
+            LocalPlayer.SetWantedLevel(0, false);
+            LocalPlayer.SetWantedLevelNow(false);
+            LocalPlayer.SetMaxWantedLevel(0);
         }
 
     }
