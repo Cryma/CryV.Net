@@ -37,8 +37,47 @@ namespace CryV.Net.Client
 
                 ThreadHelper.Run(() =>
                 {
-                    Utility.Log($"There are currently {World.GetAllPeds().Count} peds!");
-                    Utility.Log($"There are currently {World.GetAllVehicles().Count} vehicles!");
+                    var deletedPeds = 0;
+                    foreach (var ped in World.GetAllPeds())
+                    {
+                        if (ped.DoesExist() == false)
+                        {
+                            continue;
+                        }
+
+                        ped.SetAsNoLongerNeeded();
+                        ped.SetAsMissionEntity();
+
+                        ped.Delete();
+
+                        deletedPeds++;
+                    }
+
+                    if (deletedPeds != 0)
+                    {
+                        Utility.Log($"Deleted {deletedPeds} peds!");
+                    }
+
+                    var deletedVehicles = 0;
+                    foreach (var vehicle in World.GetAllVehicles())
+                    {
+                        if (vehicle.DoesExist() == false)
+                        {
+                            continue;
+                        }
+
+                        vehicle.SetAsNoLongerNeeded();
+                        vehicle.SetAsMissionEntity();
+
+                        vehicle.Delete();
+
+                        deletedVehicles++;
+                    }
+
+                    if (deletedVehicles != 0)
+                    {
+                        Utility.Log($"Deleted {deletedVehicles} vehicles!");
+                    }
                 });
             }
         }
