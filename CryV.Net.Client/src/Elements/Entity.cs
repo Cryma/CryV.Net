@@ -5,7 +5,7 @@ namespace CryV.Net.Client.Elements
     public abstract class Entity
     {
 
-        public int Handle { get; }
+        public int Handle { get; protected set; }
 
         protected Entity(int handle)
         {
@@ -14,7 +14,12 @@ namespace CryV.Net.Client.Elements
 
         public bool DoesExist()
         {
-            return CryVNative.Native_Entity_DoesEntityExist(CryVNative.Plugin, Handle);
+            return IsValid() && CryVNative.Native_Entity_DoesEntityExist(CryVNative.Plugin, Handle);
+        }
+
+        public bool IsValid()
+        {
+            return Handle != 0;
         }
 
         public void SetAsNoLongerNeeded()
@@ -25,6 +30,13 @@ namespace CryV.Net.Client.Elements
         public void SetAsMissionEntity(bool p1 = false, bool p2 = true)
         {
             CryVNative.Native_Entity_SetEntityAsMissionEntity(CryVNative.Plugin, Handle, p1, p2);
+        }
+
+        public void Delete()
+        {
+            CryVNative.Native_Entity_DeleteEntity(CryVNative.Plugin, Handle);
+
+            Handle = 0;
         }
 
     }

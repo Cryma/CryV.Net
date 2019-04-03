@@ -20,5 +20,8 @@ namespace CryV.Net.Client.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Entity_SetEntityAsMissionEntity(IntPtr plugin, int entityHandle, bool p1, bool p2);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Entity_DeleteEntity(IntPtr plugin, int entityHandle);
+
     }
 }
