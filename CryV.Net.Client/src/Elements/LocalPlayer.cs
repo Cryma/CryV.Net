@@ -10,17 +10,17 @@ namespace CryV.Net.Client.Elements
 
         public static int PlayerId()
         {
-            return CryVNative.Native_LocalPlayer_PlayerId(PluginWrapper.Plugin);
+            return CryVNative.Native_LocalPlayer_PlayerId(CryVNative.Plugin);
         }
 
         public static int PedId()
         {
-            return CryVNative.Native_LocalPlayer_PedId(PluginWrapper.Plugin);
+            return CryVNative.Native_LocalPlayer_PedId(CryVNative.Plugin);
         }
 
         public static void SetPosition(float x, float y, float z)
         {
-            CryVNative.Native_Entity_SetEntityPosition(PluginWrapper.Plugin, PedId(), x, y, z);
+            CryVNative.Native_Entity_SetEntityPosition(CryVNative.Plugin, PedId(), x, y, z);
         }
 
     }

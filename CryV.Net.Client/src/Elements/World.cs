@@ -21,7 +21,7 @@ namespace CryV.Net.Client.Elements
             {
                 var weatherPointer = converter.StringToPointer(weatherName);
 
-                CryVNative.Native_World_SetWeather(PluginWrapper.Plugin, weatherPointer);
+                CryVNative.Native_World_SetWeather(CryVNative.Plugin, weatherPointer);
             }
         }
 

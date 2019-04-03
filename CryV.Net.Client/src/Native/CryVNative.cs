@@ -6,6 +6,8 @@ namespace CryV.Net.Client.Native
     public static partial class CryVNative
     {
 
+        public static IntPtr Plugin { get; set; }
+
         private const string _dllLocation = @"C:\Development\CryV\bin\Release-windows-x86_64\CryV-Launcher\CryV-Native";
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]

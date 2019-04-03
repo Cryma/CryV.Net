@@ -9,15 +9,13 @@ namespace CryV.Net.Client
     public static class PluginWrapper
     {
 
-        public static IntPtr Plugin;
-
         public static void Main()
         {
         }
 
         public static void PluginMain(IntPtr plugin)
         {
-            Plugin = plugin;
+            CryVNative.Plugin = plugin;
 
             World.SetWeather(WeatherType.Thunder);
 
