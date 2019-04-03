@@ -24,7 +24,7 @@ namespace CryV.Net.Client
 
             World.SetWeather(WeatherType.Extrasunny);
 
-            LocalPlayer.SetPosition(827.74f, 1295.68f, 364.34f);
+            LocalPlayer.SetPosition(412.4f, -976.71f, 29.43f);
 
             Task.Run(Cleanup);
         }
