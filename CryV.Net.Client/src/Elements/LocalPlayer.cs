@@ -8,12 +8,15 @@ namespace CryV.Net.Client.Elements
     public static class LocalPlayer
     {
 
+        // TODO: Cache ped or pedId
+        public static Ped Character => new Ped(PedId());
+
         public static int PlayerId()
         {
             return CryVNative.Native_LocalPlayer_PlayerId(CryVNative.Plugin);
         }
 
-        public static int PedId()
+        private static int PedId()
         {
             return CryVNative.Native_LocalPlayer_PedId(CryVNative.Plugin);
         }
@@ -64,11 +67,11 @@ namespace CryV.Net.Client.Elements
                 Utility.Wait(0);
             }
 
-            CryVNative.Native_LocalPLayer_SetPlayerModel(CryVNative.Plugin, PlayerId(), modelHash);
+            CryVNative.Native_LocalPlayer_SetPlayerModel(CryVNative.Plugin, PlayerId(), modelHash);
 
             Utility.Wait(0);
 
-            CryVNative.Native_LocalPLayer_SetPedDefaultComponentVariation(CryVNative.Plugin, PedId());
+            Character.SetPedDefaultComponentVariation();
 
             Utility.Wait(100);
 

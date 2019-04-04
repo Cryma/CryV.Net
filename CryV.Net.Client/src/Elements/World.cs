@@ -42,7 +42,7 @@ namespace CryV.Net.Client.Elements
             var pedList = new List<Ped>();
             foreach (var ped in peds)
             {
-                if (includeSelf && ped == LocalPlayer.PedId())
+                if (includeSelf && ped == LocalPlayer.Character.Handle)
                 {
                     continue;
                 }
