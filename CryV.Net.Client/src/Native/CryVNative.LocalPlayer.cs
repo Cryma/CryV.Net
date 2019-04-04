@@ -36,5 +36,10 @@ namespace CryV.Net.Client.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern int Native_LocalPlayer_SetMaxWantedLevel(IntPtr plugin, int maxWantedLevel);
 
+        //
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern int Native_LocalPLayer_SetPlayerModel(IntPtr plugin, int playerId, ulong model);
+
     }
 }

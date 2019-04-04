@@ -29,13 +29,17 @@ namespace CryV.Net.Client
             World.SetWeather(WeatherType.Extrasunny);
 
             LocalPlayer.SetPosition(412.4f, -976.71f, 29.43f);
+            LocalPlayer.SetModel("player_zero");
 
             Task.Run(Cleanup.ClearEntities);
         }
 
         public static void PluginKeyboardCallback(ConsoleKey key, char character, bool isPressed)
         {
-
+            if (isPressed && key == ConsoleKey.F3)
+            {
+                LocalPlayer.SetModel("mp_m_freemode_01");
+            }
         }
 
         public static void PluginTick()

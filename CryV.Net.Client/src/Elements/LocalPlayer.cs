@@ -53,5 +53,22 @@ namespace CryV.Net.Client.Elements
             CryVNative.Native_LocalPlayer_SetMaxWantedLevel(CryVNative.Plugin, maxWantedLevel);
         }
 
+        public static void SetModel(string model)
+        {
+            var modelHash = Utility.GetHashKey(model);
+
+            CryVNative.Native_Gameplay_RequestModel(CryVNative.Plugin, modelHash);
+            while (CryVNative.Native_Gameplay_HasModelLoaded(CryVNative.Plugin, modelHash) == false)
+            {
+                Utility.Wait(0);
+            }
+
+            CryVNative.Native_LocalPLayer_SetPlayerModel(CryVNative.Plugin, PlayerId(), modelHash);
+
+            Utility.Wait(100);
+
+            CryVNative.Native_Gameplay_SetModelAsNoLongerNeeded(CryVNative.Plugin, modelHash);
+        }
+
     }
 }
