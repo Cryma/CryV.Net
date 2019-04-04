@@ -60,10 +60,15 @@ namespace CryV.Net.Client.Elements
             CryVNative.Native_Gameplay_RequestModel(CryVNative.Plugin, modelHash);
             while (CryVNative.Native_Gameplay_HasModelLoaded(CryVNative.Plugin, modelHash) == false)
             {
+                Utility.Log("waiting...");
                 Utility.Wait(0);
             }
 
             CryVNative.Native_LocalPLayer_SetPlayerModel(CryVNative.Plugin, PlayerId(), modelHash);
+
+            Utility.Wait(0);
+
+            CryVNative.Native_LocalPLayer_SetPedDefaultComponentVariation(CryVNative.Plugin, PedId());
 
             Utility.Wait(100);
 

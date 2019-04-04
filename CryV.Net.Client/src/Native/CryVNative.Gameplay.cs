@@ -24,5 +24,12 @@ namespace CryV.Net.Client.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern ulong Native_Gameplay_GetHashKey(IntPtr plugin, IntPtr model);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Gameplay_UseFreemodeMapBehaviour(IntPtr plugin, bool enabled);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Gameplay_LoadMpDlcMaps(IntPtr plugin);
+
+
     }
 }

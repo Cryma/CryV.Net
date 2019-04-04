@@ -24,12 +24,15 @@ namespace CryV.Net.Client
         {
             CryVNative.Plugin = plugin;
 
+            Gameplay.UseFreemodeMapBehaviour(true);
+            //Gameplay.LoadMpDlcMaps();
+
             Cleanup.Initial();
             
             World.SetWeather(WeatherType.Extrasunny);
 
             LocalPlayer.SetPosition(412.4f, -976.71f, 29.43f);
-            LocalPlayer.SetModel("player_zero");
+            LocalPlayer.SetModel("mp_m_freemode_01");
 
             Task.Run(Cleanup.ClearEntities);
         }

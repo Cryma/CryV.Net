@@ -15,5 +15,15 @@ namespace CryV.Net.Client.Elements
             }
         }
 
+        public static void UseFreemodeMapBehaviour(bool enabled)
+        {
+            CryVNative.Native_Gameplay_UseFreemodeMapBehaviour(CryVNative.Plugin, enabled);
+        }
+
+        public static void LoadMpDlcMaps()
+        {
+            CryVNative.Native_Gameplay_LoadMpDlcMaps(CryVNative.Plugin);
+        }
+
     }
 }

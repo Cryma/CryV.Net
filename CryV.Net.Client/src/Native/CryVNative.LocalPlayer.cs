@@ -39,7 +39,9 @@ namespace CryV.Net.Client.Native
         //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
-        public static extern int Native_LocalPLayer_SetPlayerModel(IntPtr plugin, int playerId, ulong model);
+        public static extern void Native_LocalPLayer_SetPlayerModel(IntPtr plugin, int playerId, ulong model);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern int Native_LocalPLayer_SetPedDefaultComponentVariation(IntPtr plugin, int pedId);
     }
 }
