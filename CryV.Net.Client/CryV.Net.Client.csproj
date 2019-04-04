@@ -11,4 +11,8 @@
     <Exec Command="XCOPY &quot;$(TargetDir)*&quot; &quot;E:\Program Files\Rockstar Games\Grand Theft Auto V\dotnet\plugins\&quot; /S /Y" />
   </Target>
 
+  <ItemGroup>
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+  </ItemGroup>
+
 </Project>
