@@ -24,69 +24,18 @@ namespace CryV.Net.Client
         {
             CryVNative.Plugin = plugin;
 
+            Cleanup.Initial();
+            
             World.SetWeather(WeatherType.Extrasunny);
 
             LocalPlayer.SetPosition(412.4f, -976.71f, 29.43f);
 
-            Task.Run(Cleanup);
+            Task.Run(Cleanup.ClearEntities);
         }
 
         public static void PluginKeyboardCallback(ConsoleKey key, char character, bool isPressed)
         {
 
-        }
-
-        private static async Task Cleanup()
-        {
-            while (true)
-            {
-                await Task.Delay(TimeSpan.FromMilliseconds(500));
-
-                ThreadHelper.Run(() =>
-                {
-                    var deletedPeds = 0;
-                    foreach (var ped in World.GetAllPeds())
-                    {
-                        if (ped.DoesExist() == false)
-                        {
-                            continue;
-                        }
-
-                        ped.SetAsNoLongerNeeded();
-                        ped.SetAsMissionEntity();
-
-                        ped.Delete();
-
-                        deletedPeds++;
-                    }
-
-                    if (deletedPeds != 0)
-                    {
-                        Utility.Log($"Deleted {deletedPeds} peds!");
-                    }
-
-                    var deletedVehicles = 0;
-                    foreach (var vehicle in World.GetAllVehicles())
-                    {
-                        if (vehicle.DoesExist() == false)
-                        {
-                            continue;
-                        }
-
-                        vehicle.SetAsNoLongerNeeded();
-                        vehicle.SetAsMissionEntity();
-
-                        vehicle.Delete();
-
-                        deletedVehicles++;
-                    }
-
-                    if (deletedVehicles != 0)
-                    {
-                        Utility.Log($"Deleted {deletedVehicles} vehicles!");
-                    }
-                });
-            }
         }
 
         public static void PluginTick()
@@ -95,33 +44,7 @@ namespace CryV.Net.Client
 
             ThreadHelper.Work();
 
-            CleanupTick();
-        }
-
-        private static void CleanupTick()
-        {
-            World.SetRandomTrains(false);
-            World.SetRandomBoats(false);
-            World.SetNumberOfParkedVehicles(-1);
-            World.SetParkedVehicleDensityMultiplierThisFrame(0.0f);
-            World.SetRandomVehicleDensityMultiplierThisFrame(0.0f);
-            World.SetVehicleDensityMultiplierThisFrame(0.0f);
-            World.SetFarDrawVehicles(false);
-            World.SetAllLowPriorityVehicleGeneratorsActive(false);
-            World.DisplayDistantVehicles(false);
-
-            World.SetCreateRandomCops(false);
-            World.CanCreateRandomPed(false);
-            World.SetPedDensityMultiplierThisFrame(0.0f);
-            World.SetScenarioPedDensityMultiplierThisFrame(0.0f, 0.0f);
-
-            LocalPlayer._0xD2B315B6689D537D(false);
-            LocalPlayer.SetAutoGiveParachuteWhenEnterPlane(false);
-            LocalPlayer.SetHealthRechargeMultiplier(0.0f);
-
-            LocalPlayer.SetWantedLevel(0, false);
-            LocalPlayer.SetWantedLevelNow(false);
-            LocalPlayer.SetMaxWantedLevel(0);
+            Cleanup.Tick();
         }
 
     }
