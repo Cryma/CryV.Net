@@ -31,6 +31,11 @@ namespace CryV.Net.Client
             Task.Run(Cleanup);
         }
 
+        public static void PluginKeyboardCallback(ConsoleKey key, char character, bool isPressed)
+        {
+
+        }
+
         private static async Task Cleanup()
         {
             while (true)
