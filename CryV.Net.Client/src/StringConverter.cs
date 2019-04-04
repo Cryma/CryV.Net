@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using CryV.Net.Client.Elements;
 
 namespace CryV.Net.Client
 {
@@ -29,7 +30,7 @@ namespace CryV.Net.Client
 
             if (freePointer)
             {
-                CryVNative.Native_Utility_FreeArray(pointer);
+                Utility.FreeArray(pointer);
             }
 
             return Encoding.UTF8.GetString(buffer);

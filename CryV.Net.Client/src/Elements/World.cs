@@ -2,9 +2,7 @@
 using CryV.Net.Client.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace CryV.Net.Client.Elements
 {
@@ -37,7 +35,7 @@ namespace CryV.Net.Client.Elements
 
             Marshal.Copy(start, peds, 0, arrayLength);
 
-            CryVNative.Native_Utility_FreeArray(pedsPointer);
+            Utility.FreeArray(pedsPointer);
 
             var pedList = new List<Ped>();
             foreach (var ped in peds)
@@ -62,6 +60,8 @@ namespace CryV.Net.Client.Elements
             var vehicles = new int[arrayLength];
 
             Marshal.Copy(start, vehicles, 0, arrayLength);
+
+            Utility.FreeArray(vehiclesPointer);
 
             var vehicleList = new List<Vehicle>();
             foreach (var vehicle in vehicles)

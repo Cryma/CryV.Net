@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using CryV.Net.Client.Native;
 
 namespace CryV.Net.Client.Elements
@@ -29,6 +30,16 @@ namespace CryV.Net.Client.Elements
 
                 return CryVNative.Native_Gameplay_GetHashKey(CryVNative.Plugin, namePointer);
             }
+        }
+
+        public static void FreeObject(IntPtr pointer)
+        {
+            CryVNative.Native_Utility_FreeObject(pointer);
+        }
+
+        public static void FreeArray(IntPtr array)
+        {
+            CryVNative.Native_Utility_FreeArray(array);
         }
 
         public static uint Joaat(string data)
