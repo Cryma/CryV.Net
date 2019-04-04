@@ -60,10 +60,9 @@ namespace CryV.Net.Client.Elements
         {
             var modelHash = Utility.GetHashKey(model);
 
-            CryVNative.Native_Gameplay_RequestModel(CryVNative.Plugin, modelHash);
-            while (CryVNative.Native_Gameplay_HasModelLoaded(CryVNative.Plugin, modelHash) == false)
+            Streaming.RequestModel(modelHash);
+            while (Streaming.HasModelLoaded(modelHash) == false)
             {
-                Utility.Log("waiting...");
                 Utility.Wait(0);
             }
 
@@ -75,7 +74,7 @@ namespace CryV.Net.Client.Elements
 
             Utility.Wait(100);
 
-            CryVNative.Native_Gameplay_SetModelAsNoLongerNeeded(CryVNative.Plugin, modelHash);
+            Streaming.SetModelAsNoLongerNeeded(modelHash);
         }
 
     }

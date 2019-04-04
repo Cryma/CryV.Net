@@ -25,7 +25,7 @@ namespace CryV.Net.Client
             CryVNative.Plugin = plugin;
 
             Gameplay.UseFreemodeMapBehaviour(true);
-            //Gameplay.LoadMpDlcMaps();
+            Gameplay.LoadMpDlcMaps();
 
             Cleanup.Initial();
             
@@ -41,7 +41,7 @@ namespace CryV.Net.Client
         {
             if (isPressed && key == ConsoleKey.F3)
             {
-                LocalPlayer.SetModel("mp_m_freemode_01");
+                var ped = new Ped("mp_m_freemode_01", new Vector3(412.4f, -976.71f, 29.43f), 0f);
             }
         }
 
