@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CryV.Net.Client.Elements;
+using CryV.Net.Client.Helpers;
 
 namespace CryV.Net.Client
 {
@@ -779,7 +780,7 @@ namespace CryV.Net.Client
                     var deletedPeds = 0;
                     foreach (var ped in World.GetAllPeds())
                     {
-                        if (ped.DoesExist() == false)
+                        if (ped.DoesExist() == false || EntityPool.ContainsEntity(ped.Handle))
                         {
                             continue;
                         }
@@ -800,7 +801,7 @@ namespace CryV.Net.Client
                     var deletedVehicles = 0;
                     foreach (var vehicle in World.GetAllVehicles())
                     {
-                        if (vehicle.DoesExist() == false)
+                        if (vehicle.DoesExist() == false || EntityPool.ContainsEntity(vehicle.Handle))
                         {
                             continue;
                         }
