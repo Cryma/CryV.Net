@@ -1,4 +1,5 @@
-﻿using CryV.Net.Client.Native;
+﻿using CryV.Net.Client.Helpers;
+using CryV.Net.Client.Native;
 
 namespace CryV.Net.Client.Elements
 {
@@ -33,6 +34,16 @@ namespace CryV.Net.Client.Elements
         public static void DisableControlAction(int inputGroup, int control, bool disable)
         {
             CryVNative.Native_Gameplay_DisableControlAction(CryVNative.Plugin, inputGroup, control, disable);
+        }
+
+        public static void DestroyAllCams(bool thisScriptCheck)
+        {
+            CryVNative.Native_Gameplay_DestroyAllCams(CryVNative.Plugin, thisScriptCheck);
+        }
+
+        public static void SetNoLoadingScreen(bool toggle)
+        {
+            CryVNative.Native_Gameplay_SetNoLoadingScreen(CryVNative.Plugin, toggle);
         }
 
     }

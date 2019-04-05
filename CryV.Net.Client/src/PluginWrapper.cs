@@ -27,6 +27,9 @@ namespace CryV.Net.Client
         {
             CryVNative.Plugin = plugin;
 
+            Gameplay.DestroyAllCams(true);
+            Gameplay.SetNoLoadingScreen(true);
+
             Gameplay.UseFreemodeMapBehaviour(true);
             Gameplay.LoadMpDlcMaps();
 
@@ -59,6 +62,8 @@ namespace CryV.Net.Client
             ThreadHelper.Work();
 
             Cleanup.Tick();
+
+            Utility.Log("Position: " + LocalPlayer.Character.Position);
 
             _console.Update();
         }

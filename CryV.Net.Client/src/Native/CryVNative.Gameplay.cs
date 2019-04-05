@@ -38,5 +38,14 @@ namespace CryV.Net.Client.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Gameplay_DisableControlAction(IntPtr plugin, int inputGroup, int control, bool disable);
 
+        //
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Gameplay_DestroyAllCams(IntPtr plugin, bool thisScriptCheck);
+
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Gameplay_SetNoLoadingScreen(IntPtr plugin, bool toggle);
+
     }
 }

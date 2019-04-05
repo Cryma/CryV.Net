@@ -3,6 +3,7 @@ using CryV.Net.Client.Enums;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using CryV.Net.Client.Helpers;
 
 namespace CryV.Net.Client.Elements
 {

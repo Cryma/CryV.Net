@@ -1,4 +1,6 @@
-﻿using CryV.Net.Client.Native;
+﻿using System.Numerics;
+using CryV.Net.Client.Helpers;
+using CryV.Net.Client.Native;
 
 namespace CryV.Net.Client.Elements
 {
@@ -6,6 +8,11 @@ namespace CryV.Net.Client.Elements
     {
 
         public int Handle { get; protected set; }
+
+        public Vector3 Position
+        {
+            get { return StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetEntityPosition(CryVNative.Plugin, Handle)); }
+        }
 
         protected Entity(int handle)
         {

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using CryV.Net.Client.Elements;
 
-namespace CryV.Net.Client
+namespace CryV.Net.Client.Helpers
 {
     internal class StringConverter : IDisposable
     {

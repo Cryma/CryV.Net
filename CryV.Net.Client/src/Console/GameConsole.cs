@@ -7,6 +7,7 @@ using System.Net.Mail;
 using System.Numerics;
 using CryV.Net.Client.Elements;
 using CryV.Net.Client.Enums;
+using CryV.Net.Client.Helpers;
 using CryV.Net.Client.Native;
 
 namespace CryV.Net.Client.Console

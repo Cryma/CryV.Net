@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using CryV.Net.Client.Helpers;
 using CryV.Net.Client.Native;
 
 namespace CryV.Net.Client.Elements
