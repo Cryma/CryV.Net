@@ -32,7 +32,7 @@ namespace CryV.Net.Client
             Gameplay.SetNoLoadingScreen(true);
 
             Gameplay.UseFreemodeMapBehaviour(true);
-            Gameplay.LoadMpDlcMaps();
+            //Gameplay.LoadMpDlcMaps();
 
             Cleanup.Initial();
             
