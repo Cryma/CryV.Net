@@ -63,8 +63,6 @@ namespace CryV.Net.Client
 
             Cleanup.Tick();
 
-            Utility.Log("Position: " + LocalPlayer.Character.Position);
-
             _console.Update();
         }
 
