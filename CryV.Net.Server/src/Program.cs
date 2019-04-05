@@ -15,9 +15,11 @@ namespace CryV.Net.Server
 
             Console.WriteLine("Started CryV.Net.Server");
 
-            while (Console.ReadLine() != "quit")
+            while (true)
             {
                 await Task.Delay(1);
+
+                gameServer.Tick();
             }
 
             Console.WriteLine("Shutting down CryV.Net.Server");

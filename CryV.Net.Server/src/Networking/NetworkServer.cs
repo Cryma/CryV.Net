@@ -26,7 +26,7 @@ namespace CryV.Net.Server.Networking
 
         private void OnConnectionRequest(ConnectionRequest request)
         {
-            if (_netManager.PeersCount > 10)
+            if (_netManager.PeersCount > _maxPlayers)
             {
                 request.Reject();
 
