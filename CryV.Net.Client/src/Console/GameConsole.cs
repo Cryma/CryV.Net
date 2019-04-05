@@ -145,7 +145,9 @@ namespace CryV.Net.Client.Console
                     return;
                 }
 
-                _input = _input.Substring(_cursorIndex, 1);
+                _input = _input.Remove(_cursorIndex, 1);
+
+                return;
             }
 
             if (key == ConsoleKey.End)
