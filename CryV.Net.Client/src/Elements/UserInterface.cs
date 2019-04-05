@@ -49,5 +49,17 @@ namespace CryV.Net.Client.Elements
             }
         }
 
+        public static void DrawRect(Vector2 position, Vector2 size, Color color)
+        {
+            CryVNative.Native_UserInterface_DrawRect(CryVNative.Plugin, position.X, position.Y, size.X, size.Y, color.R, color.G, color.B, color.A);
+        }
+
+        public static void GetScreenResolution(out int x, out int y)
+        {
+            x = y = 0;
+
+            CryVNative.Native_UserInterface_GetScreenResolution(CryVNative.Plugin, ref x, ref y);
+        }
+
     }
 }
