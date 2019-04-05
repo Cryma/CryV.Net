@@ -41,6 +41,8 @@ namespace CryV.Net.Client.Console
         {
             RegisterCommand("output", CommandOutputText);
             RegisterCommand("clear", CommandClear);
+            RegisterCommand("setskin", CommandSetSkin);
+            RegisterCommand("setweather", CommandSetWeather);
         }
 
         private void RegisterCommand(string commandName, CommandDelegate action)

@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using CryV.Net.Client.Elements;
+using CryV.Net.Client.Enums;
 
 namespace CryV.Net.Client.Console
 {
@@ -23,6 +26,40 @@ namespace CryV.Net.Client.Console
             {
                 _output.Clear();
             }
+        }
+
+        private void CommandSetSkin(GameConsole gameConsole, params string[] arguments)
+        {
+            if (arguments.Length == 0)
+            {
+                PrintLine("Please specify a skin name.");
+
+                return;
+            }
+
+            var skinName = arguments[0];
+
+            LocalPlayer.SetModel(skinName);
+        }
+
+        private void CommandSetWeather(GameConsole gameConsole, params string[] arguments)
+        {
+            if (arguments.Length == 0)
+            {
+                PrintLine("Please specify a weather name.");
+
+                return;
+            }
+
+            var weatherName = arguments[0];
+            if (Enum.TryParse(weatherName, out WeatherType weatherType) == false)
+            {
+                PrintLine("Your specified weather name is invalid.");
+
+                return;
+            }
+
+            World.SetWeather(weatherType);
         }
 
     }
