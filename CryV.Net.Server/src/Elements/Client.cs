@@ -1,5 +1,7 @@
 ﻿using System.Numerics;
+using CryV.Net.Shared.Payloads;
 using LiteNetLib;
+using LiteNetLib.Utils;
 
 namespace CryV.Net.Server.Elements
 {
@@ -16,6 +18,14 @@ namespace CryV.Net.Server.Elements
         {
             _peer = peer;
             Position = position;
+        }
+
+        public void Send(IPayload payload)
+        {
+            var writer = new NetDataWriter();
+            payload.Write(writer);
+
+            _peer.Send(writer, DeliveryMethod.ReliableOrdered);
         }
 
     }

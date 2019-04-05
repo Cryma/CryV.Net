@@ -17,7 +17,7 @@ namespace CryV.Net.Server.Networking
         private readonly GameServer _gameServer;
         private readonly int _maxPlayers;
 
-        private static Vector3 _spawnPosition = new Vector3(412.4f, -976.71f, 29.43f);
+        private static readonly Vector3 _spawnPosition = new Vector3(412.4f, -976.71f, 29.43f);
 
         public NetworkServer(GameServer gameServer, int maxPlayers = 32)
         {
@@ -46,20 +46,6 @@ namespace CryV.Net.Server.Networking
         private void OnPeerConnected(NetPeer peer)
         {
             _gameServer.AddClient(new Client(peer, _spawnPosition));
-
-            var writer = new NetDataWriter();
-            writer.Put((byte) 1);
-
-            var clientPositions = new List<Vector3>();
-            foreach (var client in _gameServer.GetClients())
-            {
-                clientPositions.Add(client.Position);
-            }
-
-            var bootstrapPacket = new Bootstrap(peer.Id, _spawnPosition, clientPositions);
-            bootstrapPacket.Write(writer);
-
-            peer.Send(writer, DeliveryMethod.ReliableOrdered);
 
             Console.WriteLine($"Peer connected: {peer.Id} ({peer.EndPoint})");
         }

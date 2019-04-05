@@ -27,14 +27,14 @@ namespace CryV.Net.Client.Networking
         {
             if (reader.GetByte() == 1)
             {
-                var bootstrapPacket = new Bootstrap();
+                var bootstrapPacket = new BootstrapPayload();
                 bootstrapPacket.Read(reader);
 
                 LocalPlayer.Character.Position = bootstrapPacket.StartPosition;
 
                 foreach (var player in bootstrapPacket.Players)
                 {
-                    var ped = new Ped("mp_m_freemode_01", player, 0.0f);
+                    var ped = new Ped("mp_m_freemode_01", player.Position, player.Heading);
                 }
             }
         }
