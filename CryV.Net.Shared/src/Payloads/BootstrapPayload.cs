@@ -15,16 +15,19 @@ namespace CryV.Net.Shared.Payloads
 
         public Vector3 StartPosition { get; set; }
 
+        public float StartHeading { get; set; }
+
         public List<ClientPayload> Players { get; set; }
 
         public BootstrapPayload()
         {
         }
 
-        public BootstrapPayload(int localId, Vector3 startPosition, List<ClientPayload> players)
+        public BootstrapPayload(int localId, Vector3 startPosition, float startHeading, List<ClientPayload> players)
         {
             LocalId = localId;
             StartPosition = startPosition;
+            StartHeading = startHeading;
             Players = players;
         }
 
@@ -37,6 +40,8 @@ namespace CryV.Net.Shared.Payloads
             writer.Put(StartPosition.X);
             writer.Put(StartPosition.Y);
             writer.Put(StartPosition.Z);
+
+            writer.Put(StartHeading);
 
             writer.Put(Players.Count);
 
@@ -51,6 +56,8 @@ namespace CryV.Net.Shared.Payloads
             LocalId = reader.GetInt();
 
             StartPosition = new Vector3(reader.GetFloat(), reader.GetFloat(), reader.GetFloat());
+
+            StartHeading = reader.GetFloat();
 
             var playerAmount = reader.GetInt();
 

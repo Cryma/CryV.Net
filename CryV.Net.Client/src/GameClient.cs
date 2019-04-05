@@ -44,7 +44,7 @@ namespace CryV.Net.Client
                 ThreadHelper.Run(() =>
                 {
                     var writer = new NetDataWriter();
-                    var transformPayload = new TransformUpdatePayload(new ClientPayload(_networkClient.LocalId, LocalPlayer.Character.Position, 0.0f));
+                    var transformPayload = new TransformUpdatePayload(new ClientPayload(_networkClient.LocalId, LocalPlayer.Character.Position, LocalPlayer.Character.Rotation.Z));
                     transformPayload.Write(writer);
 
                     _networkClient.Peer.Send(writer, DeliveryMethod.Unreliable);

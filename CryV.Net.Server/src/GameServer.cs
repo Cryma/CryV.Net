@@ -64,16 +64,16 @@ namespace CryV.Net.Server
                     continue;
                 }
 
-                playerPayloads.Add(new ClientPayload(existingClient.Id, existingClient.Position, 0.0f));
+                playerPayloads.Add(new ClientPayload(existingClient.Id, existingClient.Position, existingClient.Heading));
             }
 
-            var bootstrapPayload = new BootstrapPayload(client.Id, client.Position, playerPayloads);
+            var bootstrapPayload = new BootstrapPayload(client.Id, client.Position, client.Heading, playerPayloads);
             client.Send(bootstrapPayload);
         }
 
         private void PropagateNewClient(Client client)
         {
-            var payload = new AddClientPayload(new ClientPayload(client.Id, client.Position, 0.0f));
+            var payload = new AddClientPayload(new ClientPayload(client.Id, client.Position, client.Heading));
 
             foreach (var existingClient in _clients.Values)
             {

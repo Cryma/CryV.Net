@@ -15,6 +15,12 @@ namespace CryV.Net.Client.Networking
             set => _ped.Position = value;
         }
 
+        public Vector3 Rotation
+        {
+            get => _ped.Rotation;
+            set => _ped.Rotation = value;
+        }
+
         private readonly Ped _ped;
 
         public Client(int id, Vector3 position, float heading)

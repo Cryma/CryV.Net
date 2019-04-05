@@ -98,6 +98,7 @@ namespace CryV.Net.Client.Networking
                     }
 
                     client.Position = transformUpdatePayload.Client.Position;
+                    client.Rotation = new Vector3(client.Rotation.X, client.Rotation.Y, transformUpdatePayload.Client.Heading);
                 });
             }
         }
