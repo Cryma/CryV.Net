@@ -44,8 +44,17 @@ namespace CryV.Net.Server.Networking
                 var transformPayload = new TransformUpdatePayload();
                 transformPayload.Read(reader);
 
-                Console.WriteLine("Received position: " + transformPayload.Client.Position);
                 fromClient.Position = transformPayload.Client.Position;
+
+                foreach (var client in _gameServer.GetClients())
+                {
+                    if (client.Id == fromClient.Id)
+                    {
+                        continue;
+                    }
+
+                    client.Send(transformPayload);
+                }
             }
         }
 

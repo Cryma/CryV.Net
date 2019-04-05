@@ -9,6 +9,12 @@ namespace CryV.Net.Client.Networking
         
         public int Id { get; }
 
+        public Vector3 Position
+        {
+            get => _ped.Position;
+            set => _ped.Position = value;
+        }
+
         private readonly Ped _ped;
 
         public Client(int id, Vector3 position, float heading)

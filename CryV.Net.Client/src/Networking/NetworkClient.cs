@@ -82,6 +82,18 @@ namespace CryV.Net.Client.Networking
                     client.Dispose();
                 });
             }
+            else if (type == PayloadType.TransformUpdate)
+            {
+                var transformUpdatePayload = new TransformUpdatePayload();
+                transformUpdatePayload.Read(reader);
+
+                _clients.TryGetValue(transformUpdatePayload.Client.Id, out var client);
+
+                ThreadHelper.Run(() =>
+                {
+                    client.Position = transformUpdatePayload.Client.Position;
+                });
+            }
         }
 
         public static void Connect(string address, int port)
