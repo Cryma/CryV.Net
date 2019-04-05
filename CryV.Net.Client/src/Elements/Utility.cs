@@ -42,6 +42,11 @@ namespace CryV.Net.Client.Elements
             CryVNative.Native_Utility_FreeArray(array);
         }
 
+        public static bool IsKeyReleased(ConsoleKey key)
+        {
+            return CryVNative.Native_Utility_IsKeyReleased(CryVNative.Plugin, (ulong) key);
+        }
+
         public static uint Joaat(string data)
         {
             if (string.IsNullOrEmpty(data))

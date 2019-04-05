@@ -19,5 +19,8 @@ namespace CryV.Net.Client.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Utility_FreeObject(IntPtr array);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool Native_Utility_IsKeyReleased(IntPtr plugin, ulong key);
+
     }
 }
