@@ -30,7 +30,9 @@ namespace CryV.Net.Server
 
         public void RemoveClient(int id)
         {
-            _clients.TryRemove(id, out _);
+            _clients.TryRemove(id, out var client);
+
+            PropagateClientDisconnect(client);
         }
 
         public IList<Client> GetClients()
@@ -71,6 +73,21 @@ namespace CryV.Net.Server
         private void PropagateNewClient(Client client)
         {
             var payload = new AddClientPayload(new ClientPayload(client.Id, client.Position, 0.0f));
+
+            foreach (var existingClient in _clients.Values)
+            {
+                if (existingClient.Id == client.Id)
+                {
+                    continue;
+                }
+
+                existingClient.Send(payload);
+            }
+        }
+
+        private void PropagateClientDisconnect(Client client)
+        {
+            var payload = new RemoveClientPayload(client.Id);
 
             foreach (var existingClient in _clients.Values)
             {

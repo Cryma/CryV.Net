@@ -70,6 +70,18 @@ namespace CryV.Net.Client.Networking
                     _clients.TryAdd(client.Id, client);
                 });
             }
+            else if (type == PayloadType.RemoveClient)
+            {
+                var removeClientPayload = new RemoveClientPayload();
+                removeClientPayload.Read(reader);
+
+                ThreadHelper.Run(() =>
+                {
+                    _clients.TryRemove(removeClientPayload.Id, out var client);
+
+                    client.Dispose();
+                });
+            }
         }
 
         public static void Connect(string address, int port)

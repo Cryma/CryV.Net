@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Runtime.Serialization.Formatters;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Client.Native;
 
@@ -49,6 +50,11 @@ namespace CryV.Net.Client.Elements
         public void Delete()
         {
             CryVNative.Native_Entity_DeleteEntity(CryVNative.Plugin, Handle);
+
+            if (EntityPool.ContainsEntity(Handle))
+            {
+                EntityPool.RemoveEntity(Handle);
+            }
 
             Handle = 0;
         }
