@@ -42,13 +42,7 @@ namespace CryV.Net.Shared.Payloads
 
             foreach (var player in Players)
             {
-                writer.Put(player.Id);
-
-                writer.Put(player.Position.X);
-                writer.Put(player.Position.Y);
-                writer.Put(player.Position.Z);
-
-                writer.Put(player.Heading);
+                player.Write(writer);
             }
         }
 
@@ -63,7 +57,10 @@ namespace CryV.Net.Shared.Payloads
             Players = new List<ClientPayload>();
             for (var i = 0; i < playerAmount; i++)
             {
-                Players.Add(new ClientPayload(reader.GetInt(), new Vector3(reader.GetFloat(), reader.GetFloat(), reader.GetFloat()), reader.GetFloat()));
+                var clientPayload = new ClientPayload();
+                clientPayload.Read(reader);
+
+                Players.Add(clientPayload);
             }
         }
 

@@ -4,6 +4,7 @@
     {
         None,
         Bootstrap,
-        AddClient
+        AddClient,
+        TransformUpdate
     }
 }

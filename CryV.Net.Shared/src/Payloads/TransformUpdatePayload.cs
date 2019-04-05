@@ -1,22 +1,20 @@
-﻿using System.Numerics;
-using CryV.Net.Shared.Payloads.Partials;
+﻿using CryV.Net.Shared.Payloads.Partials;
 using CryV.Net.Shared.src.Enums;
 using LiteNetLib.Utils;
 
 namespace CryV.Net.Shared.Payloads
 {
-    public class AddClientPayload : IPayload
+    public class TransformUpdatePayload : IPayload
     {
-
-        public PayloadType PayloadType { get; } = PayloadType.AddClient;
+        public PayloadType PayloadType { get; } = PayloadType.TransformUpdate;
 
         public ClientPayload Client { get; set; }
 
-        public AddClientPayload()
+        public TransformUpdatePayload()
         {
         }
 
-        public AddClientPayload(ClientPayload clientPayload)
+        public TransformUpdatePayload(ClientPayload clientPayload)
         {
             Client = clientPayload;
         }
@@ -33,6 +31,5 @@ namespace CryV.Net.Shared.Payloads
             Client = new ClientPayload();
             Client.Read(reader);
         }
-
     }
 }
