@@ -19,6 +19,7 @@ namespace CryV.Net.Client
         public static ConcurrentQueue<Action> MainThreadQueue = new ConcurrentQueue<Action>();
 
         private static GameConsole _console;
+        private static GameClient _gameClient;
 
         public static void Main()
         {
@@ -41,7 +42,8 @@ namespace CryV.Net.Client
             LocalPlayer.Character.Position = new Vector3(412.4f, -976.71f, 29.43f);
             LocalPlayer.SetModel("mp_m_freemode_01");
 
-            _console  = new GameConsole();
+            _gameClient = new GameClient();
+            _console  = new GameConsole(_gameClient);
 
             Task.Run(Cleanup.ClearEntities);
         }
@@ -64,6 +66,7 @@ namespace CryV.Net.Client
 
             Cleanup.Tick();
 
+            _gameClient.Tick();
             _console.Update();
         }
 

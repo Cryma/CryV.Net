@@ -81,28 +81,28 @@ namespace CryV.Net.Client.Console
                 return;
             }
 
-            if (NetworkClient.IsConnected)
+            if (_gameClient.IsConnected)
             {
                 PrintLine("You are already connected to a server.");
 
                 return;
             }
 
-            NetworkClient.Connect(address, port);
+            _gameClient.Connect(address, port);
 
             PrintLine($"You connected to \"{address}:{port}\".");
         }
 
         private void CommandNetworkDisconnect(GameConsole gameConsole, params string[] arguments)
         {
-            if (NetworkClient.IsConnected == false)
+            if (_gameClient.IsConnected == false)
             {
                 PrintLine("You are not connected to any server.");
 
                 return;
             }
 
-            NetworkClient.Disconnect();
+            _gameClient.Disconnect();
 
             PrintLine("You disconnected from the server.");
         }

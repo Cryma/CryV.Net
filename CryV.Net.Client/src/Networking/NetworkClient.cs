@@ -15,29 +15,32 @@ using LiteNetLib.Utils;
 
 namespace CryV.Net.Client.Networking
 {
-    public static class NetworkClient
+    public class NetworkClient
     {
 
-        public static int LocalId { get; private set; }
-        public static NetPeer Peer { get; private set; }
-        public static bool IsConnected => Peer != null;
+        public int LocalId { get; private set; }
+        public NetPeer Peer { get; private set; }
+        public bool IsConnected => Peer != null;
 
-        private static readonly ConcurrentDictionary<int, Client> _clients = new ConcurrentDictionary<int, Client>();
+        private readonly ConcurrentDictionary<int, Client> _clients = new ConcurrentDictionary<int, Client>();
 
-        private static readonly EventBasedNetListener _listener = new EventBasedNetListener();
-        private static readonly NetManager _netManager;
+        private readonly EventBasedNetListener _listener = new EventBasedNetListener();
+        private readonly NetManager _netManager;
+        private readonly GameClient _gameClient;
 
-        private static CancellationTokenSource _cancellationTokenSource;
+        public CancellationTokenSource CancellationTokenSource;
 
-        static NetworkClient()
+        public NetworkClient(GameClient gameClient)
         {
             _listener.NetworkReceiveEvent += OnNetworkReceive;
 
             _netManager = new NetManager(_listener);
             _netManager.Start();
+
+            _gameClient = gameClient;
         }
 
-        private static void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliverymethod)
+        private void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliverymethod)
         {
             var type = (PayloadType) reader.GetByte();
 
@@ -99,21 +102,21 @@ namespace CryV.Net.Client.Networking
             }
         }
 
-        public static void Connect(string address, int port)
+        public void Connect(string address, int port)
         {
             if (Peer != null)
             {
                 return;
             }
 
-            _cancellationTokenSource = new CancellationTokenSource();
+            CancellationTokenSource = new CancellationTokenSource();
 
             Peer = _netManager.Connect(address, port, "hihi");
 
             try
             {
-                Task.Run(Tick, _cancellationTokenSource.Token);
-                Task.Run(SyncTransform, _cancellationTokenSource.Token);
+                Task.Run(Tick, CancellationTokenSource.Token);
+                Task.Run(_gameClient.SyncTransform, CancellationTokenSource.Token);
             }
             catch (TaskCanceledException exception)
             {
@@ -121,14 +124,14 @@ namespace CryV.Net.Client.Networking
             }
         }
 
-        public static void Disconnect()
+        public void Disconnect()
         {
             if (Peer == null)
             {
                 return;
             }
 
-            _cancellationTokenSource.Cancel();
+            CancellationTokenSource.Cancel();
 
             _clients.Clear();
             EntityPool.Clear();
@@ -137,32 +140,15 @@ namespace CryV.Net.Client.Networking
             Peer = null;
         }
 
-        public static async Task Tick()
+        public async Task Tick()
         {
-            while (_cancellationTokenSource.IsCancellationRequested == false)
+            while (CancellationTokenSource.IsCancellationRequested == false)
             {
-                await Task.Delay(TimeSpan.FromMilliseconds(1), _cancellationTokenSource.Token);
+                await Task.Delay(TimeSpan.FromMilliseconds(1), CancellationTokenSource.Token);
 
                 _netManager?.PollEvents();
             }
         }
 
-        public static async Task SyncTransform()
-        {
-            while (_cancellationTokenSource.IsCancellationRequested == false)
-            {
-                await Task.Delay(1000 / 20, _cancellationTokenSource.Token);
-
-                ThreadHelper.Run(() =>
-                {
-                    var writer = new NetDataWriter();
-                    var transformPayload = new TransformUpdatePayload(new ClientPayload(LocalId, LocalPlayer.Character.Position, 0.0f));
-                    transformPayload.Write(writer);
-
-                    Peer.Send(writer, DeliveryMethod.Unreliable);
-                });
-            }
-        }
-        
     }
 }

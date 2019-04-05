@@ -33,8 +33,12 @@ namespace CryV.Net.Client.Console
 
         private readonly ConcurrentDictionary<string, CommandDelegate> _commands = new ConcurrentDictionary<string, CommandDelegate>();
 
-        public GameConsole()
+        private readonly GameClient _gameClient;
+
+        public GameConsole(GameClient gameClient)
         {
+            _gameClient = gameClient;
+
             RegisterCommands();
         }
 
