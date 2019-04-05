@@ -23,7 +23,7 @@ namespace CryV.Net.Client.Console
         private DateTime _lastBlinkUpdate = DateTime.UtcNow;
         private int _cursorIndex = 0;
 
-        private List<string> _inputHistory;
+        private readonly List<string> _inputHistory = new List<string>();
         private int _currentHistoryIndex = -1;
 
         private const float _backgroundInputHeight = 18.0f;
@@ -162,7 +162,59 @@ namespace CryV.Net.Client.Console
                 return;
             }
 
-            // Add history, left, right, autocomplete, copy, paste
+            if (key == ConsoleKey.UpArrow)
+            {
+                if (_currentHistoryIndex + 1 >= _inputHistory.Count)
+                {
+                    return;
+                }
+
+                _currentHistoryIndex++;
+                _input = _inputHistory[_currentHistoryIndex];
+                _cursorIndex = _input.Length;
+
+                return;
+            }
+
+            if (key == ConsoleKey.DownArrow)
+            {
+                if (_currentHistoryIndex <= 0)
+                {
+                    return;
+                }
+
+                _currentHistoryIndex--;
+                _input = _inputHistory[_currentHistoryIndex];
+                _cursorIndex = _input.Length;
+
+                return;
+            }
+
+            if (key == ConsoleKey.LeftArrow)
+            {
+                if (_cursorIndex <= 0)
+                {
+                    return;
+                }
+
+                _cursorIndex--;
+
+                return;
+            }
+
+            if (key == ConsoleKey.RightArrow)
+            {
+                if (_cursorIndex >= _input.Length)
+                {
+                    return;
+                }
+
+                _cursorIndex++;
+
+                return;
+            }
+
+            // Add autocomplete, copy, paste
 
             if (character < 32 || character > 126)
             {
@@ -181,7 +233,14 @@ namespace CryV.Net.Client.Console
             }
 
             var commandArray = command.Split(' ');
-            var commandName = commandArray[0];
+            var commandName = commandArray[0].ToLowerInvariant();
+
+            _inputHistory.Insert(0, command);
+
+            if (_inputHistory.Count > 20)
+            {
+                _inputHistory.RemoveAt(0);
+            }
 
             if (_commands.TryGetValue(commandName, out var action) == false)
             {
