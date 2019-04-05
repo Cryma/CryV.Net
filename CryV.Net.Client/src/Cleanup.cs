@@ -846,6 +846,16 @@ namespace CryV.Net.Client
             LocalPlayer.SetWantedLevel(0, false);
             LocalPlayer.SetWantedLevelNow(false);
             LocalPlayer.SetMaxWantedLevel(0);
+
+            Gameplay.DisableControlAction(0, 212, true);
+            Gameplay.DisableControlAction(0, 213, true);
+            Gameplay.DisableControlAction(0, 243, true);
+            Gameplay.DisableControlAction(0, 28, true);
+            Gameplay.DisableControlAction(0, 171, true);
+            Gameplay.DisableControlAction(0, 29, true);
+            Gameplay.DisableControlAction(0, 19, true);
+            Gameplay.DisableControlAction(0, 27, true);
+            Gameplay.DisableControlAction(0, 36, true);
         }
 
     }

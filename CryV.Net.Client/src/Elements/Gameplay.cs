@@ -25,9 +25,14 @@ namespace CryV.Net.Client.Elements
             CryVNative.Native_Gameplay_LoadMpDlcMaps(CryVNative.Plugin);
         }
 
-        public static void DisableAllControlActions(int controlGroup)
+        public static void DisableAllControlActions(int inputGroup)
         {
-            CryVNative.Native_Gameplay_DisableAllControlActions(CryVNative.Plugin, controlGroup);
+            CryVNative.Native_Gameplay_DisableAllControlActions(CryVNative.Plugin, inputGroup);
+        }
+
+        public static void DisableControlAction(int inputGroup, int control, bool disable)
+        {
+            CryVNative.Native_Gameplay_DisableControlAction(CryVNative.Plugin, inputGroup, control, disable);
         }
 
     }
