@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,8 +15,11 @@ namespace CryV.Net.Client.Networking
     public static class NetworkClient
     {
 
+        public static int LocalId { get; private set; }
         public static NetPeer Peer { get; private set; }
         public static bool IsConnected => Peer != null;
+
+        private static readonly ConcurrentDictionary<int, Client> _clients = new ConcurrentDictionary<int, Client>();
 
         private static readonly EventBasedNetListener _listener = new EventBasedNetListener();
         private static readonly NetManager _netManager;
@@ -40,11 +45,14 @@ namespace CryV.Net.Client.Networking
 
                 ThreadHelper.Run(() =>
                 {
+                    LocalId = bootstrapPacket.LocalId;
+
                     LocalPlayer.Character.Position = bootstrapPacket.StartPosition;
 
                     foreach (var player in bootstrapPacket.Players)
                     {
-                        var ped = new Ped("mp_m_freemode_01", player.Position, player.Heading);
+                        var client = new Client(player.Id, player.Position, player.Heading);
+                        _clients.TryAdd(client.Id, client);
                     }
                 });
             }
@@ -55,7 +63,8 @@ namespace CryV.Net.Client.Networking
 
                 ThreadHelper.Run(() =>
                 {
-                    var ped = new Ped("mp_m_freemode_01", addClientPayload.Client.Position, addClientPayload.Client.Heading);
+                    var client = new Client(addClientPayload.Client.Id, addClientPayload.Client.Position, addClientPayload.Client.Heading);
+                    _clients.TryAdd(client.Id, client);
                 });
             }
         }
@@ -74,6 +83,7 @@ namespace CryV.Net.Client.Networking
             try
             {
                 Task.Run(Tick, _cancellationTokenSource.Token);
+                Task.Run(SyncTransform, _cancellationTokenSource.Token)
             }
             catch (TaskCanceledException exception)
             {
@@ -90,6 +100,7 @@ namespace CryV.Net.Client.Networking
 
             _cancellationTokenSource.Cancel();
 
+            _clients.Clear();
             EntityPool.Clear();
 
             _netManager.DisconnectPeer(Peer);
@@ -103,6 +114,14 @@ namespace CryV.Net.Client.Networking
                 await Task.Delay(TimeSpan.FromMilliseconds(1), _cancellationTokenSource.Token);
 
                 _netManager?.PollEvents();
+            }
+        }
+
+        public static async Task SyncTransform()
+        {
+            while (_cancellationTokenSource.IsCancellationRequested == false)
+            {
+                await Task.Delay(Convert.ToInt32(1f / 20), _cancellationTokenSource.Token);
             }
         }
         
