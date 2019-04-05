@@ -13,6 +13,16 @@ namespace CryV.Net.Client
             _mainThreadQueue.Enqueue(action);
         }
 
+        public static void Run<T>(Func<T> action, Action<T> callback)
+        {
+            _mainThreadQueue.Enqueue(() =>
+            {
+                var result = action();
+
+                callback(result);
+            });
+        }
+
         public static void Work()
         {
             while (_mainThreadQueue.TryDequeue(out var action))
