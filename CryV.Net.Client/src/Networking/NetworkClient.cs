@@ -1,4 +1,7 @@
-﻿using System.Runtime.Serialization.Formatters;
+﻿using System;
+using System.Runtime.Serialization.Formatters;
+using System.Threading;
+using System.Threading.Tasks;
 using CryV.Net.Client.Elements;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Shared.Payloads;
@@ -15,6 +18,8 @@ namespace CryV.Net.Client.Networking
 
         private static readonly EventBasedNetListener _listener = new EventBasedNetListener();
         private static readonly NetManager _netManager;
+
+        private static CancellationTokenSource _cancellationTokenSource;
 
         static NetworkClient()
         {
@@ -33,19 +38,25 @@ namespace CryV.Net.Client.Networking
                 var bootstrapPacket = new BootstrapPayload();
                 bootstrapPacket.Read(reader);
 
-                LocalPlayer.Character.Position = bootstrapPacket.StartPosition;
-
-                foreach (var player in bootstrapPacket.Players)
+                ThreadHelper.Run(() =>
                 {
-                    var ped = new Ped("mp_m_freemode_01", player.Position, player.Heading);
-                }
+                    LocalPlayer.Character.Position = bootstrapPacket.StartPosition;
+
+                    foreach (var player in bootstrapPacket.Players)
+                    {
+                        var ped = new Ped("mp_m_freemode_01", player.Position, player.Heading);
+                    }
+                });
             }
             else if (type == PayloadType.AddClient)
             {
                 var addClientPayload = new AddClientPayload();
                 addClientPayload.Read(reader);
 
-                var ped = new Ped("mp_m_freemode_01", addClientPayload.Client.Position, addClientPayload.Client.Heading);
+                ThreadHelper.Run(() =>
+                {
+                    var ped = new Ped("mp_m_freemode_01", addClientPayload.Client.Position, addClientPayload.Client.Heading);
+                });
             }
         }
 
@@ -56,7 +67,18 @@ namespace CryV.Net.Client.Networking
                 return;
             }
 
+            _cancellationTokenSource = new CancellationTokenSource();
+
             Peer = _netManager.Connect(address, port, "hihi");
+
+            try
+            {
+                Task.Run(Tick, _cancellationTokenSource.Token);
+            }
+            catch (TaskCanceledException exception)
+            {
+                // Exception expected
+            }
         }
 
         public static void Disconnect()
@@ -66,15 +88,22 @@ namespace CryV.Net.Client.Networking
                 return;
             }
 
+            _cancellationTokenSource.Cancel();
+
             EntityPool.Clear();
 
             _netManager.DisconnectPeer(Peer);
             Peer = null;
         }
 
-        public static void Tick()
+        public static async Task Tick()
         {
-            _netManager?.PollEvents();
+            while (_cancellationTokenSource.IsCancellationRequested == false)
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(1), _cancellationTokenSource.Token);
+
+                _netManager?.PollEvents();
+            }
         }
         
     }

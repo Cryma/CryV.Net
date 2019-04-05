@@ -64,8 +64,6 @@ namespace CryV.Net.Client
 
             Cleanup.Tick();
 
-            NetworkClient.Tick(); // TODO: Own thread
-
             _console.Update();
         }
 
