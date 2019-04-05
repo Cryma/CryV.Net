@@ -33,13 +33,23 @@ namespace CryV.Net.Client.Native
         public static extern void Native_UserInterface_BeginTextCommandDisplayText(IntPtr plugin, IntPtr componentType);
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_UserInterface_BeginTextCommandGetWidth(IntPtr plugin, IntPtr componentType);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_UserInterface_AddTextComponentSubstringPlayerName(IntPtr plugin, IntPtr text);
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_UserInterface_EndTextCommandDisplayText(IntPtr plugin, float x, float y);
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern float Native_UserInterface_EndTextCommandGetWidth(IntPtr plugin, bool p0);
+
+        //
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_UserInterface_GetScreenResolution(IntPtr plugin, ref int x, ref int y);
+
+        //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_UserInterface_DrawRect(IntPtr plugin, float x, float y, float width, float height, int red, int green, int blue, int alpha);

@@ -49,6 +49,23 @@ namespace CryV.Net.Client.Elements
             }
         }
 
+        public static float GetTextWidth(string text, float scale, TextFont textFont = TextFont.ChaletLondon)
+        {
+            CryVNative.Native_UserInterface_SetTextFont(CryVNative.Plugin, (int) textFont);
+            CryVNative.Native_UserInterface_SetTextScale(CryVNative.Plugin, scale, scale);
+
+            using (var converter = new StringConverter())
+            {
+                var commandTypePointer = converter.StringToPointer("STRING");
+                var textPointer = converter.StringToPointer(text);
+
+                CryVNative.Native_UserInterface_BeginTextCommandGetWidth(CryVNative.Plugin, commandTypePointer);
+                CryVNative.Native_UserInterface_AddTextComponentSubstringPlayerName(CryVNative.Plugin, textPointer);
+            }
+
+            return CryVNative.Native_UserInterface_EndTextCommandGetWidth(CryVNative.Plugin, true);
+        }
+
         public static void DrawRect(Vector2 position, Vector2 size, Color color)
         {
             CryVNative.Native_UserInterface_DrawRect(CryVNative.Plugin, position.X, position.Y, size.X, size.Y, color.R, color.G, color.B, color.A);
