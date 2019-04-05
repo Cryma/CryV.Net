@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using CryV.Net.Client.Console;
 
 namespace CryV.Net.Client
 {
@@ -15,6 +16,8 @@ namespace CryV.Net.Client
     {
 
         public static ConcurrentQueue<Action> MainThreadQueue = new ConcurrentQueue<Action>();
+
+        private static GameConsole _console;
 
         public static void Main()
         {
@@ -34,11 +37,15 @@ namespace CryV.Net.Client
             LocalPlayer.SetPosition(412.4f, -976.71f, 29.43f);
             LocalPlayer.SetModel("mp_m_freemode_01");
 
+            _console  = new GameConsole();
+
             Task.Run(Cleanup.ClearEntities);
         }
 
         public static void PluginKeyboardCallback(ConsoleKey key, char character, bool isPressed)
         {
+            _console?.HandleKeyboardCallback(key, character, isPressed);
+
             if (isPressed && key == ConsoleKey.F3)
             {
                 var ped = new Ped("mp_m_freemode_01", new Vector3(412.4f, -976.71f, 29.43f), 0f);
@@ -52,6 +59,8 @@ namespace CryV.Net.Client
             ThreadHelper.Work();
 
             Cleanup.Tick();
+
+            _console.Update();
         }
 
     }
