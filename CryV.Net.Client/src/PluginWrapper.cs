@@ -9,6 +9,7 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using CryV.Net.Client.Console;
+using CryV.Net.Client.Networking;
 
 namespace CryV.Net.Client
 {
@@ -62,6 +63,8 @@ namespace CryV.Net.Client
             ThreadHelper.Work();
 
             Cleanup.Tick();
+
+            NetworkClient.Tick(); // TODO: Own thread
 
             _console.Update();
         }
