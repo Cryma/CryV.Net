@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.Serialization.Formatters;
 using System.Threading;
 using System.Threading.Tasks;
 using CryV.Net.Client.Elements;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Shared.Payloads;
+using CryV.Net.Shared.Payloads.Partials;
 using CryV.Net.Shared.src.Enums;
 using LiteNetLib;
+using LiteNetLib.Utils;
 
 namespace CryV.Net.Client.Networking
 {
@@ -83,7 +86,7 @@ namespace CryV.Net.Client.Networking
             try
             {
                 Task.Run(Tick, _cancellationTokenSource.Token);
-                Task.Run(SyncTransform, _cancellationTokenSource.Token)
+                Task.Run(SyncTransform, _cancellationTokenSource.Token);
             }
             catch (TaskCanceledException exception)
             {
@@ -121,7 +124,16 @@ namespace CryV.Net.Client.Networking
         {
             while (_cancellationTokenSource.IsCancellationRequested == false)
             {
-                await Task.Delay(Convert.ToInt32(1f / 20), _cancellationTokenSource.Token);
+                await Task.Delay(1000 / 20, _cancellationTokenSource.Token);
+
+                ThreadHelper.Run(() =>
+                {
+                    var writer = new NetDataWriter();
+                    var transformPayload = new TransformUpdatePayload(new ClientPayload(LocalId, LocalPlayer.Character.Position, 0.0f));
+                    transformPayload.Write(writer);
+
+                    Peer.Send(writer, DeliveryMethod.Unreliable);
+                });
             }
         }
         

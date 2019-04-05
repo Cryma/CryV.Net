@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using CryV.Net.Server.Elements;
 using CryV.Net.Shared.Payloads;
+using CryV.Net.Shared.src.Enums;
 using LiteNetLib;
 using LiteNetLib.Utils;
 
@@ -27,8 +28,25 @@ namespace CryV.Net.Server.Networking
             _listener.ConnectionRequestEvent += OnConnectionRequest;
             _listener.PeerConnectedEvent += OnPeerConnected;
             _listener.PeerDisconnectedEvent += OnPeerDisconnected;
+            _listener.NetworkReceiveEvent += OnNetworkReceive;
 
             _netManager = new NetManager(_listener);
+        }
+
+        private void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliverymethod)
+        {
+            var fromClient = _gameServer.GetClient(peer.Id);
+
+            var type = (PayloadType) reader.GetByte();
+
+            if (type == PayloadType.TransformUpdate)
+            {
+                var transformPayload = new TransformUpdatePayload();
+                transformPayload.Read(reader);
+
+                Console.WriteLine("Received position: " + transformPayload.Client.Position);
+                fromClient.Position = transformPayload.Client.Position;
+            }
         }
 
         private void OnConnectionRequest(ConnectionRequest request)

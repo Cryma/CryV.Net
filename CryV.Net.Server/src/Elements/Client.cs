@@ -10,7 +10,7 @@ namespace CryV.Net.Server.Elements
 
         public int Id => _peer.Id;
 
-        public Vector3 Position { get; }
+        public Vector3 Position { get; set; }
 
         private readonly NetPeer _peer;
 

@@ -38,6 +38,13 @@ namespace CryV.Net.Server
             return _clients.Values.ToList();
         }
 
+        public Client GetClient(int id)
+        {
+            _clients.TryGetValue(id, out var client);
+
+            return client;
+        }
+
         public void Tick()
         {
             _networkServer?.Tick();
