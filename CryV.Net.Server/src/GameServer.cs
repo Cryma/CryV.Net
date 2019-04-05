@@ -26,6 +26,7 @@ namespace CryV.Net.Server
             _clients.TryAdd(client.Id, client);
 
             BootstrapClient(client);
+            PropagateNewClient(client);
         }
 
         public void RemoveClient(int id)
@@ -76,6 +77,7 @@ namespace CryV.Net.Server
 
             foreach (var existingClient in _clients.Values)
             {
+                // Don't sync self
                 if (existingClient.Id == client.Id)
                 {
                     continue;
@@ -91,6 +93,7 @@ namespace CryV.Net.Server
 
             foreach (var existingClient in _clients.Values)
             {
+                // Don't sync self
                 if (existingClient.Id == client.Id)
                 {
                     continue;
