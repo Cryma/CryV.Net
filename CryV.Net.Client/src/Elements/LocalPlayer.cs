@@ -21,11 +21,6 @@ namespace CryV.Net.Client.Elements
             return CryVNative.Native_LocalPlayer_PedId(CryVNative.Plugin);
         }
 
-        public static void SetPosition(float x, float y, float z)
-        {
-            CryVNative.Native_Entity_SetEntityPosition(CryVNative.Plugin, PedId(), x, y, z);
-        }
-
         public static void _0xD2B315B6689D537D(bool p1)
         {
             CryVNative.Native_LocalPlayer__0xD2B315B6689D537D(CryVNative.Plugin, PlayerId(), p1);

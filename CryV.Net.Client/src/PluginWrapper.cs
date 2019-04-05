@@ -37,7 +37,7 @@ namespace CryV.Net.Client
             
             World.SetWeather(WeatherType.Extrasunny);
 
-            LocalPlayer.SetPosition(412.4f, -976.71f, 29.43f);
+            LocalPlayer.Character.Position = new Vector3(412.4f, -976.71f, 29.43f);
             LocalPlayer.SetModel("mp_m_freemode_01");
 
             _console  = new GameConsole();

@@ -11,7 +11,8 @@ namespace CryV.Net.Client.Elements
 
         public Vector3 Position
         {
-            get { return StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetEntityPosition(CryVNative.Plugin, Handle)); }
+            get => StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetEntityPosition(CryVNative.Plugin, Handle));
+            set => CryVNative.Native_Entity_SetEntityPosition(CryVNative.Plugin, Handle, value.X, value.Y, value.Z);
         }
 
         protected Entity(int handle)
