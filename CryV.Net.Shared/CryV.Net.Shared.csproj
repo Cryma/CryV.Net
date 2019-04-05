@@ -8,4 +8,10 @@
     <Folder Include="src\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="LiteNetLib">
+      <HintPath>..\lib\LiteNetLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

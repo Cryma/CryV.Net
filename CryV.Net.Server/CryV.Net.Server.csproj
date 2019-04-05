@@ -9,4 +9,14 @@
     <ProjectReference Include="..\CryV.Net.Shared\CryV.Net.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="src\Elements\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="LiteNetLib">
+      <HintPath>..\lib\LiteNetLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

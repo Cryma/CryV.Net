@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -17,6 +17,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CryV.Net.Shared\CryV.Net.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="LiteNetLib">
+      <HintPath>..\lib\LiteNetLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
