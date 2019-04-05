@@ -61,5 +61,20 @@ namespace CryV.Net.Server
             client.Send(bootstrapPayload);
         }
 
+        private void PropagateNewClient(Client client)
+        {
+            var payload = new AddClientPayload(new ClientPayload(client.Id, client.Position, 0.0f));
+
+            foreach (var existingClient in _clients.Values)
+            {
+                if (existingClient.Id == client.Id)
+                {
+                    continue;
+                }
+
+                existingClient.Send(payload);
+            }
+        }
+
     }
 }

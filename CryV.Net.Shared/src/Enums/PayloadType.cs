@@ -3,6 +3,7 @@
     public enum PayloadType : byte
     {
         None,
-        Bootstrap
+        Bootstrap,
+        AddClient
     }
 }

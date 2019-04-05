@@ -2,6 +2,7 @@
 using CryV.Net.Client.Elements;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Shared.Payloads;
+using CryV.Net.Shared.src.Enums;
 using LiteNetLib;
 
 namespace CryV.Net.Client.Networking
@@ -25,7 +26,9 @@ namespace CryV.Net.Client.Networking
 
         private static void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliverymethod)
         {
-            if (reader.GetByte() == 1)
+            var type = (PayloadType) reader.GetByte();
+
+            if (type == PayloadType.Bootstrap)
             {
                 var bootstrapPacket = new BootstrapPayload();
                 bootstrapPacket.Read(reader);
@@ -36,6 +39,13 @@ namespace CryV.Net.Client.Networking
                 {
                     var ped = new Ped("mp_m_freemode_01", player.Position, player.Heading);
                 }
+            }
+            else if (type == PayloadType.AddClient)
+            {
+                var addClientPayload = new AddClientPayload();
+                addClientPayload.Read(reader);
+
+                var ped = new Ped("mp_m_freemode_01", addClientPayload.Client.Position, addClientPayload.Client.Heading);
             }
         }
 
