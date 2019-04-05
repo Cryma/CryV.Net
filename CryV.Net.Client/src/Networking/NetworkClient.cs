@@ -7,9 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using CryV.Net.Client.Elements;
 using CryV.Net.Client.Helpers;
+using CryV.Net.Shared.Enums;
 using CryV.Net.Shared.Payloads;
 using CryV.Net.Shared.Payloads.Partials;
-using CryV.Net.Shared.src.Enums;
 using LiteNetLib;
 using LiteNetLib.Utils;
 

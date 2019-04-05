@@ -1,10 +1,11 @@
-﻿namespace CryV.Net.Shared.src.Enums
+﻿namespace CryV.Net.Shared.Enums
 {
     public enum PayloadType : byte
     {
         None,
         Bootstrap,
         AddClient,
+        RemoveClient,
         TransformUpdate
     }
 }

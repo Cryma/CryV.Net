@@ -1,5 +1,5 @@
-﻿using CryV.Net.Shared.Payloads.Partials;
-using CryV.Net.Shared.src.Enums;
+﻿using CryV.Net.Shared.Enums;
+using CryV.Net.Shared.Payloads.Partials;
 using LiteNetLib.Utils;
 
 namespace CryV.Net.Shared.Payloads

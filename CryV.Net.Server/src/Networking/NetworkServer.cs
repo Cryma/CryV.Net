@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Numerics;
 using CryV.Net.Server.Elements;
+using CryV.Net.Shared.Enums;
 using CryV.Net.Shared.Payloads;
-using CryV.Net.Shared.src.Enums;
 using LiteNetLib;
 using LiteNetLib.Utils;
 

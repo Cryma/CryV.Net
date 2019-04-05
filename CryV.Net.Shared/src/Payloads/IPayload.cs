@@ -1,4 +1,4 @@
-﻿using CryV.Net.Shared.src.Enums;
+﻿using CryV.Net.Shared.Enums;
 using LiteNetLib.Utils;
 
 namespace CryV.Net.Shared.Payloads

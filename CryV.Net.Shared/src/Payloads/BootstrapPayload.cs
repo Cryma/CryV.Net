@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
+using CryV.Net.Shared.Enums;
 using CryV.Net.Shared.Payloads.Partials;
-using CryV.Net.Shared.src.Enums;
 using LiteNetLib.Utils;
 
 namespace CryV.Net.Shared.Payloads
