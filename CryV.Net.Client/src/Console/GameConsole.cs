@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net.Mail;
@@ -134,7 +134,7 @@ namespace CryV.Net.Client.Console
 
             // Add history, left, right, autocomplete, copy, paste
 
-            if ((int) key < 32 || (int) key > 126)
+            if (character < 32 || character > 126)
             {
                 return;
             }
