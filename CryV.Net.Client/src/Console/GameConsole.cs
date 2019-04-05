@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Net.Mail;
 using System.Numerics;
 using CryV.Net.Client.Elements;
@@ -9,7 +11,7 @@ using CryV.Net.Client.Native;
 
 namespace CryV.Net.Client.Console
 {
-    public class GameConsole
+    public partial class GameConsole
     {
 
         private bool _visible = false;
@@ -25,6 +27,28 @@ namespace CryV.Net.Client.Console
 
         private const float _backgroundInputHeight = 18.0f;
         private const float _backgroundLineHeight = 16.0f;
+
+        private delegate void CommandDelegate(GameConsole gameConsole, params string[] arguments);
+
+        private readonly ConcurrentDictionary<string, CommandDelegate> _commands = new ConcurrentDictionary<string, CommandDelegate>();
+
+        public GameConsole()
+        {
+            RegisterCommands();
+        }
+
+        private void RegisterCommands()
+        {
+            RegisterCommand("output", CommandOutputText);
+            RegisterCommand("clear", CommandClear);
+        }
+
+        private void RegisterCommand(string commandName, CommandDelegate action)
+        {
+            commandName = commandName.ToLowerInvariant();
+
+            _commands.TryAdd(commandName, action);
+        }
 
         public void Update()
         {
@@ -153,14 +177,12 @@ namespace CryV.Net.Client.Console
             var commandArray = command.Split(' ');
             var commandName = commandArray[0];
 
-            if (commandName == "test")
-            {
-                PrintLine("Ahja!");
-            }
-            else
+            if (_commands.TryGetValue(commandName, out var action) == false)
             {
                 PrintLine("~o~Unknown command: ~s~" + commandName);
             }
+
+            action?.Invoke(this, commandArray.Skip(1).ToArray());
         }
 
         private void PrintLine(string text)
@@ -192,6 +214,8 @@ namespace CryV.Net.Client.Console
                 CryVNative.Native_UserInterface_EndTextCommandDisplayText(CryVNative.Plugin, x, y);
             }
         }
+
+
 
     }
 }
