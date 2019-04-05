@@ -87,10 +87,13 @@ namespace CryV.Net.Client.Networking
                 var transformUpdatePayload = new TransformUpdatePayload();
                 transformUpdatePayload.Read(reader);
 
-                _clients.TryGetValue(transformUpdatePayload.Client.Id, out var client);
-
                 ThreadHelper.Run(() =>
                 {
+                    if (_clients.TryGetValue(transformUpdatePayload.Client.Id, out var client) == false)
+                    {
+                        return;
+                    }
+
                     client.Position = transformUpdatePayload.Client.Position;
                 });
             }
