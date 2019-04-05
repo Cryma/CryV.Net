@@ -1,4 +1,5 @@
 ﻿using System;
+using CryV.Net.Server.Elements;
 using LiteNetLib;
 
 namespace CryV.Net.Server.Networking
@@ -38,11 +39,15 @@ namespace CryV.Net.Server.Networking
 
         private void OnPeerConnected(NetPeer peer)
         {
+            _gameServer.AddClient(new Client(peer));
+
             Console.WriteLine($"Peer connected: {peer.Id} ({peer.EndPoint})");
         }
 
         private void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectinfo)
         {
+            _gameServer.RemoveClient(peer.Id);
+
             Console.WriteLine($"Peer disconnected: {peer.Id} ({peer.EndPoint}) - Reason: {disconnectinfo.Reason}");
         }
 
