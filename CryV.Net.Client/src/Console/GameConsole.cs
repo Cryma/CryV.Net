@@ -38,7 +38,7 @@ namespace CryV.Net.Client.Console
                 return;
             }
 
-            // TODO: Disable all game controls
+            Gameplay.DisableAllControlActions(0);
 
             UserInterface.GetScreenResolution(out var width, out var height);
 

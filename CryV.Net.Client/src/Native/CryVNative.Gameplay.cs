@@ -30,6 +30,8 @@ namespace CryV.Net.Client.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Gameplay_LoadMpDlcMaps(IntPtr plugin);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Gameplay_DisableAllControlActions(IntPtr plugin, int controlGroup);
 
     }
 }
