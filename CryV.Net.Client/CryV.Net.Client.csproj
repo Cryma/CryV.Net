@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="XCOPY &quot;$(TargetDir)*&quot; &quot;C:\Development\CryV\bin\Release-windows-x86_64\CryV-Launcher\dotnet\plugins\&quot; /S /Y" />
+    <Exec Command="XCOPY &quot;$(TargetDir)*&quot; &quot;C:\CryV\dotnet\plugins\&quot; /S /Y" />
   </Target>
 
   <ItemGroup>
