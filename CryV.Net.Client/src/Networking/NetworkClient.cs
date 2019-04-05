@@ -1,4 +1,7 @@
 ﻿using System.Runtime.Serialization.Formatters;
+using CryV.Net.Client.Elements;
+using CryV.Net.Client.Helpers;
+using CryV.Net.Shared.Payloads;
 using LiteNetLib;
 
 namespace CryV.Net.Client.Networking
@@ -14,8 +17,26 @@ namespace CryV.Net.Client.Networking
 
         static NetworkClient()
         {
+            _listener.NetworkReceiveEvent += OnNetworkReceive;
+
             _netManager = new NetManager(_listener);
             _netManager.Start();
+        }
+
+        private static void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliverymethod)
+        {
+            if (reader.GetByte() == 1)
+            {
+                var bootstrapPacket = new Bootstrap();
+                bootstrapPacket.Read(reader);
+
+                LocalPlayer.Character.Position = bootstrapPacket.StartPosition;
+
+                foreach (var player in bootstrapPacket.Players)
+                {
+                    var ped = new Ped("mp_m_freemode_01", player, 0.0f);
+                }
+            }
         }
 
         public static void Connect(string address, int port)
@@ -34,6 +55,8 @@ namespace CryV.Net.Client.Networking
             {
                 return;
             }
+
+            EntityPool.Clear();
 
             _netManager.DisconnectPeer(Peer);
             Peer = null;

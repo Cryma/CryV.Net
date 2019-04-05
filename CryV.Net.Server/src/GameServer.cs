@@ -1,4 +1,6 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using CryV.Net.Server.Elements;
 using CryV.Net.Server.Networking;
 
@@ -25,6 +27,11 @@ namespace CryV.Net.Server
         public void RemoveClient(int id)
         {
             _clients.TryRemove(id, out _);
+        }
+
+        public IList<Client> GetClients()
+        {
+            return _clients.Values.ToList();
         }
 
         public void Tick()

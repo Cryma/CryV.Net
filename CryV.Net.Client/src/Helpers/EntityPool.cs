@@ -23,6 +23,16 @@ namespace CryV.Net.Client.Helpers
             _entities.TryRemove(id, out _);
         }
 
+        public static void Clear()
+        {
+            foreach (var entity in _entities.Values)
+            {
+                entity.Delete();
+            }
+
+            _entities.Clear();
+        }
+
         public static bool ContainsEntity(int id)
         {
             return _entities.ContainsKey(id);
