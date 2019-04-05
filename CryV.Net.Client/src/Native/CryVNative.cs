@@ -8,7 +8,7 @@ namespace CryV.Net.Client.Native
 
         public static IntPtr Plugin { get; set; }
 
-        private const string _dllLocation = @"C:\CryV\CryV-Native";
+        private const string _dllLocation = @"C:\CryV\app\CryV-Native";
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Utility_Log(IntPtr plugin, IntPtr message);
