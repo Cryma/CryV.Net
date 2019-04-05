@@ -15,6 +15,12 @@ namespace CryV.Net.Client.Native
         public static extern IntPtr Native_Entity_GetEntityPosition(IntPtr plugin, int entityHandle);
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Entity_SetEntityRotation(IntPtr plugin, int entityHandle, float pitch, float roll, float yaw);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr Native_Entity_GetEntityRotation(IntPtr plugin, int entityHandle);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Entity_SetEntityVelocity(IntPtr plugin, int entityHandle, float x, float y, float z);
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]

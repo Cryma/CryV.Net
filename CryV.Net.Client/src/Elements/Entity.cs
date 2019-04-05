@@ -16,6 +16,11 @@ namespace CryV.Net.Client.Elements
             set => CryVNative.Native_Entity_SetEntityPosition(CryVNative.Plugin, Handle, value.X, value.Y, value.Z);
         }
 
+        public Vector3 Rotation
+        {
+            get => StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetEntityRotation(CryVNative.Plugin, Handle));
+            set => CryVNative.Native_Entity_SetEntityRotation(CryVNative.Plugin, Handle, value.X, value.Y, value.Z);
+        }
         public Vector3 Velocity
         {
             get => StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetEntityVelocity(CryVNative.Plugin, Handle));
