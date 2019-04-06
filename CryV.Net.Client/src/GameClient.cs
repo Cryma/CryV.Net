@@ -33,9 +33,8 @@ namespace CryV.Net.Client
             _networkClient = new NetworkClient(this);
 
             EventHandler.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
-            EventHandler.Subscribe<NetworkEvent<AddClientPayload>>(OnAddClient);
             EventHandler.Subscribe<NetworkEvent<RemoveClientPayload>>(OnRemoveClient);
-            EventHandler.Subscribe<NetworkEvent<TransformUpdatePayload>>(OnTransformUpdate);
+            EventHandler.Subscribe<NetworkEvent<ClientUpdatePayload>>(OnTransformUpdate);
         }
 
         public void Connect(string address, int port)
@@ -92,7 +91,7 @@ namespace CryV.Net.Client
                     _lastPosition = position;
                     _lastHeading = rotation.Z;
 
-                    var transformPayload = new TransformUpdatePayload(new ClientPayload(_networkClient.LocalId, position, LocalPlayer.Character.Velocity, rotation.Z, LocalPlayer.Character.Speed()));
+                    var transformPayload = new ClientUpdatePayload(_networkClient.LocalId, position, LocalPlayer.Character.Velocity, rotation.Z, LocalPlayer.Character.Speed());
 
                     SendPayload(transformPayload, DeliveryMethod.Unreliable);
                 });
@@ -108,27 +107,16 @@ namespace CryV.Net.Client
                 LocalPlayer.Character.Position = obj.Payload.StartPosition;
                 LocalPlayer.Character.Rotation = new Vector3(LocalPlayer.Character.Rotation.X, LocalPlayer.Character.Rotation.Y, obj.Payload.StartHeading);
 
-                if (obj.Payload.Players == null)
+                if (obj.Payload.ExistingPlayers == null)
                 {
                     return;
                 }
 
-                foreach (var player in obj.Payload.Players)
+                foreach (var player in obj.Payload.ExistingPlayers)
                 {
                     var client = new Networking.Client(player.Id, player.Position, player.Velocity, player.Heading);
                     _clients.TryAdd(client.Id, client);
                 }
-            });
-        }
-
-        private void OnAddClient(NetworkEvent<AddClientPayload> obj)
-        {
-            var clientData = obj.Payload.Client;
-
-            ThreadHelper.Run(() =>
-            {
-                var client = new Networking.Client(clientData.Id, clientData.Position, clientData.Velocity, clientData.Heading);
-                _clients.TryAdd(client.Id, client);
             });
         }
 
@@ -145,21 +133,21 @@ namespace CryV.Net.Client
             });
         }
 
-        private void OnTransformUpdate(NetworkEvent<TransformUpdatePayload> obj)
+        private void OnTransformUpdate(NetworkEvent<ClientUpdatePayload> obj)
         {
-            var clientData = obj.Payload.Client;
+            var clientData = obj.Payload;
 
             ThreadHelper.Run(() =>
             {
-                if (_clients.TryGetValue(obj.Payload.Client.Id, out var client) == false)
+                _clients.AddOrUpdate(clientData.Id, new Networking.Client(clientData.Id, clientData.Position, clientData.Velocity, clientData.Heading), (id, client) =>
                 {
-                    return;
-                }
+                    client.Position = clientData.Position;
+                    client.Rotation = new Vector3(client.Rotation.X, client.Rotation.Y, clientData.Heading);
+                    client.Velocity = clientData.Velocity;
+                    client.Speed = clientData.Speed;
 
-                client.Position = clientData.Position;
-                client.Rotation = new Vector3(client.Rotation.X, client.Rotation.Y, clientData.Heading);
-                client.Velocity = clientData.Velocity;
-                client.Speed = clientData.Speed;
+                    return client;
+                });
             });
         }
 

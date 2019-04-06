@@ -6,6 +6,6 @@
         Bootstrap,
         AddClient,
         RemoveClient,
-        TransformUpdate
+        UpdateClient
     }
 }

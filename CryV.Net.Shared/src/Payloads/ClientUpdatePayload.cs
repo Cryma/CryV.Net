@@ -1,12 +1,16 @@
 ﻿using System.Numerics;
+using CryV.Net.Shared.Enums;
+using CryV.Net.Shared.Payloads.Partials;
 using ProtoBuf;
 
-namespace CryV.Net.Shared.Payloads.Partials
+namespace CryV.Net.Shared.Payloads
 {
     [ProtoContract]
-    public class ClientPayload
+    public class ClientUpdatePayload : IPayload
     {
-        
+
+        public PayloadType PayloadType { get; } = PayloadType.UpdateClient;
+
         [ProtoMember(1)]
         public int Id { get; set; }
 
@@ -22,11 +26,11 @@ namespace CryV.Net.Shared.Payloads.Partials
         [ProtoMember(5)]
         public int Speed { get; set; }
 
-        public ClientPayload()
+        public ClientUpdatePayload()
         {
         }
 
-        public ClientPayload(int id, Vector3 position, Vector3 velocity, float heading, int speed)
+        public ClientUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, int speed)
         {
             Id = id;
             Position = position;

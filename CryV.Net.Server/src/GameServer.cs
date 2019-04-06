@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using CryV.Net.Server.Elements;
 using CryV.Net.Server.Networking;
 using CryV.Net.Shared.Events.Types;
 using CryV.Net.Shared.Payloads;
-using CryV.Net.Shared.Payloads.Partials;
 using EventHandler = CryV.Net.Shared.Events.EventHandler;
 
 namespace CryV.Net.Server
@@ -24,12 +21,12 @@ namespace CryV.Net.Server
             _networkServer = new NetworkServer(this);
             _networkServer.Start(1337);
 
-            EventHandler.Subscribe<NetworkEvent<TransformUpdatePayload>>(OnTransformUpdate);
+            EventHandler.Subscribe<NetworkEvent<ClientUpdatePayload>>(OnClientUpdate);
         }
 
-        private void OnTransformUpdate(NetworkEvent<TransformUpdatePayload> obj)
+        private void OnClientUpdate(NetworkEvent<ClientUpdatePayload> obj)
         {
-            var clientData = obj.Payload.Client;
+            var clientData = obj.Payload;
 
             var fromClient = GetClient(clientData.Id);
             fromClient.Position = clientData.Position;
@@ -82,7 +79,7 @@ namespace CryV.Net.Server
 
         private void BootstrapClient(Client client)
         {
-            var playerPayloads = new List<ClientPayload>();
+            var playerPayloads = new List<ClientUpdatePayload>();
             foreach (var existingClient in _clients.Values)
             {
                 // Don't sync self
@@ -91,7 +88,7 @@ namespace CryV.Net.Server
                     continue;
                 }
 
-                playerPayloads.Add(new ClientPayload(existingClient.Id, existingClient.Position, existingClient.Velocity, existingClient.Heading, existingClient.Speed));
+                playerPayloads.Add(new ClientUpdatePayload(existingClient.Id, existingClient.Position, existingClient.Velocity, existingClient.Heading, existingClient.Speed));
             }
 
             var bootstrapPayload = new BootstrapPayload(client.Id, client.Position, client.Heading, playerPayloads);
@@ -100,7 +97,7 @@ namespace CryV.Net.Server
 
         private void PropagateNewClient(Client client)
         {
-            var payload = new AddClientPayload(new ClientPayload(client.Id, client.Position, client.Velocity, client.Heading, client.Speed));
+            var payload = new ClientUpdatePayload(client.Id, client.Position, client.Velocity, client.Heading, client.Speed);
 
             foreach (var existingClient in _clients.Values)
             {
