@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Linq;
+using System.Numerics;
 using CryV.Net.Shared.Payloads;
 using CryV.Net.Shared.Payloads.Helpers;
 using LiteNetLib;
@@ -25,7 +27,7 @@ namespace CryV.Net.Server.Elements
 
         public void Send(IPayload payload, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered)
         {
-            var data = PayloadHandler.SerializePayload(payload);
+            var data = PayloadHandler.SerializePayload(payload).Prepend((byte) payload.PayloadType).ToArray();
 
             _peer.Send(data, deliveryMethod);
         }
