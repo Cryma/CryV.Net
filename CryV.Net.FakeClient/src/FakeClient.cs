@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 using CryV.Net.Shared.Events.Types;
 using CryV.Net.Shared.Payloads;
@@ -12,6 +14,8 @@ namespace CryV.Net.FakeClient
     {
 
         public Client Client { get; }
+
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         public FakeClient()
         {
@@ -47,6 +51,10 @@ namespace CryV.Net.FakeClient
             {
                 DoCircle(Convert.ToInt32(commandArray[1]), Convert.ToSingle(commandArray[2]));
             }
+            else if (commandName == "go")
+            {
+                DoGo(Convert.ToSingle(commandArray[1]), Convert.ToSingle(commandArray[2]));
+            }
             else if (commandName == "connect")
             {
                 Client.Connect(commandArray[1], Convert.ToInt32(commandArray[2]));
@@ -59,10 +67,47 @@ namespace CryV.Net.FakeClient
 
                 Console.WriteLine("Disconnected");
             }
+            else if (commandName == "stop")
+            {
+                _cancellationTokenSource.Cancel();
+
+                _cancellationTokenSource = new CancellationTokenSource();
+            }
             else
             {
                 Console.WriteLine("Command not found");
             }
+        }
+
+        private void DoGo(float heading, float speed)
+        {
+            var velocity = new Vector3(0.0f, speed, 0.0f);
+            var direction = Quaternion.CreateFromAxisAngle(new Vector3(0.0f, 0.0f, 1.0f), (float) (heading * Math.PI / 180));
+            var directionVelocity = Vector3.Transform(velocity, direction);
+
+            var interval = 1000.0f / 100.0f;
+            var step = directionVelocity / interval;
+
+            Dummy.Heading = heading;
+            Dummy.Velocity = directionVelocity;
+
+            Task.Run(async () =>
+            {
+                while (_cancellationTokenSource.IsCancellationRequested == false)
+                {
+                    var position = Dummy.Position;
+
+                    position.X += step.X;
+                    position.Y += step.Y;
+                    position.Z += step.Z;
+
+                    Client.Send(new TransformUpdatePayload(new ClientPayload(Dummy.LocalId, position, directionVelocity, heading)), DeliveryMethod.Unreliable);
+
+                    Dummy.Position = position;
+
+                    await Task.Delay(TimeSpan.FromMilliseconds(100), _cancellationTokenSource.Token);
+                }
+            }, _cancellationTokenSource.Token);
         }
 
         private void DoCircle(int interval, float radius)
@@ -75,7 +120,7 @@ namespace CryV.Net.FakeClient
             Task.Run(async () =>
             {
                 float timeCounter = 0;
-                while (true)
+                while (_cancellationTokenSource.IsCancellationRequested == false)
                 {
                     timeCounter += 0.1f;
                     var position = center;
@@ -83,18 +128,16 @@ namespace CryV.Net.FakeClient
                     var dx = (float) Math.Sin(timeCounter * timeStep) * radius;
                     var dy = (float) Math.Cos(timeCounter * timeStep) * radius;
 
-                    Console.WriteLine(dx + " - " + dy);
-
                     position.X += dx;
                     position.Y += dy;
 
-                    Client.Send(new TransformUpdatePayload(new ClientPayload(Dummy.LocalId, position, 0.0f)), DeliveryMethod.Unreliable);
+                    Client.Send(new TransformUpdatePayload(new ClientPayload(Dummy.LocalId, position, new Vector3(dx * deltaTime, dy * deltaTime, 0.0f), 0.0f)), DeliveryMethod.Unreliable);
 
                     Dummy.Position = position;
 
-                    await Task.Delay(TimeSpan.FromMilliseconds(interval));
+                    await Task.Delay(TimeSpan.FromMilliseconds(interval), _cancellationTokenSource.Token);
                 }
-            });
+            }, _cancellationTokenSource.Token);
         }
 
         public void Tick()

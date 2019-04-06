@@ -1,4 +1,6 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using CryV.Net.Client.Elements;
 
 namespace CryV.Net.Client.Helpers
@@ -31,6 +33,11 @@ namespace CryV.Net.Client.Helpers
             }
 
             _entities.Clear();
+        }
+
+        public static IList<Entity> GetEntities()
+        {
+            return _entities.Values.ToList();
         }
 
         public static bool ContainsEntity(int id)

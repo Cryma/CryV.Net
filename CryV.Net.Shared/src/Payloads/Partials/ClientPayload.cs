@@ -14,16 +14,20 @@ namespace CryV.Net.Shared.Payloads.Partials
         public SerializableVector3 Position { get; set; }
 
         [ProtoMember(3)]
+        public SerializableVector3 Velocity { get; set; }
+
+        [ProtoMember(4)]
         public float Heading { get; set; }
 
         public ClientPayload()
         {
         }
 
-        public ClientPayload(int id, Vector3 position, float heading)
+        public ClientPayload(int id, Vector3 position, Vector3 velocity, float heading)
         {
             Id = id;
             Position = position;
+            Velocity = velocity;
             Heading = heading;
         }
 

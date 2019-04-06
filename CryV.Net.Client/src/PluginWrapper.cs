@@ -9,6 +9,7 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using CryV.Net.Client.Console;
+using CryV.Net.Client.Helpers;
 using CryV.Net.Client.Networking;
 
 namespace CryV.Net.Client
@@ -68,6 +69,14 @@ namespace CryV.Net.Client
 
             _gameClient.Tick();
             _console.Update();
+
+            foreach (var entity in EntityPool.GetEntities())
+            {
+                if (entity is Ped ped)
+                {
+                    ped.Update();
+                }
+            }
         }
 
     }

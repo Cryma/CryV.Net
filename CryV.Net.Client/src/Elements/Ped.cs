@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Client.Native;
 
@@ -45,6 +46,81 @@ namespace CryV.Net.Client.Elements
             SetCanAttackFriendly(true, true);
 
             TaskSetBlockingOfNonTemporaryEvents(true);
+        }
+
+        public void Update()
+        {
+            var end = Position + Velocity;
+            var range = Vector3.Distance(Position, end);
+
+            switch (Speed())
+            {
+                case 1:
+                {
+                    if (IsPedWalking() && range < 0.1)
+                    {
+                        break;
+                    }
+
+                    var blend = Math.Min(Math.Pow(range, 2) * 2, 1.0f);
+
+                    TaskGoStraightToCoord(end.X, end.Y, end.Z, Speed(), -1, 0.0f, 0.0f);
+                    SetPedDesiredMoveBlendRatio((float) blend);
+
+                    break;
+                }
+
+                case 2:
+                {
+                    if (IsPedRunning() && range < 0.2)
+                    {
+                        break;
+                    }
+
+                    TaskGoStraightToCoord(end.X, end.Y, end.Z, Speed(), -1, 0.0f, 0.0f);
+                    SetPedDesiredMoveBlendRatio(1.0f);
+
+                    break;
+                }
+
+                case 3:
+                {
+                    if (IsPedSprinting() && range < 0.3)
+                    {
+                        break;
+                    }
+
+                    TaskGoStraightToCoord(end.X, end.Y, end.Z, Speed(), -1, 0.0f, 0.0f);
+                    SetPedDesiredMoveBlendRatio(1.0f);
+
+                    break;
+                }
+
+                default:
+                    TaskStandStill(2000);
+
+                    break;
+            }
+        }
+
+        public int Speed()
+        {
+            if (IsPedWalking())
+            {
+                return 1;
+            }
+
+            if (IsPedRunning())
+            {
+                return 2;
+            }
+
+            if (IsPedSprinting())
+            {
+                return 3;
+            }
+
+            return 0;
         }
 
         public void SetPedDefaultComponentVariation()

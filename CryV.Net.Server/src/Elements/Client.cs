@@ -13,15 +13,17 @@ namespace CryV.Net.Server.Elements
         public int Id => _peer.Id;
 
         public Vector3 Position { get; set; }
-        
+
+        public Vector3 Velocity { get; set; }
         public float Heading { get; set; }
 
         private readonly NetPeer _peer;
 
-        public Client(NetPeer peer, Vector3 position, float heading)
+        public Client(NetPeer peer, Vector3 position, Vector3 velocity, float heading)
         {
             _peer = peer;
             Position = position;
+            Velocity = velocity;
             Heading = heading;
         }
 

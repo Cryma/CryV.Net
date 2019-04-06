@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using CryV.Net.Server.Elements;
 using CryV.Net.Server.Networking;
 using CryV.Net.Shared.Events.Types;
@@ -32,6 +33,8 @@ namespace CryV.Net.Server
 
             var fromClient = GetClient(clientData.Id);
             fromClient.Position = clientData.Position;
+            fromClient.Velocity = clientData.Velocity;
+            fromClient.Heading = clientData.Heading;
 
             foreach (var client in GetClients())
             {
@@ -87,7 +90,7 @@ namespace CryV.Net.Server
                     continue;
                 }
 
-                playerPayloads.Add(new ClientPayload(existingClient.Id, existingClient.Position, existingClient.Heading));
+                playerPayloads.Add(new ClientPayload(existingClient.Id, existingClient.Position, existingClient.Velocity, existingClient.Heading));
             }
 
             var bootstrapPayload = new BootstrapPayload(client.Id, client.Position, client.Heading, playerPayloads);
@@ -96,7 +99,7 @@ namespace CryV.Net.Server
 
         private void PropagateNewClient(Client client)
         {
-            var payload = new AddClientPayload(new ClientPayload(client.Id, client.Position, client.Heading));
+            var payload = new AddClientPayload(new ClientPayload(client.Id, client.Position, client.Velocity, client.Heading));
 
             foreach (var existingClient in _clients.Values)
             {

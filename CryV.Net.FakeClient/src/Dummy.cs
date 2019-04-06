@@ -9,6 +9,8 @@ namespace CryV.Net.FakeClient
 
         public static Vector3 Position { get; set; }
 
+        public static Vector3 Velocity { get; set; }
+
         public static float Heading { get; set; }
 
     }
