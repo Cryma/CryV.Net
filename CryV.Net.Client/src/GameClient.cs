@@ -53,7 +53,10 @@ namespace CryV.Net.Client
 
         public void Tick()
         {
-            
+            foreach (var client in _clients.Values)
+            {
+                client.Tick();
+            }
         }
 
         public void SendPayload(IPayload payload, DeliveryMethod deliveryMethod)

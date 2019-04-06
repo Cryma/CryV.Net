@@ -48,63 +48,6 @@ namespace CryV.Net.Client.Elements
             TaskSetBlockingOfNonTemporaryEvents(true);
         }
 
-        public int FakeSpeed { get; set; }
-
-        public void Update()
-        {
-            var end = Position + Velocity;
-            var range = Vector3.Distance(Position, end);
-
-            switch (FakeSpeed)
-            {
-                case 1:
-                {
-                    if (IsPedWalking() && range < 0.1)
-                    {
-                        break;
-                    }
-
-                    var blend = Math.Min(Math.Pow(range, 2) * 2, 1.0f);
-
-                    TaskGoStraightToCoord(end.X, end.Y, end.Z, FakeSpeed, -1, 0.0f, 0.0f);
-                    SetPedDesiredMoveBlendRatio((float) blend);
-
-                    break;
-                }
-
-                case 2:
-                {
-                    if (IsPedRunning() && range < 0.2)
-                    {
-                        break;
-                    }
-
-                    TaskGoStraightToCoord(end.X, end.Y, end.Z, FakeSpeed, -1, 0.0f, 0.0f);
-                    SetPedDesiredMoveBlendRatio(1.0f);
-
-                    break;
-                }
-
-                case 3:
-                {
-                    if (IsPedSprinting() && range < 0.3)
-                    {
-                        break;
-                    }
-
-                    TaskGoStraightToCoord(end.X, end.Y, end.Z, FakeSpeed, -1, 0.0f, 0.0f);
-                    SetPedDesiredMoveBlendRatio(1.0f);
-
-                    break;
-                }
-
-                default:
-                    TaskStandStill(2000);
-
-                    break;
-            }
-        }
-
         public int Speed()
         {
             if (IsPedWalking())
@@ -133,8 +76,6 @@ namespace CryV.Net.Client.Elements
 
                 return;
             }
-
-            Utility.Log("Ped id: " + Handle);
 
             CryVNative.Native_Ped_SetPedDefaultComponentVariation(CryVNative.Plugin, Handle);
         }

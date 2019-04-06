@@ -69,14 +69,6 @@ namespace CryV.Net.Client
 
             _gameClient.Tick();
             _console.Update();
-
-            foreach (var entity in EntityPool.GetEntities())
-            {
-                if (entity is Ped ped)
-                {
-                    ped.Update();
-                }
-            }
         }
 
     }

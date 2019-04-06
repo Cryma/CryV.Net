@@ -27,11 +27,7 @@ namespace CryV.Net.Client.Networking
             set => _ped.Rotation = value;
         }
 
-        public int Speed
-        {
-            get => _ped.FakeSpeed;
-            set => _ped.FakeSpeed = value;
-        }
+        public int Speed { get; set; }
 
         private readonly Ped _ped;
 
@@ -43,6 +39,61 @@ namespace CryV.Net.Client.Networking
             {
                 Velocity = velocity
             };
+        }
+
+        public void Tick()
+        {
+            var end = Position + Velocity;
+            var range = Vector3.Distance(Position, end);
+
+            switch (Speed)
+            {
+                case 1:
+                {
+                    if (_ped.IsPedWalking() && range < 0.25f)
+                    {
+                        break;
+                    }
+
+                    var blend = Math.Min(Math.Pow(range, 2) * 2, 1.0f);
+
+                    _ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, Speed, -1, 0.0f, 0.0f);
+                    _ped.SetPedDesiredMoveBlendRatio((float)blend);
+
+                    break;
+                }
+
+                case 2:
+                {
+                    if (_ped.IsPedRunning() && range < 0.5f)
+                    {
+                        break;
+                    }
+
+                    _ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, Speed, -1, 0.0f, 0.0f);
+                    _ped.SetPedDesiredMoveBlendRatio(1.0f);
+
+                    break;
+                }
+
+                case 3:
+                {
+                    if (_ped.IsPedSprinting() && range < 0.75f)
+                    {
+                        break;
+                    }
+
+                    _ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, Speed, -1, 0.0f, 0.0f);
+                    _ped.SetPedDesiredMoveBlendRatio(1.0f);
+
+                    break;
+                }
+
+                default:
+                    _ped.TaskStandStill(2000);
+
+                    break;
+            }
         }
 
         public void Dispose()
