@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using CryV.Net.Client.Elements;
@@ -53,7 +54,14 @@ namespace CryV.Net.Client
 
         public void SendPayload(IPayload payload, DeliveryMethod deliveryMethod)
         {
-            var data = PayloadHandler.SerializePayload(payload);
+            var data = PayloadHandler.SerializePayload(payload).Prepend((byte) payload.PayloadType).ToArray();
+
+            if (_networkClient.Peer == null)
+            {
+                Utility.Log("Warning: Server is null");
+
+                return;
+            }
 
             _networkClient.Peer.Send(data, deliveryMethod);
         }
@@ -81,6 +89,11 @@ namespace CryV.Net.Client
             {
                 LocalPlayer.Character.Position = obj.Payload.StartPosition;
                 LocalPlayer.Character.Rotation = new Vector3(LocalPlayer.Character.Rotation.X, LocalPlayer.Character.Rotation.Y, obj.Payload.StartHeading);
+
+                if (obj.Payload.Players == null)
+                {
+                    return;
+                }
 
                 foreach (var player in obj.Payload.Players)
                 {

@@ -1,12 +1,13 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using CryV.Net.Server.Elements;
 using CryV.Net.Server.Networking;
-using CryV.Net.Shared.Events;
 using CryV.Net.Shared.Events.Types;
 using CryV.Net.Shared.Payloads;
 using CryV.Net.Shared.Payloads.Partials;
+using EventHandler = CryV.Net.Shared.Events.EventHandler;
 
 namespace CryV.Net.Server
 {
