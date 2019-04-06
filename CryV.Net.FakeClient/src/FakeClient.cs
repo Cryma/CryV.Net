@@ -49,11 +49,11 @@ namespace CryV.Net.FakeClient
             }
             else if (commandName == "circle")
             {
-                DoCircle(Convert.ToInt32(commandArray[1]), Convert.ToSingle(commandArray[2]));
+                DoCircle(Convert.ToInt32(commandArray[1]), Convert.ToSingle(commandArray[2]), Convert.ToInt32(commandArray[3]));
             }
             else if (commandName == "go")
             {
-                DoGo(Convert.ToSingle(commandArray[1]), Convert.ToSingle(commandArray[2]));
+                DoGo(Convert.ToSingle(commandArray[1]), Convert.ToSingle(commandArray[2]), Convert.ToInt32(commandArray[3]));
             }
             else if (commandName == "connect")
             {
@@ -79,7 +79,7 @@ namespace CryV.Net.FakeClient
             }
         }
 
-        private void DoGo(float heading, float speed)
+        private void DoGo(float heading, float speed, int moveSpeed)
         {
             var velocity = new Vector3(0.0f, speed, 0.0f);
             var direction = Quaternion.CreateFromAxisAngle(new Vector3(0.0f, 0.0f, 1.0f), (float) (heading * Math.PI / 180));
@@ -101,7 +101,7 @@ namespace CryV.Net.FakeClient
                     position.Y += step.Y;
                     position.Z += step.Z;
 
-                    Client.Send(new TransformUpdatePayload(new ClientPayload(Dummy.LocalId, position, directionVelocity, heading)), DeliveryMethod.Unreliable);
+                    Client.Send(new TransformUpdatePayload(new ClientPayload(Dummy.LocalId, position, directionVelocity, heading, moveSpeed)), DeliveryMethod.Unreliable);
 
                     Dummy.Position = position;
 
@@ -110,7 +110,7 @@ namespace CryV.Net.FakeClient
             }, _cancellationTokenSource.Token);
         }
 
-        private void DoCircle(int interval, float radius)
+        private void DoCircle(int interval, float radius, int moveSpeed)
         {
             var center = Dummy.Position;
             var timeStep = (float) (0.5 * Math.PI / 6);
@@ -131,7 +131,7 @@ namespace CryV.Net.FakeClient
                     position.X += dx;
                     position.Y += dy;
 
-                    Client.Send(new TransformUpdatePayload(new ClientPayload(Dummy.LocalId, position, new Vector3(dx * deltaTime, dy * deltaTime, 0.0f), 0.0f)), DeliveryMethod.Unreliable);
+                    Client.Send(new TransformUpdatePayload(new ClientPayload(Dummy.LocalId, position, new Vector3(dx * deltaTime, dy * deltaTime, 0.0f), 0.0f, moveSpeed)), DeliveryMethod.Unreliable);
 
                     Dummy.Position = position;
 

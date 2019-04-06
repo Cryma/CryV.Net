@@ -89,7 +89,7 @@ namespace CryV.Net.Client
                     _lastPosition = position;
                     _lastHeading = rotation.Z;
 
-                    var transformPayload = new TransformUpdatePayload(new ClientPayload(_networkClient.LocalId, position, LocalPlayer.Character.Velocity, rotation.Z));
+                    var transformPayload = new TransformUpdatePayload(new ClientPayload(_networkClient.LocalId, position, LocalPlayer.Character.Velocity, rotation.Z, LocalPlayer.Character.Speed()));
 
                     SendPayload(transformPayload, DeliveryMethod.Unreliable);
                 });
@@ -156,6 +156,7 @@ namespace CryV.Net.Client
                 client.Position = clientData.Position;
                 client.Rotation = new Vector3(client.Rotation.X, client.Rotation.Y, clientData.Heading);
                 client.Velocity = clientData.Velocity;
+                client.Speed = clientData.Speed;
             });
         }
 

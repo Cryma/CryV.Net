@@ -48,12 +48,14 @@ namespace CryV.Net.Client.Elements
             TaskSetBlockingOfNonTemporaryEvents(true);
         }
 
+        public int FakeSpeed { get; set; }
+
         public void Update()
         {
             var end = Position + Velocity;
             var range = Vector3.Distance(Position, end);
 
-            switch (Speed())
+            switch (FakeSpeed)
             {
                 case 1:
                 {
@@ -64,7 +66,7 @@ namespace CryV.Net.Client.Elements
 
                     var blend = Math.Min(Math.Pow(range, 2) * 2, 1.0f);
 
-                    TaskGoStraightToCoord(end.X, end.Y, end.Z, Speed(), -1, 0.0f, 0.0f);
+                    TaskGoStraightToCoord(end.X, end.Y, end.Z, FakeSpeed, -1, 0.0f, 0.0f);
                     SetPedDesiredMoveBlendRatio((float) blend);
 
                     break;
@@ -77,7 +79,7 @@ namespace CryV.Net.Client.Elements
                         break;
                     }
 
-                    TaskGoStraightToCoord(end.X, end.Y, end.Z, Speed(), -1, 0.0f, 0.0f);
+                    TaskGoStraightToCoord(end.X, end.Y, end.Z, FakeSpeed, -1, 0.0f, 0.0f);
                     SetPedDesiredMoveBlendRatio(1.0f);
 
                     break;
@@ -90,7 +92,7 @@ namespace CryV.Net.Client.Elements
                         break;
                     }
 
-                    TaskGoStraightToCoord(end.X, end.Y, end.Z, Speed(), -1, 0.0f, 0.0f);
+                    TaskGoStraightToCoord(end.X, end.Y, end.Z, FakeSpeed, -1, 0.0f, 0.0f);
                     SetPedDesiredMoveBlendRatio(1.0f);
 
                     break;

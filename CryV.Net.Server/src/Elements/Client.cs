@@ -15,7 +15,10 @@ namespace CryV.Net.Server.Elements
         public Vector3 Position { get; set; }
 
         public Vector3 Velocity { get; set; }
+
         public float Heading { get; set; }
+
+        public int Speed { get; set; }
 
         private readonly NetPeer _peer;
 

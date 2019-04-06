@@ -27,6 +27,12 @@ namespace CryV.Net.Client.Networking
             set => _ped.Rotation = value;
         }
 
+        public int Speed
+        {
+            get => _ped.FakeSpeed;
+            set => _ped.FakeSpeed = value;
+        }
+
         private readonly Ped _ped;
 
         public Client(int id, Vector3 position, Vector3 velocity, float heading)

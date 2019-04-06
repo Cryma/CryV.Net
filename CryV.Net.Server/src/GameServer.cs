@@ -35,6 +35,7 @@ namespace CryV.Net.Server
             fromClient.Position = clientData.Position;
             fromClient.Velocity = clientData.Velocity;
             fromClient.Heading = clientData.Heading;
+            fromClient.Speed = clientData.Speed;
 
             foreach (var client in GetClients())
             {
@@ -90,7 +91,7 @@ namespace CryV.Net.Server
                     continue;
                 }
 
-                playerPayloads.Add(new ClientPayload(existingClient.Id, existingClient.Position, existingClient.Velocity, existingClient.Heading));
+                playerPayloads.Add(new ClientPayload(existingClient.Id, existingClient.Position, existingClient.Velocity, existingClient.Heading, existingClient.Speed));
             }
 
             var bootstrapPayload = new BootstrapPayload(client.Id, client.Position, client.Heading, playerPayloads);
@@ -99,7 +100,7 @@ namespace CryV.Net.Server
 
         private void PropagateNewClient(Client client)
         {
-            var payload = new AddClientPayload(new ClientPayload(client.Id, client.Position, client.Velocity, client.Heading));
+            var payload = new AddClientPayload(new ClientPayload(client.Id, client.Position, client.Velocity, client.Heading, client.Speed));
 
             foreach (var existingClient in _clients.Values)
             {
