@@ -11,7 +11,7 @@ namespace CryV.Net.Shared.Payloads.Partials
         public int Id { get; set; }
 
         [ProtoMember(2)]
-        public Vector3 Position { get; set; }
+        public SerializableVector3 Position { get; set; }
 
         [ProtoMember(3)]
         public float Heading { get; set; }

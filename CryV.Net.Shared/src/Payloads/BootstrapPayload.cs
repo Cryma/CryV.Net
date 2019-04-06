@@ -16,7 +16,7 @@ namespace CryV.Net.Shared.Payloads
         public int LocalId { get; set; }
 
         [ProtoMember(2)]
-        public Vector3 StartPosition { get; set; }
+        public SerializableVector3 StartPosition { get; set; }
 
         [ProtoMember(3)]
         public float StartHeading { get; set; }
