@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using CryV.Net.Shared.Payloads;
+using CryV.Net.Shared.Payloads.Helpers;
 using LiteNetLib;
-using LiteNetLib.Utils;
 
 namespace CryV.Net.Server.Elements
 {
@@ -23,12 +23,11 @@ namespace CryV.Net.Server.Elements
             Heading = heading;
         }
 
-        public void Send(IPayload payload)
+        public void Send(IPayload payload, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered)
         {
-            var writer = new NetDataWriter();
-            payload.Write(writer);
+            var data = PayloadHandler.SerializePayload(payload);
 
-            _peer.Send(writer, DeliveryMethod.ReliableOrdered);
+            _peer.Send(data, deliveryMethod);
         }
 
     }

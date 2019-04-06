@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Numerics;
+using System.Reflection;
+using System.Runtime.Serialization;
 using CryV.Net.Server.Elements;
 using CryV.Net.Shared.Enums;
-using CryV.Net.Shared.Payloads;
+using CryV.Net.Shared.Events;
+using CryV.Net.Shared.Events.Types;
+using CryV.Net.Shared.Payloads.Helpers;
 using LiteNetLib;
-using LiteNetLib.Utils;
 
 namespace CryV.Net.Server.Networking
 {
@@ -35,27 +37,23 @@ namespace CryV.Net.Server.Networking
 
         private void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliverymethod)
         {
-            var fromClient = _gameServer.GetClient(peer.Id);
-
             var type = (PayloadType) reader.GetByte();
 
-            if (type == PayloadType.TransformUpdate)
+            var payloadObjectType = PayloadHandler.GetPayloadByType(type);
+            var payload = PayloadHandler.DeserializePayload(payloadObjectType, reader.GetRemainingBytes());
+
+            var eventType = typeof(NetworkEvent<>).MakeGenericType(payloadObjectType);
+            var eventInstance = (IEvent) FormatterServices.GetUninitializedObject(eventType);
+
+            var payloadProperty = eventType.GetProperty("Payload", BindingFlags.Public | BindingFlags.Instance);
+            if (payloadProperty == null)
             {
-                var transformPayload = new TransformUpdatePayload();
-                transformPayload.Read(reader);
-
-                fromClient.Position = transformPayload.Client.Position;
-
-                foreach (var client in _gameServer.GetClients())
-                {
-                    if (client.Id == fromClient.Id)
-                    {
-                        continue;
-                    }
-
-                    client.Send(transformPayload);
-                }
+                return;
             }
+
+            payloadProperty.SetValue(eventInstance, payload);
+
+            Shared.Events.EventHandler.Publish(eventType, eventInstance);
         }
 
         private void OnConnectionRequest(ConnectionRequest request)

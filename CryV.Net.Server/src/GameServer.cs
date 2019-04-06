@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using CryV.Net.Server.Elements;
 using CryV.Net.Server.Networking;
+using CryV.Net.Shared.Events;
+using CryV.Net.Shared.Events.Types;
 using CryV.Net.Shared.Payloads;
 using CryV.Net.Shared.Payloads.Partials;
 
@@ -19,6 +21,26 @@ namespace CryV.Net.Server
         {
             _networkServer = new NetworkServer(this);
             _networkServer.Start(1337);
+
+            EventHandler.Subscribe<NetworkEvent<TransformUpdatePayload>>(OnTransformUpdate);
+        }
+
+        private void OnTransformUpdate(NetworkEvent<TransformUpdatePayload> obj)
+        {
+            var clientData = obj.Payload.Client;
+
+            var fromClient = GetClient(clientData.Id);
+            fromClient.Position = clientData.Position;
+
+            foreach (var client in GetClients())
+            {
+                if (client.Id == fromClient.Id)
+                {
+                    continue;
+                }
+
+                client.Send(obj.Payload);
+            }
         }
 
         public void AddClient(Client client)
