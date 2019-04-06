@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Numerics;
@@ -5,13 +6,13 @@ using System.Threading.Tasks;
 using CryV.Net.Client.Elements;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Client.Networking;
-using CryV.Net.Shared.Events;
 using CryV.Net.Shared.Events.Types;
 using CryV.Net.Shared.Payloads;
 using CryV.Net.Shared.Payloads.Helpers;
 using CryV.Net.Shared.Payloads.Partials;
 using LiteNetLib;
 using LiteNetLib.Utils;
+using EventHandler = CryV.Net.Shared.Events.EventHandler;
 
 namespace CryV.Net.Client
 {
@@ -23,6 +24,9 @@ namespace CryV.Net.Client
         private readonly NetworkClient _networkClient;
 
         private readonly ConcurrentDictionary<int, Networking.Client> _clients = new ConcurrentDictionary<int, Networking.Client>();
+
+        private Vector3 _lastPosition = Vector3.Zero;
+        private float _lastHeading = 0.0f;
 
         public GameClient()
         {
@@ -74,7 +78,18 @@ namespace CryV.Net.Client
 
                 ThreadHelper.Run(() =>
                 {
-                    var transformPayload = new TransformUpdatePayload(new ClientPayload(_networkClient.LocalId, LocalPlayer.Character.Position, LocalPlayer.Character.Rotation.Z));
+                    var position = LocalPlayer.Character.Position;
+                    var rotation = LocalPlayer.Character.Rotation;
+
+                    if ((position - _lastPosition).Length() < 0.05f && Math.Abs(rotation.Z - _lastHeading) < 0.05f)
+                    {
+                        return;
+                    }
+
+                    _lastPosition = position;
+                    _lastHeading = rotation.Z;
+
+                    var transformPayload = new TransformUpdatePayload(new ClientPayload(_networkClient.LocalId, position, rotation.Z));
 
                     SendPayload(transformPayload, DeliveryMethod.Unreliable);
                 });
