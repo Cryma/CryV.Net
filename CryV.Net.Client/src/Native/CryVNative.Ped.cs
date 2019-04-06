@@ -54,5 +54,24 @@ namespace CryV.Net.Client.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Ped_TaskSetBlockingOfNonTemporaryEvents(IntPtr plugin, int pedId, bool toggle);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool Native_Ped_IsPedWalking(IntPtr plugin, int pedId);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool Native_Ped_IsPedRunning(IntPtr plugin, int pedId);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool Native_Ped_IsPedSprinting(IntPtr plugin, int pedId);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_TaskGoStraightToCoord(IntPtr plugin, int pedId, float x, float y, float z, float speed, int timeout, float targetHeading,
+            float distanceToSlide);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_SetPedDesiredMoveBlendRatio(IntPtr plugin, int pedId, float p1);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_TaskStandStill(IntPtr plugin, int pedId, int time);
+
     }
 }

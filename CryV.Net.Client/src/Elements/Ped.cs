@@ -131,5 +131,35 @@ namespace CryV.Net.Client.Elements
             CryVNative.Native_Ped_TaskSetBlockingOfNonTemporaryEvents(CryVNative.Plugin, Handle, toggle);
         }
 
+        public bool IsPedWalking()
+        {
+            return CryVNative.Native_Ped_IsPedWalking(CryVNative.Plugin, Handle);
+        }
+
+        public bool IsPedRunning()
+        {
+            return CryVNative.Native_Ped_IsPedRunning(CryVNative.Plugin, Handle);
+        }
+
+        public bool IsPedSprinting()
+        {
+            return CryVNative.Native_Ped_IsPedSprinting(CryVNative.Plugin, Handle);
+        }
+
+        public void TaskGoStraightToCoord(float x, float y, float z, float speed, int timeout, float targetHeading, float distanceToSlide)
+        {
+            CryVNative.Native_Ped_TaskGoStraightToCoord(CryVNative.Plugin, Handle, x, y, z, speed, timeout, targetHeading, distanceToSlide);
+        }
+
+        public void SetPedDesiredMoveBlendRatio(float p1)
+        {
+            CryVNative.Native_Ped_SetPedDesiredMoveBlendRatio(CryVNative.Plugin, Handle, p1);
+        }
+
+        public void TaskStandStill(int time)
+        {
+            CryVNative.Native_Ped_TaskStandStill(CryVNative.Plugin, Handle, time);
+        }
+
     }
 }
