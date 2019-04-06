@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="protobuf-net" Version="2.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="LiteNetLib">
       <HintPath>..\lib\LiteNetLib.dll</HintPath>
     </Reference>
