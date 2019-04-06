@@ -1,43 +1,30 @@
 ﻿using System.Numerics;
-using LiteNetLib.Utils;
+using ProtoBuf;
 
 namespace CryV.Net.Shared.Payloads.Partials
 {
+    [ProtoContract]
     public class ClientPayload
     {
         
+        [ProtoMember(1)]
         public int Id { get; set; }
 
+        [ProtoMember(2)]
         public Vector3 Position { get; set; }
 
+        [ProtoMember(3)]
         public float Heading { get; set; }
 
         public ClientPayload()
         {
         }
+
         public ClientPayload(int id, Vector3 position, float heading)
         {
             Id = id;
             Position = position;
             Heading = heading;
-        }
-
-        public void Write(NetDataWriter writer)
-        {
-            writer.Put(Id);
-
-            writer.Put(Position.X);
-            writer.Put(Position.Y);
-            writer.Put(Position.Z);
-
-            writer.Put(Heading);
-        }
-
-        public void Read(NetDataReader reader)
-        {
-            Id = reader.GetInt();
-            Position = new Vector3(reader.GetFloat(), reader.GetFloat(), reader.GetFloat());
-            Heading = reader.GetFloat();
         }
 
     }

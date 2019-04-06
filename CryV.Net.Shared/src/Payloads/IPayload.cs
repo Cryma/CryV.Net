@@ -1,5 +1,4 @@
 ﻿using CryV.Net.Shared.Enums;
-using LiteNetLib.Utils;
 
 namespace CryV.Net.Shared.Payloads
 {
@@ -7,9 +6,6 @@ namespace CryV.Net.Shared.Payloads
     {
 
         PayloadType PayloadType { get; }
-
-        void Write(NetDataWriter writer);
-        void Read(NetDataReader reader);
 
     }
 }

@@ -2,21 +2,26 @@
 using System.Numerics;
 using CryV.Net.Shared.Enums;
 using CryV.Net.Shared.Payloads.Partials;
-using LiteNetLib.Utils;
+using ProtoBuf;
 
 namespace CryV.Net.Shared.Payloads
 {
+    [ProtoContract]
     public class BootstrapPayload : IPayload
     {
 
         public PayloadType PayloadType { get; } = PayloadType.Bootstrap;
 
+        [ProtoMember(1)]
         public int LocalId { get; set; }
 
+        [ProtoMember(2)]
         public Vector3 StartPosition { get; set; }
 
+        [ProtoMember(3)]
         public float StartHeading { get; set; }
 
+        [ProtoMember(4)]
         public List<ClientPayload> Players { get; set; }
 
         public BootstrapPayload()
@@ -29,46 +34,6 @@ namespace CryV.Net.Shared.Payloads
             StartPosition = startPosition;
             StartHeading = startHeading;
             Players = players;
-        }
-
-        public void Write(NetDataWriter writer)
-        {
-            writer.Put((byte) PayloadType);
-
-            writer.Put(LocalId);
-
-            writer.Put(StartPosition.X);
-            writer.Put(StartPosition.Y);
-            writer.Put(StartPosition.Z);
-
-            writer.Put(StartHeading);
-
-            writer.Put(Players.Count);
-
-            foreach (var player in Players)
-            {
-                player.Write(writer);
-            }
-        }
-
-        public void Read(NetDataReader reader)
-        {
-            LocalId = reader.GetInt();
-
-            StartPosition = new Vector3(reader.GetFloat(), reader.GetFloat(), reader.GetFloat());
-
-            StartHeading = reader.GetFloat();
-
-            var playerAmount = reader.GetInt();
-
-            Players = new List<ClientPayload>();
-            for (var i = 0; i < playerAmount; i++)
-            {
-                var clientPayload = new ClientPayload();
-                clientPayload.Read(reader);
-
-                Players.Add(clientPayload);
-            }
         }
 
     }

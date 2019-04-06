@@ -1,13 +1,15 @@
 ﻿using CryV.Net.Shared.Enums;
-using LiteNetLib.Utils;
+using ProtoBuf;
 
 namespace CryV.Net.Shared.Payloads
 {
+    [ProtoContract]
     public class RemoveClientPayload : IPayload
     {
 
         public PayloadType PayloadType { get; } = PayloadType.RemoveClient;
 
+        [ProtoMember(1)]
         public int Id { get; set; }
 
         public RemoveClientPayload()
@@ -17,18 +19,6 @@ namespace CryV.Net.Shared.Payloads
         public RemoveClientPayload(int id)
         {
             Id = id;
-        }
-
-        public void Write(NetDataWriter writer)
-        {
-            writer.Put((byte) PayloadType);
-
-            writer.Put(Id);
-        }
-
-        public void Read(NetDataReader reader)
-        {
-            Id = reader.GetInt();
         }
 
     }

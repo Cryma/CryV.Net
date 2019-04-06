@@ -1,15 +1,16 @@
-﻿using System.Numerics;
-using CryV.Net.Shared.Enums;
+﻿using CryV.Net.Shared.Enums;
 using CryV.Net.Shared.Payloads.Partials;
-using LiteNetLib.Utils;
+using ProtoBuf;
 
 namespace CryV.Net.Shared.Payloads
 {
+    [ProtoContract]
     public class AddClientPayload : IPayload
     {
 
         public PayloadType PayloadType { get; } = PayloadType.AddClient;
 
+        [ProtoMember(1)]
         public ClientPayload Client { get; set; }
 
         public AddClientPayload()
@@ -19,19 +20,6 @@ namespace CryV.Net.Shared.Payloads
         public AddClientPayload(ClientPayload clientPayload)
         {
             Client = clientPayload;
-        }
-
-        public void Write(NetDataWriter writer)
-        {
-            writer.Put((byte) PayloadType);
-
-            Client.Write(writer);
-        }
-
-        public void Read(NetDataReader reader)
-        {
-            Client = new ClientPayload();
-            Client.Read(reader);
         }
 
     }

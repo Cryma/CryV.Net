@@ -1,13 +1,16 @@
 ﻿using CryV.Net.Shared.Enums;
 using CryV.Net.Shared.Payloads.Partials;
-using LiteNetLib.Utils;
+using ProtoBuf;
 
 namespace CryV.Net.Shared.Payloads
 {
+    [ProtoContract]
     public class TransformUpdatePayload : IPayload
     {
+
         public PayloadType PayloadType { get; } = PayloadType.TransformUpdate;
 
+        [ProtoMember(1)]
         public ClientPayload Client { get; set; }
 
         public TransformUpdatePayload()
@@ -19,17 +22,5 @@ namespace CryV.Net.Shared.Payloads
             Client = clientPayload;
         }
 
-        public void Write(NetDataWriter writer)
-        {
-            writer.Put((byte) PayloadType);
-
-            Client.Write(writer);
-        }
-
-        public void Read(NetDataReader reader)
-        {
-            Client = new ClientPayload();
-            Client.Read(reader);
-        }
     }
 }
