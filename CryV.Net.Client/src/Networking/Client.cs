@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using CryV.Net.Client.Elements;
+using CryV.Net.Client.Helpers;
 using CryV.Net.Client.Native;
 
 namespace CryV.Net.Client.Networking
@@ -26,6 +27,8 @@ namespace CryV.Net.Client.Networking
             set => _ped.Rotation = value;
         }
 
+        public float TargetHeading { get; set; }
+
         public int Speed { get; set; }
 
         private readonly Ped _ped;
@@ -41,6 +44,7 @@ namespace CryV.Net.Client.Networking
         {
             Id = id;
             TargetPosition = position;
+            TargetHeading = heading;
 
             _lastTick = DateTime.UtcNow;
 
@@ -58,6 +62,9 @@ namespace CryV.Net.Client.Networking
             var interpolatedPosition = Vector3.Lerp(Position, TargetPosition, deltaTime * InterpolationFactor);
             Position = interpolatedPosition;
             _ped.Velocity = Velocity;
+
+            var interpolatedHeading = Interpolation.LerpDegrees(Rotation.Z, TargetHeading, deltaTime * InterpolationFactor);
+            Rotation = new Vector3(Rotation.X, Rotation.Y, interpolatedHeading);
 
             var end = TargetPosition + Velocity;
             var range = Vector3.Distance(TargetPosition, end);

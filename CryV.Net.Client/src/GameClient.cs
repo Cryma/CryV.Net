@@ -150,7 +150,7 @@ namespace CryV.Net.Client
                 }
 
                 client.TargetPosition = clientData.Position;
-                client.Rotation = new Vector3(client.Rotation.X, client.Rotation.Y, clientData.Heading);
+                client.TargetHeading = clientData.Heading;
                 client.Velocity = clientData.Velocity;
                 client.Speed = clientData.Speed;
             });
