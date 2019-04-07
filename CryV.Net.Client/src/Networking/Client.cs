@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using CryV.Net.Client.Elements;
+using CryV.Net.Client.Native;
 
 namespace CryV.Net.Client.Networking
 {
@@ -17,11 +18,7 @@ namespace CryV.Net.Client.Networking
 
         public Vector3 TargetPosition { get; set; }
 
-        public Vector3 Velocity
-        {
-            get => _ped.Velocity;
-            set => _ped.Velocity = value;
-        }
+        public Vector3 Velocity { get; set; }
 
         public Vector3 Rotation
         {
@@ -35,7 +32,7 @@ namespace CryV.Net.Client.Networking
 
         private DateTime _lastTick;
 
-        public static float InterpolationFactor = 12f;
+        public static float InterpolationFactor = 3f;
 
         public Client(int id, Vector3 position, Vector3 velocity, float heading)
         {
@@ -57,8 +54,9 @@ namespace CryV.Net.Client.Networking
 
             var interpolatedPosition = Vector3.Lerp(Position, TargetPosition, deltaTime * InterpolationFactor);
             Position = interpolatedPosition;
+            _ped.Velocity = Velocity;
 
-            var end = TargetPosition + Velocity;
+            var end = TargetPosition + Velocity * 3;
             var range = Vector3.Distance(TargetPosition, end);
 
             switch (Speed)
@@ -70,22 +68,20 @@ namespace CryV.Net.Client.Networking
                         break;
                     }
 
-                    var blend = Math.Min(Math.Pow(range, 2) * 2, 1.0f);
-
-                    _ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, Speed, -1, 0.0f, 0.0f);
-                    _ped.SetPedDesiredMoveBlendRatio((float)blend);
+                    _ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, 1.0f, -1, 0.0f, 0.0f);
+                    _ped.SetPedDesiredMoveBlendRatio(1.0f);
 
                     break;
                 }
 
                 case 2:
                 {
-                    if (_ped.IsPedRunning() && range < 0.2f)
+                    if (_ped.IsPedRunning() && range <= 0.2f)
                     {
                         break;
                     }
 
-                    _ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, Speed, -1, 0.0f, 0.0f);
+                    _ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, 2.0f, -1, 0.0f, 0.0f);
                     _ped.SetPedDesiredMoveBlendRatio(1.0f);
 
                     break;
@@ -98,7 +94,7 @@ namespace CryV.Net.Client.Networking
                         break;
                     }
 
-                    _ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, Speed, -1, 0.0f, 0.0f);
+                    _ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, 3.0f, -1, 0.0f, 0.0f);
                     _ped.SetPedDesiredMoveBlendRatio(1.0f);
 
                     break;
