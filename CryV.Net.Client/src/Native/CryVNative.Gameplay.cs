@@ -38,6 +38,9 @@ namespace CryV.Net.Client.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Gameplay_DisableControlAction(IntPtr plugin, int inputGroup, int control, bool disable);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool Native_Gameplay_IsDisabledControlJustPressed(IntPtr plugin, int inputGroup, int control);
+
         //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]

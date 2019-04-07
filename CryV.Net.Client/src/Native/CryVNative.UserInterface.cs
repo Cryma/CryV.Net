@@ -54,5 +54,10 @@ namespace CryV.Net.Client.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_UserInterface_DrawRect(IntPtr plugin, float x, float y, float width, float height, int red, int green, int blue, int alpha);
 
+        //
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_UserInterface_ActivateFrontendMenu(IntPtr plugin, ulong hash, bool togglePause, int component);
+
     }
 }

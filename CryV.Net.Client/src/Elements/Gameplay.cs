@@ -36,6 +36,11 @@ namespace CryV.Net.Client.Elements
             CryVNative.Native_Gameplay_DisableControlAction(CryVNative.Plugin, inputGroup, control, disable);
         }
 
+        public static bool IsDisabledControlJustPressed(int inputGroup, int control)
+        {
+            return CryVNative.Native_Gameplay_IsDisabledControlJustPressed(CryVNative.Plugin, inputGroup, control);
+        }
+
         public static void DestroyAllCams(bool thisScriptCheck)
         {
             CryVNative.Native_Gameplay_DestroyAllCams(CryVNative.Plugin, thisScriptCheck);
