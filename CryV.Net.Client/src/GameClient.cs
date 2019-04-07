@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using CryV.Net.Client.Debugging;
 using CryV.Net.Client.Elements;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Client.Networking;
@@ -22,6 +23,7 @@ namespace CryV.Net.Client
         public bool IsConnected => _networkClient.IsConnected;
 
         private readonly NetworkClient _networkClient;
+        private readonly DebugMenu _debugMenu;
 
         private readonly ConcurrentDictionary<int, Networking.Client> _clients = new ConcurrentDictionary<int, Networking.Client>();
 
@@ -31,6 +33,7 @@ namespace CryV.Net.Client
         public GameClient()
         {
             _networkClient = new NetworkClient(this);
+            _debugMenu = new DebugMenu(this, _networkClient);
 
             EventHandler.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
             EventHandler.Subscribe<NetworkEvent<RemoveClientPayload>>(OnRemoveClient);
@@ -56,6 +59,8 @@ namespace CryV.Net.Client
             {
                 client.Tick();
             }
+
+            _debugMenu.Tick();
         }
 
         public void SendPayload(IPayload payload, DeliveryMethod deliveryMethod)

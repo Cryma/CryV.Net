@@ -26,6 +26,7 @@ namespace CryV.Net.Client.Networking
 
         public int LocalId { get; set; }
         public NetPeer Peer { get; private set; }
+        public NetStatistics Statistics => _netManager.Statistics;
         public bool IsConnected => Peer != null;
 
         private readonly EventBasedNetListener _listener = new EventBasedNetListener();
