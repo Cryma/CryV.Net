@@ -31,6 +31,12 @@ namespace CryV.Net.Client.Networking
 
         public int Speed { get; set; }
 
+        public ulong Model
+        {
+            get => _ped.Model;
+            set => _ped.Model = value;
+        }
+
         private readonly Ped _ped;
 
         private DateTime _lastTick;
@@ -40,7 +46,7 @@ namespace CryV.Net.Client.Networking
         private float _lastRange;
         private bool _wasNegative;
 
-        public Client(int id, Vector3 position, Vector3 velocity, float heading)
+        public Client(int id, ulong model, Vector3 position, Vector3 velocity, float heading)
         {
             Id = id;
             TargetPosition = position;
@@ -48,7 +54,7 @@ namespace CryV.Net.Client.Networking
 
             _lastTick = DateTime.UtcNow;
 
-            _ped = new Ped("mp_m_freemode_01", position, heading)
+            _ped = new Ped(model, position, heading)
             {
                 Velocity = velocity
             };

@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using CryV.Net.Server.Elements;
@@ -33,11 +34,17 @@ namespace CryV.Net.Server
             fromClient.Velocity = clientData.Velocity;
             fromClient.Heading = clientData.Heading;
             fromClient.Speed = clientData.Speed;
+            fromClient.Model = clientData.Model;
 
             foreach (var client in GetClients())
             {
                 if (client.Id == fromClient.Id)
                 {
+                    obj.Payload.Id = 1;
+                    obj.Payload.Position.X += 2;
+
+                    client.Send(obj.Payload);
+
                     continue;
                 }
 
@@ -79,25 +86,13 @@ namespace CryV.Net.Server
 
         private void BootstrapClient(Client client)
         {
-            var playerPayloads = new List<ClientUpdatePayload>();
-            foreach (var existingClient in _clients.Values)
-            {
-                // Don't sync self
-                if (existingClient.Id == client.Id)
-                {
-                    continue;
-                }
-
-                playerPayloads.Add(new ClientUpdatePayload(existingClient.Id, existingClient.Position, existingClient.Velocity, existingClient.Heading, existingClient.Speed));
-            }
-
-            var bootstrapPayload = new BootstrapPayload(client.Id, client.Position, client.Heading, playerPayloads);
+            var bootstrapPayload = new BootstrapPayload(client.Id, client.Position, client.Heading, client.Model);
             client.Send(bootstrapPayload);
         }
 
         private void PropagateNewClient(Client client)
         {
-            var payload = new ClientUpdatePayload(client.Id, client.Position, client.Velocity, client.Heading, client.Speed);
+            var payload = new ClientUpdatePayload(client.Id, client.Position, client.Velocity, client.Heading, client.Speed, client.Model);
 
             foreach (var existingClient in _clients.Values)
             {

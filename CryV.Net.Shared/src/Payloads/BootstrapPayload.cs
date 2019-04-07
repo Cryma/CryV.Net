@@ -22,18 +22,18 @@ namespace CryV.Net.Shared.Payloads
         public float StartHeading { get; set; }
 
         [ProtoMember(4)]
-        public List<ClientUpdatePayload> ExistingPlayers { get; set; }
+        public ulong StartModel { get; set; }
 
         public BootstrapPayload()
         {
         }
 
-        public BootstrapPayload(int localId, Vector3 startPosition, float startHeading, List<ClientUpdatePayload> existingPlayers)
+        public BootstrapPayload(int localId, Vector3 startPosition, float startHeading, ulong startModel)
         {
             LocalId = localId;
             StartPosition = startPosition;
             StartHeading = startHeading;
-            ExistingPlayers = existingPlayers;
+            StartModel = startModel;
         }
 
     }

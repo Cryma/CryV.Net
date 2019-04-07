@@ -11,6 +11,18 @@ namespace CryV.Net.Client.Elements
         // TODO: Cache ped or pedId
         public static Ped Character => new Ped(PedId());
 
+        public static ulong Model
+        {
+            get => _model;
+            set
+            {
+                SetModel(value);
+                _model = value;
+            }
+        }
+
+        private static ulong _model;
+
         public static int PlayerId()
         {
             return CryVNative.Native_LocalPlayer_PlayerId(CryVNative.Plugin);
@@ -51,15 +63,9 @@ namespace CryV.Net.Client.Elements
             CryVNative.Native_LocalPlayer_SetMaxWantedLevel(CryVNative.Plugin, maxWantedLevel);
         }
 
-        public static void SetModel(string model)
+        private static void SetModel(ulong modelHash)
         {
-            var modelHash = Utility.GetHashKey(model);
-
-            Streaming.RequestModel(modelHash);
-            while (Streaming.HasModelLoaded(modelHash) == false)
-            {
-                Utility.Wait(0);
-            }
+            Streaming.LoadModel(modelHash);
 
             CryVNative.Native_LocalPlayer_SetPlayerModel(CryVNative.Plugin, PlayerId(), modelHash);
 
@@ -67,9 +73,7 @@ namespace CryV.Net.Client.Elements
 
             Character.SetPedDefaultComponentVariation();
 
-            Utility.Wait(100);
-
-            Streaming.SetModelAsNoLongerNeeded(modelHash);
+            Streaming.UnloadModel(modelHash);
         }
 
     }

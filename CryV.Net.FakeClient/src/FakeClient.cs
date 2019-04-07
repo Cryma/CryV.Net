@@ -101,7 +101,7 @@ namespace CryV.Net.FakeClient
                     position.Y += step.Y;
                     position.Z += step.Z;
 
-                    Client.Send(new ClientUpdatePayload(Dummy.LocalId, position, directionVelocity, heading, moveSpeed), DeliveryMethod.Unreliable);
+                    Client.Send(new ClientUpdatePayload(Dummy.LocalId, position, directionVelocity, heading, moveSpeed, 1885233650), DeliveryMethod.Unreliable);
 
                     Dummy.Position = position;
 
@@ -131,7 +131,7 @@ namespace CryV.Net.FakeClient
                     position.X += dx;
                     position.Y += dy;
 
-                    Client.Send(new ClientUpdatePayload(Dummy.LocalId, position, new Vector3(dx * deltaTime, dy * deltaTime, 0.0f), 0.0f, moveSpeed), DeliveryMethod.Unreliable);
+                    Client.Send(new ClientUpdatePayload(Dummy.LocalId, position, new Vector3(dx * deltaTime, dy * deltaTime, 0.0f), 0.0f, moveSpeed, 1885233650), DeliveryMethod.Unreliable);
 
                     Dummy.Position = position;
 

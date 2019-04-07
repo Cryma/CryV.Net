@@ -40,7 +40,7 @@ namespace CryV.Net.Client.Console
 
             var skinName = arguments[0];
 
-            LocalPlayer.SetModel(skinName);
+            LocalPlayer.Model = Utility.GetHashKey(skinName);
         }
 
         private void CommandSetWeather(GameConsole gameConsole, params string[] arguments)

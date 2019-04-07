@@ -24,9 +24,8 @@ namespace CryV.Net.Client.Elements
         {
         }
 
-        public Ped(string skin, Vector3 position, float heading) : base(0)
+        public Ped(ulong model, Vector3 position, float heading) : base(0)
         {
-            var model = Utility.GetHashKey(skin);
             _model = model;
             Streaming.LoadModel(model);
 
@@ -196,6 +195,8 @@ namespace CryV.Net.Client.Elements
             CryVNative.Native_LocalPlayer_SetPlayerModel(CryVNative.Plugin, Handle, model);
 
             Utility.Wait(0);
+
+            SetPedDefaultComponentVariation();
 
             Streaming.UnloadModel(model);
         }

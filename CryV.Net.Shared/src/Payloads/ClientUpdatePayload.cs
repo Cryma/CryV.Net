@@ -26,17 +26,21 @@ namespace CryV.Net.Shared.Payloads
         [ProtoMember(5)]
         public int Speed { get; set; }
 
+        [ProtoMember(6)]
+        public ulong Model { get; set; }
+
         public ClientUpdatePayload()
         {
         }
 
-        public ClientUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, int speed)
+        public ClientUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, int speed, ulong model)
         {
             Id = id;
             Position = position;
             Velocity = velocity;
             Heading = heading;
             Speed = speed;
+            Model = model;
         }
 
     }

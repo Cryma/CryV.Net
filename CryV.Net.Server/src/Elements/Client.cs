@@ -20,14 +20,17 @@ namespace CryV.Net.Server.Elements
 
         public int Speed { get; set; }
 
+        public ulong Model { get; set; }
+
         private readonly NetPeer _peer;
 
-        public Client(NetPeer peer, Vector3 position, Vector3 velocity, float heading)
+        public Client(NetPeer peer, Vector3 position, Vector3 velocity, float heading, ulong model)
         {
             _peer = peer;
             Position = position;
             Velocity = velocity;
             Heading = heading;
+            Model = model;
         }
 
         public void Send(IPayload payload, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered)

@@ -11,6 +11,7 @@ using CryV.Net.Shared.Events.Types;
 using CryV.Net.Shared.Payloads;
 using CryV.Net.Shared.Payloads.Helpers;
 using LiteNetLib;
+using ProtoBuf.ServiceModel;
 using EventHandler = CryV.Net.Shared.Events.EventHandler;
 
 namespace CryV.Net.Client
@@ -26,7 +27,9 @@ namespace CryV.Net.Client
         private readonly ConcurrentDictionary<int, Networking.Client> _clients = new ConcurrentDictionary<int, Networking.Client>();
 
         private Vector3 _lastPosition = Vector3.Zero;
-        private float _lastHeading = 0.0f;
+        private float _lastHeading;
+
+        private bool _isBootstrapped;
 
         public GameClient()
         {
@@ -81,6 +84,11 @@ namespace CryV.Net.Client
             {
                 await Task.Delay(1000 / 20, _networkClient.CancellationTokenSource.Token);
 
+                if (_isBootstrapped == false)
+                {
+                    continue;
+                }
+
                 ThreadHelper.Run(() =>
                 {
                     var position = LocalPlayer.Character.Position;
@@ -94,7 +102,8 @@ namespace CryV.Net.Client
                     _lastPosition = position;
                     _lastHeading = rotation.Z;
 
-                    var transformPayload = new ClientUpdatePayload(_networkClient.LocalId, position, LocalPlayer.Character.Velocity, rotation.Z, LocalPlayer.Character.Speed());
+                    var transformPayload = new ClientUpdatePayload(_networkClient.LocalId, position, LocalPlayer.Character.Velocity, rotation.Z, LocalPlayer.Character.Speed(),
+                        LocalPlayer.Model);
 
                     SendPayload(transformPayload, DeliveryMethod.Unreliable);
                 });
@@ -109,17 +118,10 @@ namespace CryV.Net.Client
             {
                 LocalPlayer.Character.Position = obj.Payload.StartPosition;
                 LocalPlayer.Character.Rotation = new Vector3(LocalPlayer.Character.Rotation.X, LocalPlayer.Character.Rotation.Y, obj.Payload.StartHeading);
+                
+                LocalPlayer.Model = obj.Payload.StartModel;
 
-                if (obj.Payload.ExistingPlayers == null)
-                {
-                    return;
-                }
-
-                foreach (var player in obj.Payload.ExistingPlayers)
-                {
-                    var client = new Networking.Client(player.Id, player.Position, player.Velocity, player.Heading);
-                    _clients.TryAdd(client.Id, client);
-                }
+                _isBootstrapped = true;
             });
         }
 
@@ -144,7 +146,7 @@ namespace CryV.Net.Client
             {
                 if (_clients.TryGetValue(clientData.Id, out var client) == false)
                 {
-                    _clients.TryAdd(clientData.Id, new Networking.Client(clientData.Id, clientData.Position, clientData.Velocity, clientData.Heading));
+                    _clients.TryAdd(clientData.Id, new Networking.Client(clientData.Id, clientData.Model, clientData.Position, clientData.Velocity, clientData.Heading));
 
                     return;
                 }
@@ -153,6 +155,11 @@ namespace CryV.Net.Client
                 client.TargetHeading = clientData.Heading;
                 client.Velocity = clientData.Velocity;
                 client.Speed = clientData.Speed;
+
+                if (client.Model != clientData.Model)
+                {
+                    client.Model = clientData.Model;
+                }
             });
         }
 

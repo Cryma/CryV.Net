@@ -44,7 +44,6 @@ namespace CryV.Net.Client
             World.SetWeather(WeatherType.Extrasunny);
 
             LocalPlayer.Character.Position = new Vector3(412.4f, -976.71f, 29.43f);
-            LocalPlayer.SetModel("mp_m_freemode_01");
 
             _gameClient = new GameClient();
             _console  = new GameConsole(_gameClient);
@@ -65,11 +64,6 @@ namespace CryV.Net.Client
         public static void PluginKeyboardCallback(ConsoleKey key, char character, bool isPressed)
         {
             _console?.HandleKeyboardCallback(key, character, isPressed);
-
-            if (isPressed && key == ConsoleKey.F3)
-            {
-                var ped = new Ped("mp_m_freemode_01", new Vector3(412.4f, -976.71f, 29.43f), 0f);
-            }
         }
 
         public static void PluginTick()

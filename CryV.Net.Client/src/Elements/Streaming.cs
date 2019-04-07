@@ -7,6 +7,13 @@ namespace CryV.Net.Client.Elements
 
         public static void LoadModel(ulong hash)
         {
+            if (hash == 0)
+            {
+                Utility.Log("Tried to load model \"0\".");
+
+                return;
+            }
+
             RequestModel(hash);
 
             while (HasModelLoaded(hash) == false)
@@ -20,17 +27,17 @@ namespace CryV.Net.Client.Elements
             SetModelAsNoLongerNeeded(hash);
         }
 
-        public static void RequestModel(ulong model)
+        private static void RequestModel(ulong model)
         {
             CryVNative.Native_Gameplay_RequestModel(CryVNative.Plugin, model);
         }
 
-        public static bool HasModelLoaded(ulong model)
+        private static bool HasModelLoaded(ulong model)
         {
             return CryVNative.Native_Gameplay_HasModelLoaded(CryVNative.Plugin, model);
         }
 
-        public static void SetModelAsNoLongerNeeded(ulong model)
+        private static void SetModelAsNoLongerNeeded(ulong model)
         {
             CryVNative.Native_Gameplay_SetModelAsNoLongerNeeded(CryVNative.Plugin, model);
         }
