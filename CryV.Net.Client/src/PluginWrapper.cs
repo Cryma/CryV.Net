@@ -83,7 +83,7 @@ namespace CryV.Net.Client
             Gameplay.DisableControlAction(0, 199, true);
             Gameplay.DisableControlAction(0, 200, true);
 
-            if (Gameplay.IsDisabledControlJustPressed(0, 199) || Gameplay.IsDisabledControlJustPressed(0, 200))
+            if (Gameplay.IsDisabledControlJustPressed(0, 200))
             {
                 CryVNative.Native_UserInterface_ActivateFrontendMenu(CryVNative.Plugin, 3123948979, false, -1);
             }
