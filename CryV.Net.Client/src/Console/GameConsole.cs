@@ -15,13 +15,14 @@ namespace CryV.Net.Client.Console
     public partial class GameConsole
     {
 
-        private bool _visible = false;
+        public bool IsVisible { get; private set; }
+
         private string _input = string.Empty;
         private readonly List<string> _output = new List<string>();
         private int _outputLines = 5;
-        private bool _blinkState = false;
+        private bool _blinkState;
         private DateTime _lastBlinkUpdate = DateTime.UtcNow;
-        private int _cursorIndex = 0;
+        private int _cursorIndex;
 
         private readonly List<string> _inputHistory = new List<string>();
         private int _currentHistoryIndex = -1;
@@ -38,6 +39,7 @@ namespace CryV.Net.Client.Console
         public GameConsole(GameClient gameClient)
         {
             _gameClient = gameClient;
+            _cursorIndex = 0;
 
             RegisterCommands();
         }
@@ -64,10 +66,10 @@ namespace CryV.Net.Client.Console
         {
             if (Utility.IsKeyReleased(ConsoleKey.F1))
             {
-                _visible = _visible == false;
+                IsVisible = IsVisible == false;
             }
             
-            if (_visible == false)
+            if (IsVisible == false)
             {
                 return;
             }
@@ -113,7 +115,7 @@ namespace CryV.Net.Client.Console
 
         public void HandleKeyboardCallback(ConsoleKey key, char character, bool isPressed)
         {
-            if (_visible == false || isPressed == false)
+            if (IsVisible == false || isPressed == false)
             {
                 return;
             }

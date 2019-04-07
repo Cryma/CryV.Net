@@ -74,7 +74,10 @@ namespace CryV.Net.Client
 
         public static void PluginTick()
         {
-            UserInterface.DrawText("CryV", new Vector2(0.975f,  0.01f), 0.42f, Color.FromArgb(255, 200, 200, 200), TextFont.ChaletLondon, TextAlignment.Center, 1.0f);
+            if (_console.IsVisible == false)
+            {
+                UserInterface.DrawText("CryV", new Vector2(0.975f, 0.01f), 0.42f, Color.FromArgb(255, 200, 200, 200), TextFont.ChaletLondon, TextAlignment.Center, 1.0f);
+            }
 
             ThreadHelper.Work();
 
