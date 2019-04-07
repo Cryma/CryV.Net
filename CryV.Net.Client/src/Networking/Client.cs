@@ -15,6 +15,8 @@ namespace CryV.Net.Client.Networking
             set => _ped.Position = value;
         }
 
+        public Vector3 TargetPosition { get; set; }
+
         public Vector3 Velocity
         {
             get => _ped.Velocity;
@@ -31,9 +33,16 @@ namespace CryV.Net.Client.Networking
 
         private readonly Ped _ped;
 
+        private DateTime _lastTick;
+
+        private const float _interpolationFactor = 4.5f;
+
         public Client(int id, Vector3 position, Vector3 velocity, float heading)
         {
             Id = id;
+            TargetPosition = position;
+
+            _lastTick = DateTime.UtcNow;
 
             _ped = new Ped("mp_m_freemode_01", position, heading)
             {
@@ -43,14 +52,20 @@ namespace CryV.Net.Client.Networking
 
         public void Tick()
         {
-            var end = Position + Velocity;
-            var range = Vector3.Distance(Position, end);
+            var now = DateTime.UtcNow;
+            var deltaTime = (float) (now - _lastTick).TotalSeconds;
+
+            var interpolatedPosition = Vector3.Lerp(Position, TargetPosition, deltaTime * _interpolationFactor);
+            Position = interpolatedPosition;
+
+            var end = interpolatedPosition + Velocity;
+            var range = Vector3.Distance(interpolatedPosition, end);
 
             switch (Speed)
             {
                 case 1:
                 {
-                    if (_ped.IsPedWalking() && range < 0.25f)
+                    if (_ped.IsPedWalking() && range < 0.1f)
                     {
                         break;
                     }
@@ -65,7 +80,7 @@ namespace CryV.Net.Client.Networking
 
                 case 2:
                 {
-                    if (_ped.IsPedRunning() && range < 0.5f)
+                    if (_ped.IsPedRunning() && range < 0.2f)
                     {
                         break;
                     }
@@ -78,7 +93,7 @@ namespace CryV.Net.Client.Networking
 
                 case 3:
                 {
-                    if (_ped.IsPedSprinting() && range < 0.75f)
+                    if (_ped.IsPedSprinting() && range < 0.3f)
                     {
                         break;
                     }
@@ -94,6 +109,8 @@ namespace CryV.Net.Client.Networking
 
                     break;
             }
+
+            _lastTick = now;
         }
 
         public void Dispose()
