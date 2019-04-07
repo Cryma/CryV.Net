@@ -35,7 +35,7 @@ namespace CryV.Net.Client.Networking
 
         private DateTime _lastTick;
 
-        private const float _interpolationFactor = 4.5f;
+        public static float InterpolationFactor = 12f;
 
         public Client(int id, Vector3 position, Vector3 velocity, float heading)
         {
@@ -55,11 +55,11 @@ namespace CryV.Net.Client.Networking
             var now = DateTime.UtcNow;
             var deltaTime = (float) (now - _lastTick).TotalSeconds;
 
-            var interpolatedPosition = Vector3.Lerp(Position, TargetPosition, deltaTime * _interpolationFactor);
+            var interpolatedPosition = Vector3.Lerp(Position, TargetPosition, deltaTime * InterpolationFactor);
             Position = interpolatedPosition;
 
-            var end = interpolatedPosition + Velocity;
-            var range = Vector3.Distance(interpolatedPosition, end);
+            var end = TargetPosition + Velocity;
+            var range = Vector3.Distance(TargetPosition, end);
 
             switch (Speed)
             {

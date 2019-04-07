@@ -107,5 +107,24 @@ namespace CryV.Net.Client.Console
             PrintLine("You disconnected from the server.");
         }
 
+        private void CommandInterpolation(GameConsole gameConsole, params string[] arguments)
+        {
+            if (arguments.Length == 0)
+            {
+                PrintLine("Please specify an interpolation factor.");
+
+                return;
+            }
+
+            if (float.TryParse(arguments[0], out var factor) == false)
+            {
+                PrintLine("Interpolation factor must be of type \"float\".");
+
+                return;
+            }
+
+            Networking.Client.InterpolationFactor = factor;
+        }
+
     }
 }
