@@ -8,6 +8,18 @@ namespace CryV.Net.Client.Elements
     public class Ped : Entity
     {
 
+        public ulong Model
+        {
+            get => _model;
+            set
+            {
+                SetSkin(value);
+                _model = value;
+            }
+        }
+
+        private ulong _model;
+
         public Ped(int handle) : base(handle)
         {
         }
@@ -15,11 +27,8 @@ namespace CryV.Net.Client.Elements
         public Ped(string skin, Vector3 position, float heading) : base(0)
         {
             var model = Utility.GetHashKey(skin);
-            Streaming.RequestModel(model);
-            while (Streaming.HasModelLoaded(model) == false)
-            {
-                Utility.Wait(0);
-            }
+            _model = model;
+            Streaming.LoadModel(model);
 
             Handle = CryVNative.Native_Ped_CreatePed(CryVNative.Plugin, 26, model, position.X, position.Y, position.Z, heading, false, false);
             EntityPool.AddEntity(this);
@@ -28,7 +37,7 @@ namespace CryV.Net.Client.Elements
 
             SetPedDefaultComponentVariation();
 
-            Streaming.SetModelAsNoLongerNeeded(model);
+            Streaming.UnloadModel(model);
 
             SetPedFleeAttributes(0, false);
             SetBlockingOfNonTemporaryEvents(true);
@@ -178,6 +187,17 @@ namespace CryV.Net.Client.Elements
         public void TaskStandStill(int time)
         {
             CryVNative.Native_Ped_TaskStandStill(CryVNative.Plugin, Handle, time);
+        }
+
+        private void SetSkin(ulong model)
+        {
+            Streaming.LoadModel(model);
+
+            CryVNative.Native_LocalPlayer_SetPlayerModel(CryVNative.Plugin, Handle, model);
+
+            Utility.Wait(0);
+
+            Streaming.UnloadModel(model);
         }
 
     }
