@@ -1,22 +1,13 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters;
 using System.Threading;
 using System.Threading.Tasks;
-using CryV.Net.Client.Elements;
-using CryV.Net.Client.Helpers;
 using CryV.Net.Shared.Enums;
 using CryV.Net.Shared.Events;
 using CryV.Net.Shared.Events.Types;
-using CryV.Net.Shared.Payloads;
 using CryV.Net.Shared.Payloads.Helpers;
-using CryV.Net.Shared.Payloads.Partials;
 using LiteNetLib;
-using LiteNetLib.Utils;
 using EventHandler = CryV.Net.Shared.Events.EventHandler;
 
 namespace CryV.Net.Client.Networking

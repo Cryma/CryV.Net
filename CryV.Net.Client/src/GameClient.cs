@@ -10,9 +10,7 @@ using CryV.Net.Client.Networking;
 using CryV.Net.Shared.Events.Types;
 using CryV.Net.Shared.Payloads;
 using CryV.Net.Shared.Payloads.Helpers;
-using CryV.Net.Shared.Payloads.Partials;
 using LiteNetLib;
-using LiteNetLib.Utils;
 using EventHandler = CryV.Net.Shared.Events.EventHandler;
 
 namespace CryV.Net.Client
@@ -144,15 +142,17 @@ namespace CryV.Net.Client
 
             ThreadHelper.Run(() =>
             {
-                _clients.AddOrUpdate(clientData.Id, new Networking.Client(clientData.Id, clientData.Position, clientData.Velocity, clientData.Heading), (id, client) =>
+                if (_clients.TryGetValue(clientData.Id, out var client) == false)
                 {
-                    client.Position = clientData.Position;
-                    client.Rotation = new Vector3(client.Rotation.X, client.Rotation.Y, clientData.Heading);
-                    client.Velocity = clientData.Velocity;
-                    client.Speed = clientData.Speed;
+                    _clients.TryAdd(clientData.Id, new Networking.Client(clientData.Id, clientData.Position, clientData.Velocity, clientData.Heading));
 
-                    return client;
-                });
+                    return;
+                }
+
+                client.TargetPosition = clientData.Position;
+                client.Rotation = new Vector3(client.Rotation.X, client.Rotation.Y, clientData.Heading);
+                client.Velocity = clientData.Velocity;
+                client.Speed = clientData.Speed;
             });
         }
 
