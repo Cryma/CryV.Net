@@ -3,14 +3,11 @@ using CryV.Net.Client.Enums;
 using CryV.Net.Client.Native;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using CryV.Net.Client.Console;
-using CryV.Net.Client.Helpers;
-using CryV.Net.Client.Networking;
+using Sentry;
 
 namespace CryV.Net.Client
 {
@@ -28,6 +25,8 @@ namespace CryV.Net.Client
 
         public static void PluginMain(IntPtr plugin)
         {
+            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+
             CryVNative.Plugin = plugin;
 
             Gameplay.DestroyAllCams(true);
@@ -47,6 +46,16 @@ namespace CryV.Net.Client
             _console  = new GameConsole(_gameClient);
 
             Task.Run(Cleanup.ClearEntities);
+        }
+
+        private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+#if RELEASE
+            using (SentrySdk.Init("https://8229e99d7e144ed0b94e307e9396f341@sentry.io/1432896"))
+            {
+                SentrySdk.CaptureException((Exception) e.ExceptionObject);
+            }
+#endif
         }
 
         public static void PluginKeyboardCallback(ConsoleKey key, char character, bool isPressed)
