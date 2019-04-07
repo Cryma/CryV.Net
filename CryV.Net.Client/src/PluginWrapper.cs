@@ -5,8 +5,10 @@ using System;
 using System.Collections.Concurrent;
 using System.Drawing;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using CryV.Net.Client.Console;
+using Microsoft.Win32;
 using Sentry;
 
 namespace CryV.Net.Client
@@ -26,6 +28,8 @@ namespace CryV.Net.Client
         public static void PluginMain(IntPtr plugin)
         {
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+
+            SetNativePath();
 
             CryVNative.Plugin = plugin;
 
@@ -78,6 +82,23 @@ namespace CryV.Net.Client
 
             _gameClient.Tick();
             _console.Update();
+        }
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern bool SetDllDirectory(string path);
+
+        private static void SetNativePath()
+        {
+            using (var key = Registry.CurrentUser.OpenSubKey("Software\\CryV"))
+            {
+                if (key == null)
+                {
+                    return;
+                }
+
+                var path = key.GetValue("InstallDir").ToString();
+                SetDllDirectory(path);
+            }
         }
 
     }

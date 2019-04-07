@@ -25,6 +25,9 @@
     <Reference Include="LiteNetLib">
       <HintPath>..\lib\LiteNetLib.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Win32.Registry">
+      <HintPath>..\lib\Microsoft.Win32.Registry.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
