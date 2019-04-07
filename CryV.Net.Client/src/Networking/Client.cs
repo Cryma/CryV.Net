@@ -34,6 +34,9 @@ namespace CryV.Net.Client.Networking
 
         public static float InterpolationFactor = 3f;
 
+        private float _lastRange;
+        private bool _wasNegative;
+
         public Client(int id, Vector3 position, Vector3 velocity, float heading)
         {
             Id = id;
@@ -56,14 +59,34 @@ namespace CryV.Net.Client.Networking
             Position = interpolatedPosition;
             _ped.Velocity = Velocity;
 
-            var end = TargetPosition + Velocity * 3;
+            var end = TargetPosition + Velocity;
             var range = Vector3.Distance(TargetPosition, end);
+            var deltaRange = range - _lastRange;
+
+            _lastRange = range;
+            _lastTick = now;
+
+            if (deltaRange < 0)
+            {
+                _wasNegative = true;
+
+                if (_ped.IsPedSprinting())
+                {
+                    _ped.TaskStandStill(2000);
+
+                    return;
+                }
+            }
+            else if (deltaRange > 0)
+            {
+                _wasNegative = false;
+            }
 
             switch (Speed)
             {
                 case 1:
                 {
-                    if (_ped.IsPedWalking() && range < 0.1f)
+                    if (_ped.IsPedWalking() && range < 0.1f || _wasNegative)
                     {
                         break;
                     }
@@ -76,7 +99,7 @@ namespace CryV.Net.Client.Networking
 
                 case 2:
                 {
-                    if (_ped.IsPedRunning() && range <= 0.2f)
+                    if (_ped.IsPedRunning() && range < 0.2f || _wasNegative)
                     {
                         break;
                     }
@@ -89,7 +112,7 @@ namespace CryV.Net.Client.Networking
 
                 case 3:
                 {
-                    if (_ped.IsPedSprinting() && range < 0.3f)
+                    if (_ped.IsPedSprinting() && range < 0.3f || _wasNegative)
                     {
                         break;
                     }
@@ -105,8 +128,6 @@ namespace CryV.Net.Client.Networking
 
                     break;
             }
-
-            _lastTick = now;
         }
 
         public void Dispose()
