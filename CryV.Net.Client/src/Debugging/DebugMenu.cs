@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Numerics;
 using CryV.Net.Elements;
 using CryV.Net.Client.Networking;
+using CryV.Net.Enums;
 
 namespace CryV.Net.Client.Debugging
 {
@@ -56,10 +57,10 @@ namespace CryV.Net.Client.Debugging
             PrintVector(position, "Position");
             PrintVector(rotation, "Rotation");
 
-            _line++;
-
             if (_networkClient.IsConnected)
             {
+                _line++;
+
                 PrintLine("Packet loss: " + _networkClient.Statistics.PacketLossPercent + "%");
                 PrintLine("Packet loss total: " + _networkClient.Statistics.PacketLoss);
 
@@ -81,20 +82,7 @@ namespace CryV.Net.Client.Debugging
 
         private void PrintLine(string text)
         {
-            // TODO: Reimplement
-            //CryVNative.Native_UserInterface_SetTextFont(CryVNative.Plugin, 0);
-            //CryVNative.Native_UserInterface_SetTextScale(CryVNative.Plugin, 0.3f, 0.3f);
-            //CryVNative.Native_UserInterface_SetTextColour(CryVNative.Plugin, 255, 255, 255, 255);
-
-            //using (var converter = new StringConverter())
-            //{
-            //    var componentTypePointer = converter.StringToPointer("STRING");
-            //    var textPointer = converter.StringToPointer(text);
-
-            //    CryVNative.Native_UserInterface_BeginTextCommandDisplayText(CryVNative.Plugin, componentTypePointer);
-            //    CryVNative.Native_UserInterface_AddTextComponentSubstringPlayerName(CryVNative.Plugin, textPointer);
-            //    CryVNative.Native_UserInterface_EndTextCommandDisplayText(CryVNative.Plugin, _x - _width / 2, _y + (20 / 1080f) * _line);
-            //}
+            UserInterface.DrawText(text, new Vector2(_x - _width / 2, _y + (20 / 1080f) * _line), 0.3f, Color.FromArgb(255, 255, 255, 255));
 
             _line++;
         }
