@@ -22,6 +22,8 @@ namespace CryV.Net.Server.Elements
 
         public ulong Model { get; set; }
 
+        public bool IsJumping { get; set; }
+
         private readonly NetPeer _peer;
 
         public Client(NetPeer peer)
@@ -32,11 +34,8 @@ namespace CryV.Net.Server.Elements
         public Client(NetPeer peer, ClientUpdatePayload payload)
         {
             _peer = peer;
-            Position = payload.Position;
-            Velocity = payload.Velocity;
-            Heading = payload.Heading;
-            Model = payload.Model;
-            Speed = payload.Speed;
+
+            ReadPayload(payload);
         }
 
         public void ReadPayload(ClientUpdatePayload payload)
@@ -46,11 +45,12 @@ namespace CryV.Net.Server.Elements
             Heading = payload.Heading;
             Model = payload.Model;
             Speed = payload.Speed;
+            IsJumping = payload.IsJumping;
         }
 
         public ClientUpdatePayload GetPayload()
         {
-            return new ClientUpdatePayload(Id, Position, Velocity, Heading, Speed, Model);
+            return new ClientUpdatePayload(Id, Position, Velocity, Heading, Speed, Model, IsJumping);
         }
 
         public void Send(IPayload payload, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered)

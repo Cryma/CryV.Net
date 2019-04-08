@@ -37,6 +37,8 @@ namespace CryV.Net.Client.Elements
             set => _ped.Model = value;
         }
 
+        public bool IsJumping { get; set; }
+
         private readonly Ped _ped;
 
         private DateTime _lastTick;
@@ -45,6 +47,7 @@ namespace CryV.Net.Client.Elements
 
         private float _lastRange;
         private bool _wasNegative;
+        private bool _wasJumping;
 
         public Client(ClientUpdatePayload payload)
         {
@@ -71,6 +74,12 @@ namespace CryV.Net.Client.Elements
             {
                 Model = payload.Model;
             }
+
+            IsJumping = payload.IsJumping;
+            if (payload.IsJumping == false)
+            {
+                _wasJumping = false;
+            }
         }
 
         public void Tick()
@@ -83,14 +92,19 @@ namespace CryV.Net.Client.Elements
 
             UpdateMovementAnimation(now);
 
+            //if (IsJumping && _wasJumping == false)
+            //{
+            //    _ped.TaskJump();
+
+            //    _wasJumping = true;
+            //}
+
             _lastTick = now;
         }
 
         private void UpdatePosition(float deltaTime)
         {
-            var interpolatedPosition = Vector3.Lerp(Position, TargetPosition, deltaTime * InterpolationFactor);
-
-            Position = interpolatedPosition;
+            Position = Vector3.Lerp(Position, TargetPosition, deltaTime * InterpolationFactor);
             _ped.Velocity = Velocity;
         }
 
@@ -103,6 +117,11 @@ namespace CryV.Net.Client.Elements
 
         private void UpdateMovementAnimation(DateTime now)
         {
+            //if (IsJumping)
+            //{
+            //    return;
+            //}
+
             var end = TargetPosition + Velocity;
             var range = Vector3.Distance(TargetPosition, end);
             var deltaRange = range - _lastRange;

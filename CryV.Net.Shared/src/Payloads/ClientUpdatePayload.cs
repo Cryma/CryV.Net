@@ -29,11 +29,14 @@ namespace CryV.Net.Shared.Payloads
         [ProtoMember(6)]
         public ulong Model { get; set; }
 
+        [ProtoMember(7)]
+        public bool IsJumping { get; set; }
+
         public ClientUpdatePayload()
         {
         }
 
-        public ClientUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, int speed, ulong model)
+        public ClientUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, int speed, ulong model, bool isJumping)
         {
             Id = id;
             Position = position;
@@ -41,6 +44,7 @@ namespace CryV.Net.Shared.Payloads
             Heading = heading;
             Speed = speed;
             Model = model;
+            IsJumping = isJumping;
         }
 
     }
