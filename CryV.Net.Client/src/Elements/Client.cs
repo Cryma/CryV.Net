@@ -78,19 +78,36 @@ namespace CryV.Net.Client.Elements
             var now = DateTime.UtcNow;
             var deltaTime = (float) (now - _lastTick).TotalSeconds;
 
+            UpdatePosition(deltaTime);
+            UpdateHeading(deltaTime);
+
+            UpdateMovementAnimation(now);
+
+            _lastTick = now;
+        }
+
+        private void UpdatePosition(float deltaTime)
+        {
             var interpolatedPosition = Vector3.Lerp(Position, TargetPosition, deltaTime * InterpolationFactor);
+
             Position = interpolatedPosition;
             _ped.Velocity = Velocity;
+        }
 
+        private void UpdateHeading(float deltaTime)
+        {
             var interpolatedHeading = Interpolation.LerpDegrees(Rotation.Z, TargetHeading, deltaTime * InterpolationFactor);
-            Rotation = new Vector3(Rotation.X, Rotation.Y, interpolatedHeading);
 
+            Rotation = new Vector3(Rotation.X, Rotation.Y, interpolatedHeading);
+        }
+
+        private void UpdateMovementAnimation(DateTime now)
+        {
             var end = TargetPosition + Velocity;
             var range = Vector3.Distance(TargetPosition, end);
             var deltaRange = range - _lastRange;
 
             _lastRange = range;
-            _lastTick = now;
 
             if (deltaRange < 0)
             {
