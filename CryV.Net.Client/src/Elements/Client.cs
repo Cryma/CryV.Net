@@ -3,7 +3,7 @@ using System.Numerics;
 using CryV.Net.Elements;
 using CryV.Net.Client.Helpers;
 
-namespace CryV.Net.Client.Networking
+namespace CryV.Net.Client.Elements
 {
     public class Client : IDisposable
     {

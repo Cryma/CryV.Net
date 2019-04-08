@@ -25,7 +25,7 @@ namespace CryV.Net.Client
         private readonly NetworkClient _networkClient;
         private readonly DebugMenu _debugMenu;
 
-        private readonly ConcurrentDictionary<int, Networking.Client> _clients = new ConcurrentDictionary<int, Networking.Client>();
+        private readonly ConcurrentDictionary<int, Elements.Client> _clients = new ConcurrentDictionary<int, Elements.Client>();
 
         private Vector3 _lastPosition = Vector3.Zero;
         private float _lastHeading;
@@ -147,7 +147,7 @@ namespace CryV.Net.Client
             {
                 if (_clients.TryGetValue(clientData.Id, out var client) == false)
                 {
-                    _clients.TryAdd(clientData.Id, new Networking.Client(clientData.Id, clientData.Model, clientData.Position, clientData.Velocity, clientData.Heading));
+                    _clients.TryAdd(clientData.Id, new Elements.Client(clientData.Id, clientData.Model, clientData.Position, clientData.Velocity, clientData.Heading));
 
                     return;
                 }
