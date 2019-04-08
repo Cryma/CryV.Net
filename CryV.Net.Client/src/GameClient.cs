@@ -104,7 +104,7 @@ namespace CryV.Net.Client
                     _lastHeading = rotation.Z;
 
                     var transformPayload = new ClientUpdatePayload(_networkClient.LocalId, position, LocalPlayer.Character.Velocity, rotation.Z, LocalPlayer.Character.Speed(),
-                        LocalPlayer.Model);
+                        LocalPlayer.Model, LocalPlayer.Character.IsPedJumping());
 
                     SendPayload(transformPayload, DeliveryMethod.Unreliable);
                 });
