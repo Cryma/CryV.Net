@@ -2,6 +2,7 @@
 using System.Numerics;
 using CryV.Net.Elements;
 using CryV.Net.Client.Helpers;
+using CryV.Net.Shared.Payloads;
 
 namespace CryV.Net.Client.Elements
 {
@@ -45,18 +46,31 @@ namespace CryV.Net.Client.Elements
         private float _lastRange;
         private bool _wasNegative;
 
-        public Client(int id, ulong model, Vector3 position, Vector3 velocity, float heading)
+        public Client(ClientUpdatePayload payload)
         {
-            Id = id;
-            TargetPosition = position;
-            TargetHeading = heading;
+            Id = payload.Id;
+            TargetPosition = payload.Position;
+            TargetHeading = payload.Heading;
 
             _lastTick = DateTime.UtcNow;
-
-            _ped = new Ped(model, position, heading)
+            
+            _ped = new Ped(payload.Model, payload.Position, payload.Heading)
             {
-                Velocity = velocity
+                Velocity =  payload.Velocity
             };
+        }
+
+        public void ReadPayload(ClientUpdatePayload payload)
+        {
+            TargetPosition = payload.Position;
+            TargetHeading = payload.Heading;
+            Velocity = payload.Velocity;
+            Speed = payload.Speed;
+
+            if (Model != payload.Model)
+            {
+                Model = payload.Model;
+            }
         }
 
         public void Tick()

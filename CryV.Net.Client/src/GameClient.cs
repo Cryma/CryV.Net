@@ -147,20 +147,12 @@ namespace CryV.Net.Client
             {
                 if (_clients.TryGetValue(clientData.Id, out var client) == false)
                 {
-                    _clients.TryAdd(clientData.Id, new Elements.Client(clientData.Id, clientData.Model, clientData.Position, clientData.Velocity, clientData.Heading));
+                    _clients.TryAdd(clientData.Id, new Elements.Client(clientData));
 
                     return;
                 }
 
-                client.TargetPosition = clientData.Position;
-                client.TargetHeading = clientData.Heading;
-                client.Velocity = clientData.Velocity;
-                client.Speed = clientData.Speed;
-
-                if (client.Model != clientData.Model)
-                {
-                    client.Model = clientData.Model;
-                }
+                client.ReadPayload(clientData);
             });
         }
 

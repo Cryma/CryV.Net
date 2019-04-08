@@ -70,7 +70,11 @@ namespace CryV.Net.Server.Networking
 
         private void OnPeerConnected(NetPeer peer)
         {
-            _gameServer.AddClient(new Client(peer, _spawnPosition, Vector3.Zero, 0.0f, 1885233650));
+            _gameServer.AddClient(new Client(peer)
+            {
+                Position =  _spawnPosition,
+                Model = 1885233650
+            });
 
             Console.WriteLine($"Peer connected: {peer.Id} ({peer.EndPoint})");
         }
