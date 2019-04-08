@@ -24,6 +24,8 @@ namespace CryV.Net.Server.Elements
 
         public bool IsJumping { get; set; }
 
+        public bool IsClimbing { get; set; }
+
         private readonly NetPeer _peer;
 
         public Client(NetPeer peer)
@@ -46,11 +48,12 @@ namespace CryV.Net.Server.Elements
             Model = payload.Model;
             Speed = payload.Speed;
             IsJumping = payload.IsJumping;
+            IsClimbing = payload.IsClimbing;
         }
 
         public ClientUpdatePayload GetPayload()
         {
-            return new ClientUpdatePayload(Id, Position, Velocity, Heading, Speed, Model, IsJumping);
+            return new ClientUpdatePayload(Id, Position, Velocity, Heading, Speed, Model, IsJumping, IsClimbing);
         }
 
         public void Send(IPayload payload, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered)

@@ -39,6 +39,8 @@ namespace CryV.Net.Client.Elements
 
         public bool IsJumping { get; set; }
 
+        public bool IsClimbing { get; set; }
+
         private readonly Ped _ped;
 
         private DateTime _lastTick;
@@ -47,7 +49,8 @@ namespace CryV.Net.Client.Elements
 
         private float _lastRange;
         private bool _wasNegative;
-        private bool _wasJumping;
+        //private bool _wasJumping;
+        private bool _wasClimbing;
 
         public Client(ClientUpdatePayload payload)
         {
@@ -75,10 +78,16 @@ namespace CryV.Net.Client.Elements
                 Model = payload.Model;
             }
 
-            IsJumping = payload.IsJumping;
-            if (payload.IsJumping == false)
+            //IsJumping = payload.IsJumping;
+            //if (payload.IsJumping == false)
+            //{
+            //    _wasJumping = false;
+            //}
+
+            IsClimbing = payload.IsClimbing;
+            if (payload.IsClimbing == false)
             {
-                _wasJumping = false;
+                _wasClimbing = false;
             }
         }
 
@@ -98,6 +107,13 @@ namespace CryV.Net.Client.Elements
 
             //    _wasJumping = true;
             //}
+
+            if (IsClimbing && _wasClimbing == false)
+            {
+                _ped.TaskClimb();
+
+                _wasClimbing = true;
+            }
 
             _lastTick = now;
         }
@@ -121,6 +137,11 @@ namespace CryV.Net.Client.Elements
             //{
             //    return;
             //}
+
+            if (IsClimbing)
+            {
+                return;
+            }
 
             var end = TargetPosition + Velocity;
             var range = Vector3.Distance(TargetPosition, end);
