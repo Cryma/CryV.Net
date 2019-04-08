@@ -4,7 +4,7 @@ using CryV.Net.Native;
 
 namespace CryV.Net.Helpers
 {
-    public static class StructConverter
+    internal static class StructConverter
     {
 
         public static T PointerToStruct<T>(IntPtr pointer, bool freePointer = true)
