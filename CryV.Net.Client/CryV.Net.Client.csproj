@@ -4,30 +4,27 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <ApplicationIcon />
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <StartupObject />
   </PropertyGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="XCOPY &quot;$(TargetDir)*&quot; &quot;C:\CryV\app\dotnet\plugins\&quot; /S /Y" />
-  </Target>
-
   <ItemGroup>
-    <PackageReference Include="Sentry" Version="1.1.3-beta2" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CryV.Net.Shared\CryV.Net.Shared.csproj" />
+    <ProjectReference Include="..\CryV.Net\CryV.Net.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="LiteNetLib">
       <HintPath>..\lib\LiteNetLib.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Win32.Registry">
-      <HintPath>..\lib\Microsoft.Win32.Registry.dll</HintPath>
-    </Reference>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="XCOPY &quot;$(TargetDir)*&quot; &quot;C:\CryV\app\dotnet\resources\&quot; /S /Y" />
+  </Target>
 
 </Project>

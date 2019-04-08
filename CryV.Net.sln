@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Shared", "CryV.Net
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Server", "CryV.Net.Server\CryV.Net.Server.csproj", "{98BEFA09-9456-4C62-AD9D-8295AEBA6D78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.FakeClient", "CryV.Net.FakeClient\CryV.Net.FakeClient.csproj", "{5234FF56-DF25-4A97-B551-9C0CF9298CC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.FakeClient", "CryV.Net.FakeClient\CryV.Net.FakeClient.csproj", "{5234FF56-DF25-4A97-B551-9C0CF9298CC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net", "CryV.Net\CryV.Net.csproj", "{FC916AEC-0E45-4E21-A764-406190182972}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{5234FF56-DF25-4A97-B551-9C0CF9298CC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5234FF56-DF25-4A97-B551-9C0CF9298CC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5234FF56-DF25-4A97-B551-9C0CF9298CC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC916AEC-0E45-4E21-A764-406190182972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC916AEC-0E45-4E21-A764-406190182972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC916AEC-0E45-4E21-A764-406190182972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC916AEC-0E45-4E21-A764-406190182972}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

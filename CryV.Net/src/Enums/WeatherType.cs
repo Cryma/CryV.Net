@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CryV.Net.Client.Enums
+﻿namespace CryV.Net.Enums
 {
     public enum WeatherType
     {
