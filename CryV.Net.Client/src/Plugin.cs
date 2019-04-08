@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
 using CryV.Net.Client.Console;
+using CryV.Net.Client.Helpers;
 using CryV.Net.Elements;
 using CryV.Net.Enums;
 using CryV.Net.Plugins;

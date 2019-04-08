@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CryV.Net.Elements;
-using CryV.Net.Client.Helpers;
 using CryV.Net.Helpers;
 
-namespace CryV.Net.Client
+namespace CryV.Net.Client.Helpers
 {
     public static class Cleanup
     {

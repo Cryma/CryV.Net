@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using CryV.Net.Elements;
 using CryV.Net.Enums;
-using CryV.Net.Client.Networking;
 
 namespace CryV.Net.Client.Console
 {
@@ -123,7 +121,7 @@ namespace CryV.Net.Client.Console
                 return;
             }
 
-            Networking.Client.InterpolationFactor = factor;
+            Elements.Client.InterpolationFactor = factor;
         }
 
     }
