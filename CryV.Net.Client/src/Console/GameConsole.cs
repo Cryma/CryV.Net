@@ -275,7 +275,7 @@ namespace CryV.Net.Client.Console
 
         private void DrawText(string text, float x, float y)
         {
-            UserInterface.DrawText(text, new Vector2(x, y), 0.3f, Color.FromArgb(255, 255, 255, 255), TextFont.ChaletLondon, TextAlignment.Left, 1.0f);
+            UserInterface.DrawText(text, new Vector2(x, y), 0.3f, Color.FromArgb(255, 255, 255, 255));
         }
 
     }
