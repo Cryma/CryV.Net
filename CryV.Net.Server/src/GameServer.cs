@@ -27,19 +27,15 @@ namespace CryV.Net.Server
 
         private void OnClientUpdate(NetworkEvent<ClientUpdatePayload> obj)
         {
-            var clientData = obj.Payload;
-
-            var fromClient = GetClient(clientData.Id);
-            fromClient.Position = clientData.Position;
-            fromClient.Velocity = clientData.Velocity;
-            fromClient.Heading = clientData.Heading;
-            fromClient.Speed = clientData.Speed;
-            fromClient.Model = clientData.Model;
+            var fromClient = GetClient(obj.Payload.Id);
+           
+            fromClient.ReadPayload(obj.Payload);
 
             foreach (var client in GetClients())
             {
                 if (client.Id == fromClient.Id)
                 {
+                    // TODO: Remove debug code
                     obj.Payload.Id = 1;
                     obj.Payload.Position.X += 2;
 
@@ -92,7 +88,7 @@ namespace CryV.Net.Server
 
         private void PropagateNewClient(Client client)
         {
-            var payload = new ClientUpdatePayload(client.Id, client.Position, client.Velocity, client.Heading, client.Speed, client.Model);
+            var payload = client.GetPayload();
 
             foreach (var existingClient in _clients.Values)
             {

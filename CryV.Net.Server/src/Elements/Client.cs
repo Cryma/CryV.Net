@@ -24,13 +24,33 @@ namespace CryV.Net.Server.Elements
 
         private readonly NetPeer _peer;
 
-        public Client(NetPeer peer, Vector3 position, Vector3 velocity, float heading, ulong model)
+        public Client(NetPeer peer)
         {
             _peer = peer;
-            Position = position;
-            Velocity = velocity;
-            Heading = heading;
-            Model = model;
+        }
+
+        public Client(NetPeer peer, ClientUpdatePayload payload)
+        {
+            _peer = peer;
+            Position = payload.Position;
+            Velocity = payload.Velocity;
+            Heading = payload.Heading;
+            Model = payload.Model;
+            Speed = payload.Speed;
+        }
+
+        public void ReadPayload(ClientUpdatePayload payload)
+        {
+            Position = payload.Position;
+            Velocity = payload.Velocity;
+            Heading = payload.Heading;
+            Model = payload.Model;
+            Speed = payload.Speed;
+        }
+
+        public ClientUpdatePayload GetPayload()
+        {
+            return new ClientUpdatePayload(Id, Position, Velocity, Heading, Speed, Model);
         }
 
         public void Send(IPayload payload, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered)
