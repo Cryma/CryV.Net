@@ -5,10 +5,10 @@ using System.Drawing;
 using System.Linq;
 using System.Net.Mail;
 using System.Numerics;
-using CryV.Net.Client.Elements;
-using CryV.Net.Client.Enums;
-using CryV.Net.Client.Helpers;
-using CryV.Net.Client.Native;
+using CryV.Net.Elements;
+using CryV.Net.Enums;
+using CryV.Net.Helpers;
+using CryV.Net.Native;
 
 namespace CryV.Net.Client.Console
 {
@@ -275,19 +275,20 @@ namespace CryV.Net.Client.Console
 
         private void DrawText(string text, float x, float y)
         {
-            CryVNative.Native_UserInterface_SetTextFont(CryVNative.Plugin, 0);
-            CryVNative.Native_UserInterface_SetTextScale(CryVNative.Plugin, 0.3f, 0.3f);
-            CryVNative.Native_UserInterface_SetTextColour(CryVNative.Plugin, 255, 255, 255, 255);
+            // TODO: Reimplement
+            //CryVNative.Native_UserInterface_SetTextFont(CryVNative.Plugin, 0);
+            //CryVNative.Native_UserInterface_SetTextScale(CryVNative.Plugin, 0.3f, 0.3f);
+            //CryVNative.Native_UserInterface_SetTextColour(CryVNative.Plugin, 255, 255, 255, 255);
 
-            using (var converter = new StringConverter())
-            {
-                var componentTypePointer = converter.StringToPointer("STRING");
-                var textPointer = converter.StringToPointer(text);
+            //using (var converter = new StringConverter())
+            //{
+            //    var componentTypePointer = converter.StringToPointer("STRING");
+            //    var textPointer = converter.StringToPointer(text);
 
-                CryVNative.Native_UserInterface_BeginTextCommandDisplayText(CryVNative.Plugin, componentTypePointer);
-                CryVNative.Native_UserInterface_AddTextComponentSubstringPlayerName(CryVNative.Plugin, textPointer);
-                CryVNative.Native_UserInterface_EndTextCommandDisplayText(CryVNative.Plugin, x, y);
-            }
+            //    CryVNative.Native_UserInterface_BeginTextCommandDisplayText(CryVNative.Plugin, componentTypePointer);
+            //    CryVNative.Native_UserInterface_AddTextComponentSubstringPlayerName(CryVNative.Plugin, textPointer);
+            //    CryVNative.Native_UserInterface_EndTextCommandDisplayText(CryVNative.Plugin, x, y);
+            //}
         }
 
 

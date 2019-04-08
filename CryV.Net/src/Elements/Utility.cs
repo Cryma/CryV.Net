@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
-using CryV.Net.Client.Helpers;
-using CryV.Net.Client.Native;
+using CryV.Net.Helpers;
+using CryV.Net.Native;
 
-namespace CryV.Net.Client.Elements
+namespace CryV.Net.Elements
 {
     public static class Utility
     {

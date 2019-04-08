@@ -1,4 +1,4 @@
-﻿namespace CryV.Net.Client.Enums
+﻿namespace CryV.Net.Enums
 {
     public enum TextFont
     {

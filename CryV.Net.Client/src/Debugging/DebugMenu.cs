@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Numerics;
-using CryV.Net.Client.Elements;
-using CryV.Net.Client.Helpers;
-using CryV.Net.Client.Native;
+using CryV.Net.Elements;
 using CryV.Net.Client.Networking;
 
 namespace CryV.Net.Client.Debugging
@@ -83,19 +81,20 @@ namespace CryV.Net.Client.Debugging
 
         private void PrintLine(string text)
         {
-            CryVNative.Native_UserInterface_SetTextFont(CryVNative.Plugin, 0);
-            CryVNative.Native_UserInterface_SetTextScale(CryVNative.Plugin, 0.3f, 0.3f);
-            CryVNative.Native_UserInterface_SetTextColour(CryVNative.Plugin, 255, 255, 255, 255);
+            // TODO: Reimplement
+            //CryVNative.Native_UserInterface_SetTextFont(CryVNative.Plugin, 0);
+            //CryVNative.Native_UserInterface_SetTextScale(CryVNative.Plugin, 0.3f, 0.3f);
+            //CryVNative.Native_UserInterface_SetTextColour(CryVNative.Plugin, 255, 255, 255, 255);
 
-            using (var converter = new StringConverter())
-            {
-                var componentTypePointer = converter.StringToPointer("STRING");
-                var textPointer = converter.StringToPointer(text);
+            //using (var converter = new StringConverter())
+            //{
+            //    var componentTypePointer = converter.StringToPointer("STRING");
+            //    var textPointer = converter.StringToPointer(text);
 
-                CryVNative.Native_UserInterface_BeginTextCommandDisplayText(CryVNative.Plugin, componentTypePointer);
-                CryVNative.Native_UserInterface_AddTextComponentSubstringPlayerName(CryVNative.Plugin, textPointer);
-                CryVNative.Native_UserInterface_EndTextCommandDisplayText(CryVNative.Plugin, _x - _width / 2, _y + (20 / 1080f) * _line);
-            }
+            //    CryVNative.Native_UserInterface_BeginTextCommandDisplayText(CryVNative.Plugin, componentTypePointer);
+            //    CryVNative.Native_UserInterface_AddTextComponentSubstringPlayerName(CryVNative.Plugin, textPointer);
+            //    CryVNative.Native_UserInterface_EndTextCommandDisplayText(CryVNative.Plugin, _x - _width / 2, _y + (20 / 1080f) * _line);
+            //}
 
             _line++;
         }

@@ -1,9 +1,9 @@
-﻿using CryV.Net.Client.Native;
+﻿using CryV.Net.Native;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CryV.Net.Client.Elements
+namespace CryV.Net.Elements
 {
     public static class LocalPlayer
     {

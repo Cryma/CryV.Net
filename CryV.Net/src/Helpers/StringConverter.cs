@@ -1,11 +1,10 @@
-﻿using CryV.Net.Client.Native;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-using CryV.Net.Client.Elements;
+using CryV.Net.Elements;
 
-namespace CryV.Net.Client.Helpers
+namespace CryV.Net.Helpers
 {
     internal class StringConverter : IDisposable
     {

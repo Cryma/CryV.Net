@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using CryV.Net.Client.Elements;
+using CryV.Net.Elements;
 
 namespace CryV.Net.Client.Helpers
 {

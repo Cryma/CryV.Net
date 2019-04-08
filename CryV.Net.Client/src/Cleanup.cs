@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CryV.Net.Client.Elements;
+using CryV.Net.Elements;
 using CryV.Net.Client.Helpers;
+using CryV.Net.Helpers;
 
 namespace CryV.Net.Client
 {

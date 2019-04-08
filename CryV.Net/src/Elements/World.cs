@@ -1,11 +1,11 @@
-﻿using CryV.Net.Client.Native;
-using CryV.Net.Client.Enums;
+﻿using CryV.Net.Native;
+using CryV.Net.Enums;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using CryV.Net.Client.Helpers;
+using CryV.Net.Helpers;
 
-namespace CryV.Net.Client.Elements
+namespace CryV.Net.Elements
 {
     public static class World
     {
