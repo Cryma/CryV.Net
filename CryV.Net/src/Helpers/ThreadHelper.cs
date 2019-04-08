@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-namespace CryV.Net.Client
+namespace CryV.Net.Helpers
 {
     public static class ThreadHelper
     {

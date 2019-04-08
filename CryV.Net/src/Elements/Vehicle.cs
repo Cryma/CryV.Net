@@ -1,4 +1,4 @@
-﻿namespace CryV.Net.Client.Elements
+﻿namespace CryV.Net.Elements
 {
     public class Vehicle : Entity
     {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace CryV.Net.Client.Native
+namespace CryV.Net.Native
 {
-    public static partial class CryVNative
+    internal static partial class CryVNative
     {
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]

@@ -1,32 +1,32 @@
 ﻿using System.Drawing;
 using System.Numerics;
-using CryV.Net.Client.Enums;
-using CryV.Net.Client.Helpers;
-using CryV.Net.Client.Native;
+using CryV.Net.Enums;
+using CryV.Net.Helpers;
+using CryV.Net.Native;
 
-namespace CryV.Net.Client.Elements
+namespace CryV.Net.Elements
 {
     public static class UserInterface
     {
 
         public static void DrawText(string text, Vector2 position, float scale)
         {
-            DrawText(text, position, scale, Color.WhiteSmoke, TextFont.ChaletLondon, TextAlignment.Left, 0.0f);
+            DrawText(text, position, scale, Color.WhiteSmoke, TextFont.ChaletLondon, TextAlignment.Left, 1.0f);
         }
 
         public static void DrawText(string text, Vector2 position, float scale, Color color)
         {
-            DrawText(text, position, scale, color, TextFont.ChaletLondon, TextAlignment.Left, 0.0f);
+            DrawText(text, position, scale, color, TextFont.ChaletLondon, TextAlignment.Left, 1.0f);
         }
 
         public static void DrawText(string text, Vector2 position, float scale, Color color, TextFont textFont)
         {
-            DrawText(text, position, scale, color, textFont, TextAlignment.Left, 0.0f);
+            DrawText(text, position, scale, color, textFont, TextAlignment.Left, 1.0f);
         }
 
         public static void DrawText(string text, Vector2 position, float scale, Color color, TextFont textFont, TextAlignment textAlignment)
         {
-            DrawText(text, position, scale, color, textFont, textAlignment, 0.0f);
+            DrawText(text, position, scale, color, textFont, textAlignment, 1.0f);
         }
 
         public static void DrawText(string text, Vector2 position, float scale, Color color, TextFont textFont, TextAlignment textAlignment, float textWrap)
@@ -77,6 +77,11 @@ namespace CryV.Net.Client.Elements
             x = y = 0;
 
             CryVNative.Native_UserInterface_GetScreenResolution(CryVNative.Plugin, ref x, ref y);
+        }
+
+        public static void ActivateFrontendMenu(ulong hash, bool togglePause, int component)
+        {
+            CryVNative.Native_UserInterface_ActivateFrontendMenu(CryVNative.Plugin, hash, togglePause, component);
         }
 
     }

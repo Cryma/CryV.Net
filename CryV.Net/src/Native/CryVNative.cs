@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace CryV.Net.Client.Native
+namespace CryV.Net.Native
 {
-    public static partial class CryVNative
+    internal static partial class CryVNative
     {
 
         public static IntPtr Plugin { get; set; }

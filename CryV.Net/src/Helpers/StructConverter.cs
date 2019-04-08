@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using CryV.Net.Client.Native;
+using CryV.Net.Native;
 
-namespace CryV.Net.Client.Helpers
+namespace CryV.Net.Helpers
 {
     public static class StructConverter
     {

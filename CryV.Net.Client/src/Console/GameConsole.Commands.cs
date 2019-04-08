@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using CryV.Net.Client.Elements;
-using CryV.Net.Client.Enums;
+using CryV.Net.Elements;
+using CryV.Net.Enums;
 using CryV.Net.Client.Networking;
 
 namespace CryV.Net.Client.Console
