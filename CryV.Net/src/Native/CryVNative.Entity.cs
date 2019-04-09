@@ -40,5 +40,10 @@ namespace CryV.Net.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Entity_DeleteEntity(IntPtr plugin, int entityHandle);
 
+        //
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool Native_Entity_IsEntityPlayingAnim(IntPtr plugin, int entityHandle, IntPtr animDict, IntPtr animName, int taskFlag);
+
     }
 }
