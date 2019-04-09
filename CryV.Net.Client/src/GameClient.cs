@@ -28,6 +28,7 @@ namespace CryV.Net.Client
         private readonly ConcurrentDictionary<int, Elements.Client> _clients = new ConcurrentDictionary<int, Elements.Client>();
 
         private Vector3 _lastPosition = Vector3.Zero;
+        private Vector3 _lastVelocity = Vector3.Zero;
         private float _lastHeading;
         private ulong _lastModel;
 
@@ -95,20 +96,23 @@ namespace CryV.Net.Client
                 {
                     var position = LocalPlayer.Character.Position;
                     var rotation = LocalPlayer.Character.Rotation;
+                    var velocity = LocalPlayer.Character.Velocity;
                     var model = LocalPlayer.Model;
 
                     // TODO: Better detection if something changed
-                    if ((position - _lastPosition).Length() < 0.05f && Math.Abs(rotation.Z - _lastHeading) < 0.05f && _lastModel == model)
+                    if ((position - _lastPosition).Length() < 0.05f && (velocity - _lastPosition).Length() < 0.05f && Math.Abs(rotation.Z - _lastHeading) < 0.05f &&
+                        _lastModel == model)
                     {
                         return;
                     }
 
                     _lastPosition = position;
+                    _lastVelocity = velocity;
                     _lastHeading = rotation.Z;
                     _lastModel = model;
 
-                    var transformPayload = new ClientUpdatePayload(_networkClient.LocalId, position, LocalPlayer.Character.Velocity, rotation.Z, LocalPlayer.Character.Speed(),
-                        model, LocalPlayer.Character.IsPedJumping(), LocalPlayer.Character.IsPedClimbing());
+                    var transformPayload = new ClientUpdatePayload(_networkClient.LocalId, position, velocity, rotation.Z, LocalPlayer.Character.Speed(),
+                        model, LocalPlayer.Character.IsPedJumping(), LocalPlayer.Character.IsPedClimbing(), LocalPlayer.Character.GetIsTaskActive(47));
 
                     SendPayload(transformPayload, DeliveryMethod.Unreliable);
                 });
