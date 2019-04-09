@@ -26,22 +26,6 @@ namespace CryV.Net.Elements
             CryVNative.Native_Gameplay_LoadMpDlcMaps(CryVNative.Plugin);
         }
 
-        public static bool HasAnimDictLoaded(string animDict)
-        {
-            using (var converter = new StringConverter())
-            {
-                return CryVNative.Native_Gameplay_HasAnimDictLoaded(CryVNative.Plugin, converter.StringToPointer(animDict));
-            }
-        }
-
-        public static void RequestAnimDict(string animDict)
-        {
-            using (var converter = new StringConverter())
-            {
-                CryVNative.Native_Gameplay_RequestAnimDict(CryVNative.Plugin, converter.StringToPointer(animDict));
-            }
-        }
-
         public static void DisableAllControlActions(int inputGroup)
         {
             CryVNative.Native_Gameplay_DisableAllControlActions(CryVNative.Plugin, inputGroup);
