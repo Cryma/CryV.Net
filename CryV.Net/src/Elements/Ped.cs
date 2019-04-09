@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using CryV.Net.Client.Helpers;
+using CryV.Net.Helpers;
 using CryV.Net.Native;
 
 namespace CryV.Net.Elements
@@ -185,6 +186,21 @@ namespace CryV.Net.Elements
         public void TaskStandStill(int time)
         {
             CryVNative.Native_Ped_TaskStandStill(CryVNative.Plugin, Handle, time);
+        }
+
+        public void TaskPlayAnim(string animDictionary, string animationName, float speed, float speedMultiplier, int duration, int flag, float playbackRate,
+            bool lockX, bool lockY, bool lockZ)
+        {
+            using (var converter = new StringConverter())
+            {
+                CryVNative.Native_Ped_TaskPlayAnim(CryVNative.Plugin, Handle, converter.StringToPointer(animDictionary), converter.StringToPointer(animationName),
+                    speed, speedMultiplier, duration, flag, playbackRate, lockX, lockY, lockZ);
+            }
+        }
+
+        public void ClearPedTasksImmediately()
+        {
+            CryVNative.Native_Ped_ClearPedTasksImmediately(CryVNative.Plugin, Handle);
         }
 
         private void SetSkin(ulong model)
