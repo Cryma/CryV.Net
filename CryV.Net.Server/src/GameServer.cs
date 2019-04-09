@@ -36,10 +36,10 @@ namespace CryV.Net.Server
                 if (client.Id == fromClient.Id)
                 {
                     // TODO: Remove debug code
-                    //obj.Payload.Id = 1;
-                    //obj.Payload.Position.X += 2;
+                    obj.Payload.Id = 1;
+                    obj.Payload.Position.X += 2;
 
-                    //client.Send(obj.Payload);
+                    client.Send(obj.Payload);
 
                     continue;
                 }

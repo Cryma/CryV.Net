@@ -11,11 +11,7 @@ namespace CryV.Net.Elements
         public ulong Model
         {
             get => _model;
-            set
-            {
-                SetSkin(value);
-                _model = value;
-            }
+            set => SetSkin(value);
         }
 
         private ulong _model;
@@ -26,34 +22,7 @@ namespace CryV.Net.Elements
 
         public Ped(ulong model, Vector3 position, float heading) : base(0)
         {
-            _model = model;
-            Streaming.LoadModel(model);
-
-            Handle = CryVNative.Native_Ped_CreatePed(CryVNative.Plugin, 26, model, position.X, position.Y, position.Z, heading, false, false);
-            EntityPool.AddEntity(this);
-
-            Utility.Wait(0);
-
-            SetPedDefaultComponentVariation();
-
-            Streaming.UnloadModel(model);
-
-            SetPedFleeAttributes(0, false);
-            SetBlockingOfNonTemporaryEvents(true);
-            SetPedCombatAttributes(17, true);
-            SetPedCombatAttributes(46, true);
-            SetPedSeeingRange(0.0f);
-            SetPedHearingRange(0.0f);
-            SetPedAlertness(0);
-            SetPedCanRagdoll(false);
-            SetPedCanBeTargetted(true);
-            SetPedCanEvasiveDive(false);
-            SetPedCanBeTargettedByPlayer(true);
-            SetPedGetOutUpsideDownVehicle(false);
-            SetPedAsEnemy(false);
-            SetCanAttackFriendly(true, true);
-
-            TaskSetBlockingOfNonTemporaryEvents(true);
+            CreatePed(model, position, heading);
         }
 
         public int Speed()
@@ -210,15 +179,50 @@ namespace CryV.Net.Elements
 
         private void SetSkin(ulong model)
         {
+            CreatePed(model, Position, Rotation.Z);
+        }
+
+        private void CreatePed(ulong model, Vector3 position, float heading)
+        {
+            if (IsValid() || _model != model)
+            {
+                Delete();
+            }
+
+            _model = model;
+
             Streaming.LoadModel(model);
 
-            CryVNative.Native_LocalPlayer_SetPlayerModel(CryVNative.Plugin, Handle, model);
+            Handle = CryVNative.Native_Ped_CreatePed(CryVNative.Plugin, 26, model, position.X, position.Y, position.Z, heading, false, false);
+            EntityPool.AddEntity(this);
 
             Utility.Wait(0);
 
             SetPedDefaultComponentVariation();
 
             Streaming.UnloadModel(model);
+
+            SetPedDefaultBehaviour();
+        }
+
+        private void SetPedDefaultBehaviour()
+        {
+            SetPedFleeAttributes(0, false);
+            SetBlockingOfNonTemporaryEvents(true);
+            SetPedCombatAttributes(17, true);
+            SetPedCombatAttributes(46, true);
+            SetPedSeeingRange(0.0f);
+            SetPedHearingRange(0.0f);
+            SetPedAlertness(0);
+            SetPedCanRagdoll(false);
+            SetPedCanBeTargetted(true);
+            SetPedCanEvasiveDive(false);
+            SetPedCanBeTargettedByPlayer(true);
+            SetPedGetOutUpsideDownVehicle(false);
+            SetPedAsEnemy(false);
+            SetCanAttackFriendly(true, true);
+
+            TaskSetBlockingOfNonTemporaryEvents(true);
         }
 
     }
