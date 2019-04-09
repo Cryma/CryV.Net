@@ -60,6 +60,9 @@ namespace CryV.Net.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Ped_TaskClimb(IntPtr plugin, int pedId, bool unused);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_TaskClimbLadder(IntPtr plugin, int pedId, int p1);
+
         //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
@@ -76,6 +79,13 @@ namespace CryV.Net.Native
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern bool Native_Ped_IsPedClimbing(IntPtr plugin, int pedId);
+
+        //
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool Native_Ped_GetIsTaskActive(IntPtr plugin, int pedId, int taskNumber);
+
+        //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Ped_TaskGoStraightToCoord(IntPtr plugin, int pedId, float x, float y, float z, float speed, int timeout, float targetHeading,
