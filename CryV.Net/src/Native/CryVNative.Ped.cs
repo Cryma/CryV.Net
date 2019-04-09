@@ -97,5 +97,13 @@ namespace CryV.Net.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Ped_TaskStandStill(IntPtr plugin, int pedId, int time);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_TaskPlayAnim(IntPtr plugin, int pedId, IntPtr animDictionary, IntPtr animationName, float speed, float speedMultiplier,
+            int duration, int flag, float playbackRate, bool lockX, bool lockY, bool lockZ);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_ClearPedTasksImmediately(IntPtr plugin, int pedId);
+
+
     }
 }
