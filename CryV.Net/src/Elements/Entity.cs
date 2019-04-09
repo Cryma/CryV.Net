@@ -53,6 +53,14 @@ namespace CryV.Net.Elements
             CryVNative.Native_Entity_SetEntityAsMissionEntity(CryVNative.Plugin, Handle, p1, p2);
         }
 
+        public bool IsEntityPlayingAnim(string animDict, string animName, int taskFlag)
+        {
+            using (var converter = new StringConverter())
+            {
+                return CryVNative.Native_Entity_IsEntityPlayingAnim(CryVNative.Plugin, Handle, converter.StringToPointer(animDict), converter.StringToPointer(animName), taskFlag);
+            }
+        }
+
         public void Delete()
         {
             CryVNative.Native_Entity_DeleteEntity(CryVNative.Plugin, Handle);
