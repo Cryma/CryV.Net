@@ -29,6 +29,7 @@ namespace CryV.Net.Client
 
         private Vector3 _lastPosition = Vector3.Zero;
         private float _lastHeading;
+        private ulong _lastModel;
 
         private bool _isBootstrapped;
 
@@ -94,17 +95,20 @@ namespace CryV.Net.Client
                 {
                     var position = LocalPlayer.Character.Position;
                     var rotation = LocalPlayer.Character.Rotation;
+                    var model = LocalPlayer.Model;
 
-                    if ((position - _lastPosition).Length() < 0.05f && Math.Abs(rotation.Z - _lastHeading) < 0.05f)
+                    // TODO: Better detection if something changed
+                    if ((position - _lastPosition).Length() < 0.05f && Math.Abs(rotation.Z - _lastHeading) < 0.05f && _lastModel == model)
                     {
                         return;
                     }
 
                     _lastPosition = position;
                     _lastHeading = rotation.Z;
+                    _lastModel = model;
 
                     var transformPayload = new ClientUpdatePayload(_networkClient.LocalId, position, LocalPlayer.Character.Velocity, rotation.Z, LocalPlayer.Character.Speed(),
-                        LocalPlayer.Model, LocalPlayer.Character.IsPedJumping(), LocalPlayer.Character.IsPedClimbing());
+                        model, LocalPlayer.Character.IsPedJumping(), LocalPlayer.Character.IsPedClimbing());
 
                     SendPayload(transformPayload, DeliveryMethod.Unreliable);
                 });
@@ -121,6 +125,7 @@ namespace CryV.Net.Client
                 LocalPlayer.Character.Rotation = new Vector3(LocalPlayer.Character.Rotation.X, LocalPlayer.Character.Rotation.Y, obj.Payload.StartHeading);
                 
                 LocalPlayer.Model = obj.Payload.StartModel;
+                _lastModel = obj.Payload.StartModel;
 
                 _isBootstrapped = true;
             });
