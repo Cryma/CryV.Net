@@ -137,6 +137,11 @@ namespace CryV.Net.Elements
             CryVNative.Native_Ped_TaskClimb(CryVNative.Plugin, Handle, unused);
         }
 
+        public void TaskClimbLadder(int p1 = 1)
+        {
+            CryVNative.Native_Ped_TaskClimbLadder(CryVNative.Plugin, Handle, p1);
+        }
+
         public bool IsPedWalking()
         {
             return CryVNative.Native_Ped_IsPedWalking(CryVNative.Plugin, Handle);
@@ -160,6 +165,11 @@ namespace CryV.Net.Elements
         public bool IsPedClimbing()
         {
             return CryVNative.Native_Ped_IsPedClimbing(CryVNative.Plugin, Handle);
+        }
+
+        public bool GetIsTaskActive(int taskNumber)
+        {
+            return CryVNative.Native_Ped_GetIsTaskActive(CryVNative.Plugin, Handle, taskNumber);
         }
 
         public void TaskGoStraightToCoord(float x, float y, float z, float speed, int timeout, float targetHeading, float distanceToSlide)
