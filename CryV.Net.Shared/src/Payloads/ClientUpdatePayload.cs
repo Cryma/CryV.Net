@@ -30,10 +30,7 @@ namespace CryV.Net.Shared.Payloads
         public ulong Model { get; set; }
 
         [ProtoMember(7)]
-        public bool IsJumping { get; set; }
-
-        [ProtoMember(8)]
-        public bool IsClimbing { get; set; }
+        public int PedData { get; set; }
 
         public ClientUpdatePayload()
         {
@@ -47,8 +44,16 @@ namespace CryV.Net.Shared.Payloads
             Heading = heading;
             Speed = speed;
             Model = model;
-            IsJumping = isJumping;
-            IsClimbing = isClimbing;
+
+            if (isJumping)
+            {
+                PedData |= (int) Flags.PedData.IsJumping;
+            }
+
+            if (isClimbing)
+            {
+                PedData |= (int) Flags.PedData.IsClimbing;
+            }
         }
 
     }
