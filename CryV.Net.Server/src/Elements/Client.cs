@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Numerics;
 using CryV.Net.Shared.Payloads;
+using CryV.Net.Shared.Payloads.Flags;
 using CryV.Net.Shared.Payloads.Helpers;
 using LiteNetLib;
 
@@ -47,8 +48,9 @@ namespace CryV.Net.Server.Elements
             Heading = payload.Heading;
             Model = payload.Model;
             Speed = payload.Speed;
-            IsJumping = payload.IsJumping;
-            IsClimbing = payload.IsClimbing;
+
+            IsJumping = (payload.PedData & (int) PedData.IsJumping) > 0;
+            IsClimbing = (payload.PedData & (int) PedData.IsClimbing) > 0;
         }
 
         public ClientUpdatePayload GetPayload()

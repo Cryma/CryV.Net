@@ -3,6 +3,7 @@ using System.Numerics;
 using CryV.Net.Elements;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Shared.Payloads;
+using CryV.Net.Shared.Payloads.Flags;
 
 namespace CryV.Net.Client.Elements
 {
@@ -49,7 +50,7 @@ namespace CryV.Net.Client.Elements
 
         private float _lastRange;
         private bool _wasNegative;
-        //private bool _wasJumping;
+        private bool _wasJumping;
         private bool _wasClimbing;
 
         public Client(ClientUpdatePayload payload)
@@ -78,14 +79,14 @@ namespace CryV.Net.Client.Elements
                 Model = payload.Model;
             }
 
-            //IsJumping = payload.IsJumping;
-            //if (payload.IsJumping == false)
-            //{
-            //    _wasJumping = false;
-            //}
+            IsJumping = (payload.PedData & (int) PedData.IsJumping) > 0;
+            if (IsJumping == false)
+            {
+                _wasJumping = false;
+            }
 
-            IsClimbing = payload.IsClimbing;
-            if (payload.IsClimbing == false)
+            IsClimbing = (payload.PedData & (int)PedData.IsClimbing) > 0;
+            if (IsClimbing == false)
             {
                 _wasClimbing = false;
             }
@@ -101,12 +102,12 @@ namespace CryV.Net.Client.Elements
 
             UpdateMovementAnimation(now);
 
-            //if (IsJumping && _wasJumping == false)
-            //{
-            //    _ped.TaskJump();
+            if (IsJumping && _wasJumping == false)
+            {
+                _ped.TaskJump();
 
-            //    _wasJumping = true;
-            //}
+                _wasJumping = true;
+            }
 
             if (IsClimbing && _wasClimbing == false)
             {
@@ -133,10 +134,10 @@ namespace CryV.Net.Client.Elements
 
         private void UpdateMovementAnimation(DateTime now)
         {
-            //if (IsJumping)
-            //{
-            //    return;
-            //}
+            if (IsJumping)
+            {
+                return;
+            }
 
             if (IsClimbing)
             {
