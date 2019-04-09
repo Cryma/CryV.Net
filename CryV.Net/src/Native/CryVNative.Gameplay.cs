@@ -33,6 +33,14 @@ namespace CryV.Net.Native
         //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool Native_Gameplay_HasAnimDictLoaded(IntPtr plugin, IntPtr animDict);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Gameplay_RequestAnimDict(IntPtr plugin, IntPtr animDict);
+
+        //
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Gameplay_DisableAllControlActions(IntPtr plugin, int inputGroup);
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
