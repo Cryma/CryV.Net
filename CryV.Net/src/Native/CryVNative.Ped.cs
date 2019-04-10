@@ -60,6 +60,9 @@ namespace CryV.Net.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Ped_SetPedDiesWhenInjured(IntPtr plugin, int pedId, bool toggle);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_SetPedConfigFlag(IntPtr plugin, int pedId, int flagId, bool value);
+
         //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
@@ -73,6 +76,9 @@ namespace CryV.Net.Native
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Ped_TaskClimbLadder(IntPtr plugin, int pedId, int p1);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_TaskMoveNetwork(IntPtr plugin, int pedId, IntPtr task, float multiplier, bool p3, IntPtr animDict, int flags);
 
         //
 
@@ -120,6 +126,21 @@ namespace CryV.Net.Native
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Ped_ClearPedTasks(IntPtr plugin, int pedId);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_ClearPedSecondaryTask(IntPtr plugin, int pedId);
+
+        //
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped__0xD5BB4025AE449A4E(IntPtr plugin, int pedId, IntPtr p1, float p2);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped__0xB0A6CFD2C69C1088(IntPtr plugin, int pedId, IntPtr p1, bool p2);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped__0xD01015C7316AE176(IntPtr plugin, int pedId, IntPtr p1);
+
 
     }
 }

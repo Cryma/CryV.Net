@@ -75,6 +75,12 @@ namespace CryV.Net.Elements
             CryVNative.Native_Entity_SetEntityInvincible(CryVNative.Plugin, Handle, toggle);
         }
 
+        public Vector3 GetOffsetFromEntityGivenWorldCoords(Vector3 coordinates)
+        {
+            return StructConverter.PointerToStruct<Vector3>(
+                CryVNative.Native_Entity_GetOffsetFromEntityGivenWorldCoords(CryVNative.Plugin, Handle, coordinates.X, coordinates.Y, coordinates.Z));
+        }
+
         public void Delete()
         {
             CryVNative.Native_Entity_DeleteEntity(CryVNative.Plugin, Handle);

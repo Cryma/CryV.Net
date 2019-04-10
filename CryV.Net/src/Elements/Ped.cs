@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using System.Numerics;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Helpers;
@@ -138,6 +139,11 @@ namespace CryV.Net.Elements
             CryVNative.Native_Ped_SetPedDiesWhenInjured(CryVNative.Plugin, Handle, toggle);
         }
 
+        public void SetPedConfigFlag(int flagId, bool value)
+        {
+            CryVNative.Native_Ped_SetPedConfigFlag(CryVNative.Plugin, Handle, flagId, value);
+        }
+
         public void TaskSetBlockingOfNonTemporaryEvents(bool toggle)
         {
             CryVNative.Native_Ped_TaskSetBlockingOfNonTemporaryEvents(CryVNative.Plugin, Handle, toggle);
@@ -156,6 +162,17 @@ namespace CryV.Net.Elements
         public void TaskClimbLadder(int p1 = 1)
         {
             CryVNative.Native_Ped_TaskClimbLadder(CryVNative.Plugin, Handle, p1);
+        }
+
+        public void TaskMoveNetwork(string task, float multiplier, bool p3, string animDict, int flags)
+        {
+            using (var converter = new StringConverter())
+            {
+                var taskPointer = converter.StringToPointer(task);
+                var animDictPointer = converter.StringToPointer(animDict);
+
+                CryVNative.Native_Ped_TaskMoveNetwork(CryVNative.Plugin, Handle, taskPointer, multiplier, p3, animDictPointer, flags);
+            }
         }
 
         public bool IsPedWalking()
@@ -226,6 +243,41 @@ namespace CryV.Net.Elements
         public void ClearPedTasks()
         {
             CryVNative.Native_Ped_ClearPedTasks(CryVNative.Plugin, Handle);
+        }
+
+        public void ClearPedSecondaryTask()
+        {
+            CryVNative.Native_Ped_ClearPedSecondaryTask(CryVNative.Plugin, Handle);
+        }
+
+        public void _0xD5BB4025AE449A4E(string p1, float p2)
+        {
+            using (var converter = new StringConverter())
+            {
+                var p1Pointer = converter.StringToPointer(p1);
+
+                CryVNative.Native_Ped__0xD5BB4025AE449A4E(CryVNative.Plugin, Handle, p1Pointer, p2);
+            }
+        }
+
+        public void _0xB0A6CFD2C69C1088(string p1, bool p2)
+        {
+            using (var converter = new StringConverter())
+            {
+                var p1Pointer = converter.StringToPointer(p1);
+
+                CryVNative.Native_Ped__0xB0A6CFD2C69C1088(CryVNative.Plugin, Handle, p1Pointer, p2);
+            }
+        }
+
+        public void _0xD01015C7316AE176(string p1)
+        {
+            using (var converter = new StringConverter())
+            {
+                var p1Pointer = converter.StringToPointer(p1);
+
+                CryVNative.Native_Ped__0xD01015C7316AE176(CryVNative.Plugin, Handle, p1Pointer);
+            }
         }
 
         private void SetSkin(ulong model)

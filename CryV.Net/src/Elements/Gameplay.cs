@@ -1,4 +1,5 @@
-﻿using CryV.Net.Helpers;
+﻿using System.Numerics;
+using CryV.Net.Helpers;
 using CryV.Net.Native;
 
 namespace CryV.Net.Elements
@@ -49,6 +50,26 @@ namespace CryV.Net.Elements
         public static void SetNoLoadingScreen(bool toggle)
         {
             CryVNative.Native_Gameplay_SetNoLoadingScreen(CryVNative.Plugin, toggle);
+        }
+
+        public static int StartShapeTestRay(Vector3 start, Vector3 end, int flags, int entityHandle, int p8)
+        {
+            return CryVNative.Native_Gameplay_StartShapeTestRay(CryVNative.Plugin, start.X, start.Y, start.Z, end.X, end.Y, end.Z, flags, entityHandle, p8);
+        }
+
+        public static bool GetShapeTestResult(int rayHandle)
+        {
+            return CryVNative.Native_Gameplay_GetShapeTestResult(CryVNative.Plugin, rayHandle);
+        }
+
+        public static Vector3 GetGameplayCamRot(int rotationOrder = 2)
+        {
+            return StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Gameplay_GetGameplayCamRot(CryVNative.Plugin, rotationOrder));
+        }
+
+        public static float GetGameplayCamRelativeHeading()
+        {
+            return CryVNative.Native_Gameplay_GetGameplayCamRelativeHeading(CryVNative.Plugin);
         }
 
     }

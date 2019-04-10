@@ -29,6 +29,9 @@ namespace CryV.Net.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr Native_Entity_GetEntityForwardVector(IntPtr plugin, int entityHandle);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr Native_Entity_GetOffsetFromEntityGivenWorldCoords(IntPtr plugin, int entityHandle, float posX, float posY, float posZ);
+
         //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
