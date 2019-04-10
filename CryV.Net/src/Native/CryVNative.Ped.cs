@@ -52,6 +52,11 @@ namespace CryV.Net.Native
         public static extern void Native_Ped_SetCanAttackFriendly(IntPtr plugin, int pedId, bool toggle, bool p2);
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_SetPedToRagdoll(IntPtr plugin, int pedId, int time1, int time2, int ragdollType, bool p4, bool p5, bool p6);
+
+        //
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Ped_TaskSetBlockingOfNonTemporaryEvents(IntPtr plugin, int pedId, bool toggle);
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
@@ -79,6 +84,9 @@ namespace CryV.Net.Native
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern bool Native_Ped_IsPedClimbing(IntPtr plugin, int pedId);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool Native_Ped_IsPedRagdoll(IntPtr plugin, int pedId);
 
         //
 
