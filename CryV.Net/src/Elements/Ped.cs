@@ -203,6 +203,11 @@ namespace CryV.Net.Elements
             CryVNative.Native_Ped_ClearPedTasksImmediately(CryVNative.Plugin, Handle);
         }
 
+        public void ClearPedTasks()
+        {
+            CryVNative.Native_Ped_ClearPedTasks(CryVNative.Plugin, Handle);
+        }
+
         private void SetSkin(ulong model)
         {
             CreatePed(model, Position, Rotation.Z);
