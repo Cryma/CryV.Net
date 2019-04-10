@@ -32,6 +32,14 @@ namespace CryV.Net.Native
         //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Entity_SetEntityInvincible(IntPtr plugin, int entityHandle, bool toggle);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern int Native_Entity_GetEntityHealth(IntPtr plugin, int entityHandle);
+
+        //
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern bool Native_Entity_DoesEntityExist(IntPtr plugin, int entityHandle);
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
@@ -47,6 +55,9 @@ namespace CryV.Net.Native
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern bool Native_Entity_IsEntityPlayingAnim(IntPtr plugin, int entityHandle, IntPtr animDict, IntPtr animName, int taskFlag);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool Native_Entity_IsEntityDead(IntPtr plugin, int entityHandle);
 
     }
 }

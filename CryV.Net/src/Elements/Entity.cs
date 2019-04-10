@@ -11,6 +11,8 @@ namespace CryV.Net.Elements
 
         public int Handle { get; protected set; }
 
+        public int Health => CryVNative.Native_Entity_GetEntityHealth(CryVNative.Plugin, Handle);
+
         public Vector3 Position
         {
             get => StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetEntityPosition(CryVNative.Plugin, Handle));
@@ -61,6 +63,16 @@ namespace CryV.Net.Elements
             {
                 return CryVNative.Native_Entity_IsEntityPlayingAnim(CryVNative.Plugin, Handle, converter.StringToPointer(animDict), converter.StringToPointer(animName), taskFlag);
             }
+        }
+
+        public bool IsEntityDead()
+        {
+            return CryVNative.Native_Entity_IsEntityDead(CryVNative.Plugin, Handle);
+        }
+
+        public void SetEntityInvincible(bool toggle)
+        {
+            CryVNative.Native_Entity_SetEntityInvincible(CryVNative.Plugin, Handle, toggle);
         }
 
         public void Delete()

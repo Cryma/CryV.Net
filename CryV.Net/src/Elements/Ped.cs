@@ -133,6 +133,11 @@ namespace CryV.Net.Elements
             CryVNative.Native_Ped_SetPedToRagdollWithFall(CryVNative.Plugin, Handle, time, p2, ragdollType, x, y, z, p7);
         }
 
+        public void SetPedDiesWhenInjured(bool toggle)
+        {
+            CryVNative.Native_Ped_SetPedDiesWhenInjured(CryVNative.Plugin, Handle, toggle);
+        }
+
         public void TaskSetBlockingOfNonTemporaryEvents(bool toggle)
         {
             CryVNative.Native_Ped_TaskSetBlockingOfNonTemporaryEvents(CryVNative.Plugin, Handle, toggle);
@@ -253,6 +258,7 @@ namespace CryV.Net.Elements
 
         private void SetPedDefaultBehaviour()
         {
+            SetPedDiesWhenInjured(false);
             SetPedFleeAttributes(0, false);
             SetBlockingOfNonTemporaryEvents(true);
             SetPedCombatAttributes(17, true);
@@ -267,6 +273,8 @@ namespace CryV.Net.Elements
             SetPedGetOutUpsideDownVehicle(false);
             SetPedAsEnemy(false);
             SetCanAttackFriendly(true, true);
+
+            SetEntityInvincible(true);
 
             TaskSetBlockingOfNonTemporaryEvents(true);
         }
