@@ -54,6 +54,9 @@ namespace CryV.Net.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Ped_SetPedToRagdoll(IntPtr plugin, int pedId, int time1, int time2, int ragdollType, bool p4, bool p5, bool p6);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_SetPedToRagdollWithFall(IntPtr plugin, int pedId, int time, int p2, int ragdollType, float x, float y, float z, float p7);
+
         //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]

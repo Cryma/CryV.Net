@@ -128,6 +128,11 @@ namespace CryV.Net.Elements
             CryVNative.Native_Ped_SetPedToRagdoll(CryVNative.Plugin, Handle, time1, time2, ragdollType, p4, p5, p6);
         }
 
+        public void SetPedToRagdollWithFall(int time, int p2, int ragdollType, float x, float y, float z, float p7)
+        {
+            CryVNative.Native_Ped_SetPedToRagdollWithFall(CryVNative.Plugin, Handle, time, p2, ragdollType, x, y, z, p7);
+        }
+
         public void TaskSetBlockingOfNonTemporaryEvents(bool toggle)
         {
             CryVNative.Native_Ped_TaskSetBlockingOfNonTemporaryEvents(CryVNative.Plugin, Handle, toggle);
