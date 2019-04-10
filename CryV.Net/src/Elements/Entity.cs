@@ -28,6 +28,8 @@ namespace CryV.Net.Elements
             set => CryVNative.Native_Entity_SetEntityVelocity(CryVNative.Plugin, Handle, value.X, value.Y, value.Z);
         }
 
+        public Vector3 Forward => StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetEntityForwardVector(CryVNative.Plugin, Handle));
+
         protected Entity(int handle)
         {
             Handle = handle;

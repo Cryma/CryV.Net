@@ -26,6 +26,9 @@ namespace CryV.Net.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr Native_Entity_GetEntityVelocity(IntPtr plugin, int entityHandle);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr Native_Entity_GetEntityForwardVector(IntPtr plugin, int entityHandle);
+
         //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
