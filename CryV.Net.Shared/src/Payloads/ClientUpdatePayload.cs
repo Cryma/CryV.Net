@@ -36,7 +36,7 @@ namespace CryV.Net.Shared.Payloads
         {
         }
 
-        public ClientUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, int speed, ulong model, bool isJumping, bool isClimbing)
+        public ClientUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, int speed, ulong model, bool isJumping, bool isClimbing, bool isClimbingLadder)
         {
             Id = id;
             Position = position;
@@ -53,6 +53,11 @@ namespace CryV.Net.Shared.Payloads
             if (isClimbing)
             {
                 PedData |= (int) Flags.PedData.IsClimbing;
+            }
+
+            if (isClimbingLadder)
+            {
+                PedData |= (int) Flags.PedData.IsClimbingLadder;
             }
         }
 

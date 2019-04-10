@@ -20,7 +20,8 @@ namespace CryV.Net.Server.Networking
         private readonly GameServer _gameServer;
         private readonly int _maxPlayers;
 
-        private static readonly Vector3 _spawnPosition = new Vector3(412.4f, -976.71f, 29.43f);
+        //private static readonly Vector3 _spawnPosition = new Vector3(412.4f, -976.71f, 29.43f);
+        private static readonly Vector3 _spawnPosition = new Vector3(161.1652f, -1069.867f, 29.19238f);
 
         public NetworkServer(GameServer gameServer, int maxPlayers = 32)
         {

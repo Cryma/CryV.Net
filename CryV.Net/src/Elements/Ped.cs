@@ -188,7 +188,7 @@ namespace CryV.Net.Elements
             CryVNative.Native_Ped_TaskStandStill(CryVNative.Plugin, Handle, time);
         }
 
-        public void TaskPlayAnim(string animDictionary, string animationName, float speed, float speedMultiplier, int duration, int flag, float playbackRate,
+        public void TaskPlayAnim(string animDictionary, string animationName, float speed, float speedMultiplier, int duration, uint flag, float playbackRate,
             bool lockX, bool lockY, bool lockZ)
         {
             using (var converter = new StringConverter())

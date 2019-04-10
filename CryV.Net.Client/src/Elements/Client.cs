@@ -42,6 +42,8 @@ namespace CryV.Net.Client.Elements
 
         public bool IsClimbing { get; set; }
 
+        public bool IsClimbingLadder { get; set; }
+
         private readonly Ped _ped;
 
         private DateTime _lastTick;
@@ -85,11 +87,13 @@ namespace CryV.Net.Client.Elements
                 _wasJumping = false;
             }
 
-            IsClimbing = (payload.PedData & (int)PedData.IsClimbing) > 0;
+            IsClimbing = (payload.PedData & (int) PedData.IsClimbing) > 0;
             if (IsClimbing == false)
             {
                 _wasClimbing = false;
             }
+
+            IsClimbingLadder = (payload.PedData & (int) PedData.IsClimbingLadder) > 0;
         }
 
         public void Tick()
@@ -101,6 +105,21 @@ namespace CryV.Net.Client.Elements
             UpdateHeading(deltaTime);
 
             UpdateMovementAnimation(now);
+
+            if (IsClimbingLadder)
+            {
+                var animationName = GetLadderClimbingAnimationName();
+
+                if (_ped.IsEntityPlayingAnim("laddersbase", animationName, 3) == false)
+                {
+                    if (Velocity.Z < 0)
+                    {
+                        _ped.ClearPedTasksImmediately();
+                    }
+
+                    _ped.TaskPlayAnim("laddersbase", animationName, 8f, 10f, -1, 1 | 2147483648, -8f, true, true, true);
+                }
+            }
 
             if (IsJumping && _wasJumping == false)
             {
@@ -134,12 +153,7 @@ namespace CryV.Net.Client.Elements
 
         private void UpdateMovementAnimation(DateTime now)
         {
-            if (IsJumping)
-            {
-                return;
-            }
-
-            if (IsClimbing)
+            if (IsJumping || IsClimbing || IsClimbingLadder)
             {
                 return;
             }
@@ -212,6 +226,27 @@ namespace CryV.Net.Client.Elements
 
                     break;
             }
+        }
+
+        private string GetLadderClimbingAnimationName()
+        {
+            if (Math.Abs(Velocity.Z) < 0.5)
+            {
+                return "base_left_hand_up";
+            }
+
+            if (Velocity.Z > 0)
+            {
+                Utility.Log("2");
+                return "climb_up";
+            }
+
+            if (Velocity.Z < 0)
+            {
+                return "climb_down";
+            }
+
+            return null;
         }
 
         public void Dispose()
