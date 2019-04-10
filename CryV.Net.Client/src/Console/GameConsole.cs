@@ -55,6 +55,9 @@ namespace CryV.Net.Client.Console
             RegisterCommand("disconnect", CommandNetworkDisconnect);
 
             RegisterCommand("interpolation", CommandInterpolation);
+            
+            RegisterCommand("playanim", CommandPlayAnimation);
+            RegisterCommand("stopanim", CommandStopAnimation);
         }
 
         private void RegisterCommand(string commandName, CommandDelegate action)

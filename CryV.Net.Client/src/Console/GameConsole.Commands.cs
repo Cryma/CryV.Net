@@ -124,5 +124,23 @@ namespace CryV.Net.Client.Console
             Elements.Client.InterpolationFactor = factor;
         }
 
+        private void CommandPlayAnimation(GameConsole gameConsole, params string[] arguments)
+        {
+            if (arguments.Length < 1)
+            {
+                PrintLine("Please specify an animation dictionary and name.");
+
+                return;
+            }
+            
+            Streaming.LoadAnimationDictionary(arguments[0]);
+            LocalPlayer.Character.TaskPlayAnim(arguments[0], arguments[1], 8.0f, 10.0f, -1, 1 | 2147483648, 1.0f, true, true, true);
+        }
+
+        private void CommandStopAnimation(GameConsole gameConsole, params string[] arguments)
+        {
+            LocalPlayer.Character.ClearPedTasks();
+        }
+
     }
 }
