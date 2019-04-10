@@ -29,6 +29,8 @@ namespace CryV.Net.Server.Elements
 
         public bool IsClimbingLadder { get; set; }
 
+        public bool IsRagdoll { get; set; }
+
         private readonly NetPeer _peer;
 
         public Client(NetPeer peer)
@@ -54,11 +56,12 @@ namespace CryV.Net.Server.Elements
             IsJumping = (payload.PedData & (int) PedData.IsJumping) > 0;
             IsClimbing = (payload.PedData & (int) PedData.IsClimbing) > 0;
             IsClimbingLadder = (payload.PedData & (int) PedData.IsClimbingLadder) > 0;
+            IsRagdoll = (payload.PedData & (int) PedData.IsRagdoll) > 0;
         }
 
         public ClientUpdatePayload GetPayload()
         {
-            return new ClientUpdatePayload(Id, Position, Velocity, Heading, Speed, Model, IsJumping, IsClimbing, IsClimbingLadder);
+            return new ClientUpdatePayload(Id, Position, Velocity, Heading, Speed, Model, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll);
         }
 
         public void Send(IPayload payload, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered)
