@@ -167,7 +167,7 @@ namespace CryV.Net.Client.Elements
                 _wasRagdoll = true;
             }
 
-            if (IsRagdoll == false && _wasRagdoll)
+            if (IsRagdoll == false && (_wasRagdoll || _ped.IsPedRagdoll()))
             {
                 _ped.ClearPedTasks();
 
