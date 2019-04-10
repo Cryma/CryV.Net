@@ -30,6 +30,11 @@ namespace CryV.Net.Elements
 
         public static void LoadAnimationDictionary(string animationDictionary)
         {
+            if (HasAnimDictLoaded(animationDictionary))
+            {
+                return;
+            }
+
             RequestAnimDict(animationDictionary);
 
             while (HasAnimDictLoaded(animationDictionary) == false)

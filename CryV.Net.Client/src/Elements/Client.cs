@@ -101,25 +101,22 @@ namespace CryV.Net.Client.Elements
             var now = DateTime.UtcNow;
             var deltaTime = (float) (now - _lastTick).TotalSeconds;
 
-            UpdatePosition(deltaTime);
-            UpdateHeading(deltaTime);
-
-            UpdateMovementAnimation(now);
-
             if (IsClimbingLadder)
             {
                 var animationName = GetLadderClimbingAnimationName();
 
                 if (_ped.IsEntityPlayingAnim("laddersbase", animationName, 3) == false)
                 {
-                    if (Velocity.Z < 0)
-                    {
-                        _ped.ClearPedTasksImmediately();
-                    }
-
-                    _ped.TaskPlayAnim("laddersbase", animationName, 8f, 10f, -1, 1 | 2147483648, -8f, true, true, true);
+                    _ped.ClearPedTasks();
+                    Streaming.LoadAnimationDictionary("laddersbase");
+                    _ped.TaskPlayAnim("laddersbase", animationName, 8.0f, 10f, -1, 1 | 2147483648, 1.0f, true, true, true);
                 }
             }
+
+            UpdatePosition(deltaTime);
+            UpdateHeading(deltaTime);
+
+            UpdateMovementAnimation(now);
 
             if (IsJumping && _wasJumping == false)
             {
@@ -237,8 +234,12 @@ namespace CryV.Net.Client.Elements
 
             if (Velocity.Z > 0)
             {
-                Utility.Log("2");
                 return "climb_up";
+            }
+
+            if (Velocity.Z < -2)
+            {
+                return "slide_climb_down";
             }
 
             if (Velocity.Z < 0)

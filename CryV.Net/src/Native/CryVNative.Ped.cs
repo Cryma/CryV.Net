@@ -104,6 +104,8 @@ namespace CryV.Net.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Ped_ClearPedTasksImmediately(IntPtr plugin, int pedId);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_ClearPedTasks(IntPtr plugin, int pedId);
 
     }
 }
