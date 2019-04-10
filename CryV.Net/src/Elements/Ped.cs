@@ -123,6 +123,11 @@ namespace CryV.Net.Elements
             CryVNative.Native_Ped_SetCanAttackFriendly(CryVNative.Plugin, Handle, toggle, p2);
         }
 
+        public void SetPedToRagdoll(int time1, int time2, int ragdollType, bool p4, bool p5, bool p6)
+        {
+            CryVNative.Native_Ped_SetPedToRagdoll(CryVNative.Plugin, Handle, time1, time2, ragdollType, p4, p5, p6);
+        }
+
         public void TaskSetBlockingOfNonTemporaryEvents(bool toggle)
         {
             CryVNative.Native_Ped_TaskSetBlockingOfNonTemporaryEvents(CryVNative.Plugin, Handle, toggle);
@@ -166,6 +171,11 @@ namespace CryV.Net.Elements
         public bool IsPedClimbing()
         {
             return CryVNative.Native_Ped_IsPedClimbing(CryVNative.Plugin, Handle);
+        }
+
+        public bool IsPedRagdoll()
+        {
+            return CryVNative.Native_Ped_IsPedRagdoll(CryVNative.Plugin, Handle);
         }
 
         public bool GetIsTaskActive(int taskNumber)
