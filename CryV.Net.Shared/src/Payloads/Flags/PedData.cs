@@ -8,6 +8,7 @@ namespace CryV.Net.Shared.Payloads.Flags
         None = 1 << 0,
         IsJumping = 1 << 1,
         IsClimbing = 1 << 2,
-        IsClimbingLadder = 1 << 3
+        IsClimbingLadder = 1 << 3,
+        IsRagdoll = 1 << 4
     }
 }

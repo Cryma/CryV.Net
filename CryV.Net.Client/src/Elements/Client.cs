@@ -44,6 +44,8 @@ namespace CryV.Net.Client.Elements
 
         public bool IsClimbingLadder { get; set; }
 
+        public bool IsRagdoll { get; set; }
+
         private readonly Ped _ped;
 
         private DateTime _lastTick;
@@ -54,6 +56,7 @@ namespace CryV.Net.Client.Elements
         private bool _wasNegative;
         private bool _wasJumping;
         private bool _wasClimbing;
+        private bool _wasRagdoll;
 
         public Client(ClientUpdatePayload payload)
         {
@@ -94,6 +97,8 @@ namespace CryV.Net.Client.Elements
             }
 
             IsClimbingLadder = (payload.PedData & (int) PedData.IsClimbingLadder) > 0;
+
+            IsRagdoll = (payload.PedData & (int) PedData.IsRagdoll) > 0;
         }
 
         public void Tick()
@@ -117,6 +122,8 @@ namespace CryV.Net.Client.Elements
             UpdateHeading(deltaTime);
 
             UpdateMovementAnimation(now);
+
+            UpdateRagdoll();
 
             if (IsJumping && _wasJumping == false)
             {
@@ -148,9 +155,29 @@ namespace CryV.Net.Client.Elements
             Rotation = new Vector3(Rotation.X, Rotation.Y, interpolatedHeading);
         }
 
+        private void UpdateRagdoll()
+        {
+            if (IsRagdoll && _wasRagdoll == false)
+            {
+                _ped.ClearPedTasksImmediately();
+                _ped.SetPedCanRagdoll(true);
+
+                _ped.SetPedToRagdoll(-1, -1, 0, false, false, false);
+
+                _wasRagdoll = true;
+            }
+
+            if (IsRagdoll == false && _wasRagdoll)
+            {
+                _ped.ClearPedTasks();
+
+                _wasRagdoll = false;
+            }
+        }
+
         private void UpdateMovementAnimation(DateTime now)
         {
-            if (IsJumping || IsClimbing || IsClimbingLadder)
+            if (IsJumping || IsClimbing || IsClimbingLadder || IsRagdoll)
             {
                 return;
             }

@@ -112,7 +112,8 @@ namespace CryV.Net.Client
                     _lastModel = model;
 
                     var transformPayload = new ClientUpdatePayload(_networkClient.LocalId, position, velocity, rotation.Z, LocalPlayer.Character.Speed(),
-                        model, LocalPlayer.Character.IsPedJumping(), LocalPlayer.Character.IsPedClimbing(), LocalPlayer.Character.GetIsTaskActive(47));
+                        model, LocalPlayer.Character.IsPedJumping(), LocalPlayer.Character.IsPedClimbing(), LocalPlayer.Character.GetIsTaskActive(47),
+                        LocalPlayer.Character.IsPedRagdoll());
 
                     SendPayload(transformPayload, DeliveryMethod.Unreliable);
                 });
