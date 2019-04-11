@@ -31,5 +31,12 @@ namespace CryV.Net.Client.Helpers
             return (value % rangeZero);
         }
 
+        public static float Lerp(float start, float end, float amount)
+        {
+            amount = Math.Clamp(amount, 0, 1);
+
+            return start + (end - start) * amount;
+        }
+
     }
 }

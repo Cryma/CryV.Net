@@ -6,6 +6,7 @@
         Bootstrap,
         AddClient,
         RemoveClient,
-        UpdateClient
+        UpdateClient,
+        UpdatePointing
     }
 }

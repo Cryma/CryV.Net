@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using CryV.Net.Client.Debugging;
 using CryV.Net.Elements;
 using CryV.Net.Client.Helpers;
+using CryV.Net.Client.Helpers.Pointing;
 using CryV.Net.Client.Networking;
 using CryV.Net.Helpers;
 using CryV.Net.Shared.Events.Types;
 using CryV.Net.Shared.Payloads;
 using CryV.Net.Shared.Payloads.Helpers;
 using LiteNetLib;
-using ProtoBuf.ServiceModel;
 using EventHandler = CryV.Net.Shared.Events.EventHandler;
 
 namespace CryV.Net.Client
@@ -20,10 +20,12 @@ namespace CryV.Net.Client
     public class GameClient
     {
 
+        public int Id => _networkClient.LocalId;
         public bool IsConnected => _networkClient.IsConnected;
 
         private readonly NetworkClient _networkClient;
         private readonly DebugMenu _debugMenu;
+        private readonly LocalFingerPointing _pointing;
 
         private readonly ConcurrentDictionary<int, Elements.Client> _clients = new ConcurrentDictionary<int, Elements.Client>();
 
@@ -34,12 +36,11 @@ namespace CryV.Net.Client
 
         private bool _isBootstrapped;
 
-        private bool _isPointing;
-
         public GameClient()
         {
             _networkClient = new NetworkClient(this);
             _debugMenu = new DebugMenu(this, _networkClient);
+            _pointing = new LocalFingerPointing(this);
 
             EventHandler.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
             EventHandler.Subscribe<NetworkEvent<RemoveClientPayload>>(OnRemoveClient);
@@ -66,24 +67,7 @@ namespace CryV.Net.Client
                 client.Tick();
             }
 
-            if (Utility.IsKeyReleased(ConsoleKey.B))
-            {
-                if (_isPointing == false)
-                {
-                    FingerPointing.StartPointing();
-                    _isPointing = true;
-                }
-                else
-                {
-                    FingerPointing.StopPointing();
-                    _isPointing = false;
-                }
-            }
-
-            if (_isPointing)
-            {
-                FingerPointing.UpdateLocal();
-            }
+            _pointing.Tick();
 
             _debugMenu.Tick();
         }

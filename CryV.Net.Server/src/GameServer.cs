@@ -6,6 +6,7 @@ using CryV.Net.Server.Elements;
 using CryV.Net.Server.Networking;
 using CryV.Net.Shared.Events.Types;
 using CryV.Net.Shared.Payloads;
+using LiteNetLib;
 using EventHandler = CryV.Net.Shared.Events.EventHandler;
 
 namespace CryV.Net.Server
@@ -23,6 +24,25 @@ namespace CryV.Net.Server
             _networkServer.Start(1337);
 
             EventHandler.Subscribe<NetworkEvent<ClientUpdatePayload>>(OnClientUpdate);
+            EventHandler.Subscribe<NetworkEvent<PointingUpdatePayload>>(OnPointingUpdate);
+        }
+
+        private void OnPointingUpdate(NetworkEvent<PointingUpdatePayload> obj)
+        {
+            var fromClient = GetClient(obj.Payload.Id);
+
+            foreach (var client in GetClients())
+            {
+                if (client.Id == fromClient.Id)
+                {
+                    obj.Payload.Id = 1;
+                    client.Send(obj.Payload, DeliveryMethod.Unreliable);
+
+                    continue;
+                }
+
+                client.Send(obj.Payload, DeliveryMethod.Unreliable);
+            }
         }
 
         private void OnClientUpdate(NetworkEvent<ClientUpdatePayload> obj)
@@ -44,7 +64,7 @@ namespace CryV.Net.Server
                     continue;
                 }
 
-                client.Send(obj.Payload);
+                client.Send(obj.Payload, DeliveryMethod.Unreliable);
             }
         }
 
