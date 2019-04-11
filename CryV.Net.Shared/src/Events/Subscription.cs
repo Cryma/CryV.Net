@@ -5,6 +5,8 @@ namespace CryV.Net.Shared.Events
     public class Subscription<TEvent> : ISubscription where TEvent : IEvent
     {
 
+        public Type EventType { get; }
+
         private readonly Action<TEvent> _callback;
         private readonly Func<TEvent, bool> _filter;
 
@@ -12,6 +14,8 @@ namespace CryV.Net.Shared.Events
         {
             _callback = callback;
             _filter = filter;
+
+            EventType = typeof(TEvent);
         }
 
         public void Invoke(object arguments)

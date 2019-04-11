@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CryV.Net.Shared.Events
 {
@@ -9,12 +10,12 @@ namespace CryV.Net.Shared.Events
         
         private static readonly ConcurrentDictionary<Type, List<ISubscription>> _subscriptions = new ConcurrentDictionary<Type, List<ISubscription>>();
 
-        public static void Subscribe<TEvent>(Action<TEvent> callback, Func<TEvent, bool> filter = null) where TEvent : IEvent
+        public static ISubscription Subscribe<TEvent>(Action<TEvent> callback, Func<TEvent, bool> filter = null) where TEvent : IEvent
         {
-            AddSubscription(new Subscription<TEvent>(callback, filter));
+            return AddSubscription(new Subscription<TEvent>(callback, filter));
         }
 
-        private static void AddSubscription<TEvent>(Subscription<TEvent> callback) where TEvent : IEvent
+        private static ISubscription AddSubscription<TEvent>(Subscription<TEvent> callback) where TEvent : IEvent
         {
             _subscriptions.AddOrUpdate(typeof(TEvent), new List<ISubscription> { callback }, (type, list) =>
             {
@@ -25,6 +26,8 @@ namespace CryV.Net.Shared.Events
                     return list;
                 }
             });
+
+            return callback;
         }
 
         public static void Publish<TEvent>(TEvent eventInstance) where TEvent : IEvent
@@ -42,6 +45,26 @@ namespace CryV.Net.Shared.Events
             foreach (var subscription in subscriptions)
             {
                 subscription.Invoke(eventInstance);
+            }
+        }
+
+        public static void Unsubscribe(ISubscription subscription)
+        {
+            if (_subscriptions.TryGetValue(subscription.EventType, out var subscriptions) == false)
+            {
+                return;
+            }
+
+            lock (subscriptions)
+            {
+                subscriptions.Remove(subscription);
+
+                if (subscriptions.Any())
+                {
+                    return;
+                }
+
+                _subscriptions.TryRemove(subscription.EventType, out _);
             }
         }
 
