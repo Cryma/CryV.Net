@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="XCOPY &quot;$(TargetDir)*&quot; &quot;C:\CryV\app\dotnet\plugins\&quot; /S /Y" />
+    <Exec Command="XCOPY &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\..\client\dotnet\plugins\&quot; /S /Y" />
   </Target>
 
 </Project>
