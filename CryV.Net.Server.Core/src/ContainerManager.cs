@@ -29,7 +29,7 @@ namespace CryV.Net.Server.Core
                 GetPath("CryV.Net.Server.Common.dll")
             };
 
-            var components = Directory.GetFiles(GetPath(), "CryV.Net.Server.*.dll").Except(ignoredAssemblies);
+            var components = Directory.GetFiles(GetPath(), "CryV.Net.Server.*.dll").Concat(Directory.GetFiles(GetPath(), "CryV.Net.Shared.*.dll")).Except(ignoredAssemblies);
 
             var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
 
