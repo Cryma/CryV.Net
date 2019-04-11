@@ -81,6 +81,11 @@ namespace CryV.Net.Elements
                 CryVNative.Native_Entity_GetOffsetFromEntityGivenWorldCoords(CryVNative.Plugin, Handle, coordinates.X, coordinates.Y, coordinates.Z));
         }
 
+        public float GetEntityPitch()
+        {
+            return CryVNative.Native_Entity_GetEntityPitch(CryVNative.Plugin, Handle);
+        }
+
         public void Delete()
         {
             CryVNative.Native_Entity_DeleteEntity(CryVNative.Plugin, Handle);
