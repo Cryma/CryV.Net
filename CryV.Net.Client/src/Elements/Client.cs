@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using CryV.Net.Elements;
 using CryV.Net.Client.Helpers;
@@ -63,8 +64,7 @@ namespace CryV.Net.Client.Elements
         private bool _wasClimbing;
         private bool _wasRagdoll;
 
-        private readonly ISubscription _pointingUpdateSubscription;
-        private readonly ISubscription _pointingStopSubscription;
+        private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
 
         public Client(ClientUpdatePayload payload)
         {
@@ -81,8 +81,8 @@ namespace CryV.Net.Client.Elements
 
             _pointing = new FingerPointing(_ped);
 
-            _pointingUpdateSubscription = EventHandler.Subscribe<NetworkEvent<PointingUpdatePayload>>(_pointing.OnPointingUpdate, networkEvent => networkEvent.Payload.Id == Id);
-            _pointingStopSubscription = EventHandler.Subscribe<NetworkEvent<StopPointingPayload>>(_pointing.OnStopPointing, networkEvent => networkEvent.Payload.Id == Id);
+            _eventSubscriptions.Add(EventHandler.Subscribe<NetworkEvent<PointingUpdatePayload>>(_pointing.OnPointingUpdate, networkEvent => networkEvent.Payload.Id == Id));
+            _eventSubscriptions.Add(EventHandler.Subscribe<NetworkEvent<StopPointingPayload>>(_pointing.OnStopPointing, networkEvent => networkEvent.Payload.Id == Id));
         }
 
         public void ReadPayload(ClientUpdatePayload payload)
@@ -134,7 +134,7 @@ namespace CryV.Net.Client.Elements
             UpdatePosition(deltaTime);
             UpdateHeading(deltaTime);
 
-            UpdateMovementAnimation(now);
+            UpdateMovementAnimation();
 
             UpdateRagdoll();
 
@@ -190,7 +190,7 @@ namespace CryV.Net.Client.Elements
             }
         }
 
-        private void UpdateMovementAnimation(DateTime now)
+        private void UpdateMovementAnimation()
         {
             if (IsJumping || IsClimbing || IsClimbingLadder || IsRagdoll)
             {
@@ -294,8 +294,10 @@ namespace CryV.Net.Client.Elements
 
         public void Dispose()
         {
-            EventHandler.Unsubscribe(_pointingUpdateSubscription);
-            EventHandler.Unsubscribe(_pointingStopSubscription);
+            foreach (var subscription in _eventSubscriptions)
+            {
+                EventHandler.Unsubscribe(subscription);
+            }
 
             _ped.Delete();
         }
