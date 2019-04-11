@@ -34,6 +34,8 @@ namespace CryV.Net.Client
 
         private bool _isBootstrapped;
 
+        private bool _isPointing;
+
         public GameClient()
         {
             _networkClient = new NetworkClient(this);
@@ -62,6 +64,25 @@ namespace CryV.Net.Client
             foreach (var client in _clients.Values)
             {
                 client.Tick();
+            }
+
+            if (Utility.IsKeyReleased(ConsoleKey.B))
+            {
+                if (_isPointing == false)
+                {
+                    FingerPointing.StartPointing();
+                    _isPointing = true;
+                }
+                else
+                {
+                    FingerPointing.StopPointing();
+                    _isPointing = false;
+                }
+            }
+
+            if (_isPointing)
+            {
+                FingerPointing.UpdateLocal();
             }
 
             _debugMenu.Tick();
