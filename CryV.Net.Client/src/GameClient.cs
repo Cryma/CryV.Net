@@ -105,7 +105,7 @@ namespace CryV.Net.Client
                     var model = LocalPlayer.Model;
 
                     // TODO: Better detection if something changed
-                    if ((position - _lastPosition).Length() < 0.05f && (velocity - _lastPosition).Length() < 0.05f && Math.Abs(rotation.Z - _lastHeading) < 0.05f &&
+                    if ((position - _lastPosition).Length() < 0.05f && (velocity - _lastVelocity).Length() < 0.05f && Math.Abs(rotation.Z - _lastHeading) < 0.05f &&
                         _lastModel == model)
                     {
                         return;
