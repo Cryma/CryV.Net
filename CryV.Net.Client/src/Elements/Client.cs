@@ -2,8 +2,11 @@
 using System.Numerics;
 using CryV.Net.Elements;
 using CryV.Net.Client.Helpers;
+using CryV.Net.Client.Helpers.Pointing;
+using CryV.Net.Shared.Events.Types;
 using CryV.Net.Shared.Payloads;
 using CryV.Net.Shared.Payloads.Flags;
+using EventHandler = CryV.Net.Shared.Events.EventHandler;
 
 namespace CryV.Net.Client.Elements
 {
@@ -47,6 +50,7 @@ namespace CryV.Net.Client.Elements
         public bool IsRagdoll { get; set; }
 
         private readonly Ped _ped;
+        private readonly FingerPointing _pointing;
 
         private DateTime _lastTick;
 
@@ -70,6 +74,10 @@ namespace CryV.Net.Client.Elements
             {
                 Velocity =  payload.Velocity
             };
+
+            _pointing = new FingerPointing(_ped);
+
+            EventHandler.Subscribe<NetworkEvent<PointingUpdatePayload>>(_pointing.OnPointingUpdate, networkEvent => networkEvent.Payload.Id == Id);
         }
 
         public void ReadPayload(ClientUpdatePayload payload)
@@ -124,6 +132,8 @@ namespace CryV.Net.Client.Elements
             UpdateMovementAnimation(now);
 
             UpdateRagdoll();
+
+            _pointing.Tick(deltaTime);
 
             if (IsJumping && _wasJumping == false)
             {
