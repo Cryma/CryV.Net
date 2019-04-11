@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Server.Common", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Client.Networking", "CryV.Net.Client.Networking\CryV.Net.Client.Networking.csproj", "{E655EB35-563C-4BB8-9238-CF06C6399AA3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Server.Networking", "CryV.Net.Server.Networking\CryV.Net.Server.Networking.csproj", "{E1AC6B34-94B7-40DA-B5D3-ABDD7EED0342}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,12 @@ Global
 		{E655EB35-563C-4BB8-9238-CF06C6399AA3}.PedMirror|Any CPU.Build.0 = Debug|Any CPU
 		{E655EB35-563C-4BB8-9238-CF06C6399AA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E655EB35-563C-4BB8-9238-CF06C6399AA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1AC6B34-94B7-40DA-B5D3-ABDD7EED0342}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1AC6B34-94B7-40DA-B5D3-ABDD7EED0342}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1AC6B34-94B7-40DA-B5D3-ABDD7EED0342}.PedMirror|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1AC6B34-94B7-40DA-B5D3-ABDD7EED0342}.PedMirror|Any CPU.Build.0 = Debug|Any CPU
+		{E1AC6B34-94B7-40DA-B5D3-ABDD7EED0342}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1AC6B34-94B7-40DA-B5D3-ABDD7EED0342}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,6 +116,7 @@ Global
 		{80761A5B-AB12-448B-BCF9-4C37551E68C1} = {FF194CC2-08D8-45A0-92E4-6A912B27CD0D}
 		{EA6EF688-FECD-4EC2-8356-C2DCB99E0525} = {FF194CC2-08D8-45A0-92E4-6A912B27CD0D}
 		{E655EB35-563C-4BB8-9238-CF06C6399AA3} = {B70BD485-BD69-4069-8E91-3E849018909E}
+		{E1AC6B34-94B7-40DA-B5D3-ABDD7EED0342} = {FF194CC2-08D8-45A0-92E4-6A912B27CD0D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D13F4F0C-E395-4838-B597-2A10F446B713}

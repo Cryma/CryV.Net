@@ -1,51 +1,43 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Autofac;
-using CryV.Net.Client.Common.Interfaces;
+using CryV.Net.Server.Common.Interfaces;
 using LiteNetLib;
 
-namespace CryV.Net.Client.Networking
+namespace CryV.Net.Server.Networking
 {
     public class NetworkManager : INetworkManager, IStartable
     {
 
-        public bool IsConnected => _peer != null && _peer.ConnectionState == ConnectionState.Connected;
-
-        private NetPeer _peer;
-
         private readonly EventBasedNetListener _listener = new EventBasedNetListener();
         private readonly NetManager _netManager;
 
+        private const int _maxPlayers = 32;
+
         public NetworkManager()
         {
+            _listener.ConnectionRequestEvent += OnConectionRequest;
+
             _netManager = new NetManager(_listener);
+        }
+
+        private void OnConectionRequest(ConnectionRequest request)
+        {
+            if (_netManager.PeersCount >= _maxPlayers)
+            {
+                request.Reject();
+
+                return;
+            }
+
+            request.AcceptIfKey("hihihi");
         }
 
         public void Start()
         {
-            _netManager.Start();
+            _netManager.Start(1337);
 
             Task.Run(Tick);
-        }
-
-        public void Connect(string address, int port)
-        {
-            if (IsConnected)
-            {
-                return;
-            }
-
-            _peer = _netManager.Connect(address, port, "hihihi");
-        }
-
-        public void Disconnect()
-        {
-            if (IsConnected == false)
-            {
-                return;
-            }
-
-            _peer.Disconnect();
         }
 
         private async Task Tick()
