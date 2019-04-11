@@ -11,32 +11,42 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Server", "CryV.Net
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.FakeClient", "CryV.Net.FakeClient\CryV.Net.FakeClient.csproj", "{5234FF56-DF25-4A97-B551-9C0CF9298CC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net", "CryV.Net\CryV.Net.csproj", "{FC916AEC-0E45-4E21-A764-406190182972}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net", "CryV.Net\CryV.Net.csproj", "{FC916AEC-0E45-4E21-A764-406190182972}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		PedMirror|Any CPU = PedMirror|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3D92286E-C935-4402-8F9D-6A17712F04F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3D92286E-C935-4402-8F9D-6A17712F04F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D92286E-C935-4402-8F9D-6A17712F04F7}.PedMirror|Any CPU.ActiveCfg = PedMirror|Any CPU
+		{3D92286E-C935-4402-8F9D-6A17712F04F7}.PedMirror|Any CPU.Build.0 = PedMirror|Any CPU
 		{3D92286E-C935-4402-8F9D-6A17712F04F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D92286E-C935-4402-8F9D-6A17712F04F7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9020DFA5-4D08-48E2-9A06-0ACA14D72A82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9020DFA5-4D08-48E2-9A06-0ACA14D72A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9020DFA5-4D08-48E2-9A06-0ACA14D72A82}.PedMirror|Any CPU.ActiveCfg = PedMirror|Any CPU
+		{9020DFA5-4D08-48E2-9A06-0ACA14D72A82}.PedMirror|Any CPU.Build.0 = PedMirror|Any CPU
 		{9020DFA5-4D08-48E2-9A06-0ACA14D72A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9020DFA5-4D08-48E2-9A06-0ACA14D72A82}.Release|Any CPU.Build.0 = Release|Any CPU
 		{98BEFA09-9456-4C62-AD9D-8295AEBA6D78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{98BEFA09-9456-4C62-AD9D-8295AEBA6D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98BEFA09-9456-4C62-AD9D-8295AEBA6D78}.PedMirror|Any CPU.ActiveCfg = PedMirror|Any CPU
+		{98BEFA09-9456-4C62-AD9D-8295AEBA6D78}.PedMirror|Any CPU.Build.0 = PedMirror|Any CPU
 		{98BEFA09-9456-4C62-AD9D-8295AEBA6D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98BEFA09-9456-4C62-AD9D-8295AEBA6D78}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5234FF56-DF25-4A97-B551-9C0CF9298CC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5234FF56-DF25-4A97-B551-9C0CF9298CC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5234FF56-DF25-4A97-B551-9C0CF9298CC5}.PedMirror|Any CPU.ActiveCfg = Release|Any CPU
 		{5234FF56-DF25-4A97-B551-9C0CF9298CC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5234FF56-DF25-4A97-B551-9C0CF9298CC5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FC916AEC-0E45-4E21-A764-406190182972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FC916AEC-0E45-4E21-A764-406190182972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC916AEC-0E45-4E21-A764-406190182972}.PedMirror|Any CPU.ActiveCfg = PedMirror|Any CPU
+		{FC916AEC-0E45-4E21-A764-406190182972}.PedMirror|Any CPU.Build.0 = PedMirror|Any CPU
 		{FC916AEC-0E45-4E21-A764-406190182972}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC916AEC-0E45-4E21-A764-406190182972}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

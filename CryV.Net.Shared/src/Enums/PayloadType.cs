@@ -7,6 +7,7 @@
         AddClient,
         RemoveClient,
         UpdateClient,
-        UpdatePointing
+        UpdatePointing,
+        StopPointing
     }
 }

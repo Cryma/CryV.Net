@@ -52,12 +52,22 @@ namespace CryV.Net.Client.Helpers.Pointing
 
             var payload = obj.Payload;
 
-            Utility.Log("Receiving");
-
             _targetHeading = payload.Heading;
             _targetPitch = payload.Pitch;
 
             _lastReceiveDate = DateTime.UtcNow;
+        }
+
+        public void OnStopPointing(NetworkEvent<StopPointingPayload> obj)
+        {
+            if (_isPointing == false)
+            {
+                return;
+            }
+
+            _isPointing = false;
+
+            FingerPointingUtils.StopPointing(_ped);
         }
 
     }

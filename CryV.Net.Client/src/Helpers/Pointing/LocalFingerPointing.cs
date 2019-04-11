@@ -50,6 +50,11 @@ namespace CryV.Net.Client.Helpers.Pointing
 
                     _cancellationTokenSource.Cancel();
                     _cancellationTokenSource = new CancellationTokenSource();
+
+                    if (_gameClient.IsConnected)
+                    {
+                        _gameClient.SendPayload(new StopPointingPayload(_gameClient.Id), DeliveryMethod.ReliableOrdered);
+                    }
                 }
             }
 

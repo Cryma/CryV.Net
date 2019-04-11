@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Configurations>Debug;Release;PedMirror</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PedMirror|AnyCPU'">
+    <DefineConstants>TRACE;PedMirror</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

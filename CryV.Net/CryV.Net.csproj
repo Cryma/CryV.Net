@@ -6,6 +6,11 @@
     <ApplicationIcon />
     <OutputType>Exe</OutputType>
     <StartupObject />
+    <Configurations>Debug;Release;PedMirror</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PedMirror|AnyCPU'">
+    <DefineConstants>TRACE;PedMirror</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
