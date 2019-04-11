@@ -78,6 +78,7 @@ namespace CryV.Net.Client.Elements
             _pointing = new FingerPointing(_ped);
 
             EventHandler.Subscribe<NetworkEvent<PointingUpdatePayload>>(_pointing.OnPointingUpdate, networkEvent => networkEvent.Payload.Id == Id);
+            EventHandler.Subscribe<NetworkEvent<StopPointingPayload>>(_pointing.OnStopPointing, networkEvent => networkEvent.Payload.Id == Id);
         }
 
         public void ReadPayload(ClientUpdatePayload payload)

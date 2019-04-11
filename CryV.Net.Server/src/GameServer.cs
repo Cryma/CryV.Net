@@ -25,6 +25,26 @@ namespace CryV.Net.Server
 
             EventHandler.Subscribe<NetworkEvent<ClientUpdatePayload>>(OnClientUpdate);
             EventHandler.Subscribe<NetworkEvent<PointingUpdatePayload>>(OnPointingUpdate);
+            EventHandler.Subscribe<NetworkEvent<StopPointingPayload>>(OnStopPointing);
+        }
+
+        private void OnStopPointing(NetworkEvent<StopPointingPayload> obj)
+        {
+            var fromClient = GetClient(obj.Payload.Id);
+
+            foreach (var client in GetClients())
+            {
+                if (client.Id == fromClient.Id)
+                {
+#if PEDMIRROR
+                    obj.Payload.Id = 1;
+                    client.Send(obj.Payload);
+#endif
+                    continue;
+                }
+
+                client.Send(obj.Payload);
+            }
         }
 
         private void OnPointingUpdate(NetworkEvent<PointingUpdatePayload> obj)
@@ -35,9 +55,10 @@ namespace CryV.Net.Server
             {
                 if (client.Id == fromClient.Id)
                 {
+#if PEDMIRROR
                     obj.Payload.Id = 1;
                     client.Send(obj.Payload, DeliveryMethod.Unreliable);
-
+#endif
                     continue;
                 }
 
@@ -55,12 +76,12 @@ namespace CryV.Net.Server
             {
                 if (client.Id == fromClient.Id)
                 {
-                    // TODO: Remove debug code
+#if PEDMIRROR
                     obj.Payload.Id = 1;
                     obj.Payload.Position.X += 1.0f;
 
                     client.Send(obj.Payload);
-
+#endif
                     continue;
                 }
 
