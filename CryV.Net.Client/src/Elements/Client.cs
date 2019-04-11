@@ -3,6 +3,7 @@ using System.Numerics;
 using CryV.Net.Elements;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Client.Helpers.Pointing;
+using CryV.Net.Shared.Events;
 using CryV.Net.Shared.Events.Types;
 using CryV.Net.Shared.Payloads;
 using CryV.Net.Shared.Payloads.Flags;
@@ -62,6 +63,9 @@ namespace CryV.Net.Client.Elements
         private bool _wasClimbing;
         private bool _wasRagdoll;
 
+        private readonly ISubscription _pointingUpdateSubscription;
+        private readonly ISubscription _pointingStopSubscription;
+
         public Client(ClientUpdatePayload payload)
         {
             Id = payload.Id;
@@ -77,8 +81,8 @@ namespace CryV.Net.Client.Elements
 
             _pointing = new FingerPointing(_ped);
 
-            EventHandler.Subscribe<NetworkEvent<PointingUpdatePayload>>(_pointing.OnPointingUpdate, networkEvent => networkEvent.Payload.Id == Id);
-            EventHandler.Subscribe<NetworkEvent<StopPointingPayload>>(_pointing.OnStopPointing, networkEvent => networkEvent.Payload.Id == Id);
+            _pointingUpdateSubscription = EventHandler.Subscribe<NetworkEvent<PointingUpdatePayload>>(_pointing.OnPointingUpdate, networkEvent => networkEvent.Payload.Id == Id);
+            _pointingStopSubscription = EventHandler.Subscribe<NetworkEvent<StopPointingPayload>>(_pointing.OnStopPointing, networkEvent => networkEvent.Payload.Id == Id);
         }
 
         public void ReadPayload(ClientUpdatePayload payload)
@@ -290,6 +294,9 @@ namespace CryV.Net.Client.Elements
 
         public void Dispose()
         {
+            EventHandler.Unsubscribe(_pointingUpdateSubscription);
+            EventHandler.Unsubscribe(_pointingStopSubscription);
+
             _ped.Delete();
         }
     }
