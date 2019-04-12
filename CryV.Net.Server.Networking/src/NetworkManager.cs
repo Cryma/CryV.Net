@@ -36,11 +36,13 @@ namespace CryV.Net.Server.Networking
 
         private void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectinfo)
         {
+            Console.WriteLine($"Player {peer.Id} ({peer.EndPoint}) disconnected.");
             _eventHandler.Publish(new PlayerDisconnectedEvent(peer.Id));
         }
 
         private void OnPeerConnected(NetPeer peer)
         {
+            Console.WriteLine($"Player {peer.Id} ({peer.EndPoint}) connected.");
             _eventHandler.Publish(new PlayerConnectedEvent(peer.Id));
         }
 
