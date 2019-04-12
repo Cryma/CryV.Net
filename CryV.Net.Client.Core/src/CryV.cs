@@ -1,4 +1,5 @@
 ﻿using System;
+using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Plugins;
 
 namespace CryV.Net.Client.Core
@@ -17,12 +18,12 @@ namespace CryV.Net.Client.Core
 
         public void Tick()
         {
-            
+            NativeHelper.InvokeNativeTick();
         }
 
         public void OnKeyboard(ConsoleKey key, char character, bool isPressed)
         {
-            
+            NativeHelper.InvokeKeyboardTick(key, character, isPressed);
         }
 
     }
