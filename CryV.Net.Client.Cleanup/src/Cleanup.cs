@@ -4,7 +4,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Client.Common.Helpers;
-using CryV.Net.Client.Helpers;
+using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
 using CryV.Net.Enums;
 using CryV.Net.Helpers;
@@ -766,6 +766,13 @@ namespace CryV.Net.Client.Cleanup
             "selector"
         };
 
+        private readonly IEntityPool _entityPool;
+
+        public Cleanup(IEntityPool entityPool)
+        {
+            _entityPool = entityPool;
+        }
+
         public void Start()
         {
             ThreadHelper.Run(() =>
@@ -801,7 +808,7 @@ namespace CryV.Net.Client.Cleanup
                     var deletedPeds = 0;
                     foreach (var ped in World.GetAllPeds())
                     {
-                        if (ped.DoesExist() == false || EntityPool.ContainsEntity(ped.Handle))
+                        if (ped.DoesExist() == false || _entityPool.ContainsEntity(ped.Handle))
                         {
                             continue;
                         }
@@ -822,7 +829,7 @@ namespace CryV.Net.Client.Cleanup
                     var deletedVehicles = 0;
                     foreach (var vehicle in World.GetAllVehicles())
                     {
-                        if (vehicle.DoesExist() == false || EntityPool.ContainsEntity(vehicle.Handle))
+                        if (vehicle.DoesExist() == false || _entityPool.ContainsEntity(vehicle.Handle))
                         {
                             continue;
                         }
