@@ -1,14 +1,19 @@
 ﻿using System.Collections.Concurrent;
+using System.Linq;
 using Autofac;
 using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Interfaces;
+using CryV.Net.Shared.Common.Payloads;
+using CryV.Net.Shared.Common.Payloads.Helpers;
 using LiteNetLib;
 
 namespace CryV.Net.Server.Players
 {
     public class PlayerManager : IPlayerManager, IStartable
     {
+
+        public INetworkManager NetworkManager { get; }
 
         private readonly IEventHandler _eventHandler;
 
@@ -26,7 +31,7 @@ namespace CryV.Net.Server.Players
 
         public void AddPlayer(NetPeer peer)
         {
-            var player = new Player(peer);
+            var player = new Player(this, _eventHandler, peer);
             _players.TryAdd(peer.Id, player);
 
             _eventHandler.Publish(new PlayerConnectedEvent(player));
@@ -42,5 +47,9 @@ namespace CryV.Net.Server.Players
             _eventHandler.Publish(new PlayerDisconnectedEvent(player));
         }
 
+        public void Send(IPayload payload, DeliveryMethod deliveryMethod)
+        {
+            var data = PayloadHandler.SerializePayload(payload).Prepend((byte)payload.PayloadType).ToArray();
+        }
     }
 }

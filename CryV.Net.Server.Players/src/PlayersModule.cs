@@ -9,7 +9,8 @@ namespace CryV.Net.Server.Players
         {
             builder.RegisterType<PlayerManager>()
                 .AsImplementedInterfaces()
-                .SingleInstance();
+                .SingleInstance()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
         }
     }
 }
