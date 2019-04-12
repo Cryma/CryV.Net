@@ -26,7 +26,8 @@ namespace CryV.Net.Client.Core
             var ignoredAssemblies = new List<string>
             {
                 GetPath("CryV.Net.Client.Core.dll"),
-                GetPath("CryV.Net.Client.Common.dll")
+                GetPath("CryV.Net.Client.Common.dll"),
+                GetPath("CryV.Net.Shared.Common.dll")
             };
 
             var components = Directory.GetFiles(GetPath(), "CryV.Net.Client.*.dll").Concat(Directory.GetFiles(GetPath(), "CryV.Net.Shared.*.dll")).Except(ignoredAssemblies);

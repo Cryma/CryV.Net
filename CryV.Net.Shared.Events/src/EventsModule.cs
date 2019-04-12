@@ -4,9 +4,12 @@ namespace CryV.Net.Shared.Events
 {
     public class EventsModule : Module
     {
+
         protected override void Load(ContainerBuilder builder)
         {
-            
+            builder.RegisterType<EventHandler>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
 
     }

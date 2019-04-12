@@ -21,19 +21,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{FF194C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{E605FB54-A4AD-4E0C-99C9-31D3B47F7463}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Client.Core", "CryV.Net.Client.Core\CryV.Net.Client.Core.csproj", "{4BE639FD-F1D3-40EE-BB29-1E01244A58D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.Core", "CryV.Net.Client.Core\CryV.Net.Client.Core.csproj", "{4BE639FD-F1D3-40EE-BB29-1E01244A58D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Client.Common", "CryV.Net.Client.Common\CryV.Net.Client.Common.csproj", "{1DE14C98-FEAC-4771-B27D-F7BA399D6355}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.Common", "CryV.Net.Client.Common\CryV.Net.Client.Common.csproj", "{1DE14C98-FEAC-4771-B27D-F7BA399D6355}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Server.Core", "CryV.Net.Server.Core\CryV.Net.Server.Core.csproj", "{80761A5B-AB12-448B-BCF9-4C37551E68C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Server.Core", "CryV.Net.Server.Core\CryV.Net.Server.Core.csproj", "{80761A5B-AB12-448B-BCF9-4C37551E68C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Server.Common", "CryV.Net.Server.Common\CryV.Net.Server.Common.csproj", "{EA6EF688-FECD-4EC2-8356-C2DCB99E0525}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Server.Common", "CryV.Net.Server.Common\CryV.Net.Server.Common.csproj", "{EA6EF688-FECD-4EC2-8356-C2DCB99E0525}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Client.Networking", "CryV.Net.Client.Networking\CryV.Net.Client.Networking.csproj", "{E655EB35-563C-4BB8-9238-CF06C6399AA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.Networking", "CryV.Net.Client.Networking\CryV.Net.Client.Networking.csproj", "{E655EB35-563C-4BB8-9238-CF06C6399AA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Server.Networking", "CryV.Net.Server.Networking\CryV.Net.Server.Networking.csproj", "{E1AC6B34-94B7-40DA-B5D3-ABDD7EED0342}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Server.Networking", "CryV.Net.Server.Networking\CryV.Net.Server.Networking.csproj", "{E1AC6B34-94B7-40DA-B5D3-ABDD7EED0342}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Shared.Events", "CryV.Net.Shared.Events\CryV.Net.Shared.Events.csproj", "{94C03156-5009-46C9-98D1-396E8A7D0908}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Shared.Events", "CryV.Net.Shared.Events\CryV.Net.Shared.Events.csproj", "{94C03156-5009-46C9-98D1-396E8A7D0908}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Shared.Common", "CryV.Net.Shared.Common\CryV.Net.Shared.Common.csproj", "{2849B08F-3EBB-4657-929D-8ACD35656511}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,6 +115,12 @@ Global
 		{94C03156-5009-46C9-98D1-396E8A7D0908}.PedMirror|Any CPU.Build.0 = Debug|Any CPU
 		{94C03156-5009-46C9-98D1-396E8A7D0908}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94C03156-5009-46C9-98D1-396E8A7D0908}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2849B08F-3EBB-4657-929D-8ACD35656511}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2849B08F-3EBB-4657-929D-8ACD35656511}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2849B08F-3EBB-4657-929D-8ACD35656511}.PedMirror|Any CPU.ActiveCfg = Debug|Any CPU
+		{2849B08F-3EBB-4657-929D-8ACD35656511}.PedMirror|Any CPU.Build.0 = Debug|Any CPU
+		{2849B08F-3EBB-4657-929D-8ACD35656511}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2849B08F-3EBB-4657-929D-8ACD35656511}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -126,6 +134,7 @@ Global
 		{E655EB35-563C-4BB8-9238-CF06C6399AA3} = {B70BD485-BD69-4069-8E91-3E849018909E}
 		{E1AC6B34-94B7-40DA-B5D3-ABDD7EED0342} = {FF194CC2-08D8-45A0-92E4-6A912B27CD0D}
 		{94C03156-5009-46C9-98D1-396E8A7D0908} = {E605FB54-A4AD-4E0C-99C9-31D3B47F7463}
+		{2849B08F-3EBB-4657-929D-8ACD35656511} = {E605FB54-A4AD-4E0C-99C9-31D3B47F7463}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D13F4F0C-E395-4838-B597-2A10F446B713}
