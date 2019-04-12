@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using CryV.Net.Server.Common.Events;
@@ -45,6 +46,11 @@ namespace CryV.Net.Server.Players
             }
 
             _eventHandler.Publish(new PlayerDisconnectedEvent(player));
+        }
+
+        public ICollection<IPlayer> GetPlayers()
+        {
+            return _players.Values.ToList();
         }
 
         public void Send(IPayload payload, DeliveryMethod deliveryMethod)

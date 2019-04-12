@@ -1,4 +1,5 @@
-﻿using CryV.Net.Shared.Common.Payloads;
+﻿using System.Collections.Generic;
+using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 
 namespace CryV.Net.Server.Common.Interfaces
@@ -8,6 +9,8 @@ namespace CryV.Net.Server.Common.Interfaces
 
         void AddPlayer(NetPeer peer);
         void RemovePlayer(NetPeer peer);
+
+        ICollection<IPlayer> GetPlayers();
 
         void Send(IPayload payload, DeliveryMethod deliveryMethod);
 
