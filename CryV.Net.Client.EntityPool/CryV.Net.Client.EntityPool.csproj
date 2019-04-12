@@ -5,13 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CryV.Net\CryV.Net.csproj" />
+    <PackageReference Include="Autofac" Version="4.9.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="LiteNetLib">
-      <HintPath>..\lib\LiteNetLib.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\CryV.Net.Client.Common\CryV.Net.Client.Common.csproj" />
   </ItemGroup>
 
 </Project>
