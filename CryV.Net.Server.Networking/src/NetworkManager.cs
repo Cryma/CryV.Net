@@ -20,10 +20,12 @@ namespace CryV.Net.Server.Networking
 
         private const int _maxPlayers = 32;
 
+        private readonly IPlayerManager _playerManager;
         private readonly IEventHandler _eventHandler;
 
-        public NetworkManager(IEventHandler eventHandler)
+        public NetworkManager(IPlayerManager playerManager, IEventHandler eventHandler)
         {
+            _playerManager = playerManager;
             _eventHandler = eventHandler;
 
             _listener.ConnectionRequestEvent += OnConectionRequest;
@@ -34,16 +36,16 @@ namespace CryV.Net.Server.Networking
             _netManager = new NetManager(_listener);
         }
 
-        private void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectinfo)
-        {
-            Console.WriteLine($"Player {peer.Id} ({peer.EndPoint}) disconnected.");
-            _eventHandler.Publish(new PlayerDisconnectedEvent(peer.Id));
-        }
-
         private void OnPeerConnected(NetPeer peer)
         {
+            _playerManager.AddPlayer(peer);
             Console.WriteLine($"Player {peer.Id} ({peer.EndPoint}) connected.");
-            _eventHandler.Publish(new PlayerConnectedEvent(peer.Id));
+        }
+
+        private void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectinfo)
+        {
+            _playerManager.RemovePlayer(peer);
+            Console.WriteLine($"Player {peer.Id} ({peer.EndPoint}) disconnected.");
         }
 
         private void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliverymethod)

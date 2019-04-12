@@ -35,15 +35,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Server.Networking"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Shared.Events", "CryV.Net.Shared.Events\CryV.Net.Shared.Events.csproj", "{94C03156-5009-46C9-98D1-396E8A7D0908}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Shared.Common", "CryV.Net.Shared.Common\CryV.Net.Shared.Common.csproj", "{2849B08F-3EBB-4657-929D-8ACD35656511}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Shared.Common", "CryV.Net.Shared.Common\CryV.Net.Shared.Common.csproj", "{2849B08F-3EBB-4657-929D-8ACD35656511}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Client.Cleanup", "CryV.Net.Client.Cleanup\CryV.Net.Client.Cleanup.csproj", "{C7F128E3-9EA5-4227-B735-AC777DB5BC58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.Cleanup", "CryV.Net.Client.Cleanup\CryV.Net.Client.Cleanup.csproj", "{C7F128E3-9EA5-4227-B735-AC777DB5BC58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Client.EntityPool", "CryV.Net.Client.EntityPool\CryV.Net.Client.EntityPool.csproj", "{8694AA32-FEF2-4A43-B2CD-EF91EA583CEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.EntityPool", "CryV.Net.Client.EntityPool\CryV.Net.Client.EntityPool.csproj", "{8694AA32-FEF2-4A43-B2CD-EF91EA583CEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Client.Console", "CryV.Net.Client.Console\CryV.Net.Client.Console.csproj", "{E555BFFE-AAAC-4222-B987-3C3A9AB84671}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.Console", "CryV.Net.Client.Console\CryV.Net.Client.Console.csproj", "{E555BFFE-AAAC-4222-B987-3C3A9AB84671}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Client.Debugging", "CryV.Net.Client.Debugging\CryV.Net.Client.Debugging.csproj", "{B1F42F7D-9314-43FF-A96D-5340D4089837}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.Debugging", "CryV.Net.Client.Debugging\CryV.Net.Client.Debugging.csproj", "{B1F42F7D-9314-43FF-A96D-5340D4089837}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.Players", "CryV.Net.Client.Players\CryV.Net.Client.Players.csproj", "{B3B67B63-5785-49E1-85B0-647EDE36C80D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Server.Players", "CryV.Net.Server.Players\CryV.Net.Server.Players.csproj", "{C5E640E2-8913-487B-BAB5-6951CB6C050E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,6 +157,18 @@ Global
 		{B1F42F7D-9314-43FF-A96D-5340D4089837}.PedMirror|Any CPU.Build.0 = Debug|Any CPU
 		{B1F42F7D-9314-43FF-A96D-5340D4089837}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1F42F7D-9314-43FF-A96D-5340D4089837}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3B67B63-5785-49E1-85B0-647EDE36C80D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3B67B63-5785-49E1-85B0-647EDE36C80D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3B67B63-5785-49E1-85B0-647EDE36C80D}.PedMirror|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3B67B63-5785-49E1-85B0-647EDE36C80D}.PedMirror|Any CPU.Build.0 = Debug|Any CPU
+		{B3B67B63-5785-49E1-85B0-647EDE36C80D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3B67B63-5785-49E1-85B0-647EDE36C80D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5E640E2-8913-487B-BAB5-6951CB6C050E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5E640E2-8913-487B-BAB5-6951CB6C050E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5E640E2-8913-487B-BAB5-6951CB6C050E}.PedMirror|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5E640E2-8913-487B-BAB5-6951CB6C050E}.PedMirror|Any CPU.Build.0 = Debug|Any CPU
+		{C5E640E2-8913-487B-BAB5-6951CB6C050E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5E640E2-8913-487B-BAB5-6951CB6C050E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -171,6 +187,8 @@ Global
 		{8694AA32-FEF2-4A43-B2CD-EF91EA583CEF} = {B70BD485-BD69-4069-8E91-3E849018909E}
 		{E555BFFE-AAAC-4222-B987-3C3A9AB84671} = {B70BD485-BD69-4069-8E91-3E849018909E}
 		{B1F42F7D-9314-43FF-A96D-5340D4089837} = {B70BD485-BD69-4069-8E91-3E849018909E}
+		{B3B67B63-5785-49E1-85B0-647EDE36C80D} = {B70BD485-BD69-4069-8E91-3E849018909E}
+		{C5E640E2-8913-487B-BAB5-6951CB6C050E} = {FF194CC2-08D8-45A0-92E4-6A912B27CD0D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D13F4F0C-E395-4838-B597-2A10F446B713}
