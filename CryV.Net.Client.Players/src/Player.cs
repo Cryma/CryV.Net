@@ -12,7 +12,7 @@ using CryV.Net.Shared.Events.Types;
 
 namespace CryV.Net.Client.Players
 {
-    public class Player : IPlayer, IDisposable
+    public class Player : IPlayer
     {
 
         public int Id { get; }

@@ -1,9 +1,9 @@
-﻿using Autofac;
+﻿using System.Collections.Concurrent;
+using Autofac;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Events.Types;
-using LiteNetLib;
 
 namespace CryV.Net.Client.Players
 {
@@ -11,6 +11,8 @@ namespace CryV.Net.Client.Players
     {
 
         private readonly IEventHandler _eventHandler;
+
+        private readonly ConcurrentDictionary<int, IPlayer> _players = new ConcurrentDictionary<int, IPlayer>();
 
         public PlayerManager(IEventHandler eventHandler)
         {
@@ -32,12 +34,18 @@ namespace CryV.Net.Client.Players
 
         public void AddPlayer(ClientUpdatePayload player)
         {
-            
+            _players.TryAdd(player.Id, new Player(_eventHandler, player));
         }
 
         public void RemovePlayer(int playerId)
         {
-            throw new System.NotImplementedException();
+            if (_players.TryRemove(playerId, out var player) == false)
+            {
+                return;
+            }
+
+            player.Dispose();
         }
+
     }
 }
