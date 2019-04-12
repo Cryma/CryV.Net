@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading;
@@ -8,6 +9,7 @@ using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Shared.Common.Enums;
 using CryV.Net.Shared.Common.Interfaces;
+using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Common.Payloads.Helpers;
 using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
@@ -91,6 +93,18 @@ namespace CryV.Net.Client.Networking
 
             _peer.Disconnect();
             _peer = null;
+        }
+
+        public void Send(IPayload payload, DeliveryMethod deliveryMethod)
+        {
+            if (IsConnected == false)
+            {
+                return;
+            }
+
+            var data = PayloadHandler.SerializePayload(payload).Prepend((byte)payload.PayloadType).ToArray();
+
+            _peer.Send(data, deliveryMethod);
         }
 
         private async Task Tick()
