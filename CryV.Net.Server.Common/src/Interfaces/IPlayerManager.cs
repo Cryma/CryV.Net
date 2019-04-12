@@ -1,4 +1,5 @@
-﻿using LiteNetLib;
+﻿using CryV.Net.Shared.Common.Payloads;
+using LiteNetLib;
 
 namespace CryV.Net.Server.Common.Interfaces
 {
@@ -7,6 +8,8 @@ namespace CryV.Net.Server.Common.Interfaces
 
         void AddPlayer(NetPeer peer);
         void RemovePlayer(NetPeer peer);
+
+        void Send(IPayload payload, DeliveryMethod deliveryMethod);
 
     }
 }
