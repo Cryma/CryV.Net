@@ -28,8 +28,20 @@ namespace CryV.Net.Server.Networking
 
             _listener.ConnectionRequestEvent += OnConectionRequest;
             _listener.NetworkReceiveEvent += OnNetworkReceive;
+            _listener.PeerConnectedEvent += OnPeerConnected;
+            _listener.PeerDisconnectedEvent += OnPeerDisconnected;
 
             _netManager = new NetManager(_listener);
+        }
+
+        private void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectinfo)
+        {
+            _eventHandler.Publish(new PlayerDisconnectedEvent(peer.Id));
+        }
+
+        private void OnPeerConnected(NetPeer peer)
+        {
+            _eventHandler.Publish(new PlayerConnectedEvent(peer.Id));
         }
 
         private void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliverymethod)
