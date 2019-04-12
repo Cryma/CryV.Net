@@ -1,5 +1,6 @@
 ﻿using System;
 using CryV.Net.Client.Common.Helpers;
+using CryV.Net.Elements;
 using CryV.Net.Plugins;
 
 namespace CryV.Net.Client.Core
@@ -18,6 +19,7 @@ namespace CryV.Net.Client.Core
 
         public void Tick()
         {
+            Utility.Log("Invoking tick....");
             NativeHelper.InvokeNativeTick();
         }
 
