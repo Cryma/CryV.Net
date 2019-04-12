@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Autofac;
+using CryV.Net.Elements;
 
 namespace CryV.Net.Client.Core
 {
@@ -52,7 +53,7 @@ namespace CryV.Net.Client.Core
 
             foreach (var assembly in componentAssemblies)
             {
-                Console.WriteLine("Loaded: " + assembly.FullName);
+                Utility.Log("Loaded: " + assembly.FullName);
             }
 
             return componentAssemblies;
