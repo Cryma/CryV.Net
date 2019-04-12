@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CryV.Net.Server.Common\CryV.Net.Server.Common.csproj" />
     <ProjectReference Include="..\CryV.Net.Server.Networking\CryV.Net.Server.Networking.csproj" />
+    <ProjectReference Include="..\CryV.Net.Server.Players\CryV.Net.Server.Players.csproj" />
     <ProjectReference Include="..\CryV.Net.Shared.Events\CryV.Net.Shared.Events.csproj" />
   </ItemGroup>
 

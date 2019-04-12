@@ -5,7 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="protobuf-net" Version="2.4.0" />
+    <PackageReference Include="Autofac" Version="4.9.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CryV.Net.Server.Common\CryV.Net.Server.Common.csproj" />
+    <ProjectReference Include="..\CryV.Net.Shared.Common\CryV.Net.Shared.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
