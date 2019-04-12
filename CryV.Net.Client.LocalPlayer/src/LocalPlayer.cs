@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using Autofac;
+using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Elements;
 using CryV.Net.Helpers;
 using CryV.Net.Shared.Common.Interfaces;
@@ -10,6 +11,12 @@ namespace CryV.Net.Client.LocalPlayer
 {
     public class LocalPlayer : IStartable
     {
+
+        public int Id
+        {
+            get => LocalPlayerHelper.LocalId;
+            set => LocalPlayerHelper.LocalId = value;
+        }
 
         private readonly IEventHandler _eventHandler;
 
@@ -26,6 +33,8 @@ namespace CryV.Net.Client.LocalPlayer
         private void OnBootstrap(NetworkEvent<BootstrapPayload> obj)
         {
             var payload = obj.Payload;
+
+            Id = payload.LocalId;
 
             ThreadHelper.Run(() =>
             {
