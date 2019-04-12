@@ -19,7 +19,6 @@ namespace CryV.Net.Client.Core
 
         public void Tick()
         {
-            Utility.Log("Invoking tick....");
             NativeHelper.InvokeNativeTick();
         }
 
