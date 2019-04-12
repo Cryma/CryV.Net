@@ -45,6 +45,8 @@ namespace CryV.Net.Server.Players
                 return;
             }
 
+            player.Dispose();
+
             _eventHandler.Publish(new PlayerDisconnectedEvent(player));
         }
 
@@ -53,9 +55,5 @@ namespace CryV.Net.Server.Players
             return _players.Values.ToList();
         }
 
-        public void Send(IPayload payload, DeliveryMethod deliveryMethod)
-        {
-            var data = PayloadHandler.SerializePayload(payload).Prepend((byte)payload.PayloadType).ToArray();
-        }
     }
 }

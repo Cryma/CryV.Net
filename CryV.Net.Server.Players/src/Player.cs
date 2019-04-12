@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using CryV.Net.Elements;
 using CryV.Net.Server.Common.Interfaces;
+using CryV.Net.Shared.Common.Flags;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Common.Payloads.Helpers;
+using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
 
 namespace CryV.Net.Server.Players
@@ -33,6 +35,8 @@ namespace CryV.Net.Server.Players
 
         public bool IsRagdoll { get; set; }
 
+        private readonly List<ISubscription> _subscriptions = new List<ISubscription>();
+
         private readonly NetPeer _peer;
         private readonly IEventHandler _eventHandler;
         private readonly IPlayerManager _playerManager;
@@ -43,7 +47,26 @@ namespace CryV.Net.Server.Players
             _eventHandler = eventHandler;
             _peer = peer;
 
+            _subscriptions.Add(_eventHandler.Subscribe<NetworkEvent<ClientUpdatePayload>>(OnNetworkUpdate, x => x.Payload.Id == Id));
+
             BootstrapPlayer();
+        }
+
+        private void OnNetworkUpdate(NetworkEvent<ClientUpdatePayload> obj)
+        {
+            var payload = obj.Payload;
+
+            ReadPayload(payload);
+
+            foreach (var player in _playerManager.GetPlayers())
+            {
+                if (player == this)
+                {
+                    continue;
+                }
+
+                player.Send(payload, DeliveryMethod.Unreliable);
+            }
         }
 
         public void Send(IPayload payload, DeliveryMethod deliveryMethod)
@@ -65,6 +88,20 @@ namespace CryV.Net.Server.Players
             return new ClientUpdatePayload(Id, Position, Velocity, Heading, Speed, Model, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll);
         }
 
+        public void ReadPayload(ClientUpdatePayload payload)
+        {
+            Position = payload.Position;
+            Velocity = payload.Velocity;
+            Heading = payload.Heading;
+            Model = payload.Model;
+            Speed = payload.Speed;
+
+            IsJumping = (payload.PedData & (int) PedData.IsJumping) > 0;
+            IsClimbing = (payload.PedData & (int) PedData.IsClimbing) > 0;
+            IsClimbingLadder = (payload.PedData & (int) PedData.IsClimbingLadder) > 0;
+            IsRagdoll = (payload.PedData & (int) PedData.IsRagdoll) > 0;
+        }
+
         private void BootstrapPlayer()
         {
             var existingPlayers = new List<ClientUpdatePayload>();
@@ -79,5 +116,12 @@ namespace CryV.Net.Server.Players
             Send(payload, DeliveryMethod.ReliableOrdered);
         }
 
+        public void Dispose()
+        {
+            foreach (var subscription in _subscriptions)
+            {
+                _eventHandler.Unsubscribe(subscription);
+            }
+        }
     }
 }
