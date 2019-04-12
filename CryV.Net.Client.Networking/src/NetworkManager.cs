@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
+using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Shared.Common.Enums;
 using CryV.Net.Shared.Common.Interfaces;
@@ -71,6 +72,8 @@ namespace CryV.Net.Client.Networking
 
             _peer = _netManager.Connect(address, port, "hihihi");
 
+            _eventHandler.Publish(new LocalPlayerConnectedEvent());
+
             _cancellationTokenSource = new CancellationTokenSource();
             Task.Run(Tick, _cancellationTokenSource.Token);
         }
@@ -83,6 +86,8 @@ namespace CryV.Net.Client.Networking
             }
 
             _cancellationTokenSource.Cancel();
+
+            _eventHandler.Publish(new LocalPlayerDisconnectedEvent());
 
             _peer.Disconnect();
             _peer = null;
