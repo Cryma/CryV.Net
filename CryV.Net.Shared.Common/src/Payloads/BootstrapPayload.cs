@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Collections.Generic;
+using System.Numerics;
 using CryV.Net.Shared.Common.Enums;
 using CryV.Net.Shared.Common.Payloads.Partials;
 using ProtoBuf;
@@ -23,16 +24,20 @@ namespace CryV.Net.Shared.Common.Payloads
         [ProtoMember(4)]
         public ulong StartModel { get; set; }
 
+        [ProtoMember(5)]
+        public List<ClientUpdatePayload> ExistingPlayers { get; set; }
+
         public BootstrapPayload()
         {
         }
 
-        public BootstrapPayload(int localId, Vector3 startPosition, float startHeading, ulong startModel)
+        public BootstrapPayload(int localId, Vector3 startPosition, float startHeading, ulong startModel, List<ClientUpdatePayload> existingPlayers)
         {
             LocalId = localId;
             StartPosition = startPosition;
             StartHeading = startHeading;
             StartModel = startModel;
+            ExistingPlayers = existingPlayers;
         }
 
     }
