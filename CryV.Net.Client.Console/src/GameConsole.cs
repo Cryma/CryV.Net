@@ -6,6 +6,7 @@ using System.Linq;
 using System.Numerics;
 using Autofac;
 using CryV.Net.Client.Common.Helpers;
+using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
 
 namespace CryV.Net.Client.Console
@@ -32,6 +33,13 @@ namespace CryV.Net.Client.Console
 
         private readonly ConcurrentDictionary<string, CommandDelegate> _commands = new ConcurrentDictionary<string, CommandDelegate>();
 
+        private readonly INetworkManager _networkManager;
+
+        public GameConsole(INetworkManager networkManager)
+        {
+            _networkManager = networkManager;
+        }
+
         public void Start()
         {
             _cursorIndex = 0;
@@ -49,8 +57,8 @@ namespace CryV.Net.Client.Console
             RegisterCommand("setskin", CommandSetSkin);
             RegisterCommand("setweather", CommandSetWeather);
 
-            //RegisterCommand("connect", CommandNetworkConnect);
-            //RegisterCommand("disconnect", CommandNetworkDisconnect);
+            RegisterCommand("connect", CommandNetworkConnect);
+            RegisterCommand("disconnect", CommandNetworkDisconnect);
 
             RegisterCommand("playanim", CommandPlayAnimation);
             RegisterCommand("stopanim", CommandStopAnimation);

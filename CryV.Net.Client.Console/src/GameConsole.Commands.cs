@@ -61,49 +61,49 @@ namespace CryV.Net.Client.Console
             World.SetWeather(weatherType);
         }
 
-        //private void CommandNetworkConnect(GameConsole gameConsole, params string[] arguments)
-        //{
-        //    if (arguments.Length != 2)
-        //    {
-        //        PrintLine("Please specify address and port.");
+        private void CommandNetworkConnect(GameConsole gameConsole, params string[] arguments)
+        {
+            if (arguments.Length != 2)
+            {
+                PrintLine("Please specify address and port.");
 
-        //        return;
-        //    }
+                return;
+            }
 
-        //    var address = arguments[0];
+            var address = arguments[0];
 
-        //    if (int.TryParse(arguments[1], out var port) == false)
-        //    {
-        //        PrintLine("Your specified port is not an integer.");
+            if (int.TryParse(arguments[1], out var port) == false)
+            {
+                PrintLine("Your specified port is not an integer.");
 
-        //        return;
-        //    }
+                return;
+            }
 
-        //    if (_gameClient.IsConnected)
-        //    {
-        //        PrintLine("You are already connected to a server.");
+            if (_networkManager.IsConnected)
+            {
+                PrintLine("You are already connected to a server.");
 
-        //        return;
-        //    }
+                return;
+            }
 
-        //    _gameClient.Connect(address, port);
+            _networkManager.Connect(address, port);
 
-        //    PrintLine($"You connected to \"{address}:{port}\".");
-        //}
+            PrintLine($"You connected to \"{address}:{port}\".");
+        }
 
-        //private void CommandNetworkDisconnect(GameConsole gameConsole, params string[] arguments)
-        //{
-        //    if (_gameClient.IsConnected == false)
-        //    {
-        //        PrintLine("You are not connected to any server.");
+        private void CommandNetworkDisconnect(GameConsole gameConsole, params string[] arguments)
+        {
+            if (_networkManager.IsConnected == false)
+            {
+                PrintLine("You are not connected to any server.");
 
-        //        return;
-        //    }
+                return;
+            }
 
-        //    _gameClient.Disconnect();
+            _networkManager.Disconnect();
 
-        //    PrintLine("You disconnected from the server.");
-        //}
+            PrintLine("You disconnected from the server.");
+        }
 
         private void CommandPlayAnimation(GameConsole gameConsole, params string[] arguments)
         {
