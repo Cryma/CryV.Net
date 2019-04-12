@@ -1,7 +1,13 @@
 ﻿using System;
+using System.Reflection;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Server.Common.Interfaces;
+using CryV.Net.Shared.Common.Enums;
+using CryV.Net.Shared.Common.Interfaces;
+using CryV.Net.Shared.Common.Payloads.Helpers;
+using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
 
 namespace CryV.Net.Server.Networking
@@ -14,11 +20,37 @@ namespace CryV.Net.Server.Networking
 
         private const int _maxPlayers = 32;
 
-        public NetworkManager()
+        private readonly IEventHandler _eventHandler;
+
+        public NetworkManager(IEventHandler eventHandler)
         {
+            _eventHandler = eventHandler;
+
             _listener.ConnectionRequestEvent += OnConectionRequest;
+            _listener.NetworkReceiveEvent += OnNetworkReceive;
 
             _netManager = new NetManager(_listener);
+        }
+
+        private void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliverymethod)
+        {
+            var type = (PayloadType) reader.GetByte();
+
+            var payloadObjectType = PayloadHandler.GetPayloadByType(type);
+            var payload = PayloadHandler.DeserializePayload(payloadObjectType, reader.GetRemainingBytes());
+
+            var eventType = typeof(NetworkEvent<>).MakeGenericType(payloadObjectType);
+            var eventInstance = (IEvent) FormatterServices.GetUninitializedObject(eventType);
+
+            var payloadProperty = eventType.GetProperty("Payload", BindingFlags.Public | BindingFlags.Instance);
+            if (payloadProperty == null)
+            {
+                return;
+            }
+
+            payloadProperty.SetValue(eventInstance, payload);
+
+            _eventHandler.Publish(eventType, eventInstance);
         }
 
         private void OnConectionRequest(ConnectionRequest request)
