@@ -52,7 +52,7 @@ namespace CryV.Net
 
         private static void LoadPlugin()
         {
-            var assembly = Assembly.LoadFrom(Path.Combine(GetInstallDirectory(), "dotnet/resources/CryV.Net.Client.dll"));
+            var assembly = Assembly.LoadFrom(Path.Combine(GetInstallDirectory(), "dotnet/resources/CryV.Net.Client.Core.dll"));
 
             foreach (var type in assembly.GetTypes())
             {

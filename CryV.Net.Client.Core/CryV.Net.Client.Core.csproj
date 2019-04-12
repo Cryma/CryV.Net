@@ -1,7 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
@@ -19,5 +20,9 @@
     <ProjectReference Include="..\CryV.Net.Shared.Events\CryV.Net.Shared.Events.csproj" />
     <ProjectReference Include="..\CryV.Net\CryV.Net.csproj" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="XCOPY &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\..\client\dotnet\resources\&quot; /S /Y" />
+  </Target>
 
 </Project>
