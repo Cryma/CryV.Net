@@ -28,8 +28,4 @@
     </Reference>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="XCOPY &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\..\client\dotnet\resources\&quot; /S /Y" />
-  </Target>
-
 </Project>
