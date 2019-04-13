@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Numerics;
 using Autofac;
 using CryV.Net.Client.Common.Helpers;
+using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
 
 namespace CryV.Net.Client.Debugging.Menu
@@ -16,6 +17,13 @@ namespace CryV.Net.Client.Debugging.Menu
         private float _x;
         private float _y;
         private int _line;
+
+        private readonly INetworkManager _networkManager;
+
+        public DebugMenu(INetworkManager networkManager)
+        {
+            _networkManager = networkManager;
+        }
 
         public void Start()
         {
@@ -53,23 +61,29 @@ namespace CryV.Net.Client.Debugging.Menu
             PrintVector(position, "Position");
             PrintVector(rotation, "Rotation");
 
-            //if (_networkClient.IsConnected)
-            //{
-            //    _line++;
+#if !RELEASE
+            if (_networkManager.IsConnected)
+            {
+                _line++;
 
-            //    PrintLine("Packet loss: " + _networkClient.Statistics.PacketLossPercent + "%");
-            //    PrintLine("Packet loss total: " + _networkClient.Statistics.PacketLoss);
+                PrintLine("Ping: " + _networkManager.Ping);
 
-            //    _line++;
+                _line++;
 
-            //    PrintLine("Bytes received: " + _networkClient.Statistics.BytesReceived);
-            //    PrintLine("Bytes sent: " + _networkClient.Statistics.BytesSent);
+                PrintLine("Packet loss: " + _networkManager.Statistics.PacketLossPercent + "%");
+                PrintLine("Packet loss total: " + _networkManager.Statistics.PacketLoss);
 
-            //    _line++;
+                _line++;
 
-            //    PrintLine("Packets received: " + _networkClient.Statistics.PacketsReceived);
-            //    PrintLine("Packets sent: " + _networkClient.Statistics.PacketsSent);
-            //}
+                PrintLine("Bytes received: " + _networkManager.Statistics.BytesReceived);
+                PrintLine("Bytes sent: " + _networkManager.Statistics.BytesSent);
+
+                _line++;
+
+                PrintLine("Packets received: " + _networkManager.Statistics.PacketsReceived);
+                PrintLine("Packets sent: " + _networkManager.Statistics.PacketsSent);
+            }
+#endif
 
             var rectangleHeight = _y + (20 / 1080f) * _line;
 
