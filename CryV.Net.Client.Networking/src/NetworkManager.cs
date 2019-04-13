@@ -21,6 +21,10 @@ namespace CryV.Net.Client.Networking
 
         public bool IsConnected => _peer != null && _peer.ConnectionState == ConnectionState.Connected;
 
+        public NetStatistics Statistics => _peer.Statistics;
+
+        public int Ping => _peer?.Ping ?? -1;
+
         private NetPeer _peer;
 
         private CancellationTokenSource _cancellationTokenSource;

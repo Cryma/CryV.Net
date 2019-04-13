@@ -8,6 +8,10 @@ namespace CryV.Net.Client.Common.Interfaces
 
         bool IsConnected { get; }
 
+        NetStatistics Statistics { get; }
+
+        int Ping { get; }
+
         void Connect(string address, int port);
 
         void Disconnect();
