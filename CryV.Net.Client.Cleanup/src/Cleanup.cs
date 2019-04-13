@@ -850,7 +850,7 @@ namespace CryV.Net.Client.Cleanup
             }
         }
 
-        public static void Tick()
+        public static void Tick(float deltaTime)
         {
             World.SetRandomTrains(false);
             World.SetRandomBoats(false);

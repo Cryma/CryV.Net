@@ -30,7 +30,7 @@ namespace CryV.Net.Client.Debugging.Menu
             NativeHelper.OnNativeTick += Tick;
         }
 
-        public void Tick()
+        public void Tick(float deltaTime)
         {
             if (Utility.IsKeyReleased(ConsoleKey.F4))
             {

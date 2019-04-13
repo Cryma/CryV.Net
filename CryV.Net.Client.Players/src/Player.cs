@@ -55,8 +55,6 @@ namespace CryV.Net.Client.Players
 
         private static float _interpolationFactor = 3.0f;
 
-        private DateTime _lastTick = DateTime.UtcNow;
-
         private float _lastRange;
         private bool _wasNegative;
         private bool _wasJumping;
@@ -94,6 +92,11 @@ namespace CryV.Net.Client.Players
             NativeHelper.OnNativeTick += Tick;
         }
 
+        public Ped GetPed()
+        {
+            return _ped;
+        }
+
         public void ReadPayload(ClientUpdatePayload payload)
         {
             TargetPosition = payload.Position;
@@ -127,11 +130,8 @@ namespace CryV.Net.Client.Players
             });
         }
 
-        private void Tick()
+        private void Tick(float deltaTime)
         {
-            var now = DateTime.UtcNow;
-            var deltaTime = (float)(now - _lastTick).TotalSeconds;
-
             if (IsClimbingLadder)
             {
                 var animationName = GetLadderClimbingAnimationName();
@@ -164,8 +164,6 @@ namespace CryV.Net.Client.Players
 
                 _wasClimbing = true;
             }
-
-            _lastTick = now;
         }
 
         private void UpdatePosition(float deltaTime)
