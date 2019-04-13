@@ -22,14 +22,8 @@ namespace CryV.Net.Client.Players
         public void Start()
         {
             _eventHandler.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
-        }
-
-        private void OnBootstrap(NetworkEvent<BootstrapPayload> obj)
-        {
-            foreach (var player in obj.Payload.ExistingPlayers)
-            {
-                AddPlayer(player);
-            }
+            _eventHandler.Subscribe<NetworkEvent<AddClientPayload>>(OnAddClient);
+            _eventHandler.Subscribe<NetworkEvent<RemoveClientPayload>>(OnRemoveClient);
         }
 
         public void AddPlayer(ClientUpdatePayload player)
@@ -45,6 +39,24 @@ namespace CryV.Net.Client.Players
             }
 
             player.Dispose();
+        }
+
+        private void OnBootstrap(NetworkEvent<BootstrapPayload> obj)
+        {
+            foreach (var player in obj.Payload.ExistingPlayers)
+            {
+                AddPlayer(player);
+            }
+        }
+
+        private void OnAddClient(NetworkEvent<AddClientPayload> obj)
+        {
+            AddPlayer(obj.Payload.Data);
+        }
+
+        private void OnRemoveClient(NetworkEvent<RemoveClientPayload> obj)
+        {
+            RemovePlayer(obj.Payload.Id);
         }
 
     }
