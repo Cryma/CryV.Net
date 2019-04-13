@@ -45,9 +45,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.Debugging",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.Players", "CryV.Net.Client.Players\CryV.Net.Client.Players.csproj", "{B3B67B63-5785-49E1-85B0-647EDE36C80D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Server.Players", "CryV.Net.Server.Players\CryV.Net.Server.Players.csproj", "{C5E640E2-8913-487B-BAB5-6951CB6C050E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Server.Players", "CryV.Net.Server.Players\CryV.Net.Server.Players.csproj", "{C5E640E2-8913-487B-BAB5-6951CB6C050E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Client.LocalPlayer", "CryV.Net.Client.LocalPlayer\CryV.Net.Client.LocalPlayer.csproj", "{04888282-CF87-4E67-BF07-686C224131DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.LocalPlayer", "CryV.Net.Client.LocalPlayer\CryV.Net.Client.LocalPlayer.csproj", "{04888282-CF87-4E67-BF07-686C224131DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Client.FingerPointing", "CryV.Net.Client.FingerPointing\CryV.Net.Client.FingerPointing.csproj", "{8B2FD029-355C-427E-8278-C484C289CCC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -170,6 +172,12 @@ Global
 		{04888282-CF87-4E67-BF07-686C224131DA}.PedMirror|Any CPU.Build.0 = PedMirror|Any CPU
 		{04888282-CF87-4E67-BF07-686C224131DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04888282-CF87-4E67-BF07-686C224131DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B2FD029-355C-427E-8278-C484C289CCC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B2FD029-355C-427E-8278-C484C289CCC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B2FD029-355C-427E-8278-C484C289CCC4}.PedMirror|Any CPU.ActiveCfg = PedMirror|Any CPU
+		{8B2FD029-355C-427E-8278-C484C289CCC4}.PedMirror|Any CPU.Build.0 = PedMirror|Any CPU
+		{8B2FD029-355C-427E-8278-C484C289CCC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B2FD029-355C-427E-8278-C484C289CCC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -191,6 +199,7 @@ Global
 		{B3B67B63-5785-49E1-85B0-647EDE36C80D} = {B70BD485-BD69-4069-8E91-3E849018909E}
 		{C5E640E2-8913-487B-BAB5-6951CB6C050E} = {FF194CC2-08D8-45A0-92E4-6A912B27CD0D}
 		{04888282-CF87-4E67-BF07-686C224131DA} = {B70BD485-BD69-4069-8E91-3E849018909E}
+		{8B2FD029-355C-427E-8278-C484C289CCC4} = {B70BD485-BD69-4069-8E91-3E849018909E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D13F4F0C-E395-4838-B597-2A10F446B713}

@@ -7,6 +7,7 @@ namespace CryV.Net.Client.Common.Interfaces
 
         void AddPlayer(ClientUpdatePayload player);
         void RemovePlayer(int playerId);
+        IPlayer GetPlayer(int playerId);
 
     }
 }
