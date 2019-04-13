@@ -51,6 +51,16 @@ namespace CryV.Net.Server.Players
             _eventHandler.Publish(new PlayerDisconnectedEvent(player));
         }
 
+        public IPlayer GetPlayer(int playerId)
+        {
+            if (_players.TryGetValue(playerId, out var player) == false)
+            {
+                return null;
+            }
+
+            return player;
+        }
+
         public ICollection<IPlayer> GetPlayers()
         {
             return _players.Values.ToList();
