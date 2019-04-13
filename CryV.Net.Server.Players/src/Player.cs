@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using CryV.Net.Elements;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Flags;
 using CryV.Net.Shared.Common.Interfaces;
@@ -60,8 +59,6 @@ namespace CryV.Net.Server.Players
 
             if (_peer == null)
             {
-                Utility.Log("Client peer is null!");
-
                 return;
             }
 
