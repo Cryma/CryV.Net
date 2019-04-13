@@ -22,7 +22,7 @@ namespace CryV.Net.Client.FingerPointing
         private float _lastSentHeading;
         private float _lastSentPitch;
 
-        private CancellationTokenSource _cancellationTokenSource;
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         private bool _isPointing;
 
