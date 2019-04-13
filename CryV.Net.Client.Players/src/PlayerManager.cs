@@ -54,6 +54,16 @@ namespace CryV.Net.Client.Players
             player.Dispose();
         }
 
+        public IPlayer GetPlayer(int playerId)
+        {
+            if (_players.TryGetValue(playerId, out var player) == false)
+            {
+                return null;
+            }
+
+            return player;
+        }
+
         private void OnBootstrap(NetworkEvent<BootstrapPayload> obj)
         {
             foreach (var player in obj.Payload.ExistingPlayers)
