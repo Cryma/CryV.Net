@@ -12,7 +12,5 @@ namespace CryV.Net.Server.Common.Interfaces
 
         ICollection<IPlayer> GetPlayers();
 
-        void Send(IPayload payload, DeliveryMethod deliveryMethod);
-
     }
 }
