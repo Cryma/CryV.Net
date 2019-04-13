@@ -7,6 +7,7 @@ using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Common.Payloads.Helpers;
+using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
 
 namespace CryV.Net.Server.Players

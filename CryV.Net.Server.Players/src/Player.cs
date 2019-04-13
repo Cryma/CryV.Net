@@ -50,6 +50,7 @@ namespace CryV.Net.Server.Players
             _subscriptions.Add(_eventHandler.Subscribe<NetworkEvent<ClientUpdatePayload>>(OnNetworkUpdate, x => x.Payload.Id == Id));
 
             BootstrapPlayer();
+            PropagateNewPlayer();
         }
 
         private void OnNetworkUpdate(NetworkEvent<ClientUpdatePayload> obj)
@@ -116,11 +117,34 @@ namespace CryV.Net.Server.Players
             Send(payload, DeliveryMethod.ReliableOrdered);
         }
 
+        private void PropagateNewPlayer()
+        {
+            foreach (var existingPlayer in _playerManager.GetPlayers())
+            {
+                if (existingPlayer == this)
+                {
+                    continue;
+                }
+
+                existingPlayer.Send(new AddClientPayload(GetPayload()), DeliveryMethod.ReliableOrdered);
+            }
+        }
+
         public void Dispose()
         {
             foreach (var subscription in _subscriptions)
             {
                 _eventHandler.Unsubscribe(subscription);
+            }
+
+            foreach (var player in _playerManager.GetPlayers())
+            {
+                if (player == this)
+                {
+                    continue;
+                }
+
+                player.Send(new RemoveClientPayload(Id), DeliveryMethod.ReliableOrdered);
             }
         }
     }
