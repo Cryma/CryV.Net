@@ -136,6 +136,8 @@ namespace CryV.Net.Server.Players
 #if PEDMIRROR
                     payload.Id = 1;
                     payload.Position.X += 2.0f;
+
+                    player.Send(payload, DeliveryMethod.Unreliable);
 #endif
                     continue;
                 }

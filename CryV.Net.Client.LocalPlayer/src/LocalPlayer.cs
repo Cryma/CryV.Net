@@ -11,6 +11,7 @@ using CryV.Net.Helpers;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Events.Types;
+using LiteNetLib;
 
 namespace CryV.Net.Client.LocalPlayer
 {
@@ -102,6 +103,8 @@ namespace CryV.Net.Client.LocalPlayer
                     var transformPayload = new ClientUpdatePayload(Id, position, velocity, rotation.Z, Elements.LocalPlayer.Character.Speed(),
                         model, Elements.LocalPlayer.Character.IsPedJumping(), Elements.LocalPlayer.Character.IsPedClimbing(), Elements.LocalPlayer.Character.GetIsTaskActive(47),
                         Elements.LocalPlayer.Character.IsPedRagdoll());
+
+                    _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
                 });
             }
         }
