@@ -71,7 +71,7 @@ namespace CryV.Net.Client.Console
             _commands.TryAdd(commandName, action);
         }
 
-        public void Tick()
+        public void Tick(float deltaTime)
         {
             if (Utility.IsKeyReleased(ConsoleKey.F1))
             {
