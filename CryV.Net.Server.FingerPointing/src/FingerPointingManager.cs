@@ -38,6 +38,10 @@ namespace CryV.Net.Server.FingerPointing
             {
                 if (otherPlayer == player)
                 {
+#if PEDMIRROR
+                    obj.Payload.Id = 1;
+                    otherPlayer.Send(obj.Payload, DeliveryMethod.Unreliable);
+#endif
                     continue;
                 }
 
@@ -58,6 +62,10 @@ namespace CryV.Net.Server.FingerPointing
             {
                 if (otherPlayer == player)
                 {
+#if PEDMIRROR
+                    obj.Payload.Id = 1;
+                    otherPlayer.Send(obj.Payload, DeliveryMethod.Unreliable);
+#endif
                     continue;
                 }
 
