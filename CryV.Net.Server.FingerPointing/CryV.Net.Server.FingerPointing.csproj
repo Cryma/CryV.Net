@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <Configurations>Debug;Release;PedMirror</Configurations>
   </PropertyGroup>
@@ -12,10 +11,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CryV.Net.Server.Common\CryV.Net.Server.Common.csproj" />
-    <ProjectReference Include="..\CryV.Net.Server.FingerPointing\CryV.Net.Server.FingerPointing.csproj" />
-    <ProjectReference Include="..\CryV.Net.Server.Networking\CryV.Net.Server.Networking.csproj" />
-    <ProjectReference Include="..\CryV.Net.Server.Players\CryV.Net.Server.Players.csproj" />
+    <ProjectReference Include="..\CryV.Net.Shared.Common\CryV.Net.Shared.Common.csproj" />
     <ProjectReference Include="..\CryV.Net.Shared.Events\CryV.Net.Shared.Events.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="LiteNetLib">
+      <HintPath>..\lib\LiteNetLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
