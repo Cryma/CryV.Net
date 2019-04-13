@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using CryV.Net.Elements;
@@ -17,7 +18,7 @@ namespace CryV.Net.Server.Players
 
         public int Id => _peer.Id;
 
-        public Vector3 Position { get; set; }
+        public Vector3 Position { get; set; } = new Vector3(161.1652f, -1069.867f, 29.19238f);
 
         public Vector3 Velocity { get; set; }
 
@@ -25,7 +26,7 @@ namespace CryV.Net.Server.Players
 
         public int Speed { get; set; }
 
-        public ulong Model { get; set; }
+        public ulong Model { get; set; } = 1885233650; // Male freemode model
 
         public bool IsJumping { get; set; }
 
@@ -51,23 +52,6 @@ namespace CryV.Net.Server.Players
 
             BootstrapPlayer();
             PropagateNewPlayer();
-        }
-
-        private void OnNetworkUpdate(NetworkEvent<ClientUpdatePayload> obj)
-        {
-            var payload = obj.Payload;
-
-            ReadPayload(payload);
-
-            foreach (var player in _playerManager.GetPlayers())
-            {
-                if (player == this)
-                {
-                    continue;
-                }
-
-                player.Send(payload, DeliveryMethod.Unreliable);
-            }
         }
 
         public void Send(IPayload payload, DeliveryMethod deliveryMethod)
@@ -112,7 +96,16 @@ namespace CryV.Net.Server.Players
                 existingPlayers.Add(player.GetPayload());
             }
 
-            var payload = new BootstrapPayload(_peer.Id, new Vector3(161.1652f, -1069.867f, 29.19238f), 0.0f, 1885233650, existingPlayers);
+#if PEDMIRROR
+            var mirrorPayload = GetPayload();
+
+            mirrorPayload.Id = 1;
+            mirrorPayload.Position.X += 2.0f;
+
+            existingPlayers.Add(mirrorPayload);
+#endif
+
+            var payload = new BootstrapPayload(_peer.Id, Position, Heading, Model, existingPlayers);
 
             Send(payload, DeliveryMethod.ReliableOrdered);
         }
@@ -127,6 +120,27 @@ namespace CryV.Net.Server.Players
                 }
 
                 existingPlayer.Send(new AddClientPayload(GetPayload()), DeliveryMethod.ReliableOrdered);
+            }
+        }
+
+        private void OnNetworkUpdate(NetworkEvent<ClientUpdatePayload> obj)
+        {
+            var payload = obj.Payload;
+
+            ReadPayload(payload);
+
+            foreach (var player in _playerManager.GetPlayers())
+            {
+                if (player == this)
+                {
+#if PEDMIRROR
+                    payload.Id = 1;
+                    payload.Position.X += 2.0f;
+#endif
+                    continue;
+                }
+
+                player.Send(payload, DeliveryMethod.Unreliable);
             }
         }
 
