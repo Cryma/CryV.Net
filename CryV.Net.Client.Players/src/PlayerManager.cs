@@ -66,6 +66,11 @@ namespace CryV.Net.Client.Players
 
         private void OnBootstrap(NetworkEvent<BootstrapPayload> obj)
         {
+            if (obj.Payload.ExistingPlayers == null)
+            {
+                return;
+            }
+
             foreach (var player in obj.Payload.ExistingPlayers)
             {
                 AddPlayer(player);
