@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Threading;
 using Autofac;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Client.FingerPointing;
 using CryV.Net.Elements;
+using CryV.Net.Helpers;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Events.Types;
@@ -47,7 +49,10 @@ namespace CryV.Net.Client.Helpers.Pointing
 
         public void StartPointing()
         {
-            FingerPointingUtils.StartPointing(_player.GetPed());
+            ThreadHelper.Run(() =>
+            {
+                FingerPointingUtils.StartPointing(_player.GetPed());
+            });
         }
 
         public void UpdatePointing(PointingUpdatePayload payload)
@@ -61,7 +66,10 @@ namespace CryV.Net.Client.Helpers.Pointing
 
         private void StopPointing()
         {
-            FingerPointingUtils.StopPointing(_player.GetPed());
+            ThreadHelper.Run(() =>
+            {
+                FingerPointingUtils.StopPointing(_player.GetPed());
+            });
         }
 
         public void Dispose()

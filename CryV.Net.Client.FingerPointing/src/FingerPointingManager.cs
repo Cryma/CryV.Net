@@ -50,6 +50,8 @@ namespace CryV.Net.Client.FingerPointing.src
                 pointingPlayer = new FingerPointingPlayer(player);
 
                 _pointingPlayers.TryAdd(payload.Id, pointingPlayer);
+
+                return;
             }
 
             pointingPlayer.UpdatePointing(payload);
