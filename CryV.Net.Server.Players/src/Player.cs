@@ -47,7 +47,7 @@ namespace CryV.Net.Server.Players
             _eventHandler = eventHandler;
             _peer = peer;
 
-            _subscriptions.Add(_eventHandler.Subscribe<NetworkEvent<ClientUpdatePayload>>(OnNetworkUpdate, x => x.Payload.Id == Id));
+            _subscriptions.Add(_eventHandler.Subscribe<NetworkEvent<PlayerUpdatePayload>>(OnNetworkUpdate, x => x.Payload.Id == Id));
 
             BootstrapPlayer();
             PropagateNewPlayer();
@@ -65,12 +65,12 @@ namespace CryV.Net.Server.Players
             _peer.Send(data, deliveryMethod);
         }
 
-        public ClientUpdatePayload GetPayload()
+        public PlayerUpdatePayload GetPayload()
         {
-            return new ClientUpdatePayload(Id, Position, Velocity, Heading, Speed, Model, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll);
+            return new PlayerUpdatePayload(Id, Position, Velocity, Heading, Speed, Model, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll);
         }
 
-        public void ReadPayload(ClientUpdatePayload payload)
+        public void ReadPayload(PlayerUpdatePayload payload)
         {
             Position = payload.Position;
             Velocity = payload.Velocity;
@@ -86,7 +86,7 @@ namespace CryV.Net.Server.Players
 
         private void BootstrapPlayer()
         {
-            var existingPlayers = new List<ClientUpdatePayload>();
+            var existingPlayers = new List<PlayerUpdatePayload>();
 
             foreach (var player in _playerManager.GetPlayers())
             {
@@ -116,11 +116,11 @@ namespace CryV.Net.Server.Players
                     continue;
                 }
 
-                existingPlayer.Send(new AddClientPayload(GetPayload()), DeliveryMethod.ReliableOrdered);
+                existingPlayer.Send(new PlayerAddPayload(GetPayload()), DeliveryMethod.ReliableOrdered);
             }
         }
 
-        private void OnNetworkUpdate(NetworkEvent<ClientUpdatePayload> obj)
+        private void OnNetworkUpdate(NetworkEvent<PlayerUpdatePayload> obj)
         {
             var payload = obj.Payload;
 
@@ -157,7 +157,7 @@ namespace CryV.Net.Server.Players
                     continue;
                 }
 
-                player.Send(new RemoveClientPayload(Id), DeliveryMethod.ReliableOrdered);
+                player.Send(new PlayerRemovePayload(Id), DeliveryMethod.ReliableOrdered);
             }
         }
     }

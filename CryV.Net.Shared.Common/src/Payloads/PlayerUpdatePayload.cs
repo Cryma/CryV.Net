@@ -6,10 +6,10 @@ using ProtoBuf;
 namespace CryV.Net.Shared.Common.Payloads
 {
     [ProtoContract]
-    public class ClientUpdatePayload : IPayload
+    public class PlayerUpdatePayload : IPayload
     {
 
-        public PayloadType PayloadType { get; } = PayloadType.UpdateClient;
+        public PayloadType PayloadType { get; } = PayloadType.UpdatePlayer;
 
         [ProtoMember(1)]
         public int Id { get; set; }
@@ -32,11 +32,11 @@ namespace CryV.Net.Shared.Common.Payloads
         [ProtoMember(7)]
         public int PedData { get; set; }
 
-        public ClientUpdatePayload()
+        public PlayerUpdatePayload()
         {
         }
 
-        public ClientUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, int speed, ulong model, bool isJumping, bool isClimbing, bool isClimbingLadder,
+        public PlayerUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, int speed, ulong model, bool isJumping, bool isClimbing, bool isClimbingLadder,
             bool isRagdoll)
         {
             Id = id;

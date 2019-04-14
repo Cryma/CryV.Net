@@ -100,7 +100,7 @@ namespace CryV.Net.Client.LocalPlayer
                     _lastHeading = rotation.Z;
                     _lastModel = model;
 
-                    var transformPayload = new ClientUpdatePayload(Id, position, velocity, rotation.Z, Elements.LocalPlayer.Character.Speed(),
+                    var transformPayload = new PlayerUpdatePayload(Id, position, velocity, rotation.Z, Elements.LocalPlayer.Character.Speed(),
                         model, Elements.LocalPlayer.Character.IsPedJumping(), Elements.LocalPlayer.Character.IsPedClimbing(), Elements.LocalPlayer.Character.GetIsTaskActive(47),
                         Elements.LocalPlayer.Character.IsPedRagdoll());
 

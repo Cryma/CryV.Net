@@ -5,7 +5,7 @@ namespace CryV.Net.Client.Common.Interfaces
     public interface IPlayerManager
     {
 
-        void AddPlayer(ClientUpdatePayload payload);
+        void AddPlayer(PlayerUpdatePayload payload);
         void RemovePlayer(int playerId);
         IPlayer GetPlayer(int playerId);
 

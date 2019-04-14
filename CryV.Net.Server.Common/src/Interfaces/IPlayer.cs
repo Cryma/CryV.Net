@@ -9,7 +9,7 @@ namespace CryV.Net.Server.Common.Interfaces
         
         int Id { get; }
 
-        ClientUpdatePayload GetPayload();
+        PlayerUpdatePayload GetPayload();
 
         void Send(IPayload payload, DeliveryMethod deliveryMethod);
 

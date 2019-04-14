@@ -25,8 +25,8 @@ namespace CryV.Net.Client.Players
         public void Start()
         {
             _eventHandler.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
-            _eventHandler.Subscribe<NetworkEvent<AddClientPayload>>(OnAddClient);
-            _eventHandler.Subscribe<NetworkEvent<RemoveClientPayload>>(OnRemoveClient);
+            _eventHandler.Subscribe<NetworkEvent<PlayerAddPayload>>(OnAddPlayer);
+            _eventHandler.Subscribe<NetworkEvent<PlayerRemovePayload>>(OnRemovePlayer);
 
             _eventHandler.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnect);
         }
@@ -39,7 +39,7 @@ namespace CryV.Net.Client.Players
             }
         }
 
-        public void AddPlayer(ClientUpdatePayload payload)
+        public void AddPlayer(PlayerUpdatePayload payload)
         {
             var player = new Player(_eventHandler, _entityPool, payload);
 
@@ -83,12 +83,12 @@ namespace CryV.Net.Client.Players
             }
         }
 
-        private void OnAddClient(NetworkEvent<AddClientPayload> obj)
+        private void OnAddPlayer(NetworkEvent<PlayerAddPayload> obj)
         {
             AddPlayer(obj.Payload.Data);
         }
 
-        private void OnRemoveClient(NetworkEvent<RemoveClientPayload> obj)
+        private void OnRemovePlayer(NetworkEvent<PlayerRemovePayload> obj)
         {
             RemovePlayer(obj.Payload.Id);
         }

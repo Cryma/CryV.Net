@@ -4,19 +4,19 @@ using ProtoBuf;
 namespace CryV.Net.Shared.Common.Payloads
 {
     [ProtoContract]
-    public class RemoveClientPayload : IPayload
+    public class PlayerRemovePayload : IPayload
     {
 
-        public PayloadType PayloadType { get; } = PayloadType.RemoveClient;
+        public PayloadType PayloadType { get; } = PayloadType.RemovePlayer;
 
         [ProtoMember(1)]
         public int Id { get; set; }
 
-        public RemoveClientPayload()
+        public PlayerRemovePayload()
         {
         }
 
-        public RemoveClientPayload(int id)
+        public PlayerRemovePayload(int id)
         {
             Id = id;
         }

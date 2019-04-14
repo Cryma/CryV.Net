@@ -4,9 +4,9 @@
     {
         None,
         Bootstrap,
-        AddClient,
-        RemoveClient,
-        UpdateClient,
+        AddPlayer,
+        RemovePlayer,
+        UpdatePlayer,
         UpdatePointing,
         StopPointing
     }

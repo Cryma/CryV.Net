@@ -66,7 +66,7 @@ namespace CryV.Net.Client.Players
         private readonly IEventHandler _eventHandler;
         private readonly IEntityPool _entityPool;
 
-        public Player(IEventHandler eventHandler, IEntityPool entityPool, ClientUpdatePayload payload)
+        public Player(IEventHandler eventHandler, IEntityPool entityPool, PlayerUpdatePayload payload)
         {
             _eventHandler = eventHandler;
             _entityPool = entityPool;
@@ -75,7 +75,7 @@ namespace CryV.Net.Client.Players
             TargetPosition = payload.Position;
             TargetHeading = payload.Heading;
 
-            _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<ClientUpdatePayload>>(update => ReadPayload(update.Payload), x => x.Payload.Id == Id));
+            _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<PlayerUpdatePayload>>(update => ReadPayload(update.Payload), x => x.Payload.Id == Id));
 
             ThreadHelper.Run(() =>
             {
@@ -95,7 +95,7 @@ namespace CryV.Net.Client.Players
             return _ped;
         }
 
-        public void ReadPayload(ClientUpdatePayload payload)
+        public void ReadPayload(PlayerUpdatePayload payload)
         {
             TargetPosition = payload.Position;
             TargetHeading = payload.Heading;
