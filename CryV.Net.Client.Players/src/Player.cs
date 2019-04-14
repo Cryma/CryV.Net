@@ -77,8 +77,6 @@ namespace CryV.Net.Client.Players
 
             _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<ClientUpdatePayload>>(update => ReadPayload(update.Payload), x => x.Payload.Id == Id));
 
-            Utility.Log("Initialized " + Id);
-
             ThreadHelper.Run(() =>
             {
                 _ped = new Ped(payload.Model, payload.Position, payload.Heading)

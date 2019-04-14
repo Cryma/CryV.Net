@@ -39,9 +39,13 @@ namespace CryV.Net.Client.Players
             }
         }
 
-        public void AddPlayer(ClientUpdatePayload player)
+        public void AddPlayer(ClientUpdatePayload payload)
         {
-            _players.TryAdd(player.Id, new Player(_eventHandler, _entityPool, player));
+            var player = new Player(_eventHandler, _entityPool, payload);
+
+            _players.TryAdd(payload.Id, player);
+
+            _eventHandler.Publish(new PlayerConnectedEvent(player));
         }
 
         public void RemovePlayer(int playerId)
@@ -50,6 +54,8 @@ namespace CryV.Net.Client.Players
             {
                 return;
             }
+
+            _eventHandler.Publish(new PlayerDisconnectedEvent(player));
 
             player.Dispose();
         }
