@@ -43,9 +43,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Server.Players", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.LocalPlayer", "CryV.Net.Client.LocalPlayer\CryV.Net.Client.LocalPlayer.csproj", "{04888282-CF87-4E67-BF07-686C224131DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Client.FingerPointing", "CryV.Net.Client.FingerPointing\CryV.Net.Client.FingerPointing.csproj", "{8B2FD029-355C-427E-8278-C484C289CCC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.FingerPointing", "CryV.Net.Client.FingerPointing\CryV.Net.Client.FingerPointing.csproj", "{8B2FD029-355C-427E-8278-C484C289CCC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Server.FingerPointing", "CryV.Net.Server.FingerPointing\CryV.Net.Server.FingerPointing.csproj", "{1A0E043C-FD9B-4D8C-AB5E-51FE7734CC2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Server.FingerPointing", "CryV.Net.Server.FingerPointing\CryV.Net.Server.FingerPointing.csproj", "{1A0E043C-FD9B-4D8C-AB5E-51FE7734CC2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Client.Helpers", "CryV.Net.Client.Helpers\CryV.Net.Client.Helpers.csproj", "{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -162,6 +164,12 @@ Global
 		{1A0E043C-FD9B-4D8C-AB5E-51FE7734CC2D}.PedMirror|Any CPU.Build.0 = PedMirror|Any CPU
 		{1A0E043C-FD9B-4D8C-AB5E-51FE7734CC2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A0E043C-FD9B-4D8C-AB5E-51FE7734CC2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}.PedMirror|Any CPU.ActiveCfg = Debug|Any CPU
+		{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}.PedMirror|Any CPU.Build.0 = Debug|Any CPU
+		{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -185,6 +193,7 @@ Global
 		{04888282-CF87-4E67-BF07-686C224131DA} = {B70BD485-BD69-4069-8E91-3E849018909E}
 		{8B2FD029-355C-427E-8278-C484C289CCC4} = {B70BD485-BD69-4069-8E91-3E849018909E}
 		{1A0E043C-FD9B-4D8C-AB5E-51FE7734CC2D} = {FF194CC2-08D8-45A0-92E4-6A912B27CD0D}
+		{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD} = {B70BD485-BD69-4069-8E91-3E849018909E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D13F4F0C-E395-4838-B597-2A10F446B713}
