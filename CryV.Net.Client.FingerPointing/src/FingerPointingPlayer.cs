@@ -25,13 +25,9 @@ namespace CryV.Net.Client.Helpers.Pointing
         private float _targetHeading;
         private float _targetPitch;
 
-        private DateTime _lastReceiveDate;
-
         public FingerPointingPlayer(IPlayer player)
         {
             _player = player;
-
-            _lastReceiveDate = DateTime.UtcNow;
 
             StartPointing();
         }
@@ -41,7 +37,13 @@ namespace CryV.Net.Client.Helpers.Pointing
             var lerpedPitch = Interpolation.Lerp(_currentPitch, _targetPitch, deltaTime * _syncFactor);
             var lerpedHeading = Interpolation.Lerp(_currentHeading, _targetHeading, deltaTime * _syncFactor);
 
-            FingerPointingUtils.UpdatePointing(_player.GetPed(), lerpedPitch, lerpedHeading, false);
+            var ped = _player?.GetPed();
+            if (ped == null)
+            {
+                return;
+            }
+
+            FingerPointingUtils.UpdatePointing(ped, lerpedPitch, lerpedHeading, false);
 
             _currentPitch = lerpedPitch;
             _currentHeading = lerpedHeading;
@@ -57,11 +59,8 @@ namespace CryV.Net.Client.Helpers.Pointing
 
         public void UpdatePointing(PointingUpdatePayload payload)
         {
-
             _targetHeading = payload.Heading;
             _targetPitch = payload.Pitch;
-
-            _lastReceiveDate = DateTime.UtcNow;
         }
 
         private void StopPointing()

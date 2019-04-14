@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Autofac;
+using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Client.Helpers.Pointing;
@@ -26,7 +27,8 @@ namespace CryV.Net.Client.FingerPointing.src
         public void Start()
         {
             _eventHandler.Subscribe<NetworkEvent<PointingUpdatePayload>>(OnPointingUpdate);
-            _eventHandler.Subscribe<NetworkEvent<StopPointingPayload>>(OnStopPointing);
+            _eventHandler.Subscribe<NetworkEvent<StopPointingPayload>>(x => OnStopPointing(x.Payload.Id));
+            _eventHandler.Subscribe<PlayerDisconnectedEvent>(x => OnStopPointing(x.Player.Id));
 
             NativeHelper.OnNativeTick += Tick;
         }
@@ -57,11 +59,9 @@ namespace CryV.Net.Client.FingerPointing.src
             pointingPlayer.UpdatePointing(payload);
         }
 
-        private void OnStopPointing(NetworkEvent<StopPointingPayload> obj)
+        private void OnStopPointing(int playerId)
         {
-            var payload = obj.Payload;
-             
-            if (_pointingPlayers.TryRemove(payload.Id, out var pointingPlayer) == false)
+            if (_pointingPlayers.TryRemove(playerId, out var pointingPlayer) == false)
             {
                 return;
             }
