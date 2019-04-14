@@ -250,6 +250,26 @@ namespace CryV.Net.Elements
             CryVNative.Native_Ped_ClearPedSecondaryTask(CryVNative.Plugin, Handle);
         }
 
+        public ulong GetCurrentPedWeapon()
+        {
+            return CryVNative.Native_Ped_GetCurrentPedWeapon(CryVNative.Plugin, Handle);
+        }
+
+        public ulong GetSelectedPedWeapon()
+        {
+            return CryVNative.Native_Ped_GetSelectedPedWeapon(CryVNative.Plugin, Handle);
+        }
+
+        public void RemoveAllPedWeapons()
+        {
+            CryVNative.Native_Ped_RemoveAllPedWeapons(CryVNative.Plugin, Handle);
+        }
+
+        public void GiveWeaponToPed(ulong weaponHash, int ammoCount, bool isHidden, bool equipNow)
+        {
+            CryVNative.Native_Ped_GiveWeaponToPed(CryVNative.Plugin, Handle, weaponHash, ammoCount, isHidden, equipNow);
+        }
+
         public void _0xD5BB4025AE449A4E(string p1, float p2)
         {
             using (var converter = new StringConverter())

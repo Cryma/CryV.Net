@@ -133,6 +133,20 @@ namespace CryV.Net.Native
         //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern ulong Native_Ped_GetCurrentPedWeapon(IntPtr plugin, int pedId);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern ulong Native_Ped_GetSelectedPedWeapon(IntPtr plugin, int pedId);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_RemoveAllPedWeapons(IntPtr plugin, int pedId);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_GiveWeaponToPed(IntPtr plugin, int pedId, ulong weaponHash, int ammoCount, bool isHidden, bool equipNow);
+
+        //
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Ped__0xD5BB4025AE449A4E(IntPtr plugin, int pedId, IntPtr p1, float p2);
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
