@@ -31,6 +31,7 @@ namespace CryV.Net.Client.LocalPlayer
         private float _lastHeading;
         private ulong _lastModel;
         private ulong _lastWeapon;
+        private bool _lastAiming;
 
         private readonly IEventHandler _eventHandler;
         private readonly INetworkManager _networkManager;
@@ -89,10 +90,11 @@ namespace CryV.Net.Client.LocalPlayer
                     var velocity = Elements.LocalPlayer.Character.Velocity;
                     var model = Elements.LocalPlayer.Model;
                     var weaponModel = Elements.LocalPlayer.Character.GetCurrentPedWeapon();
+                    var isAiming = Elements.LocalPlayer.Character.GetIsTaskActive(290);
 
                     // TODO: Better detection if something changed
                     if ((position - _lastPosition).Length() < 0.05f && (velocity - _lastVelocity).Length() < 0.05f && Math.Abs(rotation.Z - _lastHeading) < 0.05f &&
-                        _lastModel == model && _lastWeapon == weaponModel)
+                        _lastModel == model && _lastWeapon == weaponModel && _lastAiming == isAiming)
                     {
                         return;
                     }
@@ -102,10 +104,11 @@ namespace CryV.Net.Client.LocalPlayer
                     _lastHeading = rotation.Z;
                     _lastModel = model;
                     _lastWeapon = weaponModel;
+                    _lastAiming = isAiming;
 
                     var transformPayload = new PlayerUpdatePayload(Id, position, velocity, rotation.Z, Elements.LocalPlayer.Character.Speed(),
                         model, weaponModel, Elements.LocalPlayer.Character.IsPedJumping(), Elements.LocalPlayer.Character.IsPedClimbing(),
-                        Elements.LocalPlayer.Character.GetIsTaskActive(47), Elements.LocalPlayer.Character.IsPedRagdoll());
+                        Elements.LocalPlayer.Character.GetIsTaskActive(47), Elements.LocalPlayer.Character.IsPedRagdoll(), isAiming);
 
                     _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
                 });

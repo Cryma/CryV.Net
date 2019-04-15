@@ -9,6 +9,7 @@ namespace CryV.Net.Shared.Common.Flags
         IsJumping = 1 << 1,
         IsClimbing = 1 << 2,
         IsClimbingLadder = 1 << 3,
-        IsRagdoll = 1 << 4
+        IsRagdoll = 1 << 4,
+        IsAiming = 1 << 5
     }
 }
