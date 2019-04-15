@@ -30,6 +30,7 @@ namespace CryV.Net.Client.LocalPlayer
         private Vector3 _lastVelocity;
         private float _lastHeading;
         private ulong _lastModel;
+        private ulong _lastWeapon;
 
         private readonly IEventHandler _eventHandler;
         private readonly INetworkManager _networkManager;
@@ -53,7 +54,7 @@ namespace CryV.Net.Client.LocalPlayer
 
         private void OnLocalPlayerDisconnected(LocalPlayerDisconnectedEvent obj)
         {
-            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource?.Cancel();
         }
 
         private void OnBootstrap(NetworkEvent<BootstrapPayload> obj)
@@ -87,10 +88,11 @@ namespace CryV.Net.Client.LocalPlayer
                     var rotation = Elements.LocalPlayer.Character.Rotation;
                     var velocity = Elements.LocalPlayer.Character.Velocity;
                     var model = Elements.LocalPlayer.Model;
+                    var weaponModel = Elements.LocalPlayer.Character.GetCurrentPedWeapon();
 
                     // TODO: Better detection if something changed
                     if ((position - _lastPosition).Length() < 0.05f && (velocity - _lastVelocity).Length() < 0.05f && Math.Abs(rotation.Z - _lastHeading) < 0.05f &&
-                        _lastModel == model)
+                        _lastModel == model && _lastWeapon == weaponModel)
                     {
                         return;
                     }
@@ -99,10 +101,11 @@ namespace CryV.Net.Client.LocalPlayer
                     _lastVelocity = velocity;
                     _lastHeading = rotation.Z;
                     _lastModel = model;
+                    _lastWeapon = weaponModel;
 
                     var transformPayload = new PlayerUpdatePayload(Id, position, velocity, rotation.Z, Elements.LocalPlayer.Character.Speed(),
-                        model, Elements.LocalPlayer.Character.IsPedJumping(), Elements.LocalPlayer.Character.IsPedClimbing(), Elements.LocalPlayer.Character.GetIsTaskActive(47),
-                        Elements.LocalPlayer.Character.IsPedRagdoll());
+                        model, weaponModel, Elements.LocalPlayer.Character.IsPedJumping(), Elements.LocalPlayer.Character.IsPedClimbing(),
+                        Elements.LocalPlayer.Character.GetIsTaskActive(47), Elements.LocalPlayer.Character.IsPedRagdoll());
 
                     _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
                 });

@@ -32,7 +32,7 @@ namespace CryV.Net.Shared.Common.Payloads
         [ProtoMember(7)]
         public ulong WeaponModel { get; set; }
 
-        [ProtoMember(7)]
+        [ProtoMember(8)]
         public int PedData { get; set; }
 
         public PlayerUpdatePayload()
