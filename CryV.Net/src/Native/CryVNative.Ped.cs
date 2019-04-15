@@ -80,6 +80,9 @@ namespace CryV.Net.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Ped_TaskMoveNetwork(IntPtr plugin, int pedId, IntPtr task, float multiplier, bool p3, IntPtr animDict, int flags);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_TaskAimGunAtCoord(IntPtr plugin, int pedId, float x, float y, float z, int time, bool p5, bool p6);
+
         //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]

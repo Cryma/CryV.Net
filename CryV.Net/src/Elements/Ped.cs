@@ -175,6 +175,11 @@ namespace CryV.Net.Elements
             }
         }
 
+        public void TaskAimGunAtCoord(Vector3 coordinates, int time, bool p5, bool p6)
+        {
+            CryVNative.Native_Ped_TaskAimGunAtCoord(CryVNative.Plugin, Handle, coordinates.X, coordinates.Y, coordinates.Z, time, p5, p6);
+        }
+
         public bool IsPedWalking()
         {
             return CryVNative.Native_Ped_IsPedWalking(CryVNative.Plugin, Handle);
