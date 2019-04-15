@@ -57,6 +57,8 @@ namespace CryV.Net.Client.Players
 
         public bool IsRagdoll { get; set; }
 
+        public bool IsAiming { get; set; }
+
         private Ped _ped;
 
         private static float _interpolationFactor = 3.0f;
@@ -66,6 +68,7 @@ namespace CryV.Net.Client.Players
         private bool _wasJumping;
         private bool _wasClimbing;
         private bool _wasRagdoll;
+        private bool _wasAiming;
 
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
 
@@ -124,6 +127,8 @@ namespace CryV.Net.Client.Players
 
             IsRagdoll = (payload.PedData & (int) PedData.IsRagdoll) > 0;
 
+            IsAiming = (payload.PedData & (int) PedData.IsAiming) > 0;
+
             // TODO: Optimize
             ThreadHelper.Run(() =>
             {
@@ -156,7 +161,14 @@ namespace CryV.Net.Client.Players
             UpdatePosition(deltaTime);
             UpdateHeading(deltaTime);
 
-            UpdateMovementAnimation();
+            if (IsAiming == false)
+            {
+                UpdateMovementAnimation();
+            }
+            else
+            {
+                UpdateWeaponAnimation();
+            }
 
             UpdateRagdoll();
 
@@ -283,6 +295,12 @@ namespace CryV.Net.Client.Players
 
                     break;
             }
+        }
+
+        private void UpdateWeaponAnimation()
+        {
+            _ped.ClearPedTasks();
+            _ped.TaskAimGunAtCoord(Vector3.Zero, 5000, true, false);
         }
 
         private string GetLadderClimbingAnimationName()

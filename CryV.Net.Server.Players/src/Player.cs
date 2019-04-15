@@ -37,6 +37,8 @@ namespace CryV.Net.Server.Players
 
         public bool IsRagdoll { get; set; }
 
+        public bool IsAiming { get; set; }
+
         private readonly List<ISubscription> _subscriptions = new List<ISubscription>();
 
         private readonly NetPeer _peer;
@@ -69,7 +71,7 @@ namespace CryV.Net.Server.Players
 
         public PlayerUpdatePayload GetPayload()
         {
-            return new PlayerUpdatePayload(Id, Position, Velocity, Heading, Speed, Model, WeaponModel, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll);
+            return new PlayerUpdatePayload(Id, Position, Velocity, Heading, Speed, Model, WeaponModel, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll, IsAiming);
         }
 
         public void ReadPayload(PlayerUpdatePayload payload)
@@ -85,6 +87,7 @@ namespace CryV.Net.Server.Players
             IsClimbing = (payload.PedData & (int) PedData.IsClimbing) > 0;
             IsClimbingLadder = (payload.PedData & (int) PedData.IsClimbingLadder) > 0;
             IsRagdoll = (payload.PedData & (int) PedData.IsRagdoll) > 0;
+            IsAiming = (payload.PedData & (int) PedData.IsAiming) > 0;
         }
 
         private void BootstrapPlayer()
