@@ -69,6 +69,9 @@ namespace CryV.Net.Native
         //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr Native_Gameplay_GetGameplayCamCoord(IntPtr plugin);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr Native_Gameplay_GetGameplayCamRot(IntPtr plugin, int rotationOrder);
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]

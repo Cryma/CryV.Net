@@ -29,7 +29,7 @@ namespace CryV.Net.Client.LocalPlayer
         private Vector3 _lastPosition;
         private Vector3 _lastVelocity;
         private float _lastHeading;
-        private Vector3 _lastCameraDirection;
+        private Vector3 _lastAimTarget;
         private ulong _lastModel;
         private ulong _lastWeapon;
         private bool _lastAiming;
@@ -89,14 +89,14 @@ namespace CryV.Net.Client.LocalPlayer
                     var position = Elements.LocalPlayer.Character.Position;
                     var rotation = Elements.LocalPlayer.Character.Rotation;
                     var velocity = Elements.LocalPlayer.Character.Velocity;
-                    var cameraDirection = Utility.RotationToDirection(Gameplay.GetGameplayCamRot());
+                    var aimTarget = Gameplay.GetGameplayCamCoord() + Utility.GetDirection(Gameplay.GetGameplayCamRot());
                     var model = Elements.LocalPlayer.Model;
                     var weaponModel = Elements.LocalPlayer.Character.GetCurrentPedWeapon();
                     var isAiming = Elements.LocalPlayer.Character.GetIsTaskActive(290);
 
                     // TODO: Better detection if something changed
                     if ((position - _lastPosition).Length() < 0.05f && (velocity - _lastVelocity).Length() < 0.05f && Math.Abs(rotation.Z - _lastHeading) < 0.05f &&
-                        _lastModel == model && _lastWeapon == weaponModel && _lastAiming == isAiming && (cameraDirection - _lastCameraDirection).Length() < 0.05f)
+                        _lastModel == model && _lastWeapon == weaponModel && _lastAiming == isAiming && (aimTarget - _lastAimTarget).Length() < 0.05f)
                     {
                         return;
                     }
@@ -107,9 +107,9 @@ namespace CryV.Net.Client.LocalPlayer
                     _lastModel = model;
                     _lastWeapon = weaponModel;
                     _lastAiming = isAiming;
-                    _lastCameraDirection = cameraDirection;
+                    _lastAimTarget = aimTarget;
 
-                    var transformPayload = new PlayerUpdatePayload(Id, position, velocity, rotation.Z, cameraDirection, Elements.LocalPlayer.Character.Speed(),
+                    var transformPayload = new PlayerUpdatePayload(Id, position, velocity, rotation.Z, aimTarget, Elements.LocalPlayer.Character.Speed(),
                         model, weaponModel, Elements.LocalPlayer.Character.IsPedJumping(), Elements.LocalPlayer.Character.IsPedClimbing(),
                         Elements.LocalPlayer.Character.GetIsTaskActive(47), Elements.LocalPlayer.Character.IsPedRagdoll(), isAiming);
 

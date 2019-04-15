@@ -35,7 +35,7 @@ namespace CryV.Net.Client.Players
 
         public float TargetHeading { get; set; }
 
-        public Vector3 CameraDirection { get; set; }
+        public Vector3 AimTarget { get; set; }
 
         public int Speed { get; set; }
 
@@ -70,7 +70,6 @@ namespace CryV.Net.Client.Players
         private bool _wasJumping;
         private bool _wasClimbing;
         private bool _wasRagdoll;
-        private bool _wasAiming;
 
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
 
@@ -85,7 +84,7 @@ namespace CryV.Net.Client.Players
             Id = payload.Id;
             TargetPosition = payload.Position;
             TargetHeading = payload.Heading;
-            CameraDirection = payload.CameraDirection;
+            AimTarget = payload.AimTarget;
 
             _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<PlayerUpdatePayload>>(update => ReadPayload(update.Payload), x => x.Payload.Id == Id));
 
@@ -113,7 +112,7 @@ namespace CryV.Net.Client.Players
             TargetHeading = payload.Heading;
             Velocity = payload.Velocity;
             Speed = payload.Speed;
-            CameraDirection = payload.CameraDirection;
+            AimTarget = payload.AimTarget;
 
             IsJumping = (payload.PedData & (int) PedData.IsJumping) > 0;
             if (IsJumping == false)
@@ -305,7 +304,8 @@ namespace CryV.Net.Client.Players
         {
             _ped.ClearPedTasks();
             // TODO: Interpolate
-            _ped.TaskAimGunAtCoord(Position + (CameraDirection * 3), 5000, true, false);
+            // TODO: Fix native ignoring z-coordinate
+            _ped.TaskAimGunAtCoord(AimTarget + new Vector3(0.0f, 0.0f, 20.0f), 5000, true, false);
         }
 
         private string GetLadderClimbingAnimationName()

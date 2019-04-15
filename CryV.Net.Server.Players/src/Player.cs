@@ -23,7 +23,7 @@ namespace CryV.Net.Server.Players
 
         public float Heading { get; set; }
 
-        public Vector3 CameraDirection { get; set; }
+        public Vector3 AimTarget { get; set; }
 
         public int Speed { get; set; }
 
@@ -73,7 +73,7 @@ namespace CryV.Net.Server.Players
 
         public PlayerUpdatePayload GetPayload()
         {
-            return new PlayerUpdatePayload(Id, Position, Velocity, Heading, CameraDirection, Speed, Model, WeaponModel, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll,
+            return new PlayerUpdatePayload(Id, Position, Velocity, Heading, AimTarget, Speed, Model, WeaponModel, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll,
                 IsAiming);
         }
 
@@ -82,7 +82,7 @@ namespace CryV.Net.Server.Players
             Position = payload.Position;
             Velocity = payload.Velocity;
             Heading = payload.Heading;
-            CameraDirection = payload.CameraDirection;
+            AimTarget = payload.AimTarget;
             Model = payload.Model;
             WeaponModel = payload.WeaponModel;
             Speed = payload.Speed;

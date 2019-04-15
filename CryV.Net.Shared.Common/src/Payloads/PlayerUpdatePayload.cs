@@ -24,7 +24,7 @@ namespace CryV.Net.Shared.Common.Payloads
         public float Heading { get; set; }
 
         [ProtoMember(5)]
-        public SerializableVector3 CameraDirection { get; set; }
+        public SerializableVector3 AimTarget { get; set; }
 
         [ProtoMember(6)]
         public int Speed { get; set; }
@@ -42,14 +42,14 @@ namespace CryV.Net.Shared.Common.Payloads
         {
         }
 
-        public PlayerUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, Vector3 cameraDirection, int speed, ulong model, ulong weaponModel,
+        public PlayerUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, Vector3 aimTarget, int speed, ulong model, ulong weaponModel,
             bool isJumping, bool isClimbing, bool isClimbingLadder, bool isRagdoll, bool isAiming)
         {
             Id = id;
             Position = position;
             Velocity = velocity;
             Heading = heading;
-            CameraDirection = cameraDirection;
+            AimTarget = aimTarget;
             Speed = speed;
             Model = model;
             WeaponModel = weaponModel;

@@ -62,6 +62,11 @@ namespace CryV.Net.Elements
             return CryVNative.Native_Gameplay_GetShapeTestResult(CryVNative.Plugin, rayHandle);
         }
 
+        public static Vector3 GetGameplayCamCoord()
+        {
+            return StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Gameplay_GetGameplayCamCoord(CryVNative.Plugin));
+        }
+
         public static Vector3 GetGameplayCamRot(int rotationOrder = 2)
         {
             return StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Gameplay_GetGameplayCamRot(CryVNative.Plugin, rotationOrder));
