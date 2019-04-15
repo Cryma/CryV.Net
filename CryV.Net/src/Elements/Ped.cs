@@ -180,6 +180,11 @@ namespace CryV.Net.Elements
             CryVNative.Native_Ped_TaskAimGunAtCoord(CryVNative.Plugin, Handle, coordinates.X, coordinates.Y, coordinates.Z, time, p5, p6);
         }
 
+        public void TaskLookAtCoord(Vector3 coordinates, float duration, int p5, int p6)
+        {
+            CryVNative.Native_Ped_TaskLookAtCoord(CryVNative.Plugin, Handle, coordinates.X, coordinates.Y, coordinates.Z, duration, p5, p6);
+        }
+
         public bool IsPedWalking()
         {
             return CryVNative.Native_Ped_IsPedWalking(CryVNative.Plugin, Handle);
