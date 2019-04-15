@@ -27,6 +27,8 @@ namespace CryV.Net.Server.Players
 
         public ulong Model { get; set; } = 1885233650; // Male freemode model
 
+        public ulong WeaponModel { get; set; }
+
         public bool IsJumping { get; set; }
 
         public bool IsClimbing { get; set; }
@@ -67,7 +69,7 @@ namespace CryV.Net.Server.Players
 
         public PlayerUpdatePayload GetPayload()
         {
-            return new PlayerUpdatePayload(Id, Position, Velocity, Heading, Speed, Model, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll);
+            return new PlayerUpdatePayload(Id, Position, Velocity, Heading, Speed, Model, WeaponModel, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll);
         }
 
         public void ReadPayload(PlayerUpdatePayload payload)
@@ -76,6 +78,7 @@ namespace CryV.Net.Server.Players
             Velocity = payload.Velocity;
             Heading = payload.Heading;
             Model = payload.Model;
+            WeaponModel = payload.WeaponModel;
             Speed = payload.Speed;
 
             IsJumping = (payload.PedData & (int) PedData.IsJumping) > 0;

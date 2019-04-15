@@ -43,6 +43,12 @@ namespace CryV.Net.Client.Players
             set => _ped.Model = value;
         }
 
+        public ulong WeaponModel
+        {
+            get => _ped.GetSelectedPedWeapon();
+            set => _ped.GiveWeaponToPed(value, 999, true, true);
+        }
+
         public bool IsJumping { get; set; }
 
         public bool IsClimbing { get; set; }
@@ -124,6 +130,11 @@ namespace CryV.Net.Client.Players
                 if (Model != payload.Model)
                 {
                     Model = payload.Model;
+                }
+
+                if (WeaponModel != payload.WeaponModel)
+                {
+                    WeaponModel = payload.WeaponModel;
                 }
             });
         }
