@@ -62,6 +62,9 @@ namespace CryV.Net.Client.Console
 
             RegisterCommand("playanim", CommandPlayAnimation);
             RegisterCommand("stopanim", CommandStopAnimation);
+
+            RegisterCommand("addweapon", CommandAddWeapon);
+            RegisterCommand("removeallweapons", CommandRemoveAllWeapons);
         }
 
         private void RegisterCommand(string commandName, CommandDelegate action)

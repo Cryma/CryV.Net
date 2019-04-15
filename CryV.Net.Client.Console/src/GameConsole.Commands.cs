@@ -123,5 +123,22 @@ namespace CryV.Net.Client.Console
             LocalPlayer.Character.ClearPedTasks();
         }
 
+        private void CommandAddWeapon(GameConsole gameConsole, params string[] arguments)
+        {
+            if (arguments.Length == 0)
+            {
+                PrintLine("Please specify a weapon name.");
+
+                return;
+            }
+
+            LocalPlayer.Character.GiveWeaponToPed(Utility.GetHashKey("weapon_" + arguments[0]), 999, true, true);
+        }
+
+        private void CommandRemoveAllWeapons(GameConsole gameConsole, params string[] arguments)
+        {
+            LocalPlayer.Character.RemoveAllPedWeapons();
+        }
+
     }
 }
