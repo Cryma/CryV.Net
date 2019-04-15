@@ -57,6 +57,16 @@ namespace CryV.Net.Elements
             CryVNative.Native_Entity_SetEntityAsMissionEntity(CryVNative.Plugin, Handle, p1, p2);
         }
 
+        public void SetEntityCollision(bool toggle, bool keepPhysics = false)
+        {
+            CryVNative.Native_Entity_SetEntityCollision(CryVNative.Plugin, Handle, toggle, keepPhysics);
+        }
+
+        public void SetEntityAlpha(int alphaLevel)
+        {
+            CryVNative.Native_Entity_SetEntityAlpha(CryVNative.Plugin, Handle, alphaLevel, 0);
+        }
+
         public bool IsEntityPlayingAnim(string animDict, string animName, int taskFlag)
         {
             using (var converter = new StringConverter())

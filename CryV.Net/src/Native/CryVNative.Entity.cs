@@ -60,6 +60,14 @@ namespace CryV.Net.Native
         //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Entity_SetEntityCollision(IntPtr plugin, int entityHandle, bool toggle, bool keepPhysics);
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Entity_SetEntityAlpha(IntPtr plugin, int entityHandle, int alphaLevel, int skin);
+
+        //
+
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern bool Native_Entity_IsEntityPlayingAnim(IntPtr plugin, int entityHandle, IntPtr animDict, IntPtr animName, int taskFlag);
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
