@@ -71,6 +71,8 @@ namespace CryV.Net.Client.Players
         private bool _wasClimbing;
         private bool _wasRagdoll;
 
+        private Prop _aimProp;
+
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
 
         private readonly IEventHandler _eventHandler;
@@ -302,10 +304,21 @@ namespace CryV.Net.Client.Players
 
         private void UpdateWeaponAnimation()
         {
-            _ped.ClearPedTasks();
-            // TODO: Interpolate
-            // TODO: Fix native ignoring z-coordinate
-            _ped.TaskAimGunAtCoord(AimTarget + new Vector3(0.0f, 0.0f, 20.0f), 5000, true, false);
+            // TODO: Interpolate and improve aim prop handling
+
+            if (_aimProp == null)
+            {
+                _aimProp = new Prop(3120582510, AimTarget);
+                _aimProp.SetEntityCollision(false);
+                _aimProp.SetEntityAlpha(0);
+            }
+
+            if (_aimProp != null && _aimProp.DoesExist())
+            {
+                _aimProp.Position = AimTarget;
+            }
+
+            _ped.TaskAimGunAtEntity(_aimProp.Handle, -1, false);
         }
 
         private string GetLadderClimbingAnimationName()
@@ -343,6 +356,8 @@ namespace CryV.Net.Client.Players
             NativeHelper.OnNativeTick -= Tick;
 
             _entityPool.RemoveEntity(_ped);
+
+            _aimProp?.Delete();
 
             _ped.Delete();
         }

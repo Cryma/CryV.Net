@@ -11,7 +11,7 @@ namespace CryV.Net.Elements
 
         public Prop(uint model, Vector3 position) : base(0)
         {
-
+            CreateProp(model, position);
         }
 
         private void CreateProp(uint model, Vector3 position)
