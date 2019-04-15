@@ -144,6 +144,11 @@ namespace CryV.Net.Elements
             CryVNative.Native_Ped_SetPedConfigFlag(CryVNative.Plugin, Handle, flagId, value);
         }
 
+        public void SetPedCanHeadIK(bool toggle)
+        {
+            CryVNative.Native_Ped_SetPedCanHeadIK(CryVNative.Plugin, Handle, toggle);
+        }
+
         public void TaskSetBlockingOfNonTemporaryEvents(bool toggle)
         {
             CryVNative.Native_Ped_TaskSetBlockingOfNonTemporaryEvents(CryVNative.Plugin, Handle, toggle);

@@ -63,6 +63,9 @@ namespace CryV.Net.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Ped_SetPedConfigFlag(IntPtr plugin, int pedId, int flagId, bool value);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_SetPedCanHeadIK(IntPtr plugin, int pedId, bool toggle);
+
         //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
