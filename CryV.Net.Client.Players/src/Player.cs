@@ -35,6 +35,8 @@ namespace CryV.Net.Client.Players
 
         public float TargetHeading { get; set; }
 
+        public Vector3 CameraDirection { get; set; }
+
         public int Speed { get; set; }
 
         public ulong Model
@@ -83,6 +85,7 @@ namespace CryV.Net.Client.Players
             Id = payload.Id;
             TargetPosition = payload.Position;
             TargetHeading = payload.Heading;
+            CameraDirection = payload.CameraDirection;
 
             _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<PlayerUpdatePayload>>(update => ReadPayload(update.Payload), x => x.Payload.Id == Id));
 
@@ -110,6 +113,7 @@ namespace CryV.Net.Client.Players
             TargetHeading = payload.Heading;
             Velocity = payload.Velocity;
             Speed = payload.Speed;
+            CameraDirection = payload.CameraDirection;
 
             IsJumping = (payload.PedData & (int) PedData.IsJumping) > 0;
             if (IsJumping == false)
@@ -300,7 +304,8 @@ namespace CryV.Net.Client.Players
         private void UpdateWeaponAnimation()
         {
             _ped.ClearPedTasks();
-            _ped.TaskAimGunAtCoord(Vector3.Zero, 5000, true, false);
+            // TODO: Interpolate
+            _ped.TaskAimGunAtCoord(Position + (CameraDirection * 3), 5000, true, false);
         }
 
         private string GetLadderClimbingAnimationName()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Text;
 using CryV.Net.Helpers;
 using CryV.Net.Native;
@@ -71,6 +72,21 @@ namespace CryV.Net.Elements
             hash += hash << 15;
 
             return hash;
+        }
+
+        public static Vector3 RotationToDirection(Vector3 rotation)
+        {
+            var x = DegreeToRadian(rotation.X);
+            var z = DegreeToRadian(rotation.Z);
+
+            var value = Math.Abs(Math.Cos(x));
+
+            return new Vector3((float) (-Math.Sin(z) * value), (float) (Math.Cos(z) * value), (float) Math.Sin(x));
+        }
+
+        private static double DegreeToRadian(double degree)
+        {
+            return degree * Math.PI / 180.0d;
         }
 
     }
