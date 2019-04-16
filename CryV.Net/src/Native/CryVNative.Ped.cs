@@ -92,6 +92,10 @@ namespace CryV.Net.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Ped_TaskAimGunAtEntity(IntPtr plugin, int pedId, int entityHandle, int duration, bool p3);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Ped_TaskGoToEntityWhileAimingAtEntity(IntPtr plugin, int pedId, int entityToWalkTo, int entityToAimAt, float speed, bool shootAtEntity,
+            float p5, float p6, bool p7, bool p8, ulong firingPattern);
+
         //
 
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]

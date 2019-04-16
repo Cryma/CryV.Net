@@ -195,6 +195,12 @@ namespace CryV.Net.Elements
             CryVNative.Native_Ped_TaskAimGunAtEntity(CryVNative.Plugin, Handle, entityHandle, duration, p3);
         }
 
+        public void TaskGoToEntityWhileAimingAtEntity(int entityToWalkTo, int entityToAimAt, float speed, bool shootAtEntity, float p5, float p6, bool p7, bool p8,
+            ulong firingPattern)
+        {
+            CryVNative.Native_Ped_TaskGoToEntityWhileAimingAtEntity(CryVNative.Plugin, Handle, entityToWalkTo, entityToAimAt, speed, shootAtEntity, p5, p6, p7, p8, firingPattern);
+        }
+
         public bool IsPedWalking()
         {
             return CryVNative.Native_Ped_IsPedWalking(CryVNative.Plugin, Handle);
