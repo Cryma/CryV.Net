@@ -72,6 +72,9 @@ namespace CryV.Net.Client.Players
         private bool _wasRagdoll;
 
         private Prop _aimProp;
+        private Prop _followProp;
+
+        private int _ticks;
 
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
 
@@ -151,6 +154,8 @@ namespace CryV.Net.Client.Players
 
         private void Tick(float deltaTime)
         {
+            _ticks++;
+
             if (IsClimbingLadder)
             {
                 var animationName = GetLadderClimbingAnimationName();
@@ -166,13 +171,13 @@ namespace CryV.Net.Client.Players
             UpdatePosition(deltaTime);
             UpdateHeading(deltaTime);
 
-            if (IsAiming == false)
+            if (IsAiming)
             {
-                UpdateMovementAnimation();
+                UpdateWeaponAnimation();
             }
             else
             {
-                UpdateWeaponAnimation();
+                UpdateMovementAnimation();
             }
 
             UpdateRagdoll();
@@ -318,7 +323,32 @@ namespace CryV.Net.Client.Players
                 _aimProp.Position = AimTarget;
             }
 
-            _ped.TaskAimGunAtEntity(_aimProp.Handle, -1, false);
+            if (_followProp == null)
+            {
+                _followProp = new Prop(3120582510, TargetPosition + Velocity * 3.0f);
+                _followProp.SetEntityCollision(false);
+                _followProp.SetEntityAlpha(0);
+            }
+
+            if (_followProp != null && _followProp.DoesExist())
+            {
+                _followProp.Position = TargetPosition + Velocity * 3.0f;
+            }
+
+            var isPedAiming = _ped.GetIsTaskActive(290);
+
+            if (isPedAiming == false || _ticks % 100 == 0)
+            {
+                if (Speed == 0)
+                {
+                    _ped.TaskAimGunAtEntity(_aimProp.Handle, -1, false);
+                }
+                else
+                {
+                    _ped.TaskGoToEntityWhileAimingAtEntity(_followProp.Handle, _aimProp.Handle, Speed, false, 3.0f, 1082130432, true, false, 3337513804);
+                    _ped.SetPedDesiredMoveBlendRatio(Speed);
+                }
+            }
         }
 
         private string GetLadderClimbingAnimationName()
@@ -358,6 +388,7 @@ namespace CryV.Net.Client.Players
             _entityPool.RemoveEntity(_ped);
 
             _aimProp?.Delete();
+            _followProp?.Delete();
 
             _ped.Delete();
         }
