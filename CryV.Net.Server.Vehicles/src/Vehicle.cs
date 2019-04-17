@@ -1,6 +1,8 @@
 ﻿using System.Numerics;
 using CryV.Net.Server.Common.Interfaces;
+using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
+using LiteNetLib;
 
 namespace CryV.Net.Server.Vehicles
 {
@@ -15,11 +17,21 @@ namespace CryV.Net.Server.Vehicles
 
         public Vector3 Rotation { get; set; }
 
-        public Vehicle(int id, Vector3 position, Vector3 rotation)
+        private readonly IVehicleManager _vehicleManager;
+        private readonly IEventHandler _eventHandler;
+        private readonly IPlayerManager _playerManager;
+
+        public Vehicle(IVehicleManager vehicleManager, IEventHandler eventHandler, IPlayerManager playerManager, int id, Vector3 position, Vector3 rotation)
         {
+            _vehicleManager = vehicleManager;
+            _eventHandler = eventHandler;
+            _playerManager = playerManager;
+
             Id = id;
             Position = position;
             Rotation = rotation;
+
+            PropagateNewVehicle();
         }
 
         public VehicleUpdatePayload GetPayload()
@@ -32,6 +44,14 @@ namespace CryV.Net.Server.Vehicles
             Position = payload.Position;
             Velocity = payload.Velocity;
             Rotation = payload.Rotation;
+        }
+
+        private void PropagateNewVehicle()
+        {
+            foreach (var player in _playerManager.GetPlayers())
+            {
+                player.Send(new VehicleAddPayload(GetPayload()), DeliveryMethod.ReliableOrdered);
+            }
         }
 
     }

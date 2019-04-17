@@ -15,8 +15,6 @@ namespace CryV.Net.Server.Players
     public class PlayerManager : IPlayerManager, IStartable
     {
 
-        public INetworkManager NetworkManager { get; }
-
         private readonly IEventHandler _eventHandler;
         private readonly IVehicleManager _vehicleManager;
 

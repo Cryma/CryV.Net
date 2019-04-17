@@ -1,8 +1,10 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Interfaces;
@@ -12,7 +14,7 @@ namespace CryV.Net.Server.Vehicles
     public class VehicleManager : IVehicleManager, IStartable
     {
 
-        public INetworkManager NetworkManager { get; }
+        public IPlayerManager PlayerManager { get; set; }
 
         private readonly IEventHandler _eventHandler;
 
@@ -26,14 +28,19 @@ namespace CryV.Net.Server.Vehicles
         public void Start()
         {
             // TODO: Remove debug vehicle
-            AddVehicle(new Vector3(165.1652f, -1064.867f, 29.19238f), Vector3.Zero);
+            Task.Run(async () =>
+            {
+                await Task.Delay(2000);
+
+                AddVehicle(new Vector3(165.1652f, -1064.867f, 29.19238f), Vector3.Zero);
+            });
         }
 
         public IVehicle AddVehicle(Vector3 position, Vector3 rotation)
         {
             var id = GetFreeId();
 
-            var vehicle = new Vehicle(id, position, rotation);
+            var vehicle = new Vehicle(this, _eventHandler, PlayerManager, id, position, rotation);
 
             _vehicles.TryAdd(id, vehicle);
 
