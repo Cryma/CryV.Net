@@ -9,20 +9,25 @@ namespace CryV.Net.Elements
     public abstract class Entity
     {
 
-        public int Handle { get; protected set; }
+        public int Handle
+        {
+            get => _handle;
+            protected set => _handle = value;
+        }
+        private int _handle;
 
         public int Health => CryVNative.Native_Entity_GetEntityHealth(CryVNative.Plugin, Handle);
 
         public Vector3 Position
         {
-            get => StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetEntityPosition(CryVNative.Plugin, Handle));
-            set => CryVNative.Native_Entity_SetEntityPosition(CryVNative.Plugin, Handle, value.X, value.Y, value.Z);
+            get => StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetEntityCoords(CryVNative.Plugin, Handle, true));
+            set => CryVNative.Native_Entity_SetEntityCoordsNoOffset(CryVNative.Plugin, Handle, value.X, value.Y, value.Z, false, false, true);
         }
 
         public Vector3 Rotation
         {
-            get => StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetEntityRotation(CryVNative.Plugin, Handle));
-            set => CryVNative.Native_Entity_SetEntityRotation(CryVNative.Plugin, Handle, value.X, value.Y, value.Z);
+            get => StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetEntityRotation(CryVNative.Plugin, Handle, 2));
+            set => CryVNative.Native_Entity_SetEntityRotation(CryVNative.Plugin, Handle, value.X, value.Y, value.Z, 2, true);
         }
         public Vector3 Velocity
         {
@@ -49,7 +54,7 @@ namespace CryV.Net.Elements
 
         public void SetAsNoLongerNeeded()
         {
-            CryVNative.Native_Entity_SetEntityAsNoLongerNeeded(CryVNative.Plugin, Handle);
+            CryVNative.Native_Entity_SetEntityAsNoLongerNeeded(CryVNative.Plugin, ref _handle);
         }
 
         public void SetAsMissionEntity(bool p1 = false, bool p2 = true)
@@ -98,7 +103,7 @@ namespace CryV.Net.Elements
 
         public void Delete()
         {
-            CryVNative.Native_Entity_DeleteEntity(CryVNative.Plugin, Handle);
+            CryVNative.Native_Entity_DeleteEntity(CryVNative.Plugin, ref _handle);
 
             if (EntityPool.ContainsEntity(Handle))
             {

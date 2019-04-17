@@ -21,7 +21,7 @@ namespace CryV.Net.Elements
 
         public static void Wait(int ms)
         {
-            CryVNative.Native_Gameplay_Wait(CryVNative.Plugin, 0);
+            CryVNative.Native_Misc_Wait(CryVNative.Plugin, 0);
         }
 
         public static ulong GetHashKey(string name)
@@ -30,7 +30,7 @@ namespace CryV.Net.Elements
             {
                 var namePointer = converter.StringToPointer(name);
 
-                return CryVNative.Native_Gameplay_GetHashKey(CryVNative.Plugin, namePointer);
+                return CryVNative.Native_Misc_GetHashKey(CryVNative.Plugin, namePointer);
             }
         }
 

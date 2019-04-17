@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq.Expressions;
-using System.Numerics;
-using CryV.Net.Client.Helpers;
+﻿using CryV.Net.Client.Helpers;
 using CryV.Net.Helpers;
 using CryV.Net.Native;
+using System.Numerics;
 
 namespace CryV.Net.Elements
 {
@@ -61,7 +59,7 @@ namespace CryV.Net.Elements
 
         public void SetPedFleeAttributes(int attribute, bool p2)
         {
-            CryVNative.Native_Ped_SetPedFleeAttribute(CryVNative.Plugin, Handle, attribute, p2);
+            CryVNative.Native_Ped_SetPedFleeAttributes(CryVNative.Plugin, Handle, attribute, p2);
         }
 
         public void SetBlockingOfNonTemporaryEvents(bool toggle)
@@ -131,7 +129,7 @@ namespace CryV.Net.Elements
 
         public void SetPedToRagdollWithFall(int time, int p2, int ragdollType, float x, float y, float z, float p7)
         {
-            CryVNative.Native_Ped_SetPedToRagdollWithFall(CryVNative.Plugin, Handle, time, p2, ragdollType, x, y, z, p7);
+            CryVNative.Native_Ped_SetPedToRagdollWithFall(CryVNative.Plugin, Handle, time, p2, ragdollType, x, y, z, p7, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
         }
 
         public void SetPedDiesWhenInjured(bool toggle)
@@ -146,27 +144,27 @@ namespace CryV.Net.Elements
 
         public void SetPedCanHeadIK(bool toggle)
         {
-            CryVNative.Native_Ped_SetPedCanHeadIK(CryVNative.Plugin, Handle, toggle);
+            CryVNative.Native_Ped_SetPedCanHeadIk(CryVNative.Plugin, Handle, toggle);
         }
 
         public void TaskSetBlockingOfNonTemporaryEvents(bool toggle)
         {
-            CryVNative.Native_Ped_TaskSetBlockingOfNonTemporaryEvents(CryVNative.Plugin, Handle, toggle);
+            CryVNative.Native_Brain_TaskSetBlockingOfNonTemporaryEvents(CryVNative.Plugin, Handle, toggle);
         }
 
         public void TaskJump(bool unused = true)
         {
-            CryVNative.Native_Ped_TaskJump(CryVNative.Plugin, Handle, unused);
+            CryVNative.Native_Brain_TaskJump(CryVNative.Plugin, Handle, unused);
         }
 
         public void TaskClimb(bool unused = true)
         {
-            CryVNative.Native_Ped_TaskClimb(CryVNative.Plugin, Handle, unused);
+            CryVNative.Native_Brain_TaskClimb(CryVNative.Plugin, Handle, unused);
         }
 
         public void TaskClimbLadder(int p1 = 1)
         {
-            CryVNative.Native_Ped_TaskClimbLadder(CryVNative.Plugin, Handle, p1);
+            CryVNative.Native_Brain_TaskClimbLadder(CryVNative.Plugin, Handle, p1);
         }
 
         public void TaskMoveNetwork(string task, float multiplier, bool p3, string animDict, int flags)
@@ -176,44 +174,44 @@ namespace CryV.Net.Elements
                 var taskPointer = converter.StringToPointer(task);
                 var animDictPointer = converter.StringToPointer(animDict);
 
-                CryVNative.Native_Ped_TaskMoveNetwork(CryVNative.Plugin, Handle, taskPointer, multiplier, p3, animDictPointer, flags);
+                CryVNative.Native_Brain_TaskMoveNetwork(CryVNative.Plugin, Handle, taskPointer, multiplier, p3, animDictPointer, flags);
             }
         }
 
         public void TaskAimGunAtCoord(Vector3 coordinates, int time, bool p5, bool p6)
         {
-            CryVNative.Native_Ped_TaskAimGunAtCoord(CryVNative.Plugin, Handle, coordinates.X, coordinates.Y, coordinates.Z, time, p5, p6);
+            CryVNative.Native_Brain_TaskAimGunAtCoord(CryVNative.Plugin, Handle, coordinates.X, coordinates.Y, coordinates.Z, time, p5, p6);
         }
 
-        public void TaskLookAtCoord(Vector3 coordinates, float duration, int p5, int p6)
+        public void TaskLookAtCoord(Vector3 coordinates, float duration, ulong p5, ulong p6)
         {
-            CryVNative.Native_Ped_TaskLookAtCoord(CryVNative.Plugin, Handle, coordinates.X, coordinates.Y, coordinates.Z, duration, p5, p6);
+            CryVNative.Native_Brain_TaskLookAtCoord(CryVNative.Plugin, Handle, coordinates.X, coordinates.Y, coordinates.Z, duration, p5, p6);
         }
 
         public void TaskAimGunAtEntity(int entityHandle, int duration, bool p3)
         {
-            CryVNative.Native_Ped_TaskAimGunAtEntity(CryVNative.Plugin, Handle, entityHandle, duration, p3);
+            CryVNative.Native_Brain_TaskAimGunAtEntity(CryVNative.Plugin, Handle, entityHandle, duration, p3);
         }
 
         public void TaskGoToEntityWhileAimingAtEntity(int entityToWalkTo, int entityToAimAt, float speed, bool shootAtEntity, float p5, float p6, bool p7, bool p8,
             ulong firingPattern)
         {
-            CryVNative.Native_Ped_TaskGoToEntityWhileAimingAtEntity(CryVNative.Plugin, Handle, entityToWalkTo, entityToAimAt, speed, shootAtEntity, p5, p6, p7, p8, firingPattern);
+            CryVNative.Native_Brain_TaskGoToEntityWhileAimingAtEntity(CryVNative.Plugin, Handle, entityToWalkTo, entityToAimAt, speed, shootAtEntity, p5, p6, p7, p8, firingPattern);
         }
 
         public bool IsPedWalking()
         {
-            return CryVNative.Native_Ped_IsPedWalking(CryVNative.Plugin, Handle);
+            return CryVNative.Native_Brain_IsPedWalking(CryVNative.Plugin, Handle);
         }
 
         public bool IsPedRunning()
         {
-            return CryVNative.Native_Ped_IsPedRunning(CryVNative.Plugin, Handle);
+            return CryVNative.Native_Brain_IsPedRunning(CryVNative.Plugin, Handle);
         }
 
         public bool IsPedSprinting()
         {
-            return CryVNative.Native_Ped_IsPedSprinting(CryVNative.Plugin, Handle);
+            return CryVNative.Native_Brain_IsPedSprinting(CryVNative.Plugin, Handle);
         }
 
         public bool IsPedJumping()
@@ -233,22 +231,22 @@ namespace CryV.Net.Elements
 
         public bool GetIsTaskActive(int taskNumber)
         {
-            return CryVNative.Native_Ped_GetIsTaskActive(CryVNative.Plugin, Handle, taskNumber);
+            return CryVNative.Native_Brain_GetIsTaskActive(CryVNative.Plugin, Handle, taskNumber);
         }
 
         public void TaskGoStraightToCoord(float x, float y, float z, float speed, int timeout, float targetHeading, float distanceToSlide)
         {
-            CryVNative.Native_Ped_TaskGoStraightToCoord(CryVNative.Plugin, Handle, x, y, z, speed, timeout, targetHeading, distanceToSlide);
+            CryVNative.Native_Brain_TaskGoStraightToCoord(CryVNative.Plugin, Handle, x, y, z, speed, timeout, targetHeading, distanceToSlide);
         }
 
         public void SetPedDesiredMoveBlendRatio(float p1)
         {
-            CryVNative.Native_Ped_SetPedDesiredMoveBlendRatio(CryVNative.Plugin, Handle, p1);
+            CryVNative.Native_Brain_SetPedDesiredMoveBlendRatio(CryVNative.Plugin, Handle, p1);
         }
 
         public void TaskStandStill(int time)
         {
-            CryVNative.Native_Ped_TaskStandStill(CryVNative.Plugin, Handle, time);
+            CryVNative.Native_Brain_TaskStandStill(CryVNative.Plugin, Handle, time);
         }
 
         public void TaskPlayAnim(string animDictionary, string animationName, float speed, float speedMultiplier, int duration, uint flag, float playbackRate,
@@ -256,44 +254,48 @@ namespace CryV.Net.Elements
         {
             using (var converter = new StringConverter())
             {
-                CryVNative.Native_Ped_TaskPlayAnim(CryVNative.Plugin, Handle, converter.StringToPointer(animDictionary), converter.StringToPointer(animationName),
-                    speed, speedMultiplier, duration, flag, playbackRate, lockX, lockY, lockZ);
+                CryVNative.Native_Brain_TaskPlayAnim(CryVNative.Plugin, Handle, converter.StringToPointer(animDictionary), converter.StringToPointer(animationName),
+                    speed, speedMultiplier, duration, (int) flag, playbackRate, lockX, lockY, lockZ);
             }
         }
 
         public void ClearPedTasksImmediately()
         {
-            CryVNative.Native_Ped_ClearPedTasksImmediately(CryVNative.Plugin, Handle);
+            CryVNative.Native_Brain_ClearPedTasksImmediately(CryVNative.Plugin, Handle);
         }
 
         public void ClearPedTasks()
         {
-            CryVNative.Native_Ped_ClearPedTasks(CryVNative.Plugin, Handle);
+            CryVNative.Native_Brain_ClearPedTasks(CryVNative.Plugin, Handle);
         }
 
         public void ClearPedSecondaryTask()
         {
-            CryVNative.Native_Ped_ClearPedSecondaryTask(CryVNative.Plugin, Handle);
+            CryVNative.Native_Brain_ClearPedSecondaryTask(CryVNative.Plugin, Handle);
         }
 
         public ulong GetCurrentPedWeapon()
         {
-            return CryVNative.Native_Ped_GetCurrentPedWeapon(CryVNative.Plugin, Handle);
+            ulong hash = 0;
+
+            CryVNative.Native_Weapon_GetCurrentPedWeapon(CryVNative.Plugin, Handle, ref hash, false);
+
+            return hash;
         }
 
         public ulong GetSelectedPedWeapon()
         {
-            return CryVNative.Native_Ped_GetSelectedPedWeapon(CryVNative.Plugin, Handle);
+            return CryVNative.Native_Weapon_GetSelectedPedWeapon(CryVNative.Plugin, Handle);
         }
 
         public void RemoveAllPedWeapons()
         {
-            CryVNative.Native_Ped_RemoveAllPedWeapons(CryVNative.Plugin, Handle);
+            CryVNative.Native_Weapon_RemoveAllPedWeapons(CryVNative.Plugin, Handle, true);
         }
 
         public void GiveWeaponToPed(ulong weaponHash, int ammoCount, bool isHidden, bool equipNow)
         {
-            CryVNative.Native_Ped_GiveWeaponToPed(CryVNative.Plugin, Handle, weaponHash, ammoCount, isHidden, equipNow);
+            CryVNative.Native_Weapon_GiveWeaponToPed(CryVNative.Plugin, Handle, weaponHash, ammoCount, isHidden, equipNow);
         }
 
         public void _0xD5BB4025AE449A4E(string p1, float p2)
@@ -302,7 +304,7 @@ namespace CryV.Net.Elements
             {
                 var p1Pointer = converter.StringToPointer(p1);
 
-                CryVNative.Native_Ped__0xD5BB4025AE449A4E(CryVNative.Plugin, Handle, p1Pointer, p2);
+                CryVNative.Native_Brain_SetTaskPropertyFloat(CryVNative.Plugin, Handle, p1Pointer, p2);
             }
         }
 
@@ -312,7 +314,7 @@ namespace CryV.Net.Elements
             {
                 var p1Pointer = converter.StringToPointer(p1);
 
-                CryVNative.Native_Ped__0xB0A6CFD2C69C1088(CryVNative.Plugin, Handle, p1Pointer, p2);
+                CryVNative.Native_Brain_SetTaskPropertyBool(CryVNative.Plugin, Handle, p1Pointer, p2);
             }
         }
 
@@ -322,7 +324,7 @@ namespace CryV.Net.Elements
             {
                 var p1Pointer = converter.StringToPointer(p1);
 
-                CryVNative.Native_Ped__0xD01015C7316AE176(CryVNative.Plugin, Handle, p1Pointer);
+                CryVNative.Native_Brain__0xD01015C7316AE176(CryVNative.Plugin, Handle, p1Pointer);
             }
         }
 

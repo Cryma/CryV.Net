@@ -47,7 +47,7 @@ namespace CryV.Net.Elements
         {
             using (var converter = new StringConverter())
             {
-                return CryVNative.Native_Gameplay_HasAnimDictLoaded(CryVNative.Plugin, converter.StringToPointer(animDict));
+                return CryVNative.Native_Streaming_HasAnimDictLoaded(CryVNative.Plugin, converter.StringToPointer(animDict));
             }
         }
 
@@ -55,23 +55,23 @@ namespace CryV.Net.Elements
         {
             using (var converter = new StringConverter())
             {
-                CryVNative.Native_Gameplay_RequestAnimDict(CryVNative.Plugin, converter.StringToPointer(animDict));
+                CryVNative.Native_Streaming_RequestAnimDict(CryVNative.Plugin, converter.StringToPointer(animDict));
             }
         }
 
         private static void RequestModel(ulong model)
         {
-            CryVNative.Native_Gameplay_RequestModel(CryVNative.Plugin, model);
+            CryVNative.Native_Streaming_RequestModel(CryVNative.Plugin, model);
         }
 
         private static bool HasModelLoaded(ulong model)
         {
-            return CryVNative.Native_Gameplay_HasModelLoaded(CryVNative.Plugin, model);
+            return CryVNative.Native_Streaming_HasModelLoaded(CryVNative.Plugin, model);
         }
 
         private static void SetModelAsNoLongerNeeded(ulong model)
         {
-            CryVNative.Native_Gameplay_SetModelAsNoLongerNeeded(CryVNative.Plugin, model);
+            CryVNative.Native_Streaming_SetModelAsNoLongerNeeded(CryVNative.Plugin, model);
         }
 
     }

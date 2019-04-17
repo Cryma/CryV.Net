@@ -18,7 +18,7 @@ namespace CryV.Net.Elements
         {
             Streaming.LoadModel(model);
 
-            Handle = CryVNative.Native_Prop_CreateObject(CryVNative.Plugin, model, position.X, position.Y, position.Z, true, true, false);
+            Handle = CryVNative.Native_Object_CreateObject(CryVNative.Plugin, (int) model, position.X, position.Y, position.Z, true, true, false);
 
             Streaming.UnloadModel(model);
         }

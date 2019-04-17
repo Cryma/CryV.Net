@@ -615,5 +615,11 @@ namespace CryV.Net.Native
         public static extern void Native_Misc_UseFreemodeMapBehavior(IntPtr plugin, bool toggle);
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Misc_UsingMissionCreator(IntPtr plugin, bool toggle);
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr Native_Misc_GetAllPeds(IntPtr plugin);
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr Native_Misc_GetAllVehicles(IntPtr plugin);
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Misc_Wait(IntPtr plugin, int ms);
     }
 }
