@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -45,6 +44,16 @@ namespace CryV.Net.Server.Vehicles
             _vehicles.TryAdd(id, vehicle);
 
             return vehicle;
+        }
+
+        public void RemoveVehicle(int vehicleId)
+        {
+            if (_vehicles.TryRemove(vehicleId, out var vehicle) == false)
+            {
+                return;
+            }
+
+            vehicle.Dispose();
         }
 
         public ICollection<IVehicle> GetVehicles()

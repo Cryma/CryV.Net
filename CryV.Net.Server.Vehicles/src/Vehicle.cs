@@ -1,7 +1,9 @@
-﻿using System.Numerics;
+﻿using System.Collections.Generic;
+using System.Numerics;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
+using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
 
 namespace CryV.Net.Server.Vehicles
@@ -19,6 +21,8 @@ namespace CryV.Net.Server.Vehicles
 
         public ulong Model { get; set; }
 
+        private readonly List<ISubscription> _subscriptions = new List<ISubscription>();
+
         private readonly IVehicleManager _vehicleManager;
         private readonly IEventHandler _eventHandler;
         private readonly IPlayerManager _playerManager;
@@ -33,6 +37,8 @@ namespace CryV.Net.Server.Vehicles
             Position = position;
             Rotation = rotation;
             Model = model;
+
+            _subscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(OnNetworkUpdate, x => x.Payload.Id == Id));
 
             PropagateNewVehicle();
         }
@@ -55,6 +61,26 @@ namespace CryV.Net.Server.Vehicles
             foreach (var player in _playerManager.GetPlayers())
             {
                 player.Send(new VehicleAddPayload(GetPayload()), DeliveryMethod.ReliableOrdered);
+            }
+        }
+
+        private void OnNetworkUpdate(NetworkEvent<VehicleUpdatePayload> obj)
+        {
+            var payload = obj.Payload;
+
+            ReadPayload(payload);
+
+            foreach (var player in _playerManager.GetPlayers())
+            {
+                player.Send(payload, DeliveryMethod.Unreliable);
+            }
+        }
+
+        public void Dispose()
+        {
+            foreach (var player in _playerManager.GetPlayers())
+            {
+                player.Send(new VehicleRemovePayload(Id), DeliveryMethod.ReliableOrdered);
             }
         }
 
