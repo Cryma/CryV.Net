@@ -229,6 +229,16 @@ namespace CryV.Net.Elements
             return CryVNative.Native_Ped_IsPedRagdoll(CryVNative.Plugin, Handle);
         }
 
+        public bool IsInAnyVehicle(bool atGetIn = false)
+        {
+            return CryVNative.Native_Ped_IsPedInAnyVehicle(CryVNative.Plugin, Handle, atGetIn);
+        }
+
+        public Vehicle GetVehiclePedIsIn()
+        {
+            return new Vehicle(CryVNative.Native_Ped_GetVehiclePedIsIn(CryVNative.Plugin, Handle, false));
+        }
+
         public bool GetIsTaskActive(int taskNumber)
         {
             return CryVNative.Native_Brain_GetIsTaskActive(CryVNative.Plugin, Handle, taskNumber);
