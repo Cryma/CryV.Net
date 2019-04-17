@@ -23,16 +23,20 @@ namespace CryV.Net.Shared.Common.Payloads
         [ProtoMember(4)]
         public SerializableVector3 Rotation { get; set; }
 
+        [ProtoMember(5)]
+        public ulong Model { get; set; }
+
         public VehicleUpdatePayload()
         {
         }
 
-        public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation)
+        public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, ulong model)
         {
             Id = id;
             Position = position;
             Velocity = velocity;
             Rotation = rotation;
+            Model = model;
         }
 
     }

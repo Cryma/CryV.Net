@@ -1,6 +1,8 @@
-﻿namespace CryV.Net.Client.Common.Interfaces
+﻿using System;
+
+namespace CryV.Net.Client.Common.Interfaces
 {
-    public interface IVehicle
+    public interface IVehicle : IDisposable
     {
         
     }

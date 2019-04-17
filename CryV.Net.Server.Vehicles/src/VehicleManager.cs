@@ -32,15 +32,15 @@ namespace CryV.Net.Server.Vehicles
             {
                 await Task.Delay(2000);
 
-                AddVehicle(new Vector3(165.1652f, -1064.867f, 29.19238f), Vector3.Zero);
+                AddVehicle(new Vector3(165.1652f, -1064.867f, 29.19238f), Vector3.Zero, 1274868363);
             });
         }
 
-        public IVehicle AddVehicle(Vector3 position, Vector3 rotation)
+        public IVehicle AddVehicle(Vector3 position, Vector3 rotation, ulong model)
         {
             var id = GetFreeId();
 
-            var vehicle = new Vehicle(this, _eventHandler, PlayerManager, id, position, rotation);
+            var vehicle = new Vehicle(this, _eventHandler, PlayerManager, id, position, rotation, model);
 
             _vehicles.TryAdd(id, vehicle);
 

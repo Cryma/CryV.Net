@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CryV.Net.Client.Common\CryV.Net.Client.Common.csproj" />
+    <ProjectReference Include="..\CryV.Net.Shared.Events\CryV.Net.Shared.Events.csproj" />
   </ItemGroup>
 
 </Project>

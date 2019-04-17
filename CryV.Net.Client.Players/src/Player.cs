@@ -387,10 +387,13 @@ namespace CryV.Net.Client.Players
 
             _entityPool.RemoveEntity(_ped);
 
-            _aimProp?.Delete();
-            _followProp?.Delete();
+            ThreadHelper.Run(() =>
+            {
+                _aimProp?.Delete();
+                _followProp?.Delete();
 
-            _ped.Delete();
+                _ped.Delete();
+            });
         }
 
     }

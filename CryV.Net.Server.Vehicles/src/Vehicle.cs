@@ -17,11 +17,13 @@ namespace CryV.Net.Server.Vehicles
 
         public Vector3 Rotation { get; set; }
 
+        public ulong Model { get; set; }
+
         private readonly IVehicleManager _vehicleManager;
         private readonly IEventHandler _eventHandler;
         private readonly IPlayerManager _playerManager;
 
-        public Vehicle(IVehicleManager vehicleManager, IEventHandler eventHandler, IPlayerManager playerManager, int id, Vector3 position, Vector3 rotation)
+        public Vehicle(IVehicleManager vehicleManager, IEventHandler eventHandler, IPlayerManager playerManager, int id, Vector3 position, Vector3 rotation, ulong model)
         {
             _vehicleManager = vehicleManager;
             _eventHandler = eventHandler;
@@ -30,13 +32,14 @@ namespace CryV.Net.Server.Vehicles
             Id = id;
             Position = position;
             Rotation = rotation;
+            Model = model;
 
             PropagateNewVehicle();
         }
 
         public VehicleUpdatePayload GetPayload()
         {
-            return new VehicleUpdatePayload(Id, Position, Velocity, Rotation);
+            return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, Model);
         }
 
         public void ReadPayload(VehicleUpdatePayload payload)
@@ -44,6 +47,7 @@ namespace CryV.Net.Server.Vehicles
             Position = payload.Position;
             Velocity = payload.Velocity;
             Rotation = payload.Rotation;
+            Model = payload.Model;
         }
 
         private void PropagateNewVehicle()
