@@ -27,17 +27,21 @@ namespace CryV.Net.Shared.Common.Payloads
         [ProtoMember(5)]
         public List<PlayerUpdatePayload> ExistingPlayers { get; set; }
 
+        [ProtoMember(6)]
+        public List<VehicleUpdatePayload> ExistingVehicles { get; set; }
+
         public BootstrapPayload()
         {
         }
 
-        public BootstrapPayload(int localId, Vector3 startPosition, float startHeading, ulong startModel, List<PlayerUpdatePayload> existingPlayers)
+        public BootstrapPayload(int localId, Vector3 startPosition, float startHeading, ulong startModel, List<PlayerUpdatePayload> existingPlayers, List<VehicleUpdatePayload> existingVehicles)
         {
             LocalId = localId;
             StartPosition = startPosition;
             StartHeading = startHeading;
             StartModel = startModel;
             ExistingPlayers = existingPlayers;
+            ExistingVehicles = existingVehicles;
         }
 
     }

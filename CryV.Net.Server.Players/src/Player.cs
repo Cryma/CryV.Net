@@ -46,11 +46,13 @@ namespace CryV.Net.Server.Players
         private readonly NetPeer _peer;
         private readonly IEventHandler _eventHandler;
         private readonly IPlayerManager _playerManager;
+        private readonly IVehicleManager _vehicleManager;
 
-        public Player(IPlayerManager playerManager, IEventHandler eventHandler, NetPeer peer)
+        public Player(IPlayerManager playerManager, IEventHandler eventHandler, IVehicleManager vehicleManager, NetPeer peer)
         {
             _playerManager = playerManager;
             _eventHandler = eventHandler;
+            _vehicleManager = vehicleManager;
             _peer = peer;
 
             _subscriptions.Add(_eventHandler.Subscribe<NetworkEvent<PlayerUpdatePayload>>(OnNetworkUpdate, x => x.Payload.Id == Id));
@@ -103,6 +105,13 @@ namespace CryV.Net.Server.Players
                 existingPlayers.Add(player.GetPayload());
             }
 
+            var existingVehicles = new List<VehicleUpdatePayload>();
+
+            foreach (var vehicle in _vehicleManager.GetVehicles())
+            {
+                existingVehicles.Add(vehicle.GetPayload());
+            }
+
 #if PEDMIRROR
             var mirrorPayload = GetPayload();
 
@@ -112,7 +121,7 @@ namespace CryV.Net.Server.Players
             existingPlayers.Add(mirrorPayload);
 #endif
 
-            var payload = new BootstrapPayload(_peer.Id, Position, Heading, Model, existingPlayers);
+            var payload = new BootstrapPayload(_peer.Id, Position, Heading, Model, existingPlayers, existingVehicles);
 
             Send(payload, DeliveryMethod.ReliableOrdered);
         }

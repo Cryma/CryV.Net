@@ -18,12 +18,14 @@ namespace CryV.Net.Server.Players
         public INetworkManager NetworkManager { get; }
 
         private readonly IEventHandler _eventHandler;
+        private readonly IVehicleManager _vehicleManager;
 
         private readonly ConcurrentDictionary<int, IPlayer> _players = new ConcurrentDictionary<int, IPlayer>();
 
-        public PlayerManager(IEventHandler eventHandler)
+        public PlayerManager(IEventHandler eventHandler, IVehicleManager vehicleManager)
         {
             _eventHandler = eventHandler;
+            _vehicleManager = vehicleManager;
         }
 
         public void Start()
@@ -33,7 +35,7 @@ namespace CryV.Net.Server.Players
 
         public void AddPlayer(NetPeer peer)
         {
-            var player = new Player(this, _eventHandler, peer);
+            var player = new Player(this, _eventHandler, _vehicleManager, peer);
             _players.TryAdd(peer.Id, player);
 
             _eventHandler.Publish(new PlayerConnectedEvent(player));

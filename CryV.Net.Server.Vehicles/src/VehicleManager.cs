@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Numerics;
@@ -37,6 +38,11 @@ namespace CryV.Net.Server.Vehicles
             _vehicles.TryAdd(id, vehicle);
 
             return vehicle;
+        }
+
+        public ICollection<IVehicle> GetVehicles()
+        {
+            return _vehicles.Values;
         }
 
         private int GetFreeId()
