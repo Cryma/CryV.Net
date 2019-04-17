@@ -8,6 +8,9 @@
         RemovePlayer,
         UpdatePlayer,
         UpdatePointing,
-        StopPointing
+        StopPointing,
+        AddVehicle,
+        RemoveVehicle,
+        UpdateVehicle
     }
 }
