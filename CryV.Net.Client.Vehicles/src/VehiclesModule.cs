@@ -7,7 +7,9 @@ namespace CryV.Net.Client.Vehicles
     {
         protected override void Load(ContainerBuilder builder)
         {
-            
+            builder.RegisterType<VehicleManager>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }
