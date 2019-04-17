@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -6,6 +6,9 @@ using CryV.Net.Helpers;
 using CryV.Net.Native;
 using CryV.Net.Plugins;
 using Microsoft.Win32;
+#if RELEASE
+using Sentry;
+#endif
 
 namespace CryV.Net
 {
