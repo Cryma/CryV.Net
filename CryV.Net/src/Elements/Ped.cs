@@ -236,6 +236,11 @@ namespace CryV.Net.Elements
 
         public Vehicle GetVehiclePedIsIn()
         {
+            if (IsInAnyVehicle() == false)
+            {
+                return new Vehicle(0);
+            }
+
             return new Vehicle(CryVNative.Native_Ped_GetVehiclePedIsIn(CryVNative.Plugin, Handle, false));
         }
 

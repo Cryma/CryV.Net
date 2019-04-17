@@ -31,7 +31,7 @@ namespace CryV.Net.Server.Vehicles
             {
                 await Task.Delay(2000);
 
-                AddVehicle(new Vector3(165.1652f, -1064.867f, 29.19238f), Vector3.Zero, 1274868363);
+                AddVehicle(new Vector3(165.1652f, -1077.867f, 28.433891f), Vector3.Zero, 1274868363);
             });
         }
 

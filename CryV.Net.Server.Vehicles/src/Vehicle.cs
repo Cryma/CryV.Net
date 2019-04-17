@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Interfaces;
@@ -69,6 +70,8 @@ namespace CryV.Net.Server.Vehicles
             var payload = obj.Payload;
 
             ReadPayload(payload);
+
+            Console.WriteLine("New Position: " + (Vector3) obj.Payload.Position);
 
             foreach (var player in _playerManager.GetPlayers())
             {

@@ -2,10 +2,12 @@
 using System.Numerics;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
+using CryV.Net.Elements;
 using CryV.Net.Helpers;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Events.Types;
+using LiteNetLib;
 
 namespace CryV.Net.Client.Vehicles
 {
@@ -32,23 +34,29 @@ namespace CryV.Net.Client.Vehicles
 
         public Vector3 TargetRotation { get; set; }
 
+        public ulong Model { get; set; }
+
         private Elements.Vehicle _vehicle;
 
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
 
+        private readonly INetworkManager _networkManager;
         private readonly IEventHandler _eventHandler;
         private readonly IEntityPool _entityPool;
 
-        public Vehicle(IEventHandler eventHandler, IEntityPool entityPool, VehicleUpdatePayload payload)
+        public Vehicle(INetworkManager networkManager, IEventHandler eventHandler, IEntityPool entityPool, VehicleUpdatePayload payload)
         {
+            _networkManager = networkManager;
             _eventHandler = eventHandler;
             _entityPool = entityPool;
 
             Id = payload.Id;
             TargetPosition = payload.Position;
             TargetRotation = payload.Rotation;
+            Model = payload.Model;
 
-            _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(update => ReadPayload(update.Payload), x => x.Payload.Id == Id));
+            _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(update => ReadPayload(update.Payload),
+                x => x.Payload.Id == Id && LocalPlayer.Character.GetVehiclePedIsIn().Handle != _vehicle.Handle));
 
             ThreadHelper.Run(() =>
             {
@@ -68,11 +76,30 @@ namespace CryV.Net.Client.Vehicles
             TargetPosition = payload.Position;
             TargetRotation = payload.Rotation;
             Velocity = payload.Velocity;
+            Model = payload.Model;
+        }
+
+        public VehicleUpdatePayload GetPayload()
+        {
+            return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, Model);
         }
 
         private void Tick(float deltatime)
         {
-            
+            if (LocalPlayer.Character.GetVehiclePedIsIn().Handle == _vehicle.Handle)
+            {
+                Utility.Log("Sending: " + Position);
+
+                _networkManager.Send(GetPayload(), DeliveryMethod.Unreliable);
+            }
+            else
+            {
+                Utility.Log("Receiving: " + TargetPosition);
+
+                Position = TargetPosition;
+                Rotation = TargetRotation;
+                _vehicle.Velocity = Velocity;
+            }
         }
 
         public void Dispose()
