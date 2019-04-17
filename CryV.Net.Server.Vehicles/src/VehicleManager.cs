@@ -12,15 +12,15 @@ namespace CryV.Net.Server.Vehicles
     public class VehicleManager : IVehicleManager, IStartable
     {
 
+        public INetworkManager NetworkManager { get; }
+
         private readonly IEventHandler _eventHandler;
-        private readonly INetworkManager _networkManager;
 
         private readonly ConcurrentDictionary<int, IVehicle> _vehicles = new ConcurrentDictionary<int, IVehicle>();
 
-        public VehicleManager(IEventHandler eventHandler, INetworkManager networkManager)
+        public VehicleManager(IEventHandler eventHandler)
         {
             _eventHandler = eventHandler;
-            _networkManager = networkManager;
         }
 
         public void Start()

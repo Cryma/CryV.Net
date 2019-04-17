@@ -9,7 +9,8 @@ namespace CryV.Net.Server.Vehicles
         {
             builder.RegisterType<VehicleManager>()
                 .AsImplementedInterfaces()
-                .SingleInstance();
+                .SingleInstance()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
         }
     }
 }
