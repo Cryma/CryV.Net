@@ -94,6 +94,11 @@ namespace CryV.Net.Client.Vehicles
                 return;
             }
 
+            if (_vehicle.GetPedOnSeat(-1).Handle == LocalPlayer.Character.Handle)
+            {
+                return;
+            }
+
             Position = TargetPosition;
             Rotation = TargetRotation;
             _vehicle.Velocity = Velocity;

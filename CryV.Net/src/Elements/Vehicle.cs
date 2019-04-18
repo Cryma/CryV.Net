@@ -16,6 +16,11 @@ namespace CryV.Net.Elements
             CreateVehicle(model, position, rotation);
         }
 
+        public Ped GetPedOnSeat(int seat)
+        {
+            return new Ped(CryVNative.Native_Vehicle_GetPedInVehicleSeat(CryVNative.Plugin, Handle, seat));
+        }
+
         private void CreateVehicle(ulong model, Vector3 position, Vector3 rotation)
         {
             if (IsValid())
