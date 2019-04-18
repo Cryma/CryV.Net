@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Numerics;
 using Autofac;
 using CryV.Net.Client.Common.Helpers;
@@ -22,7 +23,7 @@ namespace CryV.Net.Client.Helpers
             Gameplay.DisableControlAction(0, 199, true);
             Gameplay.DisableControlAction(0, 200, true);
 
-            if (Gameplay.IsDisabledControlJustPressed(0, 200))
+            if (Utility.IsKeyReleased(ConsoleKey.Escape))
             {
                 UserInterface.ActivateFrontendMenu(3123948979, false, -1);
             }
