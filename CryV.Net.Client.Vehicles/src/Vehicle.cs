@@ -40,13 +40,11 @@ namespace CryV.Net.Client.Vehicles
 
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
 
-        private readonly INetworkManager _networkManager;
         private readonly IEventHandler _eventHandler;
         private readonly IEntityPool _entityPool;
 
-        public Vehicle(INetworkManager networkManager, IEventHandler eventHandler, IEntityPool entityPool, VehicleUpdatePayload payload)
+        public Vehicle(IEventHandler eventHandler, IEntityPool entityPool, VehicleUpdatePayload payload)
         {
-            _networkManager = networkManager;
             _eventHandler = eventHandler;
             _entityPool = entityPool;
 
@@ -71,6 +69,11 @@ namespace CryV.Net.Client.Vehicles
             NativeHelper.OnNativeTick += Tick;
         }
 
+        public Elements.Vehicle GetVehicle()
+        {
+            return _vehicle;
+        }
+
         public void ReadPayload(VehicleUpdatePayload payload)
         {
             TargetPosition = payload.Position;
@@ -88,18 +91,12 @@ namespace CryV.Net.Client.Vehicles
         {
             if (LocalPlayer.Character.GetVehiclePedIsIn().Handle == _vehicle.Handle)
             {
-                Utility.Log("Sending: " + Position);
-
-                _networkManager.Send(GetPayload(), DeliveryMethod.Unreliable);
+                return;
             }
-            else
-            {
-                Utility.Log("Receiving: " + TargetPosition);
 
-                Position = TargetPosition;
-                Rotation = TargetRotation;
-                _vehicle.Velocity = Velocity;
-            }
+            Position = TargetPosition;
+            Rotation = TargetRotation;
+            _vehicle.Velocity = Velocity;
         }
 
         public void Dispose()

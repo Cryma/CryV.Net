@@ -1,8 +1,10 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
+using CryV.Net.Helpers;
 
 namespace CryV.Net.Client.EntityPool
 {
@@ -30,7 +32,10 @@ namespace CryV.Net.Client.EntityPool
         {
             foreach (var entity in _entities.Values)
             {
-                entity.Delete();
+                ThreadHelper.Run(() =>
+                {
+                    entity.Delete();
+                });
             }
 
             _entities.Clear();

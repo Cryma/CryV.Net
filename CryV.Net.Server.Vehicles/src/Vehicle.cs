@@ -71,10 +71,24 @@ namespace CryV.Net.Server.Vehicles
 
             ReadPayload(payload);
 
-            Console.WriteLine("New Position: " + (Vector3) obj.Payload.Position);
+            Console.WriteLine($"Receive update from Vehicle {payload.Id} - Pos: {(Vector3) payload.Position}");
 
             foreach (var player in _playerManager.GetPlayers())
             {
+                player.Send(payload, DeliveryMethod.Unreliable);
+
+                payload.Id = 2;
+                payload.Position.X += 6.5f;
+                player.Send(payload, DeliveryMethod.Unreliable);
+
+                payload.Id = 3;
+                payload.Position.X += 6.5f;
+                payload.Position.Z += 3.0f;
+                player.Send(payload, DeliveryMethod.Unreliable);
+
+                payload.Id = 4;
+                payload.Position.X += 6.5f;
+                payload.Position.Z += 6.0f;
                 player.Send(payload, DeliveryMethod.Unreliable);
             }
         }

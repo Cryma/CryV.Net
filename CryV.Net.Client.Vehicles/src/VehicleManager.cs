@@ -12,15 +12,13 @@ namespace CryV.Net.Client.Vehicles
 
         private readonly IEventHandler _eventHandler;
         private readonly IEntityPool _entityPool;
-        private readonly INetworkManager _networkManager;
 
         private readonly ConcurrentDictionary<int, IVehicle> _vehicles = new ConcurrentDictionary<int, IVehicle>();
 
-        public VehicleManager(IEventHandler eventHandler, IEntityPool entityPool, INetworkManager networkManager)
+        public VehicleManager(IEventHandler eventHandler, IEntityPool entityPool)
         {
             _eventHandler = eventHandler;
             _entityPool = entityPool;
-            _networkManager = networkManager;
         }
 
         public void Start()
@@ -56,7 +54,7 @@ namespace CryV.Net.Client.Vehicles
 
         private void AddVehicle(VehicleUpdatePayload payload)
         {
-            var vehicle = new Vehicle(_networkManager, _eventHandler, _entityPool, payload);
+            var vehicle = new Vehicle(_eventHandler, _entityPool, payload);
 
             _vehicles.TryAdd(payload.Id, vehicle);
         }
@@ -69,6 +67,21 @@ namespace CryV.Net.Client.Vehicles
             }
 
             vehicle.Dispose();
+        }
+
+        public IVehicle GetVehicle(Elements.Vehicle vehicle)
+        {
+            foreach (var veh in _vehicles.Values)
+            {
+                if (veh.GetVehicle().Handle != vehicle.Handle)
+                {
+                    continue;
+                }
+
+                return veh;
+            }
+
+            return null;
         }
 
     }

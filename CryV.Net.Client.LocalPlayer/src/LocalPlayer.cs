@@ -36,11 +36,15 @@ namespace CryV.Net.Client.LocalPlayer
 
         private readonly IEventHandler _eventHandler;
         private readonly INetworkManager _networkManager;
+        private readonly IEntityPool _entityPool;
+        private readonly IVehicleManager _vehicleManager;
 
-        public LocalPlayer(IEventHandler eventHandler, INetworkManager networkManager)
+        public LocalPlayer(IEventHandler eventHandler, INetworkManager networkManager, IEntityPool entityPool, IVehicleManager vehicleManager)
         {
             _eventHandler = eventHandler;
             _networkManager = networkManager;
+            _entityPool = entityPool;
+            _vehicleManager = vehicleManager;
         }
 
         public void Start()
@@ -57,6 +61,7 @@ namespace CryV.Net.Client.LocalPlayer
         private void OnLocalPlayerDisconnected(LocalPlayerDisconnectedEvent obj)
         {
             _cancellationTokenSource?.Cancel();
+            _entityPool.Clear();
         }
 
         private void OnBootstrap(NetworkEvent<BootstrapPayload> obj)
@@ -86,36 +91,63 @@ namespace CryV.Net.Client.LocalPlayer
 
                 ThreadHelper.Run(() =>
                 {
-                    var position = Elements.LocalPlayer.Character.Position;
-                    var rotation = Elements.LocalPlayer.Character.Rotation;
-                    var velocity = Elements.LocalPlayer.Character.Velocity;
-                    var aimTarget = Gameplay.GetGameplayCamCoord() + Utility.GetDirection(Gameplay.GetGameplayCamRot());
-                    var model = Elements.LocalPlayer.Model;
-                    var weaponModel = Elements.LocalPlayer.Character.GetCurrentPedWeapon();
-                    var isAiming = Elements.LocalPlayer.Character.GetIsTaskActive(290);
-
-                    // TODO: Better detection if something changed
-                    if ((position - _lastPosition).Length() < 0.05f && (velocity - _lastVelocity).Length() < 0.05f && Math.Abs(rotation.Z - _lastHeading) < 0.05f &&
-                        _lastModel == model && _lastWeapon == weaponModel && _lastAiming == isAiming && (aimTarget - _lastAimTarget).Length() < 0.05f)
-                    {
-                        return;
-                    }
-
-                    _lastPosition = position;
-                    _lastVelocity = velocity;
-                    _lastHeading = rotation.Z;
-                    _lastModel = model;
-                    _lastWeapon = weaponModel;
-                    _lastAiming = isAiming;
-                    _lastAimTarget = aimTarget;
-
-                    var transformPayload = new PlayerUpdatePayload(Id, position, velocity, rotation.Z, aimTarget, Elements.LocalPlayer.Character.Speed(),
-                        model, weaponModel, Elements.LocalPlayer.Character.IsPedJumping(), Elements.LocalPlayer.Character.IsPedClimbing(),
-                        Elements.LocalPlayer.Character.GetIsTaskActive(47), Elements.LocalPlayer.Character.IsPedRagdoll(), isAiming);
-
-                    _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
+                    SyncLocalPlayer();
+                    SyncVehicle();
                 });
             }
+        }
+
+        private void SyncVehicle()
+        {
+            var vehicle = Elements.LocalPlayer.Character.GetVehiclePedIsIn();
+
+            if (vehicle.DoesExist() == false)
+            {
+                return;
+            }
+
+            var veh = _vehicleManager.GetVehicle(vehicle);
+
+            var position = vehicle.Position;
+            var rotation = vehicle.Rotation;
+            var velocity = vehicle.Velocity;
+            var id = veh.Id;
+
+            var transformPayload = new VehicleUpdatePayload(id, position, velocity, rotation, veh.Model);
+
+            _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
+        }
+
+        private void SyncLocalPlayer()
+        {
+            var position = Elements.LocalPlayer.Character.Position;
+            var rotation = Elements.LocalPlayer.Character.Rotation;
+            var velocity = Elements.LocalPlayer.Character.Velocity;
+            var aimTarget = Gameplay.GetGameplayCamCoord() + Utility.GetDirection(Gameplay.GetGameplayCamRot());
+            var model = Elements.LocalPlayer.Model;
+            var weaponModel = Elements.LocalPlayer.Character.GetCurrentPedWeapon();
+            var isAiming = Elements.LocalPlayer.Character.GetIsTaskActive(290);
+
+            // TODO: Better detection if something changed
+            if ((position - _lastPosition).Length() < 0.05f && (velocity - _lastVelocity).Length() < 0.05f && Math.Abs(rotation.Z - _lastHeading) < 0.05f &&
+                _lastModel == model && _lastWeapon == weaponModel && _lastAiming == isAiming && (aimTarget - _lastAimTarget).Length() < 0.05f)
+            {
+                return;
+            }
+
+            _lastPosition = position;
+            _lastVelocity = velocity;
+            _lastHeading = rotation.Z;
+            _lastModel = model;
+            _lastWeapon = weaponModel;
+            _lastAiming = isAiming;
+            _lastAimTarget = aimTarget;
+
+            var transformPayload = new PlayerUpdatePayload(Id, position, velocity, rotation.Z, aimTarget, Elements.LocalPlayer.Character.Speed(),
+                model, weaponModel, Elements.LocalPlayer.Character.IsPedJumping(), Elements.LocalPlayer.Character.IsPedClimbing(),
+                Elements.LocalPlayer.Character.GetIsTaskActive(47), Elements.LocalPlayer.Character.IsPedRagdoll(), isAiming);
+
+            _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
         }
 
     }

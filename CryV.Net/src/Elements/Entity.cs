@@ -21,7 +21,12 @@ namespace CryV.Net.Elements
         public Vector3 Position
         {
             get => StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetEntityCoords(CryVNative.Plugin, Handle, true));
-            set => CryVNative.Native_Entity_SetEntityCoordsNoOffset(CryVNative.Plugin, Handle, value.X, value.Y, value.Z, false, false, true);
+            set
+            {
+                if(GetType() == typeof(Ped))
+                    Utility.Log("SETTING POSITION: " + value);
+                CryVNative.Native_Entity_SetEntityCoordsNoOffset(CryVNative.Plugin, Handle, value.X, value.Y, value.Z, false, false, true);
+            }
         }
 
         public Vector3 Rotation
@@ -103,6 +108,8 @@ namespace CryV.Net.Elements
 
         public void Delete()
         {
+            SetAsMissionEntity();
+
             CryVNative.Native_Entity_DeleteEntity(CryVNative.Plugin, ref _handle);
 
             if (EntityPool.ContainsEntity(Handle))

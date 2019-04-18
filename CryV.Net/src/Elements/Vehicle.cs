@@ -25,7 +25,7 @@ namespace CryV.Net.Elements
 
             Streaming.LoadModel(model);
 
-            Handle = CryVNative.Native_Vehicle_CreateVehicle(CryVNative.Plugin, model, position.X, position.Y, position.Z, rotation.Z, false, true);
+            Handle = CryVNative.Native_Vehicle_CreateVehicle(CryVNative.Plugin, model, position.X, position.Y, position.Z, rotation.Z, false, false);
             EntityPool.AddEntity(this);
 
             Utility.Wait(0);
