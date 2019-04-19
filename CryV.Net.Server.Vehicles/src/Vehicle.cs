@@ -24,8 +24,6 @@ namespace CryV.Net.Server.Vehicles
 
         public bool EngineState { get; set; }
 
-        public float WheelSpeed { get; set; }
-
         public byte CurrentGear { get; set; }
 
         public float CurrentRPM { get; set; }
@@ -65,7 +63,7 @@ namespace CryV.Net.Server.Vehicles
 
         public VehicleUpdatePayload GetPayload()
         {
-            return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, Model, EngineState, WheelSpeed, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration, Brake,
+            return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, Model, EngineState, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration, Brake,
                 SteeringAngle);
         }
 
@@ -76,7 +74,6 @@ namespace CryV.Net.Server.Vehicles
             Rotation = payload.Rotation;
             Model = payload.Model;
             EngineState = payload.EngineState;
-            WheelSpeed = payload.WheelSpeed;
             CurrentGear = payload.CurrentGear;
             CurrentRPM = payload.CurrentRPM;
             Clutch = payload.Clutch;

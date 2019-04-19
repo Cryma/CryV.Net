@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Threading;
 using CryV.Net.Client.Common.Helpers;
@@ -38,8 +38,6 @@ namespace CryV.Net.Client.Vehicles
         public ulong Model { get; set; }
 
         public bool EngineState { get; set; }
-
-        public float WheelSpeed { get; set; }
 
         public byte CurrentGear { get; set; }
 
@@ -103,7 +101,6 @@ namespace CryV.Net.Client.Vehicles
             TargetRotation = payload.Rotation;
             Velocity = payload.Velocity;
             Model = payload.Model;
-            WheelSpeed = payload.WheelSpeed;
             CurrentGear = payload.CurrentGear;
             CurrentRPM = payload.CurrentRPM;
             Clutch = payload.Clutch;
@@ -125,7 +122,7 @@ namespace CryV.Net.Client.Vehicles
 
         public VehicleUpdatePayload GetPayload()
         {
-            return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, Model, EngineState, WheelSpeed, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration,
+            return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, Model, EngineState, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration,
                 Brake, SteeringAngle);
         }
 
@@ -140,7 +137,6 @@ namespace CryV.Net.Client.Vehicles
             Rotation = Vector3.Lerp(Rotation, TargetRotation, deltatime * 3);
             _vehicle.Velocity = Velocity;
 
-            _vehicle.WheelSpeed = WheelSpeed;
             _vehicle.CurrentGear = CurrentGear;
             _vehicle.CurrentRPM = CurrentRPM;
             _vehicle.Clutch = Clutch;

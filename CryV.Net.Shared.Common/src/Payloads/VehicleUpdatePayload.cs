@@ -30,9 +30,6 @@ namespace CryV.Net.Shared.Common.Payloads
         [ProtoMember(6)]
         public bool EngineState { get; set; }
 
-        [ProtoMember(7)]
-        public float WheelSpeed { get; set; }
-
         [ProtoMember(8)]
         public byte CurrentGear { get; set; }
 
@@ -58,7 +55,7 @@ namespace CryV.Net.Shared.Common.Payloads
         {
         }
 
-        public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, ulong model, bool engineState, float wheelSpeed, byte currentGear,
+        public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, ulong model, bool engineState, byte currentGear,
             float currentRPM, float clutch, float turbo, float acceleration, float brake, float steeringAngle)
         {
             Id = id;
@@ -67,7 +64,6 @@ namespace CryV.Net.Shared.Common.Payloads
             Rotation = rotation;
             Model = model;
             EngineState = engineState;
-            WheelSpeed = wheelSpeed;
             CurrentGear = currentGear;
             CurrentRPM = currentRPM;
             Clutch = clutch;
