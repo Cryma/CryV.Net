@@ -51,7 +51,7 @@ namespace CryV.Net.Client.Vehicles
 
         public float Brake { get; set; }
 
-        public float SteeringAngle { get; set; }
+        public float TargetSteeringAngle { get; set; }
 
         private Elements.Vehicle _vehicle;
 
@@ -107,7 +107,7 @@ namespace CryV.Net.Client.Vehicles
             Turbo = payload.Turbo;
             Acceleration = payload.Acceleration;
             Brake = payload.Brake;
-            SteeringAngle = payload.SteeringAngle;
+            TargetSteeringAngle = payload.SteeringAngle;
 
             if (EngineState != payload.EngineState)
             {
@@ -123,7 +123,7 @@ namespace CryV.Net.Client.Vehicles
         public VehicleUpdatePayload GetPayload()
         {
             return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, Model, EngineState, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration,
-                Brake, SteeringAngle);
+                Brake, TargetSteeringAngle);
         }
 
         private void Tick(float deltatime)
@@ -144,7 +144,7 @@ namespace CryV.Net.Client.Vehicles
             _vehicle.Turbo = Turbo;
             _vehicle.Acceleration = Acceleration;
             _vehicle.Brake = Brake;
-            _vehicle.SteeringAngle = SteeringAngle;
+            _vehicle.SteeringAngle = Interpolation.Lerp(_vehicle.SteeringAngle, TargetSteeringAngle, deltatime * 5);
         }
 
         public void Dispose()
