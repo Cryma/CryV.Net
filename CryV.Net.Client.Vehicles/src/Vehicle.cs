@@ -92,11 +92,6 @@ namespace CryV.Net.Client.Vehicles
 
         public void ReadPayload(VehicleUpdatePayload payload)
         {
-            if (Id == LocalPlayerHelper.VehicleId)
-            {
-                return;
-            }
-
             TargetPosition = payload.Position;
             TargetRotation = payload.Rotation;
             Velocity = payload.Velocity;
@@ -108,6 +103,11 @@ namespace CryV.Net.Client.Vehicles
             Acceleration = payload.Acceleration;
             Brake = payload.Brake;
             TargetSteeringAngle = payload.SteeringAngle;
+
+            if (Id == LocalPlayerHelper.VehicleId)
+            {
+                return;
+            }
 
             if (EngineState != payload.EngineState)
             {
