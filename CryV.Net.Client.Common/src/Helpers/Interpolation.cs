@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 
 namespace CryV.Net.Client.Common.Helpers
 {
@@ -36,6 +37,11 @@ namespace CryV.Net.Client.Common.Helpers
             amount = Math.Clamp(amount, 0, 1);
 
             return start + (end - start) * amount;
+        }
+
+        public static Vector3 LerpRotation(Vector3 start, Vector3 end, float amount)
+        {
+            return new Vector3(LerpDegrees(start.X, end.X, amount), LerpDegrees(start.Y, end.Y, amount), LerpDegrees(start.Z, end.Z, amount));
         }
 
     }

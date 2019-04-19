@@ -133,8 +133,7 @@ namespace CryV.Net.Client.Vehicles
                 return;
             }
 
-            //Position = Vector3.Lerp(Position, TargetPosition, deltatime * 3);
-            Rotation = Vector3.Lerp(Rotation, TargetRotation, deltatime * 3);
+            Rotation = Interpolation.LerpRotation(Rotation, TargetRotation, deltatime * 5);
 
             var positionDifference = TargetPosition - Position;
             _vehicle.Velocity = Velocity + positionDifference;
