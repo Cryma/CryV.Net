@@ -199,6 +199,11 @@ namespace CryV.Net.Elements
             CryVNative.Native_Brain_TaskGoToEntityWhileAimingAtEntity(CryVNative.Plugin, Handle, entityToWalkTo, entityToAimAt, speed, shootAtEntity, p5, p6, p7, p8, firingPattern);
         }
 
+        public void TaskEnterVehicle(Vehicle vehicle, int timeout, int seat, float speed, int flag, ulong p6 = 0)
+        {
+            CryVNative.Native_Brain_TaskEnterVehicle(CryVNative.Plugin, Handle, vehicle.Handle, timeout, seat, speed, flag, p6);
+        }
+
         public bool IsPedWalking()
         {
             return CryVNative.Native_Brain_IsPedWalking(CryVNative.Plugin, Handle);

@@ -76,6 +76,7 @@ namespace CryV.Net.Client.Players
         private bool _wasJumping;
         private bool _wasClimbing;
         private bool _wasRagdoll;
+        private bool _wasEnteringVehicle;
 
         private Prop _aimProp;
         private Prop _followProp;
@@ -146,6 +147,10 @@ namespace CryV.Net.Client.Players
             IsAiming = (payload.PedData & (int) PedData.IsAiming) > 0;
 
             IsEnteringVehicle = (payload.PedData & (int) PedData.IsEnteringVehicle) > 0;
+            if (IsEnteringVehicle == false)
+            {
+                _wasEnteringVehicle = false;
+            }
 
             IsInVehicle = (payload.PedData & (int) PedData.IsInVehicle) > 0;
 
@@ -185,6 +190,11 @@ namespace CryV.Net.Client.Players
                 }
             }
 
+            if (_wasEnteringVehicle || IsInVehicle)
+            {
+                return;
+            }
+
             UpdatePosition(deltaTime);
             UpdateHeading(deltaTime);
 
@@ -211,6 +221,17 @@ namespace CryV.Net.Client.Players
                 _ped.TaskClimb();
 
                 _wasClimbing = true;
+            }
+
+            if (IsEnteringVehicle && _wasEnteringVehicle == false)
+            {
+                _ped.ClearPedTasks();
+                _ped.ClearPedSecondaryTask();
+                _ped.ClearPedTasksImmediately();
+
+                _ped.TaskEnterVehicle(Vehicle.GetVehicle(), -1, -1, Speed, 0);
+
+                _wasEnteringVehicle = true;
             }
         }
 

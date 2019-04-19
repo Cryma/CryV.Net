@@ -135,7 +135,7 @@ namespace CryV.Net.Server.Players
             var mirrorPayload = GetPayload();
 
             mirrorPayload.Id = 1;
-            mirrorPayload.Position.X += 2.0f;
+            mirrorPayload.Position.X -= 6.5f;
 
             existingPlayers.Add(mirrorPayload);
 #endif
@@ -170,7 +170,12 @@ namespace CryV.Net.Server.Players
                 {
 #if PEDMIRROR
                     payload.Id = 1;
-                    payload.Position.X += 2.0f;
+                    payload.Position.X -= 6.5f;
+
+                    if (payload.VehicleId != -1)
+                    {
+                        payload.VehicleId = 1;
+                    }
 
                     player.Send(payload, DeliveryMethod.Unreliable);
 #endif
