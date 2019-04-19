@@ -112,7 +112,17 @@ namespace CryV.Net.Client.LocalPlayer
             var rotation = vehicle.Rotation;
             var engineState = vehicle.GetIsVehicleEngineRunning();
 
-            var transformPayload = new VehicleUpdatePayload(id, position, velocity, rotation, 1274868363, engineState); // TODO: fix model
+            var wheelSpeed = vehicle.WheelSpeed;
+            var currentGear = vehicle.CurrentGear;
+            var currentRPM = vehicle.CurrentRPM;
+            var clutch = vehicle.Clutch;
+            var turbo = vehicle.Turbo;
+            var acceleration = vehicle.Acceleration;
+            var brake = vehicle.Brake;
+            var steeringAngle = vehicle.SteeringAngle;
+
+            var transformPayload = new VehicleUpdatePayload(id, position, velocity, rotation, 1274868363, engineState, wheelSpeed, currentGear, currentRPM, clutch,
+                turbo, acceleration, brake, steeringAngle); // TODO: fix model
 
             _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
         }

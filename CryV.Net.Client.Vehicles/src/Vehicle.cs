@@ -39,6 +39,22 @@ namespace CryV.Net.Client.Vehicles
 
         public bool EngineState { get; set; }
 
+        public float WheelSpeed { get; set; }
+
+        public byte CurrentGear { get; set; }
+
+        public float CurrentRPM { get; set; }
+
+        public float Clutch { get; set; }
+
+        public float Turbo { get; set; }
+
+        public float Acceleration { get; set; }
+
+        public float Brake { get; set; }
+
+        public float SteeringAngle { get; set; }
+
         private Elements.Vehicle _vehicle;
 
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
@@ -87,12 +103,20 @@ namespace CryV.Net.Client.Vehicles
             TargetRotation = payload.Rotation;
             Velocity = payload.Velocity;
             Model = payload.Model;
+            WheelSpeed = payload.WheelSpeed;
+            CurrentGear = payload.CurrentGear;
+            CurrentRPM = payload.CurrentRPM;
+            Clutch = payload.Clutch;
+            Turbo = payload.Turbo;
+            Acceleration = payload.Acceleration;
+            Brake = payload.Brake;
+            SteeringAngle = payload.SteeringAngle;
 
             if (EngineState != payload.EngineState)
             {
                 ThreadHelper.Run(() =>
                 {
-                    _vehicle.SetVehicleEngineOn(payload.EngineState, false);
+                    _vehicle.SetVehicleEngineOn(payload.EngineState, true);
 
                     EngineState = payload.EngineState;
                 });
@@ -101,7 +125,8 @@ namespace CryV.Net.Client.Vehicles
 
         public VehicleUpdatePayload GetPayload()
         {
-            return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, Model, EngineState);
+            return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, Model, EngineState, WheelSpeed, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration,
+                Brake, SteeringAngle);
         }
 
         private void Tick(float deltatime)
@@ -114,6 +139,15 @@ namespace CryV.Net.Client.Vehicles
             Position = TargetPosition;
             Rotation = TargetRotation;
             _vehicle.Velocity = Velocity;
+
+            _vehicle.WheelSpeed = WheelSpeed;
+            _vehicle.CurrentGear = CurrentGear;
+            _vehicle.CurrentRPM = CurrentRPM;
+            _vehicle.Clutch = Clutch;
+            _vehicle.Turbo = Turbo;
+            _vehicle.Acceleration = Acceleration;
+            _vehicle.Brake = Brake;
+            _vehicle.SteeringAngle = SteeringAngle;
         }
 
         public void Dispose()

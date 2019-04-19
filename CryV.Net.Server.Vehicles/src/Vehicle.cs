@@ -24,6 +24,23 @@ namespace CryV.Net.Server.Vehicles
 
         public bool EngineState { get; set; }
 
+        public float WheelSpeed { get; set; }
+
+        public byte CurrentGear { get; set; }
+
+        public float CurrentRPM { get; set; }
+
+        public float Clutch { get; set; }
+
+        public float Turbo { get; set; }
+
+        public float Acceleration { get; set; }
+
+        public float Brake { get; set; }
+
+        public float SteeringAngle { get; set; }
+
+
         private readonly List<ISubscription> _subscriptions = new List<ISubscription>();
 
         private readonly IVehicleManager _vehicleManager;
@@ -48,7 +65,8 @@ namespace CryV.Net.Server.Vehicles
 
         public VehicleUpdatePayload GetPayload()
         {
-            return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, Model, EngineState);
+            return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, Model, EngineState, WheelSpeed, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration, Brake,
+                SteeringAngle);
         }
 
         public void ReadPayload(VehicleUpdatePayload payload)
@@ -58,6 +76,14 @@ namespace CryV.Net.Server.Vehicles
             Rotation = payload.Rotation;
             Model = payload.Model;
             EngineState = payload.EngineState;
+            WheelSpeed = payload.WheelSpeed;
+            CurrentGear = payload.CurrentGear;
+            CurrentRPM = payload.CurrentRPM;
+            Clutch = payload.Clutch;
+            Turbo = payload.Turbo;
+            Acceleration = payload.Acceleration;
+            Brake = payload.Brake;
+            SteeringAngle = payload.SteeringAngle;
         }
 
         private void PropagateNewVehicle()

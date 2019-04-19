@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using CryV.Net.Shared.Common.Enums;
 using CryV.Net.Shared.Common.Payloads.Partials;
 using ProtoBuf;
@@ -29,11 +30,36 @@ namespace CryV.Net.Shared.Common.Payloads
         [ProtoMember(6)]
         public bool EngineState { get; set; }
 
+        [ProtoMember(7)]
+        public float WheelSpeed { get; set; }
+
+        [ProtoMember(8)]
+        public byte CurrentGear { get; set; }
+
+        [ProtoMember(9)]
+        public float CurrentRPM { get; set; }
+
+        [ProtoMember(10)]
+        public float Clutch { get; set; }
+
+        [ProtoMember(11)]
+        public float Turbo { get; set; }
+
+        [ProtoMember(12)]
+        public float Acceleration { get; set; }
+
+        [ProtoMember(13)]
+        public float Brake { get; set; }
+
+        [ProtoMember(14)]
+        public float SteeringAngle { get; set; }
+
         public VehicleUpdatePayload()
         {
         }
 
-        public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, ulong model, bool engineState)
+        public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, ulong model, bool engineState, float wheelSpeed, byte currentGear,
+            float currentRPM, float clutch, float turbo, float acceleration, float brake, float steeringAngle)
         {
             Id = id;
             Position = position;
@@ -41,6 +67,14 @@ namespace CryV.Net.Shared.Common.Payloads
             Rotation = rotation;
             Model = model;
             EngineState = engineState;
+            WheelSpeed = wheelSpeed;
+            CurrentGear = currentGear;
+            CurrentRPM = currentRPM;
+            Clutch = clutch;
+            Turbo = turbo;
+            Acceleration = acceleration;
+            Brake = brake;
+            SteeringAngle = steeringAngle;
         }
 
     }
