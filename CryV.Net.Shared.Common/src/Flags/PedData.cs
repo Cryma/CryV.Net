@@ -12,6 +12,7 @@ namespace CryV.Net.Shared.Common.Flags
         IsRagdoll = 1 << 4,
         IsAiming = 1 << 5,
         IsEnteringVehicle = 1 << 6,
-        IsInVehicle = 1 << 7
+        IsInVehicle = 1 << 7,
+        IsLeavingVehicle = 1 << 8
     }
 }

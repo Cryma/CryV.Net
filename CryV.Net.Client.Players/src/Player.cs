@@ -65,6 +65,8 @@ namespace CryV.Net.Client.Players
 
         public bool IsInVehicle { get; set; }
 
+        public bool IsLeavingVehicle { get; set; }
+
         public IVehicle Vehicle { get; set; }
 
         public int Seat { get; set; }
@@ -79,6 +81,7 @@ namespace CryV.Net.Client.Players
         private bool _wasClimbing;
         private bool _wasRagdoll;
         private bool _wasEnteringVehicle;
+        private bool _wasLeavingVehicle;
 
         private Prop _aimProp;
         private Prop _followProp;
@@ -162,6 +165,12 @@ namespace CryV.Net.Client.Players
                 Vehicle = _vehicleManager.GetVehicle(payload.VehicleId);
             }
 
+            IsLeavingVehicle = (payload.PedData & (int) PedData.IsLeavingVehicle) > 0;
+            if (IsLeavingVehicle == false)
+            {
+                _wasLeavingVehicle = false;
+            }
+
             // TODO: Optimize
             ThreadHelper.Run(() =>
             {
@@ -194,6 +203,21 @@ namespace CryV.Net.Client.Players
             }
 
             if (_wasEnteringVehicle || IsInVehicle)
+            {
+                return;
+            }
+
+            if (IsLeavingVehicle && _wasLeavingVehicle == false)
+            {
+                _ped.ClearPedTasks();
+                _ped.ClearPedSecondaryTask();
+
+                _ped.TaskLeaveVehicle(Vehicle.GetVehicle(), 0);
+
+                _wasLeavingVehicle = true;
+            }
+
+            if (_wasLeavingVehicle)
             {
                 return;
             }
