@@ -323,6 +323,11 @@ namespace CryV.Net.Elements
             return new Vehicle(CryVNative.Native_Ped_GetVehiclePedIsTryingToEnter(CryVNative.Plugin, Handle));
         }
 
+        public int GetSeatPedIsTryingToEnter()
+        {
+            return CryVNative.Native_Ped_GetSeatPedIsTryingToEnter(CryVNative.Plugin, Handle);
+        }
+
         public void _0xD5BB4025AE449A4E(string p1, float p2)
         {
             using (var converter = new StringConverter())

@@ -150,6 +150,7 @@ namespace CryV.Net.Client.LocalPlayer
             }
 
             var currentVehicle = Elements.LocalPlayer.Character.GetVehiclePedIsIn();
+            var seat = Elements.LocalPlayer.Character.GetSeatPedIsTryingToEnter();
 
             var success = currentVehicle.DoesExist();
             if (success)
@@ -187,7 +188,7 @@ namespace CryV.Net.Client.LocalPlayer
 
             var transformPayload = new PlayerUpdatePayload(Id, position, velocity, rotation.Z, aimTarget, Elements.LocalPlayer.Character.Speed(),
                 model, weaponModel, Elements.LocalPlayer.Character.IsPedJumping(), Elements.LocalPlayer.Character.IsPedClimbing(),
-                Elements.LocalPlayer.Character.GetIsTaskActive(47), Elements.LocalPlayer.Character.IsPedRagdoll(), isAiming, isEnteringVehicle, isInVehicle, vehicleId);
+                Elements.LocalPlayer.Character.GetIsTaskActive(47), Elements.LocalPlayer.Character.IsPedRagdoll(), isAiming, isEnteringVehicle, isInVehicle, vehicleId, seat);
 
             _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
         }

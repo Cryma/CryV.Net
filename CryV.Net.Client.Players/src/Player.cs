@@ -67,6 +67,8 @@ namespace CryV.Net.Client.Players
 
         public IVehicle Vehicle { get; set; }
 
+        public int Seat { get; set; }
+
         private Ped _ped;
 
         private static float _interpolationFactor = 3.0f;
@@ -127,6 +129,7 @@ namespace CryV.Net.Client.Players
             Velocity = payload.Velocity;
             Speed = payload.Speed;
             AimTarget = payload.AimTarget;
+            Seat = payload.Seat;
 
             IsJumping = (payload.PedData & (int) PedData.IsJumping) > 0;
             if (IsJumping == false)
@@ -229,7 +232,7 @@ namespace CryV.Net.Client.Players
                 _ped.ClearPedSecondaryTask();
                 _ped.ClearPedTasksImmediately();
 
-                _ped.TaskEnterVehicle(Vehicle.GetVehicle(), -1, -1, Speed, 0);
+                _ped.TaskEnterVehicle(Vehicle.GetVehicle(), -1, Seat, Speed, 0);
 
                 _wasEnteringVehicle = true;
             }
