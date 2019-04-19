@@ -77,9 +77,6 @@ namespace CryV.Net.Client.Players
 
         private float _lastRange;
         private bool _wasNegative;
-        private bool _wasJumping;
-        private bool _wasClimbing;
-        private bool _wasRagdoll;
 
         private Prop _aimProp;
         private Prop _followProp;
@@ -133,16 +130,8 @@ namespace CryV.Net.Client.Players
             Seat = payload.Seat;
 
             IsJumping = (payload.PedData & (int) PedData.IsJumping) > 0;
-            if (IsJumping == false)
-            {
-                _wasJumping = false;
-            }
 
             IsClimbing = (payload.PedData & (int) PedData.IsClimbing) > 0;
-            if (IsClimbing == false)
-            {
-                _wasClimbing = false;
-            }
 
             IsClimbingLadder = (payload.PedData & (int) PedData.IsClimbingLadder) > 0;
 
@@ -202,19 +191,15 @@ namespace CryV.Net.Client.Players
 
             UpdateRagdoll();
 
-            if (IsJumping && _wasJumping == false)
+            ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_JUMPING", IsJumping, () =>
             {
                 _ped.TaskJump();
+            });
 
-                _wasJumping = true;
-            }
-
-            if (IsClimbing && _wasClimbing == false)
+            ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_CLIMBING", IsClimbing, () =>
             {
                 _ped.TaskClimb();
-
-                _wasClimbing = true;
-            }
+            });
         }
 
         private void UpdatePosition(float deltaTime)
@@ -232,22 +217,16 @@ namespace CryV.Net.Client.Players
 
         private void UpdateRagdoll()
         {
-            if (IsRagdoll && _wasRagdoll == false)
+            ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_RAGDOLL", IsRagdoll, () =>
             {
                 _ped.ClearPedTasksImmediately();
                 _ped.SetPedCanRagdoll(true);
 
                 _ped.SetPedToRagdoll(-1, -1, 0, false, false, false);
-
-                _wasRagdoll = true;
-            }
-
-            if (IsRagdoll == false && (_wasRagdoll || _ped.IsPedRagdoll()))
+            }, () =>
             {
                 _ped.ClearPedTasks();
-
-                _wasRagdoll = false;
-            }
+            });
         }
 
         private void UpdateMovementAnimation()
