@@ -41,6 +41,10 @@ namespace CryV.Net.Server.Players
 
         public bool IsAiming { get; set; }
 
+        public bool IsEnteringVehicle { get; set; }
+
+        public bool IsInVehicle { get; set; }
+
         private readonly List<ISubscription> _subscriptions = new List<ISubscription>();
 
         private readonly NetPeer _peer;
@@ -76,7 +80,7 @@ namespace CryV.Net.Server.Players
         public PlayerUpdatePayload GetPayload()
         {
             return new PlayerUpdatePayload(Id, Position, Velocity, Heading, AimTarget, Speed, Model, WeaponModel, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll,
-                IsAiming);
+                IsAiming, IsEnteringVehicle, IsInVehicle);
         }
 
         public void ReadPayload(PlayerUpdatePayload payload)
@@ -94,6 +98,8 @@ namespace CryV.Net.Server.Players
             IsClimbingLadder = (payload.PedData & (int) PedData.IsClimbingLadder) > 0;
             IsRagdoll = (payload.PedData & (int) PedData.IsRagdoll) > 0;
             IsAiming = (payload.PedData & (int) PedData.IsAiming) > 0;
+            IsEnteringVehicle = (payload.PedData & (int) PedData.IsEnteringVehicle) > 0;
+            IsInVehicle = (payload.PedData & (int) PedData.IsInVehicle) > 0;
         }
 
         private void BootstrapPlayer()

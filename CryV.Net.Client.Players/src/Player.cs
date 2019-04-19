@@ -61,6 +61,10 @@ namespace CryV.Net.Client.Players
 
         public bool IsAiming { get; set; }
 
+        public bool IsEnteringVehicle { get; set; }
+
+        public bool IsInVehicle { get; set; }
+
         private Ped _ped;
 
         private static float _interpolationFactor = 3.0f;
@@ -136,6 +140,10 @@ namespace CryV.Net.Client.Players
             IsRagdoll = (payload.PedData & (int) PedData.IsRagdoll) > 0;
 
             IsAiming = (payload.PedData & (int) PedData.IsAiming) > 0;
+
+            IsEnteringVehicle = (payload.PedData & (int) PedData.IsEnteringVehicle) > 0;
+
+            IsInVehicle = (payload.PedData & (int) PedData.IsInVehicle) > 0;
 
             // TODO: Optimize
             ThreadHelper.Run(() =>

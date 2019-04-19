@@ -43,7 +43,7 @@ namespace CryV.Net.Shared.Common.Payloads
         }
 
         public PlayerUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, Vector3 aimTarget, int speed, ulong model, ulong weaponModel,
-            bool isJumping, bool isClimbing, bool isClimbingLadder, bool isRagdoll, bool isAiming)
+            bool isJumping, bool isClimbing, bool isClimbingLadder, bool isRagdoll, bool isAiming, bool isEnteringVehicle, bool isInVehicle)
         {
             Id = id;
             Position = position;
@@ -77,6 +77,16 @@ namespace CryV.Net.Shared.Common.Payloads
             if (isAiming)
             {
                 PedData |= (int) Flags.PedData.IsAiming;
+            }
+
+            if (isEnteringVehicle)
+            {
+                PedData |= (int) Flags.PedData.IsEnteringVehicle;
+            }
+
+            if (isInVehicle)
+            {
+                PedData |= (int) Flags.PedData.IsInVehicle;
             }
         }
 
