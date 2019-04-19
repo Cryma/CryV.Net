@@ -115,7 +115,7 @@ namespace CryV.Net.Client.LocalPlayer
             var steeringAngle = vehicle.SteeringAngle;
 
             var transformPayload = new VehicleUpdatePayload(id, position, velocity, rotation, 1274868363, engineState, currentGear, currentRPM, clutch,
-                turbo, acceleration, brake, steeringAngle); // TODO: fix model
+                turbo, acceleration, brake, steeringAngle, Elements.LocalPlayer.IsPlayerPressingHorn()); // TODO: fix model
 
             if (_lastVehiclePayload != null && transformPayload.IsDifferent(_lastVehiclePayload) == false)
             {

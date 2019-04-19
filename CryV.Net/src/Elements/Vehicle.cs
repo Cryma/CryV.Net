@@ -80,6 +80,11 @@ namespace CryV.Net.Elements
             return new Ped(CryVNative.Native_Vehicle_GetPedInVehicleSeat(CryVNative.Plugin, Handle, seat));
         }
 
+        public void StartVehicleHorn(int duration)
+        {
+            CryVNative.Native_Vehicle_StartVehicleHorn(CryVNative.Plugin, Handle, duration, Utility.Joaat("HELDDOWN"), false);
+        }
+
         private void CreateVehicle(ulong model, Vector3 position, Vector3 rotation)
         {
             if (IsValid())

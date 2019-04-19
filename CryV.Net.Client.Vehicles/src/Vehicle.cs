@@ -5,6 +5,7 @@ using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
 using CryV.Net.Helpers;
+using CryV.Net.Shared.Common.Flags;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Events.Types;
@@ -52,6 +53,8 @@ namespace CryV.Net.Client.Vehicles
         public float Brake { get; set; }
 
         public float TargetSteeringAngle { get; set; }
+
+        public bool IsHornActive { get; set; }
 
         private Elements.Vehicle _vehicle;
 
@@ -104,6 +107,8 @@ namespace CryV.Net.Client.Vehicles
             Brake = payload.Brake;
             TargetSteeringAngle = payload.SteeringAngle;
 
+            IsHornActive = (payload.VehicleData & (int) VehicleData.IsHornActive) > 0;
+
             if (Id == LocalPlayerHelper.VehicleId)
             {
                 return;
@@ -123,7 +128,7 @@ namespace CryV.Net.Client.Vehicles
         public VehicleUpdatePayload GetPayload()
         {
             return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, Model, EngineState, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration,
-                Brake, TargetSteeringAngle);
+                Brake, TargetSteeringAngle, IsHornActive);
         }
 
         private void Tick(float deltatime)
@@ -145,6 +150,14 @@ namespace CryV.Net.Client.Vehicles
             _vehicle.Acceleration = Acceleration;
             _vehicle.Brake = Brake;
             _vehicle.SteeringAngle = Interpolation.Lerp(_vehicle.SteeringAngle, TargetSteeringAngle, deltatime * 5);
+
+            ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_HORN", IsHornActive, () =>
+            {
+                _vehicle.StartVehicleHorn(9999);
+            }, () =>
+            {
+                _vehicle.StartVehicleHorn(1);
+            });
         }
 
         public void Dispose()

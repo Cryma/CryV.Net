@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using CryV.Net.Server.Common.Interfaces;
+using CryV.Net.Shared.Common.Flags;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Events.Types;
@@ -38,6 +39,8 @@ namespace CryV.Net.Server.Vehicles
 
         public float SteeringAngle { get; set; }
 
+        public bool IsHornActive { get; set; }
+
 
         private readonly List<ISubscription> _subscriptions = new List<ISubscription>();
 
@@ -64,7 +67,7 @@ namespace CryV.Net.Server.Vehicles
         public VehicleUpdatePayload GetPayload()
         {
             return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, Model, EngineState, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration, Brake,
-                SteeringAngle);
+                SteeringAngle, IsHornActive);
         }
 
         public void ReadPayload(VehicleUpdatePayload payload)
@@ -81,6 +84,8 @@ namespace CryV.Net.Server.Vehicles
             Acceleration = payload.Acceleration;
             Brake = payload.Brake;
             SteeringAngle = payload.SteeringAngle;
+
+            IsHornActive = (payload.VehicleData & (int) VehicleData.IsHornActive) > 0;
         }
 
         private void PropagateNewVehicle()

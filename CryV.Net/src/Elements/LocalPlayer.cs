@@ -63,6 +63,11 @@ namespace CryV.Net.Elements
             CryVNative.Native_Player_SetMaxWantedLevel(CryVNative.Plugin, maxWantedLevel);
         }
 
+        public static bool IsPlayerPressingHorn()
+        {
+            return CryVNative.Native_Player_IsPlayerPressingHorn(CryVNative.Plugin, PlayerId());
+        }
+
         private static void SetModel(ulong modelHash)
         {
             Streaming.LoadModel(modelHash);
