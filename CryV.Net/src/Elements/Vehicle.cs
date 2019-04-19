@@ -94,7 +94,20 @@ namespace CryV.Net.Elements
         {
             CryVNative.Native_Vehicle_SetVehicleBurnout(CryVNative.Plugin, Handle, toggle);
         }
-        
+
+        public void GetVehicleColours(out int primary, out int secondary)
+        {
+            primary = 0;
+            secondary = 0;
+
+            CryVNative.Native_Vehicle_GetVehicleColours(CryVNative.Plugin, Handle, ref primary, ref secondary);
+        }
+
+        public void SetVehicleColours(int primary, int secondary)
+        {
+            CryVNative.Native_Vehicle_SetVehicleColours(CryVNative.Plugin, Handle, primary, secondary);
+        }
+
         private void CreateVehicle(ulong model, Vector3 position, Vector3 rotation)
         {
             if (IsValid())

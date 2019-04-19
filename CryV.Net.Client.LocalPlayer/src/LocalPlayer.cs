@@ -113,14 +113,18 @@ namespace CryV.Net.Client.LocalPlayer
             var acceleration = vehicle.Acceleration;
             var brake = vehicle.Brake;
             var steeringAngle = vehicle.SteeringAngle;
+            vehicle.GetVehicleColours(out var colorPrimary, out var colorSecondary);
 
             var transformPayload = new VehicleUpdatePayload(id, position, velocity, rotation, 1274868363, engineState, currentGear, currentRPM, clutch,
-                turbo, acceleration, brake, steeringAngle, Elements.LocalPlayer.IsPlayerPressingHorn(), vehicle.IsVehicleInBurnout()); // TODO: fix model
+                turbo, acceleration, brake, steeringAngle, colorPrimary, colorSecondary, Elements.LocalPlayer.IsPlayerPressingHorn(),
+                vehicle.IsVehicleInBurnout()); // TODO: fix model
 
             if (_lastVehiclePayload != null && transformPayload.IsDifferent(_lastVehiclePayload) == false)
             {
                 return;
             }
+
+            Utility.Log($"Sending Primary: {colorPrimary} - Secondary: {colorSecondary}");
 
             _lastVehiclePayload = transformPayload;
 

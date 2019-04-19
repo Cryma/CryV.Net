@@ -54,6 +54,10 @@ namespace CryV.Net.Client.Vehicles
 
         public float TargetSteeringAngle { get; set; }
 
+        public int ColorPrimary { get; set; }
+
+        public int ColorSecondary { get; set; }
+        
         public bool IsHornActive { get; set; }
 
         public bool IsBurnout { get; set; }
@@ -83,6 +87,8 @@ namespace CryV.Net.Client.Vehicles
                 {
                     Velocity = payload.Velocity
                 };
+
+                _vehicle.SetVehicleColours(payload.ColorPrimary, payload.ColorSecondary);
 
                 _entityPool.AddEntity(_vehicle);
             });
@@ -126,12 +132,25 @@ namespace CryV.Net.Client.Vehicles
                     EngineState = payload.EngineState;
                 });
             }
+
+            Utility.Log($"Primary: {ColorPrimary} - Secondary: {ColorSecondary}");
+
+            if (ColorPrimary != payload.ColorPrimary || ColorSecondary != payload.ColorSecondary)
+            {
+                ThreadHelper.Run(() =>
+                {
+                    _vehicle.SetVehicleColours(payload.ColorPrimary, payload.ColorSecondary);
+
+                    ColorPrimary = payload.ColorPrimary;
+                    ColorSecondary = payload.ColorSecondary;
+                });
+            }
         }
 
         public VehicleUpdatePayload GetPayload()
         {
             return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, Model, EngineState, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration,
-                Brake, TargetSteeringAngle, IsHornActive, IsBurnout);
+                Brake, TargetSteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout);
         }
 
         private void Tick(float deltatime)

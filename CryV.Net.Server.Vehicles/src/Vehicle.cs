@@ -39,6 +39,10 @@ namespace CryV.Net.Server.Vehicles
 
         public float SteeringAngle { get; set; }
 
+        public int ColorPrimary { get; set; } = 112;
+
+        public int ColorSecondary { get; set; } = 112;
+
         public bool IsHornActive { get; set; }
 
         public bool IsBurnout { get; set; }
@@ -69,7 +73,7 @@ namespace CryV.Net.Server.Vehicles
         public VehicleUpdatePayload GetPayload()
         {
             return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, Model, EngineState, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration, Brake,
-                SteeringAngle, IsHornActive, IsBurnout);
+                SteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout);
         }
 
         public void ReadPayload(VehicleUpdatePayload payload)
@@ -86,6 +90,8 @@ namespace CryV.Net.Server.Vehicles
             Acceleration = payload.Acceleration;
             Brake = payload.Brake;
             SteeringAngle = payload.SteeringAngle;
+            ColorPrimary = payload.ColorPrimary;
+            ColorSecondary = payload.ColorSecondary;
 
             IsHornActive = (payload.VehicleData & (int) VehicleData.IsHornActive) > 0;
             IsBurnout = (payload.VehicleData & (int) VehicleData.IsBurnout) > 0;

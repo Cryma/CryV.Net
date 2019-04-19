@@ -52,6 +52,12 @@ namespace CryV.Net.Shared.Common.Payloads
         public float SteeringAngle { get; set; }
 
         [ProtoMember(15)]
+        public int ColorPrimary { get; set; }
+
+        [ProtoMember(16)]
+        public int ColorSecondary { get; set; }
+
+        [ProtoMember(17)]
         public int VehicleData { get; set; }
 
         public VehicleUpdatePayload()
@@ -59,7 +65,8 @@ namespace CryV.Net.Shared.Common.Payloads
         }
 
         public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, ulong model, bool engineState, byte currentGear,
-            float currentRPM, float clutch, float turbo, float acceleration, float brake, float steeringAngle, bool isHornActive, bool isBurnout)
+            float currentRPM, float clutch, float turbo, float acceleration, float brake, float steeringAngle, int colorPrimary, int colorSecondary,
+            bool isHornActive, bool isBurnout)
         {
             Id = id;
             Position = position;
@@ -74,6 +81,8 @@ namespace CryV.Net.Shared.Common.Payloads
             Acceleration = acceleration;
             Brake = brake;
             SteeringAngle = steeringAngle;
+            ColorPrimary = colorPrimary;
+            ColorSecondary = colorSecondary;
 
             if (isHornActive)
             {
@@ -94,6 +103,8 @@ namespace CryV.Net.Shared.Common.Payloads
                    EngineState != payload.EngineState ||
                    Math.Abs(CurrentRPM - payload.CurrentRPM) > 1f ||
                    Math.Abs(SteeringAngle - payload.SteeringAngle) > 0.02f ||
+                   ColorPrimary != payload.ColorPrimary ||
+                   ColorSecondary != payload.ColorSecondary ||
                    VehicleData != payload.VehicleData;
         }
 
