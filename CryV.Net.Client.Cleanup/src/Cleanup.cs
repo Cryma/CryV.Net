@@ -786,13 +786,14 @@ namespace CryV.Net.Client.Cleanup
                 World.SetWeather(WeatherType.Extrasunny);
 
                 LocalPlayer.Character.Position = new Vector3(412.4f, -976.71f, 29.43f);
-                //var v1 = new Vehicle(1274868363, new Vector3(414.4f, -974.71f, 29.43f), Vector3.Zero);
-                //var v2 = new Vehicle(1274868363, new Vector3(408.4f, -974.71f, 29.43f), Vector3.Zero);
 
-                //Utility.Log($"V1: {v1.Handle} - V2: {v2.Handle}");
+                Gameplay.PauseClock(true);
 
-                //_entityPool.AddEntity(v1);
-                //_entityPool.AddEntity(v2);
+                for (var i = 0; i < 50; i++)
+                {
+                    Gameplay.DisableStuntJumpSet(i);
+                    Gameplay.DeleteStuntJump(i);
+                }
 
                 foreach (var gameplayScript in _gameplayScripts)
                 {

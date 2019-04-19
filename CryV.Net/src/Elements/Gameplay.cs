@@ -78,5 +78,20 @@ namespace CryV.Net.Elements
             return CryVNative.Native_Cam_GetGameplayCamRelativeHeading(CryVNative.Plugin);
         }
 
+        public static void DisableStuntJumpSet(int set)
+        {
+            CryVNative.Native_Misc_DisableStuntJumpSet(CryVNative.Plugin, set);
+        }
+
+        public static void DeleteStuntJump(int stuntJump)
+        {
+            CryVNative.Native_Misc_DeleteStuntJump(CryVNative.Plugin, stuntJump);
+        }
+
+        public static void PauseClock(bool toggle)
+        {
+            CryVNative.Native_Clock_PauseClock(CryVNative.Plugin, toggle);
+        }
+
     }
 }
