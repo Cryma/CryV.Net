@@ -345,7 +345,7 @@ namespace CryV.Net.Elements
 
         public bool MemoryIsPedInVehicle()
         {
-            return CryVNative.Native_Misc_MemoryIsPedInVehicle(CryVNative.Plugin, Handle);
+            return CryVNative.Native_Memory_IsPedInVehicle(CryVNative.Plugin, Handle);
         }
 
         public Vehicle MemoryGetVehiclePedIsIn()
@@ -355,7 +355,7 @@ namespace CryV.Net.Elements
                 return new Vehicle(0);
             }
 
-            return new Vehicle(CryVNative.Native_Misc_MemoryGetVehiclePedIsIn(CryVNative.Plugin, Handle));
+            return new Vehicle(CryVNative.Native_Memory_GetVehiclePedIsIn(CryVNative.Plugin, Handle));
         }
 
         private void SetSkin(ulong model)
