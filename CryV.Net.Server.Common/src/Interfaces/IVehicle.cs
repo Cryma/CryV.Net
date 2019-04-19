@@ -6,6 +6,7 @@ namespace CryV.Net.Server.Common.Interfaces
     public interface IVehicle : IDisposable
     {
 
+        int Id { get; }
         VehicleUpdatePayload GetPayload();
 
     }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
+using CryV.Net.Elements;
 using CryV.Net.Shared.Common.Enums;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
@@ -123,7 +124,7 @@ namespace CryV.Net.Client.Networking
                 }
                 catch (Exception exception)
                 {
-                    // TODO: Add logging
+                    Utility.Log(exception.ToString());
                 }
             }
         }

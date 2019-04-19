@@ -100,7 +100,7 @@ namespace CryV.Net.Server.Networking
                 }
                 catch (Exception exception)
                 {
-                    // TODO: Add logging
+                    Console.WriteLine(exception.ToString());
                 }
             }
         }

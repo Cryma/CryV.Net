@@ -313,6 +313,11 @@ namespace CryV.Net.Elements
             CryVNative.Native_Weapon_GiveWeaponToPed(CryVNative.Plugin, Handle, weaponHash, ammoCount, isHidden, equipNow);
         }
 
+        public Vehicle GetVehiclePedIsTryingToEnter()
+        {
+            return new Vehicle(CryVNative.Native_Ped_GetVehiclePedIsTryingToEnter(CryVNative.Plugin, Handle));
+        }
+
         public void _0xD5BB4025AE449A4E(string p1, float p2)
         {
             using (var converter = new StringConverter())

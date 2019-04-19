@@ -2,6 +2,7 @@
 using Autofac;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
+using CryV.Net.Elements;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Events.Types;
@@ -13,13 +14,15 @@ namespace CryV.Net.Client.Players
 
         private readonly IEventHandler _eventHandler;
         private readonly IEntityPool _entityPool;
+        private readonly IVehicleManager _vehicleManager;
 
         private readonly ConcurrentDictionary<int, IPlayer> _players = new ConcurrentDictionary<int, IPlayer>();
 
-        public PlayerManager(IEventHandler eventHandler, IEntityPool entityPool)
+        public PlayerManager(IEventHandler eventHandler, IEntityPool entityPool, IVehicleManager vehicleManager)
         {
             _eventHandler = eventHandler;
             _entityPool = entityPool;
+            _vehicleManager = vehicleManager;
         }
 
         public void Start()
@@ -41,7 +44,7 @@ namespace CryV.Net.Client.Players
 
         public void AddPlayer(PlayerUpdatePayload payload)
         {
-            var player = new Player(_eventHandler, _entityPool, payload);
+            var player = new Player(_eventHandler, _entityPool, _vehicleManager, payload);
 
             _players.TryAdd(payload.Id, player);
 

@@ -57,6 +57,16 @@ namespace CryV.Net.Server.Vehicles
             vehicle.Dispose();
         }
 
+        public IVehicle GetVehicle(int vehicleId)
+        {
+            if (_vehicles.TryGetValue(vehicleId, out var vehicle) == false)
+            {
+                return null;
+            }
+
+            return vehicle;
+        }
+
         public ICollection<IVehicle> GetVehicles()
         {
             return _vehicles.Values;

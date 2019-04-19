@@ -65,6 +65,8 @@ namespace CryV.Net.Client.Players
 
         public bool IsInVehicle { get; set; }
 
+        public IVehicle Vehicle { get; set; }
+
         private Ped _ped;
 
         private static float _interpolationFactor = 3.0f;
@@ -84,11 +86,13 @@ namespace CryV.Net.Client.Players
 
         private readonly IEventHandler _eventHandler;
         private readonly IEntityPool _entityPool;
+        private readonly IVehicleManager _vehicleManager;
 
-        public Player(IEventHandler eventHandler, IEntityPool entityPool, PlayerUpdatePayload payload)
+        public Player(IEventHandler eventHandler, IEntityPool entityPool, IVehicleManager vehicleManager, PlayerUpdatePayload payload)
         {
             _eventHandler = eventHandler;
             _entityPool = entityPool;
+            _vehicleManager = vehicleManager;
 
             Id = payload.Id;
             TargetPosition = payload.Position;
@@ -144,6 +148,11 @@ namespace CryV.Net.Client.Players
             IsEnteringVehicle = (payload.PedData & (int) PedData.IsEnteringVehicle) > 0;
 
             IsInVehicle = (payload.PedData & (int) PedData.IsInVehicle) > 0;
+
+            if (payload.VehicleId != -1)
+            {
+                Vehicle = _vehicleManager.GetVehicle(payload.VehicleId);
+            }
 
             // TODO: Optimize
             ThreadHelper.Run(() =>

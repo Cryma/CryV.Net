@@ -67,7 +67,6 @@ namespace CryV.Net.Client.LocalPlayer
         private void OnBootstrap(NetworkEvent<BootstrapPayload> obj)
         {
             var payload = obj.Payload;
-
             Id = payload.LocalId;
 
             ThreadHelper.Run(() =>
@@ -135,8 +134,20 @@ namespace CryV.Net.Client.LocalPlayer
             var model = Elements.LocalPlayer.Model;
             var weaponModel = Elements.LocalPlayer.Character.GetCurrentPedWeapon();
             var isAiming = Elements.LocalPlayer.Character.GetIsTaskActive(290);
-            var isEnteringVehicle = Elements.LocalPlayer.Character.GetIsTaskActive(160);
+            var isEnteringVehicle = Elements.LocalPlayer.Character.GetIsTaskActive(160) || Elements.LocalPlayer.Character.GetIsTaskActive(161) 
+                || Elements.LocalPlayer.Character.GetIsTaskActive(162) || Elements.LocalPlayer.Character.GetIsTaskActive(163)
+                || Elements.LocalPlayer.Character.GetIsTaskActive(164);
             var isInVehicle = Elements.LocalPlayer.Character.IsInAnyVehicle();
+
+            var vehicleId = -1;
+            if (isEnteringVehicle)
+            {
+                var vehicle = _vehicleManager.GetVehicle(Elements.LocalPlayer.Character.GetVehiclePedIsTryingToEnter());
+                if (vehicle != null)
+                {
+                    vehicleId = vehicle.Id;
+                }
+            }
 
             var currentVehicle = Elements.LocalPlayer.Character.GetVehiclePedIsIn();
 
@@ -176,7 +187,7 @@ namespace CryV.Net.Client.LocalPlayer
 
             var transformPayload = new PlayerUpdatePayload(Id, position, velocity, rotation.Z, aimTarget, Elements.LocalPlayer.Character.Speed(),
                 model, weaponModel, Elements.LocalPlayer.Character.IsPedJumping(), Elements.LocalPlayer.Character.IsPedClimbing(),
-                Elements.LocalPlayer.Character.GetIsTaskActive(47), Elements.LocalPlayer.Character.IsPedRagdoll(), isAiming, isEnteringVehicle, isInVehicle);
+                Elements.LocalPlayer.Character.GetIsTaskActive(47), Elements.LocalPlayer.Character.IsPedRagdoll(), isAiming, isEnteringVehicle, isInVehicle, vehicleId);
 
             _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
         }

@@ -69,6 +69,16 @@ namespace CryV.Net.Client.Vehicles
             vehicle.Dispose();
         }
 
+        public IVehicle GetVehicle(int vehicleId)
+        {
+            if (_vehicles.TryGetValue(vehicleId, out var vehicle) == false)
+            {
+                return null;
+            }
+
+            return vehicle;
+        }
+
         public IVehicle GetVehicle(Elements.Vehicle vehicle)
         {
             foreach (var veh in _vehicles.Values)

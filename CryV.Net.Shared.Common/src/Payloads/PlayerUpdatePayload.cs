@@ -38,12 +38,15 @@ namespace CryV.Net.Shared.Common.Payloads
         [ProtoMember(9)]
         public int PedData { get; set; }
 
+        [ProtoMember(10)]
+        public int VehicleId { get; set; }
+
         public PlayerUpdatePayload()
         {
         }
 
         public PlayerUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, Vector3 aimTarget, int speed, ulong model, ulong weaponModel,
-            bool isJumping, bool isClimbing, bool isClimbingLadder, bool isRagdoll, bool isAiming, bool isEnteringVehicle, bool isInVehicle)
+            bool isJumping, bool isClimbing, bool isClimbingLadder, bool isRagdoll, bool isAiming, bool isEnteringVehicle, bool isInVehicle, int vehicleId)
         {
             Id = id;
             Position = position;
@@ -53,6 +56,7 @@ namespace CryV.Net.Shared.Common.Payloads
             Speed = speed;
             Model = model;
             WeaponModel = weaponModel;
+            VehicleId = vehicleId;
 
             if (isJumping)
             {
