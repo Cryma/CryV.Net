@@ -130,11 +130,12 @@ namespace CryV.Net.Server.Players
             {
                 existingVehicles.Add(vehicle.GetPayload());
 
+#if PEDMIRROR
                 var mirrorVehiclePayload = vehicle.GetPayload();
                 mirrorVehiclePayload.Id = 1;
                 mirrorVehiclePayload.Position.X -= 6.5f;
                 existingVehicles.Add(mirrorVehiclePayload);
-
+#endif
             }
 
 #if PEDMIRROR

@@ -114,10 +114,11 @@ namespace CryV.Net.Server.Vehicles
             foreach (var player in _playerManager.GetPlayers())
             {
                 player.Send(payload, DeliveryMethod.Unreliable);
-
+#if PEDMIRROR
                 payload.Id = 1;
                 payload.Position.X -= 6.5f;
                 player.Send(payload, DeliveryMethod.Unreliable);
+#endif
             }
         }
 

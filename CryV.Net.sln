@@ -49,9 +49,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Server.FingerPoint
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.Helpers", "CryV.Net.Client.Helpers\CryV.Net.Client.Helpers.csproj", "{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Client.Vehicles", "CryV.Net.Client.Vehicles\CryV.Net.Client.Vehicles.csproj", "{C6320E7D-8A62-423C-8333-7362D33C976A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.Vehicles", "CryV.Net.Client.Vehicles\CryV.Net.Client.Vehicles.csproj", "{C6320E7D-8A62-423C-8333-7362D33C976A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Server.Vehicles", "CryV.Net.Server.Vehicles\CryV.Net.Server.Vehicles.csproj", "{B74ECBF4-9039-4019-B4E9-9011323BFB9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Server.Vehicles", "CryV.Net.Server.Vehicles\CryV.Net.Server.Vehicles.csproj", "{B74ECBF4-9039-4019-B4E9-9011323BFB9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -170,20 +170,20 @@ Global
 		{1A0E043C-FD9B-4D8C-AB5E-51FE7734CC2D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}.PedMirror|Any CPU.ActiveCfg = Debug|Any CPU
-		{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}.PedMirror|Any CPU.Build.0 = Debug|Any CPU
+		{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}.PedMirror|Any CPU.ActiveCfg = PedMirror|Any CPU
+		{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}.PedMirror|Any CPU.Build.0 = PedMirror|Any CPU
 		{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E00B3E61-4E0A-43BB-AF47-FAA68EA3C7FD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C6320E7D-8A62-423C-8333-7362D33C976A}.Debug|Any CPU.ActiveCfg = PedMirror|Any CPU
 		{C6320E7D-8A62-423C-8333-7362D33C976A}.Debug|Any CPU.Build.0 = PedMirror|Any CPU
-		{C6320E7D-8A62-423C-8333-7362D33C976A}.PedMirror|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6320E7D-8A62-423C-8333-7362D33C976A}.PedMirror|Any CPU.Build.0 = Debug|Any CPU
+		{C6320E7D-8A62-423C-8333-7362D33C976A}.PedMirror|Any CPU.ActiveCfg = PedMirror|Any CPU
+		{C6320E7D-8A62-423C-8333-7362D33C976A}.PedMirror|Any CPU.Build.0 = PedMirror|Any CPU
 		{C6320E7D-8A62-423C-8333-7362D33C976A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6320E7D-8A62-423C-8333-7362D33C976A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B74ECBF4-9039-4019-B4E9-9011323BFB9C}.Debug|Any CPU.ActiveCfg = PedMirror|Any CPU
 		{B74ECBF4-9039-4019-B4E9-9011323BFB9C}.Debug|Any CPU.Build.0 = PedMirror|Any CPU
-		{B74ECBF4-9039-4019-B4E9-9011323BFB9C}.PedMirror|Any CPU.ActiveCfg = Debug|Any CPU
-		{B74ECBF4-9039-4019-B4E9-9011323BFB9C}.PedMirror|Any CPU.Build.0 = Debug|Any CPU
+		{B74ECBF4-9039-4019-B4E9-9011323BFB9C}.PedMirror|Any CPU.ActiveCfg = PedMirror|Any CPU
+		{B74ECBF4-9039-4019-B4E9-9011323BFB9C}.PedMirror|Any CPU.Build.0 = PedMirror|Any CPU
 		{B74ECBF4-9039-4019-B4E9-9011323BFB9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B74ECBF4-9039-4019-B4E9-9011323BFB9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
