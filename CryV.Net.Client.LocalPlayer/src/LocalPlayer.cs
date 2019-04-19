@@ -26,13 +26,8 @@ namespace CryV.Net.Client.LocalPlayer
 
         private CancellationTokenSource _cancellationTokenSource;
 
-        private Vector3 _lastPosition;
-        private Vector3 _lastVelocity;
-        private float _lastHeading;
-        private Vector3 _lastAimTarget;
-        private ulong _lastModel;
-        private ulong _lastWeapon;
-        private bool _lastAiming;
+        private PlayerUpdatePayload _lastPlayerPayload;
+        private VehicleUpdatePayload _lastVehiclePayload;
 
         private readonly IEventHandler _eventHandler;
         private readonly INetworkManager _networkManager;
@@ -122,6 +117,13 @@ namespace CryV.Net.Client.LocalPlayer
             var transformPayload = new VehicleUpdatePayload(id, position, velocity, rotation, 1274868363, engineState, currentGear, currentRPM, clutch,
                 turbo, acceleration, brake, steeringAngle); // TODO: fix model
 
+            if (_lastVehiclePayload != null && transformPayload.IsDifferent(_lastVehiclePayload) == false)
+            {
+                return;
+            }
+
+            _lastVehiclePayload = transformPayload;
+
             _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
         }
 
@@ -139,30 +141,19 @@ namespace CryV.Net.Client.LocalPlayer
             var isEnteringVehicle = ped.IsEnteringVehicle();
             var isInVehicle = ped.IsInAnyVehicle();
             var isLeavingVehicle = ped.IsLeavingVehicle();
-
             var vehicleId = GetDesiredVehicleId();
-
-            var currentVehicle = ped.GetVehiclePedIsIn();
             var seat = ped.GetSeatPedIsTryingToEnter();
-
-            // TODO: Better detection if something changed
-            if ((position - _lastPosition).Length() < 0.05f && (velocity - _lastVelocity).Length() < 0.05f && Math.Abs(rotation.Z - _lastHeading) < 0.05f &&
-                _lastModel == model && _lastWeapon == weaponModel && _lastAiming == isAiming && (aimTarget - _lastAimTarget).Length() < 0.05f)
-            {
-                return;
-            }
-
-            _lastPosition = position;
-            _lastVelocity = velocity;
-            _lastHeading = rotation.Z;
-            _lastModel = model;
-            _lastWeapon = weaponModel;
-            _lastAiming = isAiming;
-            _lastAimTarget = aimTarget;
 
             var transformPayload = new PlayerUpdatePayload(Id, position, velocity, rotation.Z, aimTarget, Elements.LocalPlayer.Character.Speed(),
                 model, weaponModel, ped.IsPedJumping(), ped.IsPedClimbing(), ped.IsClimbingLadder(), ped.IsPedRagdoll(), isAiming, isEnteringVehicle,
                 isInVehicle, vehicleId, seat, isLeavingVehicle);
+
+            if (_lastPlayerPayload != null && transformPayload.IsDifferent(_lastPlayerPayload) == false)
+            {
+                return;
+            }
+
+            _lastPlayerPayload = transformPayload;
 
             _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
         }

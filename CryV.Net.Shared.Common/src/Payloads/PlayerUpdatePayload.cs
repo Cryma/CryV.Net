@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using CryV.Net.Shared.Common.Enums;
 using CryV.Net.Shared.Common.Payloads.Partials;
 using ProtoBuf;
@@ -102,6 +103,17 @@ namespace CryV.Net.Shared.Common.Payloads
             {
                 PedData |= (int) Flags.PedData.IsLeavingVehicle;
             }
+        }
+
+        public bool IsDifferent(PlayerUpdatePayload payload)
+        {
+            return ((Vector3) Position - payload.Position).Length() > 0.1f ||
+                   ((Vector3) Velocity - payload.Velocity).Length() > 0.1f ||
+                   Math.Abs(Heading - payload.Heading) > 0.05f ||
+                   Model != payload.Model ||
+                   WeaponModel != payload.WeaponModel ||
+                   ((Vector3) AimTarget - payload.AimTarget).Length() > 0.1f ||
+                   PedData != payload.PedData;
         }
 
     }

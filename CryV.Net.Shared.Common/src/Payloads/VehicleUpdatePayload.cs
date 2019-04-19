@@ -73,5 +73,15 @@ namespace CryV.Net.Shared.Common.Payloads
             SteeringAngle = steeringAngle;
         }
 
+        public bool IsDifferent(VehicleUpdatePayload payload)
+        {
+            return ((Vector3) Position - payload.Position).Length() > 0.1f ||
+                   ((Vector3) Velocity - payload.Velocity).Length() > 0.1f ||
+                   ((Vector3) Rotation - payload.Rotation).Length() > 0.1f ||
+                   EngineState != payload.EngineState ||
+                   Math.Abs(CurrentRPM - payload.CurrentRPM) > 1f ||
+                   Math.Abs(SteeringAngle - payload.SteeringAngle) > 0.02f;
+        }
+
     }
 }
