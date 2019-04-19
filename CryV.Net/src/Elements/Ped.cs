@@ -147,6 +147,11 @@ namespace CryV.Net.Elements
             CryVNative.Native_Ped_SetPedCanHeadIk(CryVNative.Plugin, Handle, toggle);
         }
 
+        public void SetPedIntoVehicle(Vehicle vehicle, int seatIndex)
+        {
+            CryVNative.Native_Ped_SetPedIntoVehicle(CryVNative.Plugin, Handle, vehicle.Handle, seatIndex);
+        }
+
         public void TaskSetBlockingOfNonTemporaryEvents(bool toggle)
         {
             CryVNative.Native_Brain_TaskSetBlockingOfNonTemporaryEvents(CryVNative.Plugin, Handle, toggle);

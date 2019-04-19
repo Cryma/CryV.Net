@@ -11,6 +11,16 @@ namespace CryV.Net.Client.Players
 
         private bool UpdateVehicleAnimations()
         {
+            if (Vehicle == null)
+            {
+                return false;
+            }
+
+            if (IsInVehicle && _ped.IsInAnyVehicle(true) == false && Vehicle.GetVehicle().DoesExist())
+            {
+                _ped.SetPedIntoVehicle(Vehicle.GetVehicle(), Seat);
+            }
+
             if (_wasEnteringVehicle || IsInVehicle)
             {
                 return true;
