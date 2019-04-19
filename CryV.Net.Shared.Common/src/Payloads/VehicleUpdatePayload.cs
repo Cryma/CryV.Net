@@ -26,17 +26,21 @@ namespace CryV.Net.Shared.Common.Payloads
         [ProtoMember(5)]
         public ulong Model { get; set; }
 
+        [ProtoMember(6)]
+        public bool EngineState { get; set; }
+
         public VehicleUpdatePayload()
         {
         }
 
-        public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, ulong model)
+        public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, ulong model, bool engineState)
         {
             Id = id;
             Position = position;
             Velocity = velocity;
             Rotation = rotation;
             Model = model;
+            EngineState = engineState;
         }
 
     }

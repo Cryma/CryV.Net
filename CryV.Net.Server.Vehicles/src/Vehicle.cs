@@ -22,6 +22,8 @@ namespace CryV.Net.Server.Vehicles
 
         public ulong Model { get; set; }
 
+        public bool EngineState { get; set; }
+
         private readonly List<ISubscription> _subscriptions = new List<ISubscription>();
 
         private readonly IVehicleManager _vehicleManager;
@@ -46,7 +48,7 @@ namespace CryV.Net.Server.Vehicles
 
         public VehicleUpdatePayload GetPayload()
         {
-            return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, Model);
+            return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, Model, EngineState);
         }
 
         public void ReadPayload(VehicleUpdatePayload payload)
@@ -55,6 +57,7 @@ namespace CryV.Net.Server.Vehicles
             Velocity = payload.Velocity;
             Rotation = payload.Rotation;
             Model = payload.Model;
+            EngineState = payload.EngineState;
         }
 
         private void PropagateNewVehicle()

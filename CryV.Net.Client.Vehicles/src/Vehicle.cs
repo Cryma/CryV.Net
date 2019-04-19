@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
+using System.Threading;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
@@ -35,6 +36,8 @@ namespace CryV.Net.Client.Vehicles
         public Vector3 TargetRotation { get; set; }
 
         public ulong Model { get; set; }
+
+        public bool EngineState { get; set; }
 
         private Elements.Vehicle _vehicle;
 
@@ -84,11 +87,21 @@ namespace CryV.Net.Client.Vehicles
             TargetRotation = payload.Rotation;
             Velocity = payload.Velocity;
             Model = payload.Model;
+
+            if (EngineState != payload.EngineState)
+            {
+                ThreadHelper.Run(() =>
+                {
+                    _vehicle.SetVehicleEngineOn(payload.EngineState, false);
+
+                    EngineState = payload.EngineState;
+                });
+            }
         }
 
         public VehicleUpdatePayload GetPayload()
         {
-            return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, Model);
+            return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, Model, EngineState);
         }
 
         private void Tick(float deltatime)

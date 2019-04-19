@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using System.Numerics;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Native;
@@ -14,6 +15,16 @@ namespace CryV.Net.Elements
         public Vehicle(ulong model, Vector3 position, Vector3 rotation) : base(0)
         {
             CreateVehicle(model, position, rotation);
+        }
+
+        public bool GetIsVehicleEngineRunning()
+        {
+            return CryVNative.Native_Vehicle_GetIsVehicleEngineRunning(CryVNative.Plugin, Handle);
+        }
+
+        public void SetVehicleEngineOn(bool value, bool instantly, bool otherwise = true)
+        {
+            CryVNative.Native_Vehicle_SetVehicleEngineOn(CryVNative.Plugin, Handle, value, instantly, otherwise);
         }
 
         public Ped GetPedOnSeat(int seat)

@@ -106,12 +106,13 @@ namespace CryV.Net.Client.LocalPlayer
 
             var vehicle = LocalPlayerHelper.Vehicle;
 
-            var position = vehicle.Position;
-            var rotation = vehicle.Rotation;
-            var velocity = vehicle.Velocity;
             var id = LocalPlayerHelper.VehicleId;
+            var position = vehicle.Position;
+            var velocity = vehicle.Velocity;
+            var rotation = vehicle.Rotation;
+            var engineState = vehicle.GetIsVehicleEngineRunning();
 
-            var transformPayload = new VehicleUpdatePayload(id, position, velocity, rotation, 1274868363); // TODO: fix model
+            var transformPayload = new VehicleUpdatePayload(id, position, velocity, rotation, 1274868363, engineState); // TODO: fix model
 
             _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
         }
