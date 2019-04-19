@@ -254,6 +254,11 @@ namespace CryV.Net.Elements
             return new Vehicle(CryVNative.Native_Ped_GetVehiclePedIsIn(CryVNative.Plugin, Handle, false));
         }
 
+        public Vehicle GetLastVehiclePedIsIn()
+        {
+            return new Vehicle(CryVNative.Native_Ped_GetVehiclePedIsIn(CryVNative.Plugin, Handle, true));
+        }
+
         public bool GetIsTaskActive(int taskNumber)
         {
             return CryVNative.Native_Brain_GetIsTaskActive(CryVNative.Plugin, Handle, taskNumber);
@@ -376,6 +381,21 @@ namespace CryV.Net.Elements
             }
 
             return new Vehicle(CryVNative.Native_Memory_GetVehiclePedIsIn(CryVNative.Plugin, Handle));
+        }
+
+        public bool IsEnteringVehicle()
+        {
+            return GetIsTaskActive(160) || GetIsTaskActive(161) || GetIsTaskActive(162) || GetIsTaskActive(163) || GetIsTaskActive(164);
+        }
+
+        public bool IsLeavingVehicle()
+        {
+            return GetIsTaskActive(167) || GetIsTaskActive(168);
+        }
+
+        public bool IsClimbingLadder()
+        {
+            return GetIsTaskActive(47);
         }
 
         private void SetSkin(ulong model)

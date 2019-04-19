@@ -39,8 +39,6 @@ namespace CryV.Net.Client.LocalPlayer
         private readonly IEntityPool _entityPool;
         private readonly IVehicleManager _vehicleManager;
 
-        private bool _wasLeavingVehicle;
-
         public LocalPlayer(IEventHandler eventHandler, INetworkManager networkManager, IEntityPool entityPool, IVehicleManager vehicleManager)
         {
             _eventHandler = eventHandler;
@@ -129,69 +127,23 @@ namespace CryV.Net.Client.LocalPlayer
 
         private void SyncLocalPlayer()
         {
-            var position = Elements.LocalPlayer.Character.Position;
-            var rotation = Elements.LocalPlayer.Character.Rotation;
-            var velocity = Elements.LocalPlayer.Character.Velocity;
+            var ped = Elements.LocalPlayer.Character;
+
+            var position = ped.Position;
+            var rotation = ped.Rotation;
+            var velocity = ped.Velocity;
             var aimTarget = Gameplay.GetGameplayCamCoord() + Utility.GetDirection(Gameplay.GetGameplayCamRot());
             var model = Elements.LocalPlayer.Model;
-            var weaponModel = Elements.LocalPlayer.Character.GetCurrentPedWeapon();
-            var isAiming = Elements.LocalPlayer.Character.GetIsTaskActive(290);
-            var isEnteringVehicle = Elements.LocalPlayer.Character.GetIsTaskActive(160) || Elements.LocalPlayer.Character.GetIsTaskActive(161) 
-                || Elements.LocalPlayer.Character.GetIsTaskActive(162) || Elements.LocalPlayer.Character.GetIsTaskActive(163)
-                || Elements.LocalPlayer.Character.GetIsTaskActive(164);
-            var isInVehicle = Elements.LocalPlayer.Character.IsInAnyVehicle();
-            var isLeavingVehicle = Elements.LocalPlayer.Character.GetIsTaskActive(167) || Elements.LocalPlayer.Character.GetIsTaskActive(168);
+            var weaponModel = ped.GetCurrentPedWeapon();
+            var isAiming = ped.GetIsTaskActive(290);
+            var isEnteringVehicle = ped.IsEnteringVehicle();
+            var isInVehicle = ped.IsInAnyVehicle();
+            var isLeavingVehicle = ped.IsLeavingVehicle();
 
-            var vehicleId = -1;
-            if (isEnteringVehicle)
-            {
-                var vehicle = _vehicleManager.GetVehicle(Elements.LocalPlayer.Character.GetVehiclePedIsTryingToEnter());
-                if (vehicle != null)
-                {
-                    vehicleId = vehicle.Id;
-                }
-            }
-            else if (isInVehicle)
-            {
-                var vehicle = _vehicleManager.GetVehicle(Elements.LocalPlayer.Character.GetVehiclePedIsIn());
-                if (vehicle != null)
-                {
-                    vehicleId = vehicle.Id;
-                }
-            }
+            var vehicleId = GetDesiredVehicleId();
 
-            if (isEnteringVehicle && _wasLeavingVehicle == false)
-            {
-                _wasLeavingVehicle = true;
-            }
-
-            if (isEnteringVehicle == false && _wasLeavingVehicle)
-            {
-                vehicleId = -1;
-                _wasLeavingVehicle = false;
-            }
-
-            var currentVehicle = Elements.LocalPlayer.Character.GetVehiclePedIsIn();
-            var seat = Elements.LocalPlayer.Character.GetSeatPedIsTryingToEnter();
-
-            var success = currentVehicle.DoesExist();
-            if (success)
-            {
-                var remoteVehicle = _vehicleManager.GetVehicle(currentVehicle);
-
-                success = remoteVehicle != null;
-                if (success)
-                {
-                    LocalPlayerHelper.VehicleId = remoteVehicle.Id;
-                    LocalPlayerHelper.Vehicle = currentVehicle;
-                }
-            }
-
-            if (success == false)
-            {
-                LocalPlayerHelper.VehicleId = -1;
-                LocalPlayerHelper.Vehicle = null;
-            }
+            var currentVehicle = ped.GetVehiclePedIsIn();
+            var seat = ped.GetSeatPedIsTryingToEnter();
 
             // TODO: Better detection if something changed
             if ((position - _lastPosition).Length() < 0.05f && (velocity - _lastVelocity).Length() < 0.05f && Math.Abs(rotation.Z - _lastHeading) < 0.05f &&
@@ -209,11 +161,50 @@ namespace CryV.Net.Client.LocalPlayer
             _lastAimTarget = aimTarget;
 
             var transformPayload = new PlayerUpdatePayload(Id, position, velocity, rotation.Z, aimTarget, Elements.LocalPlayer.Character.Speed(),
-                model, weaponModel, Elements.LocalPlayer.Character.IsPedJumping(), Elements.LocalPlayer.Character.IsPedClimbing(),
-                Elements.LocalPlayer.Character.GetIsTaskActive(47), Elements.LocalPlayer.Character.IsPedRagdoll(), isAiming, isEnteringVehicle, isInVehicle, vehicleId,
-                seat, isLeavingVehicle);
+                model, weaponModel, ped.IsPedJumping(), ped.IsPedClimbing(), ped.IsClimbingLadder(), ped.IsPedRagdoll(), isAiming, isEnteringVehicle,
+                isInVehicle, vehicleId, seat, isLeavingVehicle);
 
             _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
+        }
+
+        private int GetDesiredVehicleId()
+        {
+            var ped = Elements.LocalPlayer.Character;
+
+            if (ped.IsEnteringVehicle())
+            {
+                var vehicle = _vehicleManager.GetVehicle(ped.GetVehiclePedIsTryingToEnter());
+                if (vehicle != null)
+                {
+                    LocalPlayerHelper.SetVehicle(vehicle);
+
+                    return vehicle.Id;
+                }
+            }
+            else if (ped.IsInAnyVehicle())
+            {
+                var vehicle = _vehicleManager.GetVehicle(ped.GetVehiclePedIsIn());
+                if (vehicle != null)
+                {
+                    LocalPlayerHelper.SetVehicle(vehicle);
+
+                    return vehicle.Id;
+                }
+            }
+            else if (ped.IsLeavingVehicle())
+            {
+                var vehicle = _vehicleManager.GetVehicle(ped.GetLastVehiclePedIsIn());
+                if (vehicle != null)
+                {
+                    LocalPlayerHelper.SetVehicle(vehicle);
+
+                    return vehicle.Id;
+                }
+            }
+
+            LocalPlayerHelper.SetVehicle(null);
+
+            return -1;
         }
 
     }
