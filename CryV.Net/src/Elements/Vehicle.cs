@@ -85,6 +85,16 @@ namespace CryV.Net.Elements
             CryVNative.Native_Vehicle_StartVehicleHorn(CryVNative.Plugin, Handle, duration, Utility.Joaat("HELDDOWN"), false);
         }
 
+        public bool IsVehicleInBurnout()
+        {
+            return CryVNative.Native_Vehicle_IsVehicleInBurnout(CryVNative.Plugin, Handle);
+        }
+
+        public void SetVehicleBurnout(bool toggle)
+        {
+            CryVNative.Native_Vehicle_SetVehicleBurnout(CryVNative.Plugin, Handle, toggle);
+        }
+        
         private void CreateVehicle(ulong model, Vector3 position, Vector3 rotation)
         {
             if (IsValid())

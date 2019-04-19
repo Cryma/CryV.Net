@@ -41,6 +41,8 @@ namespace CryV.Net.Server.Vehicles
 
         public bool IsHornActive { get; set; }
 
+        public bool IsBurnout { get; set; }
+
 
         private readonly List<ISubscription> _subscriptions = new List<ISubscription>();
 
@@ -67,7 +69,7 @@ namespace CryV.Net.Server.Vehicles
         public VehicleUpdatePayload GetPayload()
         {
             return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, Model, EngineState, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration, Brake,
-                SteeringAngle, IsHornActive);
+                SteeringAngle, IsHornActive, IsBurnout);
         }
 
         public void ReadPayload(VehicleUpdatePayload payload)
@@ -86,6 +88,7 @@ namespace CryV.Net.Server.Vehicles
             SteeringAngle = payload.SteeringAngle;
 
             IsHornActive = (payload.VehicleData & (int) VehicleData.IsHornActive) > 0;
+            IsBurnout = (payload.VehicleData & (int) VehicleData.IsBurnout) > 0;
         }
 
         private void PropagateNewVehicle()

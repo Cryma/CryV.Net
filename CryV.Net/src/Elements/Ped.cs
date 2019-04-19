@@ -214,6 +214,11 @@ namespace CryV.Net.Elements
             CryVNative.Native_Brain_TaskLeaveVehicle(CryVNative.Plugin, Handle, vehicle.Handle, flags);
         }
 
+        public void TaskVehicleTempAction(Vehicle vehicle, int action, int time)
+        {
+            CryVNative.Native_Brain_TaskVehicleTempAction(CryVNative.Plugin, Handle, vehicle.Handle, action, time);
+        }
+
         public bool IsPedWalking()
         {
             return CryVNative.Native_Brain_IsPedWalking(CryVNative.Plugin, Handle);

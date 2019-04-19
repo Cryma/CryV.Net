@@ -6,6 +6,7 @@ namespace CryV.Net.Shared.Common.Flags
     public enum VehicleData
     {
         None = 1 << 0,
-        IsHornActive = 1 << 1
+        IsHornActive = 1 << 1,
+        IsBurnout = 1 << 2
     }
 }

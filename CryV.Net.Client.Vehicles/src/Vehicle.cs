@@ -56,6 +56,8 @@ namespace CryV.Net.Client.Vehicles
 
         public bool IsHornActive { get; set; }
 
+        public bool IsBurnout { get; set; }
+
         private Elements.Vehicle _vehicle;
 
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
@@ -108,6 +110,7 @@ namespace CryV.Net.Client.Vehicles
             TargetSteeringAngle = payload.SteeringAngle;
 
             IsHornActive = (payload.VehicleData & (int) VehicleData.IsHornActive) > 0;
+            IsBurnout = (payload.VehicleData & (int) VehicleData.IsBurnout) > 0;
 
             if (Id == LocalPlayerHelper.VehicleId)
             {
@@ -128,7 +131,7 @@ namespace CryV.Net.Client.Vehicles
         public VehicleUpdatePayload GetPayload()
         {
             return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, Model, EngineState, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration,
-                Brake, TargetSteeringAngle, IsHornActive);
+                Brake, TargetSteeringAngle, IsHornActive, IsBurnout);
         }
 
         private void Tick(float deltatime)
@@ -157,6 +160,21 @@ namespace CryV.Net.Client.Vehicles
             }, () =>
             {
                 _vehicle.StartVehicleHorn(1);
+            });
+            
+            ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_BURNOUT", IsBurnout, () =>
+            {
+                var driver = _vehicle.GetPedOnSeat(-1);
+                driver?.TaskVehicleTempAction(_vehicle, 23, 9999);
+
+                _vehicle.SetVehicleBurnout(true);
+            }, () =>
+            {
+                var driver = _vehicle.GetPedOnSeat(-1);
+                driver?.TaskVehicleTempAction(_vehicle, 6, 1);
+                driver?.ClearPedTasks();
+
+                _vehicle.SetVehicleBurnout(false);
             });
         }
 
