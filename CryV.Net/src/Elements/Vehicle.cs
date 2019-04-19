@@ -8,6 +8,54 @@ namespace CryV.Net.Elements
     public class Vehicle : Entity
     {
 
+        public float WheelSpeed
+        {
+            get => CryVNative.Native_Memory_GetWheelSpeed(CryVNative.Plugin, Handle);
+            set => CryVNative.Native_Memory_SetWheelSpeed(CryVNative.Plugin, Handle, value);
+        }
+
+        public byte CurrentGear
+        {
+            get => CryVNative.Native_Memory_GetCurrentGear(CryVNative.Plugin, Handle);
+            set => CryVNative.Native_Memory_SetCurrentGear(CryVNative.Plugin, Handle, value);
+        }
+
+        public float CurrentRPM
+        {
+            get => CryVNative.Native_Memory_GetCurrentRPM(CryVNative.Plugin, Handle);
+            set => CryVNative.Native_Memory_SetCurrentRPM(CryVNative.Plugin, Handle, value);
+        }
+
+        public float Clutch
+        {
+            get => CryVNative.Native_Memory_GetClutch(CryVNative.Plugin, Handle);
+            set => CryVNative.Native_Memory_SetClutch(CryVNative.Plugin, Handle, value);
+        }
+
+        public float Turbo
+        {
+            get => CryVNative.Native_Memory_GetTurbo(CryVNative.Plugin, Handle);
+            set => CryVNative.Native_Memory_SetTurbo(CryVNative.Plugin, Handle, value);
+        }
+
+        public float Acceleration
+        {
+            get => CryVNative.Native_Memory_GetAcceleration(CryVNative.Plugin, Handle);
+            set => CryVNative.Native_Memory_SetAcceleration(CryVNative.Plugin, Handle, value);
+        }
+
+        public float Brake
+        {
+            get => CryVNative.Native_Memory_GetBrake(CryVNative.Plugin, Handle);
+            set => CryVNative.Native_Memory_SetBrake(CryVNative.Plugin, Handle, value);
+        }
+
+        public float SteeringAngle
+        {
+            get => CryVNative.Native_Memory_GetSteeringAngle(CryVNative.Plugin, Handle);
+            set => CryVNative.Native_Memory_SetSteeringAngle(CryVNative.Plugin, Handle, value);
+        }
+
         public Vehicle(int handle) : base(handle)
         {
         }
