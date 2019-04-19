@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Elements;
 using CryV.Net.Plugins;

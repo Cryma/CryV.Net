@@ -53,8 +53,7 @@ namespace CryV.Net.Client.Vehicles
             TargetRotation = payload.Rotation;
             Model = payload.Model;
 
-            _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(update => ReadPayload(update.Payload),
-                x => x.Payload.Id == Id && LocalPlayer.Character.GetVehiclePedIsIn().Handle != _vehicle.Handle));
+            _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(update => ReadPayload(update.Payload), x => x.Payload.Id == Id));
 
             ThreadHelper.Run(() =>
             {
@@ -76,6 +75,11 @@ namespace CryV.Net.Client.Vehicles
 
         public void ReadPayload(VehicleUpdatePayload payload)
         {
+            if (Id == LocalPlayerHelper.VehicleId)
+            {
+                return;
+            }
+
             TargetPosition = payload.Position;
             TargetRotation = payload.Rotation;
             Velocity = payload.Velocity;
@@ -89,12 +93,7 @@ namespace CryV.Net.Client.Vehicles
 
         private void Tick(float deltatime)
         {
-            if (LocalPlayer.Character.GetVehiclePedIsIn().Handle == _vehicle.Handle)
-            {
-                return;
-            }
-
-            if (_vehicle.GetPedOnSeat(-1).Handle == LocalPlayer.Character.Handle)
+            if (Id == LocalPlayerHelper.VehicleId)
             {
                 return;
             }

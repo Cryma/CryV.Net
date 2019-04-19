@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using System.Runtime.Serialization.Formatters;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Helpers;
@@ -21,7 +21,7 @@ namespace CryV.Net.Elements
         public Vector3 Position
         {
             get => StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetEntityCoords(CryVNative.Plugin, Handle, true));
-            set => CryVNative.Native_Entity_SetEntityCoordsNoOffset(CryVNative.Plugin, Handle, value.X, value.Y, value.Z, false, false, true);
+            set => CryVNative.Native_Entity_SetEntityCoordsNoOffset(CryVNative.Plugin, Handle, value.X, value.Y, value.Z, false, false, false);
         }
 
         public Vector3 Rotation
@@ -29,6 +29,7 @@ namespace CryV.Net.Elements
             get => StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetEntityRotation(CryVNative.Plugin, Handle, 2));
             set => CryVNative.Native_Entity_SetEntityRotation(CryVNative.Plugin, Handle, value.X, value.Y, value.Z, 2, true);
         }
+
         public Vector3 Velocity
         {
             get => StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetEntityVelocity(CryVNative.Plugin, Handle));

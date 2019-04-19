@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -99,21 +99,19 @@ namespace CryV.Net.Client.LocalPlayer
 
         private void SyncVehicle()
         {
-            var vehicle = Elements.LocalPlayer.Character.GetVehiclePedIsIn();
-
-            if (vehicle.DoesExist() == false)
+            if (LocalPlayerHelper.VehicleId == -1)
             {
                 return;
             }
 
-            var veh = _vehicleManager.GetVehicle(vehicle);
+            var vehicle = LocalPlayerHelper.Vehicle;
 
             var position = vehicle.Position;
             var rotation = vehicle.Rotation;
             var velocity = vehicle.Velocity;
-            var id = veh.Id;
+            var id = LocalPlayerHelper.VehicleId;
 
-            var transformPayload = new VehicleUpdatePayload(id, position, velocity, rotation, veh.Model);
+            var transformPayload = new VehicleUpdatePayload(id, position, velocity, rotation, 1274868363); // TODO: fix model
 
             _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
         }
@@ -127,6 +125,27 @@ namespace CryV.Net.Client.LocalPlayer
             var model = Elements.LocalPlayer.Model;
             var weaponModel = Elements.LocalPlayer.Character.GetCurrentPedWeapon();
             var isAiming = Elements.LocalPlayer.Character.GetIsTaskActive(290);
+            
+            var currentVehicle = Elements.LocalPlayer.Character.GetVehiclePedIsIn();
+
+            var success = currentVehicle.DoesExist();
+            if (success)
+            {
+                var remoteVehicle = _vehicleManager.GetVehicle(currentVehicle);
+
+                success = remoteVehicle != null;
+                if (success)
+                {
+                    LocalPlayerHelper.VehicleId = remoteVehicle.Id;
+                    LocalPlayerHelper.Vehicle = currentVehicle;
+                }
+            }
+
+            if (success == false)
+            {
+                LocalPlayerHelper.VehicleId = -1;
+                LocalPlayerHelper.Vehicle = null;
+            }
 
             // TODO: Better detection if something changed
             if ((position - _lastPosition).Length() < 0.05f && (velocity - _lastVelocity).Length() < 0.05f && Math.Abs(rotation.Z - _lastHeading) < 0.05f &&

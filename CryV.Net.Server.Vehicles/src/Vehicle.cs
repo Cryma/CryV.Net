@@ -78,6 +78,26 @@ namespace CryV.Net.Server.Vehicles
                 payload.Id = 2;
                 payload.Position.X += 6.5f;
                 player.Send(payload, DeliveryMethod.Unreliable);
+
+                payload.Id = 3;
+                payload.Position.X -= 13f;
+                player.Send(payload, DeliveryMethod.Unreliable);
+
+                payload.Id = 4;
+                payload.Position.X -= 4f;
+                player.Send(payload, DeliveryMethod.Unreliable);
+
+                payload.Id = 5;
+                payload.Position.X -= 4f;
+                player.Send(payload, DeliveryMethod.Unreliable);
+
+                payload.Id = 6;
+                payload.Position.X -= 4f;
+                player.Send(payload, DeliveryMethod.Unreliable);
+
+                payload.Id = 7;
+                payload.Position.X -= 4f;
+                player.Send(payload, DeliveryMethod.Unreliable);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using Autofac;
 using CryV.Net.Client.Common.Interfaces;
+using CryV.Net.Elements;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Events.Types;
@@ -55,7 +56,6 @@ namespace CryV.Net.Client.Vehicles
         private void AddVehicle(VehicleUpdatePayload payload)
         {
             var vehicle = new Vehicle(_eventHandler, _entityPool, payload);
-
             _vehicles.TryAdd(payload.Id, vehicle);
         }
 

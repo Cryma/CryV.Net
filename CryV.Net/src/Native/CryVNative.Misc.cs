@@ -621,5 +621,9 @@ namespace CryV.Net.Native
         public static extern IntPtr Native_Misc_GetAllVehicles(IntPtr plugin);
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Misc_Wait(IntPtr plugin, int ms);
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern bool Native_Misc_MemoryIsPedInVehicle(IntPtr plugin, int pedId);
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern int Native_Misc_MemoryGetVehiclePedIsIn(IntPtr plugin, int pedId);
     }
 }

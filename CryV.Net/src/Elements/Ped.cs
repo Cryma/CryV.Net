@@ -1,4 +1,4 @@
-﻿using CryV.Net.Client.Helpers;
+using CryV.Net.Client.Helpers;
 using CryV.Net.Helpers;
 using CryV.Net.Native;
 using System.Numerics;
@@ -341,6 +341,21 @@ namespace CryV.Net.Elements
 
                 CryVNative.Native_Brain__0xD01015C7316AE176(CryVNative.Plugin, Handle, p1Pointer);
             }
+        }
+
+        public bool MemoryIsPedInVehicle()
+        {
+            return CryVNative.Native_Misc_MemoryIsPedInVehicle(CryVNative.Plugin, Handle);
+        }
+
+        public Vehicle MemoryGetVehiclePedIsIn()
+        {
+            if (MemoryIsPedInVehicle() == false)
+            {
+                return new Vehicle(0);
+            }
+
+            return new Vehicle(CryVNative.Native_Misc_MemoryGetVehiclePedIsIn(CryVNative.Plugin, Handle));
         }
 
         private void SetSkin(ulong model)
