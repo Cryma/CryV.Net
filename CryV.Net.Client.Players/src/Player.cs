@@ -12,7 +12,7 @@ using CryV.Net.Shared.Events.Types;
 
 namespace CryV.Net.Client.Players
 {
-    public class Player : IPlayer
+    public partial class Player : IPlayer
     {
 
         public int Id { get; }
@@ -80,8 +80,6 @@ namespace CryV.Net.Client.Players
         private bool _wasJumping;
         private bool _wasClimbing;
         private bool _wasRagdoll;
-        private bool _wasEnteringVehicle;
-        private bool _wasLeavingVehicle;
 
         private Prop _aimProp;
         private Prop _followProp;
@@ -152,24 +150,7 @@ namespace CryV.Net.Client.Players
 
             IsAiming = (payload.PedData & (int) PedData.IsAiming) > 0;
 
-            IsEnteringVehicle = (payload.PedData & (int) PedData.IsEnteringVehicle) > 0;
-            if (IsEnteringVehicle == false)
-            {
-                _wasEnteringVehicle = false;
-            }
-
-            IsInVehicle = (payload.PedData & (int) PedData.IsInVehicle) > 0;
-
-            if (payload.VehicleId != -1)
-            {
-                Vehicle = _vehicleManager.GetVehicle(payload.VehicleId);
-            }
-
-            IsLeavingVehicle = (payload.PedData & (int) PedData.IsLeavingVehicle) > 0;
-            if (IsLeavingVehicle == false)
-            {
-                _wasLeavingVehicle = false;
-            }
+            ReadPayloadVehicleRelated(payload);
 
             // TODO: Optimize
             ThreadHelper.Run(() =>
@@ -202,22 +183,7 @@ namespace CryV.Net.Client.Players
                 }
             }
 
-            if (_wasEnteringVehicle || IsInVehicle)
-            {
-                return;
-            }
-
-            if (IsLeavingVehicle && _wasLeavingVehicle == false)
-            {
-                _ped.ClearPedTasks();
-                _ped.ClearPedSecondaryTask();
-
-                _ped.TaskLeaveVehicle(Vehicle.GetVehicle(), 0);
-
-                _wasLeavingVehicle = true;
-            }
-
-            if (_wasLeavingVehicle)
+            if (UpdateVehicleAnimations())
             {
                 return;
             }
@@ -248,17 +214,6 @@ namespace CryV.Net.Client.Players
                 _ped.TaskClimb();
 
                 _wasClimbing = true;
-            }
-
-            if (IsEnteringVehicle && _wasEnteringVehicle == false)
-            {
-                _ped.ClearPedTasks();
-                _ped.ClearPedSecondaryTask();
-                _ped.ClearPedTasksImmediately();
-
-                _ped.TaskEnterVehicle(Vehicle.GetVehicle(), -1, Seat, Speed, 0);
-
-                _wasEnteringVehicle = true;
             }
         }
 
@@ -369,50 +324,6 @@ namespace CryV.Net.Client.Players
                     _ped.TaskStandStill(2000);
 
                     break;
-            }
-        }
-
-        private void UpdateWeaponAnimation()
-        {
-            // TODO: Interpolate and improve aim prop handling
-
-            if (_aimProp == null)
-            {
-                _aimProp = new Prop(3120582510, AimTarget);
-                _aimProp.SetEntityCollision(false);
-                _aimProp.SetEntityAlpha(0);
-            }
-
-            if (_aimProp != null && _aimProp.DoesExist())
-            {
-                _aimProp.Position = AimTarget;
-            }
-
-            if (_followProp == null)
-            {
-                _followProp = new Prop(3120582510, TargetPosition + Velocity * 3.0f);
-                _followProp.SetEntityCollision(false);
-                _followProp.SetEntityAlpha(0);
-            }
-
-            if (_followProp != null && _followProp.DoesExist())
-            {
-                _followProp.Position = TargetPosition + Velocity * 3.0f;
-            }
-
-            var isPedAiming = _ped.GetIsTaskActive(290);
-
-            if (isPedAiming == false || _ticks % 100 == 0)
-            {
-                if (Speed == 0)
-                {
-                    _ped.TaskAimGunAtEntity(_aimProp.Handle, -1, false);
-                }
-                else
-                {
-                    _ped.TaskGoToEntityWhileAimingAtEntity(_followProp.Handle, _aimProp.Handle, Speed, false, 3.0f, 1082130432, true, false, 3337513804);
-                    _ped.SetPedDesiredMoveBlendRatio(Speed);
-                }
             }
         }
 
