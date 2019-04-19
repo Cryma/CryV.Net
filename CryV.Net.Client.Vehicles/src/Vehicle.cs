@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Numerics;
 using System.Threading;
 using CryV.Net.Client.Common.Helpers;
@@ -133,9 +133,11 @@ namespace CryV.Net.Client.Vehicles
                 return;
             }
 
-            Position = Vector3.Lerp(Position, TargetPosition, deltatime * 3);
+            //Position = Vector3.Lerp(Position, TargetPosition, deltatime * 3);
             Rotation = Vector3.Lerp(Rotation, TargetRotation, deltatime * 3);
-            _vehicle.Velocity = Velocity;
+
+            var positionDifference = TargetPosition - Position;
+            _vehicle.Velocity = Velocity + positionDifference;
 
             _vehicle.CurrentGear = CurrentGear;
             _vehicle.CurrentRPM = CurrentRPM;
