@@ -136,8 +136,8 @@ namespace CryV.Net.Client.Vehicles
                 return;
             }
 
-            Position = TargetPosition;
-            Rotation = TargetRotation;
+            Position = Vector3.Lerp(Position, TargetPosition, deltatime * 3);
+            Rotation = Vector3.Lerp(Rotation, TargetRotation, deltatime * 3);
             _vehicle.Velocity = Velocity;
 
             _vehicle.WheelSpeed = WheelSpeed;

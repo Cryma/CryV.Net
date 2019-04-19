@@ -112,34 +112,10 @@ namespace CryV.Net.Server.Players
                 existingVehicles.Add(vehicle.GetPayload());
 
                 var mirrorVehiclePayload = vehicle.GetPayload();
-                mirrorVehiclePayload.Id = 2;
-                mirrorVehiclePayload.Position.X += 6.5f;
+                mirrorVehiclePayload.Id = 1;
+                mirrorVehiclePayload.Position.X -= 6.5f;
                 existingVehicles.Add(mirrorVehiclePayload);
 
-                var mirrorVehiclePayload1 = vehicle.GetPayload();
-                mirrorVehiclePayload1.Id = 3;
-                mirrorVehiclePayload1.Position.X -= 6.5f;
-                existingVehicles.Add(mirrorVehiclePayload1);
-
-                var mirrorVehiclePayload2 = vehicle.GetPayload();
-                mirrorVehiclePayload2.Id = 4;
-                mirrorVehiclePayload2.Position.X -= 10.5f;
-                existingVehicles.Add(mirrorVehiclePayload2);
-
-                var mirrorVehiclePayload3 = vehicle.GetPayload();
-                mirrorVehiclePayload3.Id = 5;
-                mirrorVehiclePayload3.Position.X -= 14.5f;
-                existingVehicles.Add(mirrorVehiclePayload3);
-
-                var mirrorVehiclePayload4 = vehicle.GetPayload();
-                mirrorVehiclePayload4.Id = 6;
-                mirrorVehiclePayload4.Position.X -= 18.5f;
-                existingVehicles.Add(mirrorVehiclePayload4);
-
-                var mirrorVehiclePayload5 = vehicle.GetPayload();
-                mirrorVehiclePayload5.Id = 7;
-                mirrorVehiclePayload5.Position.X -= 22.5f;
-                existingVehicles.Add(mirrorVehiclePayload5);
             }
 
 #if PEDMIRROR
