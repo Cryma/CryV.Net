@@ -24,7 +24,7 @@ namespace CryV.Net.Server.Api
         private readonly IPlayerManager _playerManager;
         private readonly IVehicleManager _vehicleManager;
 
-        private readonly List<GamemodeEntry> _gamemodes = new List<GamemodeEntry>();
+        private readonly Dictionary<string, GamemodeEntry> _gamemodes = new Dictionary<string, GamemodeEntry>();
 
         private readonly DownloadServer _downloadServer;
 
@@ -43,6 +43,7 @@ namespace CryV.Net.Server.Api
             MP.Setup(_script);
 
             LoadGamemodes();
+            DownloadModule.Gamemodes = _gamemodes;
         }
 
         private void LoadGamemodes()
@@ -55,6 +56,8 @@ namespace CryV.Net.Server.Api
                 {
                     continue;
                 }
+
+                var gamemodeName = Path.GetFileName(potentialGamemode);
 
                 var potentialGamemodeAssemblies = Directory.GetFiles(assemblyFolder, "*.dll");
                 foreach (var potentialGamemodeAssembly in potentialGamemodeAssemblies)
@@ -70,7 +73,7 @@ namespace CryV.Net.Server.Api
 
                         var gamemode = (IGamemode) Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
 
-                        _gamemodes.Add(new GamemodeEntry(gamemode, potentialGamemode));
+                        _gamemodes.Add(gamemodeName, new GamemodeEntry(gamemode, potentialGamemode));
                     }
                 }
             }

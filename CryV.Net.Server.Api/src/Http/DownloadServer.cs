@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
+using CryV.Net.Server.Api.Gamemode;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Nancy;
 using Nancy.Owin;
+using Newtonsoft.Json;
 
 namespace CryV.Net.Server.Api.Http
 {
@@ -23,7 +28,7 @@ namespace CryV.Net.Server.Api.Http
                 .UseStartup<Startup>()
                 .Build();
 
-            _webHost.Run();
+            _webHost.Start();
         }
 
         public void Dispose()
@@ -36,16 +41,46 @@ namespace CryV.Net.Server.Api.Http
     public sealed class DownloadModule : NancyModule
     {
 
+        public static Dictionary<string, GamemodeEntry> Gamemodes;
+
         public DownloadModule()
         {
-            Get("/{resource}/{path*}", parameters =>
+            Get("/{gamemode}/{path*}", parameters =>
             {
+                if (Gamemodes == null)
+                {
+                    return 404;
+                }
+
+                var gamemodeName = (string) parameters.gamemode;
+                if (Gamemodes.ContainsKey(gamemodeName) == false)
+                {
+                    return 404;
+                }
+
+                var path = (string) parameters.path;
+                if (Gamemodes.Values.Any(x => x.ClientsideFiles.Any(y => y.Path == path)) == false)
+                {
+                    return 404;
+                }
+
+                var filePath = Path.Combine(Environment.CurrentDirectory, "gamemode", gamemodeName, "client", path);
+                if (File.Exists(filePath))
+                {
+                    return Response.AsFile(filePath);
+                }
+
                 return 404;
             });
 
             Get("/filemap.json", _ =>
             {
-                return 404;
+                if (Gamemodes == null)
+                {
+                    return 404;
+                }
+
+                return JsonConvert.SerializeObject(Gamemodes.ToDictionary(x => x.Key, y => y.Value.ClientsideFiles));
             });
         }
 
