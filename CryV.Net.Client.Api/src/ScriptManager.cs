@@ -74,6 +74,8 @@ namespace CryV.Net.Client.Http
                     _webClient.DownloadFile($"http://{_networkManager.EndPoint.Address}:{_networkManager.EndPoint.Port + 1}/{element.Key}/{file.Path}", filePath);
                 }
             }
+
+            CheckForDeletedFiles();
         }
 
         private bool IsFileUpToDate(string gamemode, FileEntry fileEntry)
@@ -96,6 +98,26 @@ namespace CryV.Net.Client.Http
                 }
 
                 return stringBuilder.ToString() == fileEntry.Hash;
+            }
+        }
+
+        private void CheckForDeletedFiles()
+        {
+            foreach (var gamemode in _clientFiles)
+            {
+                var gamemodePath = Path.Combine(GetFileBasePath(), gamemode.Key);
+
+                foreach (var file in Directory.GetFiles(gamemodePath, "*", SearchOption.AllDirectories))
+                {
+                    var relativeFilePath = file.Remove(0, gamemodePath.Length + 1);
+
+                    if (gamemode.Value.Any(x => x.Path == relativeFilePath))
+                    {
+                        continue;
+                    }
+
+                    File.Delete(file);
+                }
             }
         }
 
