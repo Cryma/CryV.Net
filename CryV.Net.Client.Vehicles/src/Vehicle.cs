@@ -62,6 +62,14 @@ namespace CryV.Net.Client.Vehicles
 
         public bool IsBurnout { get; set; }
 
+        public bool IsRoofUp { get; set; }
+
+        public bool IsRoofLowering { get; set; }
+
+        public bool IsRoofDown { get; set; }
+
+        public bool IsRoofRaising { get; set; }
+
         private Elements.Vehicle _vehicle;
 
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
@@ -117,6 +125,10 @@ namespace CryV.Net.Client.Vehicles
 
             IsHornActive = (payload.VehicleData & (int) VehicleData.IsHornActive) > 0;
             IsBurnout = (payload.VehicleData & (int) VehicleData.IsBurnout) > 0;
+            IsRoofUp = (payload.VehicleData & (int) VehicleData.RoofUp) > 0;
+            IsRoofLowering = (payload.VehicleData & (int) VehicleData.RoofLowering) > 0;
+            IsRoofDown = (payload.VehicleData & (int) VehicleData.RoofDown) > 0;
+            IsRoofRaising = (payload.VehicleData & (int) VehicleData.RoofRaising) > 0;
 
             if (Id == LocalPlayerHelper.VehicleId)
             {
@@ -148,7 +160,7 @@ namespace CryV.Net.Client.Vehicles
         public VehicleUpdatePayload GetPayload()
         {
             return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, Model, EngineState, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration,
-                Brake, TargetSteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout);
+                Brake, TargetSteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout, IsRoofUp, IsRoofLowering, IsRoofDown, IsRoofRaising);
         }
 
         private void Tick(float deltatime)
@@ -170,6 +182,16 @@ namespace CryV.Net.Client.Vehicles
             _vehicle.Acceleration = Acceleration;
             _vehicle.Brake = Brake;
             _vehicle.SteeringAngle = Interpolation.Lerp(_vehicle.SteeringAngle, TargetSteeringAngle, deltatime * 5);
+
+            ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_RAISEROOF", IsRoofRaising, () =>
+            {
+                _vehicle.RaiseConvertibleRoof(false);
+            });
+
+            ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_LOWERROOF", IsRoofLowering, () =>
+            {
+                _vehicle.LowerConvertibleRoof(false);
+            });
 
             ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_HORN", IsHornActive, () =>
             {

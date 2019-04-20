@@ -110,6 +110,41 @@ namespace CryV.Net.Elements
             CryVNative.Native_Vehicle_SetVehicleColours(CryVNative.Plugin, Handle, primary, secondary);
         }
 
+        public bool IsVehicleAConvertible()
+        {
+            return CryVNative.Native_Vehicle_IsVehicleAConvertible(CryVNative.Plugin, Handle, false);
+        }
+
+        public int GetConvertibleRoofState()
+        {
+            if (IsVehicleAConvertible() == false)
+            {
+                return -1;
+            }
+
+            return CryVNative.Native_Vehicle_GetConvertibleRoofState(CryVNative.Plugin, Handle);
+        }
+
+        public void LowerConvertibleRoof(bool instant)
+        {
+            if (IsVehicleAConvertible() == false)
+            {
+                return;
+            }
+
+            CryVNative.Native_Vehicle_LowerConvertibleRoof(CryVNative.Plugin, Handle, instant);
+        }
+
+        public void RaiseConvertibleRoof(bool instant)
+        {
+            if (IsVehicleAConvertible() == false)
+            {
+                return;
+            }
+
+            CryVNative.Native_Vehicle_RaiseConvertibleRoof(CryVNative.Plugin, Handle, instant);
+        }
+
         private void CreateVehicle(ulong model, Vector3 position, Vector3 rotation)
         {
             if (IsValid())

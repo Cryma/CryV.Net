@@ -66,7 +66,7 @@ namespace CryV.Net.Shared.Common.Payloads
 
         public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, ulong model, bool engineState, byte currentGear,
             float currentRPM, float clutch, float turbo, float acceleration, float brake, float steeringAngle, int colorPrimary, int colorSecondary,
-            bool isHornActive, bool isBurnout)
+            bool isHornActive, bool isBurnout, bool roofUp, bool roofLowering, bool roofDown, bool roofRaising)
         {
             Id = id;
             Position = position;
@@ -92,6 +92,26 @@ namespace CryV.Net.Shared.Common.Payloads
             if (isBurnout)
             {
                 VehicleData |= (int) Flags.VehicleData.IsBurnout;
+            }
+
+            if (roofUp)
+            {
+                VehicleData |= (int) Flags.VehicleData.RoofUp;
+            }
+
+            if (roofLowering)
+            {
+                VehicleData |= (int)Flags.VehicleData.RoofLowering;
+            }
+
+            if (roofDown)
+            {
+                VehicleData |= (int)Flags.VehicleData.RoofDown;
+            }
+
+            if (roofRaising)
+            {
+                VehicleData |= (int)Flags.VehicleData.RoofRaising;
             }
         }
 
