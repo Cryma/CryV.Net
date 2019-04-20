@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 
@@ -8,6 +9,10 @@ namespace CryV.Net.Server.Common.Interfaces
     {
         
         int Id { get; }
+
+        Vector3 Position { get; set; }
+
+        float Heading { get; set; }
 
         PlayerUpdatePayload GetPayload();
 

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CryV.Net.Server.Api\CryV.Net.Server.Api.csproj" />
+    <ProjectReference Include="..\CryV.Net.Server.Common\CryV.Net.Server.Common.csproj" />
+    <ProjectReference Include="..\CryV.Net.Shared.Common\CryV.Net.Shared.Common.csproj" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="XCOPY &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\..\server\gamemode\&quot; /S /Y" />
+  </Target>
+
+</Project>

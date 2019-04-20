@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CryV.Net.Server.Api\CryV.Net.Server.Api.csproj" />
     <ProjectReference Include="..\CryV.Net.Server.Common\CryV.Net.Server.Common.csproj" />
     <ProjectReference Include="..\CryV.Net.Server.FingerPointing\CryV.Net.Server.FingerPointing.csproj" />
     <ProjectReference Include="..\CryV.Net.Server.Networking\CryV.Net.Server.Networking.csproj" />
@@ -18,5 +19,9 @@
     <ProjectReference Include="..\CryV.Net.Server.Vehicles\CryV.Net.Server.Vehicles.csproj" />
     <ProjectReference Include="..\CryV.Net.Shared.Events\CryV.Net.Shared.Events.csproj" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="XCOPY &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\..\server\&quot; /S /Y" />
+  </Target>
 
 </Project>

@@ -39,13 +39,11 @@ namespace CryV.Net.Server.Networking
         private void OnPeerConnected(NetPeer peer)
         {
             _playerManager.AddPlayer(peer);
-            Console.WriteLine($"Player {peer.Id} ({peer.EndPoint}) connected.");
         }
 
         private void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectinfo)
         {
             _playerManager.RemovePlayer(peer);
-            Console.WriteLine($"Player {peer.Id} ({peer.EndPoint}) disconnected.");
         }
 
         private void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliverymethod)
