@@ -25,7 +25,7 @@ namespace CryV.Net.Client.Helpers
 
             if (Utility.IsKeyReleased(ConsoleKey.Escape))
             {
-                UserInterface.ActivateFrontendMenu(3123948979, false, -1);
+                UserInterface.ActivateFrontendMenu(Utility.Joaat("FE_MENU_VERSION_SP_PAUSE"), false, -1);
             }
         }
 
