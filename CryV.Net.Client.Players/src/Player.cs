@@ -204,8 +204,8 @@ namespace CryV.Net.Client.Players
 
         private void UpdatePosition(float deltaTime)
         {
-            Position = Vector3.Lerp(Position, TargetPosition, deltaTime * _interpolationFactor);
-            _ped.Velocity = Velocity;
+            var positionDifference = TargetPosition - Position;
+            _ped.Velocity = Velocity + positionDifference;
         }
 
         private void UpdateHeading(float deltaTime)
