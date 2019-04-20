@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CryV.Net.Client.Api\CryV.Net.Client.Api.csproj" />
     <ProjectReference Include="..\CryV.Net.Client.Cleanup\CryV.Net.Client.Cleanup.csproj" />
     <ProjectReference Include="..\CryV.Net.Client.Common\CryV.Net.Client.Common.csproj" />
     <ProjectReference Include="..\CryV.Net.Client.Console\CryV.Net.Client.Console.csproj" />

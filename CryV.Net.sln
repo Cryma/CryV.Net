@@ -53,11 +53,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Client.Vehicles", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Server.Vehicles", "CryV.Net.Server.Vehicles\CryV.Net.Server.Vehicles.csproj", "{B74ECBF4-9039-4019-B4E9-9011323BFB9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Server.Api", "CryV.Net.Server.Api\CryV.Net.Server.Api.csproj", "{27BF0F85-D90E-464E-8104-127929EF8581}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Server.Api", "CryV.Net.Server.Api\CryV.Net.Server.Api.csproj", "{27BF0F85-D90E-464E-8104-127929EF8581}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server.Example", "Server.Example", "{99791E1B-D1EA-4142-B311-4861EDAB9221}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Server.Example", "CryV.Net.Server.Example\CryV.Net.Server.Example.csproj", "{CB3867BD-C228-4DD2-BFAA-2C0F387D4E00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryV.Net.Server.Example", "CryV.Net.Server.Example\CryV.Net.Server.Example.csproj", "{CB3867BD-C228-4DD2-BFAA-2C0F387D4E00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryV.Net.Client.Api", "CryV.Net.Client.Api\CryV.Net.Client.Api.csproj", "{8E886ADF-CC3B-4601-B98E-05ABB4290FD8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -204,6 +206,12 @@ Global
 		{CB3867BD-C228-4DD2-BFAA-2C0F387D4E00}.PedMirror|Any CPU.Build.0 = Debug|Any CPU
 		{CB3867BD-C228-4DD2-BFAA-2C0F387D4E00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB3867BD-C228-4DD2-BFAA-2C0F387D4E00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E886ADF-CC3B-4601-B98E-05ABB4290FD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E886ADF-CC3B-4601-B98E-05ABB4290FD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E886ADF-CC3B-4601-B98E-05ABB4290FD8}.PedMirror|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E886ADF-CC3B-4601-B98E-05ABB4290FD8}.PedMirror|Any CPU.Build.0 = Debug|Any CPU
+		{8E886ADF-CC3B-4601-B98E-05ABB4290FD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E886ADF-CC3B-4601-B98E-05ABB4290FD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -232,6 +240,7 @@ Global
 		{B74ECBF4-9039-4019-B4E9-9011323BFB9C} = {FF194CC2-08D8-45A0-92E4-6A912B27CD0D}
 		{27BF0F85-D90E-464E-8104-127929EF8581} = {FF194CC2-08D8-45A0-92E4-6A912B27CD0D}
 		{CB3867BD-C228-4DD2-BFAA-2C0F387D4E00} = {99791E1B-D1EA-4142-B311-4861EDAB9221}
+		{8E886ADF-CC3B-4601-B98E-05ABB4290FD8} = {B70BD485-BD69-4069-8E91-3E849018909E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D13F4F0C-E395-4838-B597-2A10F446B713}

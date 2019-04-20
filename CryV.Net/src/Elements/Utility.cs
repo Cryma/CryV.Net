@@ -49,6 +49,11 @@ namespace CryV.Net.Elements
             return CryVNative.Native_Utility_IsKeyReleased(CryVNative.Plugin, (ulong) key);
         }
 
+        public static string GetInstallDirectory()
+        {
+            return PluginWrapper.GetInstallDirectory();
+        }
+
         public static uint Joaat(string data)
         {
             if (string.IsNullOrEmpty(data))

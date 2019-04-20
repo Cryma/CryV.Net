@@ -59,7 +59,7 @@ namespace CryV.Net.Server.Api.Http
                 }
 
                 var path = (string) parameters.path;
-                if (Gamemodes.Values.Any(x => x.ClientsideFiles.Any(y => y.Path == path)) == false)
+                if (Gamemodes.Values.Any(x => x.ClientsideFiles.Any(y => y.Path.Replace('\\', '/') == path)) == false)
                 {
                     return 404;
                 }

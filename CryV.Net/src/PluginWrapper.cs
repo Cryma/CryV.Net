@@ -12,7 +12,7 @@ using Sentry;
 
 namespace CryV.Net
 {
-    public static class PluginWrapper
+    internal static class PluginWrapper
     {
 
         private static IPlugin _plugin;
@@ -82,7 +82,7 @@ namespace CryV.Net
             SetDllDirectory(GetInstallDirectory());
         }
 
-        private static string GetInstallDirectory()
+        public static string GetInstallDirectory()
         {
             using (var key = Registry.CurrentUser.OpenSubKey("Software\\CryV"))
             {

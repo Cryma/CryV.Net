@@ -1,4 +1,5 @@
-﻿using CryV.Net.Shared.Common.Payloads;
+﻿using System.Net;
+using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 
 namespace CryV.Net.Client.Common.Interfaces
@@ -9,6 +10,8 @@ namespace CryV.Net.Client.Common.Interfaces
         bool IsConnected { get; }
 
         NetStatistics Statistics { get; }
+
+        IPEndPoint EndPoint { get; }
 
         int Ping { get; }
 

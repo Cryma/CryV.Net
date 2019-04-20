@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading;
@@ -23,6 +24,8 @@ namespace CryV.Net.Client.Networking
         public bool IsConnected => _peer != null && _peer.ConnectionState == ConnectionState.Connected;
 
         public NetStatistics Statistics => _peer.Statistics;
+
+        public IPEndPoint EndPoint => _peer.EndPoint;
 
         public int Ping => _peer?.Ping ?? -1;
 
