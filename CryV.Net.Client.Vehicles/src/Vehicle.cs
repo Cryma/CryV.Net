@@ -133,8 +133,6 @@ namespace CryV.Net.Client.Vehicles
                 });
             }
 
-            Utility.Log($"Primary: {ColorPrimary} - Secondary: {ColorSecondary}");
-
             if (ColorPrimary != payload.ColorPrimary || ColorSecondary != payload.ColorSecondary)
             {
                 ThreadHelper.Run(() =>

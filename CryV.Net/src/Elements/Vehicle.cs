@@ -56,6 +56,8 @@ namespace CryV.Net.Elements
             set => CryVNative.Native_Memory_SetSteeringAngle(CryVNative.Plugin, Handle, value);
         }
 
+        public ulong Model => CryVNative.Native_Entity_GetEntityModel(CryVNative.Plugin, Handle);
+
         public Vehicle(int handle) : base(handle)
         {
         }
