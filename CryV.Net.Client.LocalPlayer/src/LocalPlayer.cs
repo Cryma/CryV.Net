@@ -55,7 +55,6 @@ namespace CryV.Net.Client.LocalPlayer
         private void OnLocalPlayerDisconnected(LocalPlayerDisconnectedEvent obj)
         {
             _cancellationTokenSource?.Cancel();
-            EntityPool.Clear();
         }
 
         private void OnBootstrap(NetworkEvent<BootstrapPayload> obj)

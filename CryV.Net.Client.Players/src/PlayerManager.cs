@@ -34,10 +34,14 @@ namespace CryV.Net.Client.Players
 
         private void OnLocalPlayerDisconnect(LocalPlayerDisconnectedEvent obj)
         {
-            foreach (var player in _players.Keys)
+            foreach (var player in _players.Values)
             {
-                RemovePlayer(player);
+                _eventHandler.Publish(new PlayerDisconnectedEvent(player));
+
+                player.Dispose();
             }
+
+            _players.Clear();
         }
 
         public void AddPlayer(PlayerUpdatePayload payload)

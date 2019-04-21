@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Autofac;
+using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
 using CryV.Net.Shared.Common.Interfaces;
@@ -26,6 +27,8 @@ namespace CryV.Net.Client.Vehicles
 
             _eventHandler.Subscribe<NetworkEvent<VehicleAddPayload>>(OnAddVehicle);
             _eventHandler.Subscribe<NetworkEvent<VehicleRemovePayload>>(OnRemoveVehicle);
+
+            _eventHandler.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
         }
 
         private void OnBootstrap(NetworkEvent<BootstrapPayload> obj)
@@ -49,6 +52,16 @@ namespace CryV.Net.Client.Vehicles
         private void OnRemoveVehicle(NetworkEvent<VehicleRemovePayload> obj)
         {
             RemoveVehicle(obj.Payload.Id);
+        }
+
+        private void OnLocalPlayerDisconnected(LocalPlayerDisconnectedEvent obj)
+        {
+            foreach (var vehicle in _vehicles.Values)
+            {
+                vehicle.Dispose();
+            }
+
+            _vehicles.Clear();
         }
 
         private void AddVehicle(VehicleUpdatePayload payload)

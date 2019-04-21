@@ -69,6 +69,10 @@ namespace CryV.Net.Client.Debugging.Menu
             PrintLine("Peds: " + entities.Count(x => x.GetType() == typeof(Ped)));
             PrintLine("Vehicles: " + entities.Count(x => x.GetType() == typeof(Vehicle)));
 
+            _line++;
+
+            PrintLine("Current Vehicle: " + LocalPlayerHelper.VehicleId);
+
 #if !RELEASE
             if (_networkManager.IsConnected)
             {
