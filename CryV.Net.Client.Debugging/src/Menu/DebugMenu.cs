@@ -72,6 +72,12 @@ namespace CryV.Net.Client.Debugging.Menu
             _line++;
 
             PrintLine("Current Vehicle: " + LocalPlayerHelper.VehicleId);
+            if (LocalPlayer.Character.IsInAnyVehicle())
+            {
+                var vehicle = LocalPlayer.Character.GetVehiclePedIsIn();
+
+                PrintLine("Vehicle health: " + vehicle.Health);
+            }
 
             _line++;
 
