@@ -21,6 +21,8 @@ namespace CryV.Net.Server.Vehicles
 
         public Vector3 Rotation { get; set; }
 
+        public float EngineHealth { get; set; } = 1000.0f;
+
         public string NumberPlate { get; set; }
 
         public ulong Model { get; set; }
@@ -84,8 +86,9 @@ namespace CryV.Net.Server.Vehicles
 
         public VehicleUpdatePayload GetPayload()
         {
-            return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, NumberPlate, Model, EngineState, CurrentGear, CurrentRPM, Clutch, Turbo,
-                Acceleration, Brake, SteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout, IsRoofUp, IsRoofLowering, IsRoofDown, IsRoofRaising);
+            return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, EngineHealth, NumberPlate, Model, EngineState, CurrentGear, CurrentRPM,
+                Clutch, Turbo, Acceleration, Brake, SteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout, IsRoofUp, IsRoofLowering, IsRoofDown,
+                IsRoofRaising);
         }
 
         public void ReadPayload(VehicleUpdatePayload payload)
@@ -93,6 +96,7 @@ namespace CryV.Net.Server.Vehicles
             Position = payload.Position;
             Velocity = payload.Velocity;
             Rotation = payload.Rotation;
+            EngineHealth = payload.EngineHealth;
             NumberPlate = payload.NumberPlate;
             Model = payload.Model;
             EngineState = payload.EngineState;

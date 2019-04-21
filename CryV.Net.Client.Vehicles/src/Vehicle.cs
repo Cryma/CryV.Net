@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Numerics;
-using System.Threading;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Client.Helpers;
@@ -10,7 +9,6 @@ using CryV.Net.Shared.Common.Flags;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Events.Types;
-using LiteNetLib;
 
 namespace CryV.Net.Client.Vehicles
 {
@@ -36,6 +34,10 @@ namespace CryV.Net.Client.Vehicles
         }
 
         public Vector3 TargetRotation { get; set; }
+
+        public float BodyHealth { get; set; }
+
+        public float EngineHealth { get; set; }
 
         public string NumberPlate { get; set; }
 
@@ -87,6 +89,7 @@ namespace CryV.Net.Client.Vehicles
             TargetPosition = payload.Position;
             TargetRotation = payload.Rotation;
             Model = payload.Model;
+            EngineHealth = payload.EngineHealth;
 
             _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(update => ReadPayload(update.Payload), x => x.Payload.Id == Id));
 
@@ -99,6 +102,8 @@ namespace CryV.Net.Client.Vehicles
 
                 _vehicle.SetVehicleColours(payload.ColorPrimary, payload.ColorSecondary);
                 _vehicle.NumberPlate = payload.NumberPlate;
+
+                _vehicle.EngineHealth = payload.EngineHealth;
 
                 EntityPool.AddEntity(_vehicle);
             });
@@ -116,6 +121,7 @@ namespace CryV.Net.Client.Vehicles
             TargetPosition = payload.Position;
             TargetRotation = payload.Rotation;
             Velocity = payload.Velocity;
+            EngineHealth = payload.EngineHealth;
             Model = payload.Model;
             CurrentGear = payload.CurrentGear;
             CurrentRPM = payload.CurrentRPM;
@@ -171,9 +177,9 @@ namespace CryV.Net.Client.Vehicles
 
         public VehicleUpdatePayload GetPayload()
         {
-            return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, NumberPlate, Model, EngineState, CurrentGear, CurrentRPM, Clutch,
-                Turbo, Acceleration, Brake, TargetSteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout, IsRoofUp, IsRoofLowering, IsRoofDown,
-                IsRoofRaising);
+            return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, EngineHealth, NumberPlate, Model, EngineState, CurrentGear,
+                CurrentRPM, Clutch, Turbo, Acceleration, Brake, TargetSteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout, IsRoofUp, IsRoofLowering,
+                IsRoofDown, IsRoofRaising);
         }
 
         private void Tick(float deltatime)

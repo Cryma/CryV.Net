@@ -25,56 +25,60 @@ namespace CryV.Net.Shared.Common.Payloads
         public SerializableVector3 Rotation { get; set; }
 
         [ProtoMember(5)]
-        public string NumberPlate { get; set; }
+        public float EngineHealth { get; set; }
 
         [ProtoMember(6)]
-        public ulong Model { get; set; }
+        public string NumberPlate { get; set; }
 
         [ProtoMember(7)]
-        public bool EngineState { get; set; }
+        public ulong Model { get; set; }
 
         [ProtoMember(8)]
-        public byte CurrentGear { get; set; }
+        public bool EngineState { get; set; }
 
         [ProtoMember(9)]
-        public float CurrentRPM { get; set; }
+        public byte CurrentGear { get; set; }
 
         [ProtoMember(10)]
-        public float Clutch { get; set; }
+        public float CurrentRPM { get; set; }
 
         [ProtoMember(11)]
-        public float Turbo { get; set; }
+        public float Clutch { get; set; }
 
         [ProtoMember(12)]
-        public float Acceleration { get; set; }
+        public float Turbo { get; set; }
 
         [ProtoMember(13)]
-        public float Brake { get; set; }
+        public float Acceleration { get; set; }
 
         [ProtoMember(14)]
-        public float SteeringAngle { get; set; }
+        public float Brake { get; set; }
 
         [ProtoMember(15)]
-        public int ColorPrimary { get; set; }
+        public float SteeringAngle { get; set; }
 
         [ProtoMember(16)]
-        public int ColorSecondary { get; set; }
+        public int ColorPrimary { get; set; }
 
         [ProtoMember(17)]
+        public int ColorSecondary { get; set; }
+
+        [ProtoMember(18)]
         public int VehicleData { get; set; }
 
         public VehicleUpdatePayload()
         {
         }
 
-        public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, string numberPlate, ulong model, bool engineState,
-            byte currentGear, float currentRPM, float clutch, float turbo, float acceleration, float brake, float steeringAngle, int colorPrimary,
-            int colorSecondary, bool isHornActive, bool isBurnout, bool roofUp, bool roofLowering, bool roofDown, bool roofRaising)
+        public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, float engineHealth, string numberPlate,
+            ulong model, bool engineState, byte currentGear, float currentRPM, float clutch, float turbo, float acceleration, float brake, float steeringAngle,
+            int colorPrimary, int colorSecondary, bool isHornActive, bool isBurnout, bool roofUp, bool roofLowering, bool roofDown, bool roofRaising)
         {
             Id = id;
             Position = position;
             Velocity = velocity;
             Rotation = rotation;
+            EngineHealth = engineHealth;
             NumberPlate = numberPlate;
             Model = model;
             EngineState = engineState;
@@ -124,6 +128,7 @@ namespace CryV.Net.Shared.Common.Payloads
             return ((Vector3) Position - payload.Position).Length() > 0.1f ||
                    ((Vector3) Velocity - payload.Velocity).Length() > 0.1f ||
                    ((Vector3) Rotation - payload.Rotation).Length() > 0.1f ||
+                   Math.Abs(EngineHealth - payload.EngineHealth) > 0.1f ||
                    NumberPlate != payload.NumberPlate ||
                    EngineState != payload.EngineState ||
                    Math.Abs(CurrentRPM - payload.CurrentRPM) > 1f ||

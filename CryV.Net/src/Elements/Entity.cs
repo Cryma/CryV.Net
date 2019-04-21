@@ -16,7 +16,11 @@ namespace CryV.Net.Elements
         }
         private int _handle;
 
-        public int Health => CryVNative.Native_Entity_GetEntityHealth(CryVNative.Plugin, Handle);
+        public int Health
+        {
+            get => CryVNative.Native_Entity_GetEntityHealth(CryVNative.Plugin, Handle);
+            set => CryVNative.Native_Entity_SetEntityHealth(CryVNative.Plugin, Handle, value);
+        }
 
         public Vector3 Position
         {

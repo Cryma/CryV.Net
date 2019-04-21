@@ -76,7 +76,7 @@ namespace CryV.Net.Client.Debugging.Menu
             {
                 var vehicle = LocalPlayer.Character.GetVehiclePedIsIn();
 
-                PrintLine("Vehicle health: " + vehicle.Health);
+                PrintLine("Vehicle Health: " + vehicle.EngineHealth);
             }
 
             _line++;

@@ -77,6 +77,18 @@ namespace CryV.Net.Elements
             set => CryVNative.Native_Vehicle_SetVehicleDirtLevel(CryVNative.Plugin, Handle, value);
         }
 
+        public float BodyHealth
+        {
+            get => CryVNative.Native_Vehicle_GetVehicleBodyHealth(CryVNative.Plugin, Handle);
+            set => CryVNative.Native_Vehicle_SetVehicleBodyHealth(CryVNative.Plugin, Handle, value);
+        }
+
+        public float EngineHealth
+        {
+            get => CryVNative.Native_Vehicle_GetVehicleEngineHealth(CryVNative.Plugin, Handle);
+            set => CryVNative.Native_Vehicle_SetVehicleEngineHealth(CryVNative.Plugin, Handle, value);
+        }
+
         public ulong Model => CryVNative.Native_Entity_GetEntityModel(CryVNative.Plugin, Handle);
 
         public Vehicle(int handle) : base(handle)
