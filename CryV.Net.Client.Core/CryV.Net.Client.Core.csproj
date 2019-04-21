@@ -30,8 +30,8 @@
     <ProjectReference Include="..\CryV.Net\CryV.Net.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="XCOPY &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\..\client\dotnet\resources\&quot; /S /Y" />
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' != 'Release'">
+    <Exec Command="XCOPY $(TargetDir)* $(SolutionDir)..\client\dotnet\resources\ /S /Y" />
   </Target>
 
 </Project>

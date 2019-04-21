@@ -23,8 +23,8 @@
     </Reference>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="XCOPY &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\..\client\dotnet\plugins\&quot; /S /Y" />
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' != 'Release'">
+    <Exec Command="XCOPY $(TargetDir)* $(SolutionDir)..\client\dotnet\plugins\ /S /Y" />
   </Target>
 
 </Project>

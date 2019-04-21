@@ -10,8 +10,8 @@
     <ProjectReference Include="..\CryV.Net.Shared.Common\CryV.Net.Shared.Common.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="XCOPY &quot;$(TargetDir)*&quot; &quot;$(SolutionDir)\..\server\gamemode\example\server\&quot; /S /Y" />
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' != 'Release'">
+    <Exec Command="XCOPY $(TargetDir)* $(SolutionDir)..\server\gamemode\example\server\ /S /Y" />
   </Target>
 
 </Project>
