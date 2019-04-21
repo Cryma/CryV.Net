@@ -183,10 +183,8 @@ namespace CryV.Net.Client.Players
             {
                 UpdateWeaponAnimation();
             }
-            else
-            {
-                UpdateMovementAnimation();
-            }
+
+            UpdateMovementAnimation();
 
             UpdateRagdoll();
 
@@ -203,8 +201,20 @@ namespace CryV.Net.Client.Players
 
         private void UpdatePosition(float deltaTime)
         {
+            if (IsClimbing && IsClimbingLadder == false)
+            {
+                return;
+            }
+            
+            if (IsClimbingLadder)
+            {
+                Position = Vector3.Lerp(Position, TargetPosition + Velocity * 0.2f, deltaTime * 3);
+
+                return;
+            }
+
             var positionDifference = TargetPosition - Position;
-            _ped.Velocity = Velocity + positionDifference;
+            _ped.Velocity = Velocity + positionDifference * 0.75f;
         }
 
         private void UpdateHeading(float deltaTime)
@@ -230,7 +240,7 @@ namespace CryV.Net.Client.Players
 
         private void UpdateMovementAnimation()
         {
-            if (IsJumping || IsClimbing || IsClimbingLadder || IsRagdoll)
+            if (IsJumping || IsClimbing || IsClimbingLadder || IsRagdoll || IsAiming)
             {
                 return;
             }
