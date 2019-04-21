@@ -58,5 +58,8 @@ namespace CryV.Net.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern float Native_Memory_GetSteeringAngle(IntPtr plugin, int vehicleId);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern short Native_Memory_GetPedSeat(IntPtr plugin, int pedId);
+
     }
 }

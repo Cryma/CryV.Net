@@ -17,6 +17,8 @@ namespace CryV.Net.Elements
 
         private ulong _model;
 
+        public VehicleSeat Seat => (VehicleSeat) CryVNative.Native_Memory_GetPedSeat(CryVNative.Plugin, Handle);
+
         public Ped(int handle) : base(handle)
         {
         }
