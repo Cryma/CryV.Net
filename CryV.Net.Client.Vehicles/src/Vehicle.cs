@@ -35,8 +35,6 @@ namespace CryV.Net.Client.Vehicles
 
         public Vector3 TargetRotation { get; set; }
 
-        public float BodyHealth { get; set; }
-
         public float EngineHealth { get; set; }
 
         public string NumberPlate { get; set; }
@@ -104,6 +102,10 @@ namespace CryV.Net.Client.Vehicles
                 _vehicle.NumberPlate = payload.NumberPlate;
 
                 _vehicle.EngineHealth = payload.EngineHealth;
+                if (payload.EngineHealth < 0.0f)
+                {
+                    _vehicle.Explode(false, true);
+                }
 
                 EntityPool.AddEntity(_vehicle);
             });

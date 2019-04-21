@@ -57,6 +57,12 @@ namespace CryV.Net.Elements
             set => CryVNative.Native_Memory_SetSteeringAngle(CryVNative.Plugin, Handle, value);
         }
 
+        public bool IsDriveable
+        {
+            get => CryVNative.Native_Vehicle_IsVehicleDriveable(CryVNative.Plugin, Handle, false);
+            set => CryVNative.Native_Vehicle_SetVehicleUndriveable(CryVNative.Plugin, Handle, value == false);
+        }
+
         public string NumberPlate
         {
             get => StringConverter.PointerToString(CryVNative.Native_Vehicle_GetVehicleNumberPlateText(CryVNative.Plugin, Handle), false);
@@ -176,6 +182,11 @@ namespace CryV.Net.Elements
             }
 
             CryVNative.Native_Vehicle_RaiseConvertibleRoof(CryVNative.Plugin, Handle, instant);
+        }
+
+        public void Explode(bool isAudible, bool isInvisible)
+        {
+            CryVNative.Native_Vehicle_ExplodeVehicle(CryVNative.Plugin, Handle, isAudible, isInvisible);
         }
 
         private void CreateVehicle(ulong model, Vector3 position, Vector3 rotation)
