@@ -71,6 +71,12 @@ namespace CryV.Net.Elements
             }
         }
 
+        public float DirtLevel
+        {
+            get => CryVNative.Native_Vehicle_GetVehicleDirtLevel(CryVNative.Plugin, Handle);
+            set => CryVNative.Native_Vehicle_SetVehicleDirtLevel(CryVNative.Plugin, Handle, value);
+        }
+
         public ulong Model => CryVNative.Native_Entity_GetEntityModel(CryVNative.Plugin, Handle);
 
         public Vehicle(int handle) : base(handle)
@@ -175,6 +181,7 @@ namespace CryV.Net.Elements
             Utility.Wait(0);
 
             Rotation = rotation;
+            DirtLevel = 0.0f;
 
             Streaming.UnloadModel(model);
         }
