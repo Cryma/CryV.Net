@@ -73,13 +73,13 @@ namespace CryV.Net.Client.Debugging.Menu
 
             PrintLine("Current Vehicle: " + LocalPlayerHelper.VehicleId);
 
+            _line++;
+
+            PrintLine("Ping: " + _networkManager.Ping);
+
 #if !RELEASE
             if (_networkManager.IsConnected)
             {
-                _line++;
-
-                PrintLine("Ping: " + _networkManager.Ping);
-
                 _line++;
 
                 PrintLine("Packet loss: " + _networkManager.Statistics.PacketLossPercent + "%");
