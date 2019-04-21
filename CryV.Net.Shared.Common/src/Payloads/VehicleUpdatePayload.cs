@@ -25,9 +25,12 @@ namespace CryV.Net.Shared.Common.Payloads
         public SerializableVector3 Rotation { get; set; }
 
         [ProtoMember(5)]
-        public ulong Model { get; set; }
+        public string NumberPlate { get; set; }
 
         [ProtoMember(6)]
+        public ulong Model { get; set; }
+
+        [ProtoMember(7)]
         public bool EngineState { get; set; }
 
         [ProtoMember(8)]
@@ -64,14 +67,15 @@ namespace CryV.Net.Shared.Common.Payloads
         {
         }
 
-        public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, ulong model, bool engineState, byte currentGear,
-            float currentRPM, float clutch, float turbo, float acceleration, float brake, float steeringAngle, int colorPrimary, int colorSecondary,
-            bool isHornActive, bool isBurnout, bool roofUp, bool roofLowering, bool roofDown, bool roofRaising)
+        public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, string numberPlate, ulong model, bool engineState,
+            byte currentGear, float currentRPM, float clutch, float turbo, float acceleration, float brake, float steeringAngle, int colorPrimary,
+            int colorSecondary, bool isHornActive, bool isBurnout, bool roofUp, bool roofLowering, bool roofDown, bool roofRaising)
         {
             Id = id;
             Position = position;
             Velocity = velocity;
             Rotation = rotation;
+            NumberPlate = numberPlate;
             Model = model;
             EngineState = engineState;
             CurrentGear = currentGear;
@@ -120,6 +124,7 @@ namespace CryV.Net.Shared.Common.Payloads
             return ((Vector3) Position - payload.Position).Length() > 0.1f ||
                    ((Vector3) Velocity - payload.Velocity).Length() > 0.1f ||
                    ((Vector3) Rotation - payload.Rotation).Length() > 0.1f ||
+                   NumberPlate != payload.NumberPlate ||
                    EngineState != payload.EngineState ||
                    Math.Abs(CurrentRPM - payload.CurrentRPM) > 1f ||
                    Math.Abs(SteeringAngle - payload.SteeringAngle) > 0.02f ||

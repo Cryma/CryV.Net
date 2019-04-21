@@ -6,7 +6,7 @@ namespace CryV.Net.Server.Common.Interfaces
     public interface IVehicleManager
     {
 
-        IVehicle AddVehicle(Vector3 position, Vector3 rotation, ulong model);
+        IVehicle AddVehicle(Vector3 position, Vector3 rotation, ulong model, string numberPlate);
         IVehicle GetVehicle(int vehicleId);
         ICollection<IVehicle> GetVehicles();
 

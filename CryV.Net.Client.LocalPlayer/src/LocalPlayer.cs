@@ -115,8 +115,8 @@ namespace CryV.Net.Client.LocalPlayer
             vehicle.GetVehicleColours(out var colorPrimary, out var colorSecondary);
             var roofState = vehicle.GetConvertibleRoofState();
 
-            var transformPayload = new VehicleUpdatePayload(id, position, velocity, rotation, model, engineState, currentGear, currentRPM, clutch,
-                turbo, acceleration, brake, steeringAngle, colorPrimary, colorSecondary, Elements.LocalPlayer.IsPlayerPressingHorn(),
+            var transformPayload = new VehicleUpdatePayload(id, position, velocity, rotation, vehicle.NumberPlate, model, engineState, currentGear,
+                currentRPM, clutch, turbo, acceleration, brake, steeringAngle, colorPrimary, colorSecondary, Elements.LocalPlayer.IsPlayerPressingHorn(),
                 vehicle.IsVehicleInBurnout(), roofState == 0, roofState == 1, roofState == 2, roofState == 3);
 
             if (_lastVehiclePayload != null && transformPayload.IsDifferent(_lastVehiclePayload) == false)

@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using System.Numerics;
 using CryV.Net.Client.Helpers;
+using CryV.Net.Helpers;
 using CryV.Net.Native;
 
 namespace CryV.Net.Elements
@@ -54,6 +55,20 @@ namespace CryV.Net.Elements
         {
             get => CryVNative.Native_Memory_GetSteeringAngle(CryVNative.Plugin, Handle);
             set => CryVNative.Native_Memory_SetSteeringAngle(CryVNative.Plugin, Handle, value);
+        }
+
+        public string NumberPlate
+        {
+            get => StringConverter.PointerToString(CryVNative.Native_Vehicle_GetVehicleNumberPlateText(CryVNative.Plugin, Handle));
+            set
+            {
+                using (var converter = new StringConverter())
+                {
+                    var stringPointer = converter.StringToPointer(value);
+
+                    CryVNative.Native_Vehicle_SetVehicleNumberPlateText(CryVNative.Plugin, Handle, stringPointer);
+                }
+            }
         }
 
         public ulong Model => CryVNative.Native_Entity_GetEntityModel(CryVNative.Plugin, Handle);

@@ -20,9 +20,9 @@ namespace CryV.Net.Server.Api.Elements
             return _vehicleManager.GetVehicles();
         }
 
-        public IVehicle CreateVehicle(Vector3 position, Vector3 rotation, ulong model)
+        public IVehicle CreateVehicle(Vector3 position, Vector3 rotation, ulong model, string numberPlate = null)
         {
-            return _vehicleManager.AddVehicle(position, rotation, model);
+            return _vehicleManager.AddVehicle(position, rotation, model, numberPlate);
         }
 
     }

@@ -37,6 +37,8 @@ namespace CryV.Net.Client.Vehicles
 
         public Vector3 TargetRotation { get; set; }
 
+        public string NumberPlate { get; set; }
+
         public ulong Model { get; set; }
 
         public bool EngineState { get; set; }
@@ -96,6 +98,7 @@ namespace CryV.Net.Client.Vehicles
                 };
 
                 _vehicle.SetVehicleColours(payload.ColorPrimary, payload.ColorSecondary);
+                _vehicle.NumberPlate = payload.NumberPlate;
 
                 EntityPool.AddEntity(_vehicle);
             });
@@ -154,12 +157,23 @@ namespace CryV.Net.Client.Vehicles
                     ColorSecondary = payload.ColorSecondary;
                 });
             }
+
+            if (NumberPlate != payload.NumberPlate)
+            {
+                ThreadHelper.Run(() =>
+                {
+                    _vehicle.NumberPlate = payload.NumberPlate;
+
+                    NumberPlate = payload.NumberPlate;
+                });
+            }
         }
 
         public VehicleUpdatePayload GetPayload()
         {
-            return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, Model, EngineState, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration,
-                Brake, TargetSteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout, IsRoofUp, IsRoofLowering, IsRoofDown, IsRoofRaising);
+            return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, NumberPlate, Model, EngineState, CurrentGear, CurrentRPM, Clutch,
+                Turbo, Acceleration, Brake, TargetSteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout, IsRoofUp, IsRoofLowering, IsRoofDown,
+                IsRoofRaising);
         }
 
         private void Tick(float deltatime)

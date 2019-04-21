@@ -21,6 +21,8 @@ namespace CryV.Net.Server.Vehicles
 
         public Vector3 Rotation { get; set; }
 
+        public string NumberPlate { get; set; }
+
         public ulong Model { get; set; }
 
         public bool EngineState { get; set; }
@@ -62,7 +64,8 @@ namespace CryV.Net.Server.Vehicles
         private readonly IEventHandler _eventHandler;
         private readonly IPlayerManager _playerManager;
 
-        public Vehicle(IVehicleManager vehicleManager, IEventHandler eventHandler, IPlayerManager playerManager, int id, Vector3 position, Vector3 rotation, ulong model)
+        public Vehicle(IVehicleManager vehicleManager, IEventHandler eventHandler, IPlayerManager playerManager, int id, Vector3 position, Vector3 rotation, ulong model,
+            string numberPlate)
         {
             _vehicleManager = vehicleManager;
             _eventHandler = eventHandler;
@@ -72,6 +75,7 @@ namespace CryV.Net.Server.Vehicles
             Position = position;
             Rotation = rotation;
             Model = model;
+            NumberPlate = numberPlate;
 
             _subscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(OnNetworkUpdate, x => x.Payload.Id == Id));
 
@@ -80,8 +84,8 @@ namespace CryV.Net.Server.Vehicles
 
         public VehicleUpdatePayload GetPayload()
         {
-            return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, Model, EngineState, CurrentGear, CurrentRPM, Clutch, Turbo, Acceleration, Brake,
-                SteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout, IsRoofUp, IsRoofLowering, IsRoofDown, IsRoofRaising);
+            return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, NumberPlate, Model, EngineState, CurrentGear, CurrentRPM, Clutch, Turbo,
+                Acceleration, Brake, SteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout, IsRoofUp, IsRoofLowering, IsRoofDown, IsRoofRaising);
         }
 
         public void ReadPayload(VehicleUpdatePayload payload)
@@ -89,6 +93,7 @@ namespace CryV.Net.Server.Vehicles
             Position = payload.Position;
             Velocity = payload.Velocity;
             Rotation = payload.Rotation;
+            NumberPlate = payload.NumberPlate;
             Model = payload.Model;
             EngineState = payload.EngineState;
             CurrentGear = payload.CurrentGear;

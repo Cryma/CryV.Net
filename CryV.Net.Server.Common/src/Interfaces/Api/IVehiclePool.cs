@@ -8,7 +8,7 @@ namespace CryV.Net.Server.Common.Interfaces.Api
 
         ICollection<IVehicle> GetVehicles();
 
-        IVehicle CreateVehicle(Vector3 position, Vector3 rotation, ulong model);
+        IVehicle CreateVehicle(Vector3 position, Vector3 rotation, ulong model, string numberPlate = null);
 
     }
 }
