@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Numerics;
 using Autofac;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
+using CryV.Net.Client.Helpers;
 using CryV.Net.Elements;
 
 namespace CryV.Net.Client.Debugging.Menu
@@ -60,6 +62,12 @@ namespace CryV.Net.Client.Debugging.Menu
 
             PrintVector(position, "Position");
             PrintVector(rotation, "Rotation");
+
+            _line++;
+
+            var entities = EntityPool.GetEntities();
+            PrintLine("Peds: " + entities.Count(x => x.GetType() == typeof(Ped)));
+            PrintLine("Vehicles: " + entities.Count(x => x.GetType() == typeof(Vehicle)));
 
 #if !RELEASE
             if (_networkManager.IsConnected)
