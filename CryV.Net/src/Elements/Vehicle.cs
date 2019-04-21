@@ -59,7 +59,7 @@ namespace CryV.Net.Elements
 
         public string NumberPlate
         {
-            get => StringConverter.PointerToString(CryVNative.Native_Vehicle_GetVehicleNumberPlateText(CryVNative.Plugin, Handle));
+            get => StringConverter.PointerToString(CryVNative.Native_Vehicle_GetVehicleNumberPlateText(CryVNative.Plugin, Handle), false);
             set
             {
                 using (var converter = new StringConverter())
