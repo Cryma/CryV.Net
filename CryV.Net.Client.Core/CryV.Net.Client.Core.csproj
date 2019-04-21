@@ -19,7 +19,6 @@
     <ProjectReference Include="..\CryV.Net.Client.Common\CryV.Net.Client.Common.csproj" />
     <ProjectReference Include="..\CryV.Net.Client.Console\CryV.Net.Client.Console.csproj" />
     <ProjectReference Include="..\CryV.Net.Client.Debugging\CryV.Net.Client.Debugging.csproj" />
-    <ProjectReference Include="..\CryV.Net.Client.EntityPool\CryV.Net.Client.EntityPool.csproj" />
     <ProjectReference Include="..\CryV.Net.Client.FingerPointing\CryV.Net.Client.FingerPointing.csproj" />
     <ProjectReference Include="..\CryV.Net.Client.Helpers\CryV.Net.Client.Helpers.csproj" />
     <ProjectReference Include="..\CryV.Net.Client.LocalPlayer\CryV.Net.Client.LocalPlayer.csproj" />

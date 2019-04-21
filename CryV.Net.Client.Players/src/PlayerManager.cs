@@ -13,15 +13,13 @@ namespace CryV.Net.Client.Players
     {
 
         private readonly IEventHandler _eventHandler;
-        private readonly IEntityPool _entityPool;
         private readonly IVehicleManager _vehicleManager;
 
         private readonly ConcurrentDictionary<int, IPlayer> _players = new ConcurrentDictionary<int, IPlayer>();
 
-        public PlayerManager(IEventHandler eventHandler, IEntityPool entityPool, IVehicleManager vehicleManager)
+        public PlayerManager(IEventHandler eventHandler, IVehicleManager vehicleManager)
         {
             _eventHandler = eventHandler;
-            _entityPool = entityPool;
             _vehicleManager = vehicleManager;
         }
 
@@ -44,7 +42,7 @@ namespace CryV.Net.Client.Players
 
         public void AddPlayer(PlayerUpdatePayload payload)
         {
-            var player = new Player(_eventHandler, _entityPool, _vehicleManager, payload);
+            var player = new Player(_eventHandler, _vehicleManager, payload);
 
             _players.TryAdd(payload.Id, player);
 

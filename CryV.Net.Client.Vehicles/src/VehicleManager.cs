@@ -12,14 +12,12 @@ namespace CryV.Net.Client.Vehicles
     {
 
         private readonly IEventHandler _eventHandler;
-        private readonly IEntityPool _entityPool;
 
         private readonly ConcurrentDictionary<int, IVehicle> _vehicles = new ConcurrentDictionary<int, IVehicle>();
 
-        public VehicleManager(IEventHandler eventHandler, IEntityPool entityPool)
+        public VehicleManager(IEventHandler eventHandler)
         {
             _eventHandler = eventHandler;
-            _entityPool = entityPool;
         }
 
         public void Start()
@@ -55,7 +53,7 @@ namespace CryV.Net.Client.Vehicles
 
         private void AddVehicle(VehicleUpdatePayload payload)
         {
-            var vehicle = new Vehicle(_eventHandler, _entityPool, payload);
+            var vehicle = new Vehicle(_eventHandler, payload);
             _vehicles.TryAdd(payload.Id, vehicle);
         }
 

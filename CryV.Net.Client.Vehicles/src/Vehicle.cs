@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Threading;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
+using CryV.Net.Client.Helpers;
 using CryV.Net.Elements;
 using CryV.Net.Helpers;
 using CryV.Net.Shared.Common.Flags;
@@ -75,12 +76,10 @@ namespace CryV.Net.Client.Vehicles
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
 
         private readonly IEventHandler _eventHandler;
-        private readonly IEntityPool _entityPool;
 
-        public Vehicle(IEventHandler eventHandler, IEntityPool entityPool, VehicleUpdatePayload payload)
+        public Vehicle(IEventHandler eventHandler, VehicleUpdatePayload payload)
         {
             _eventHandler = eventHandler;
-            _entityPool = entityPool;
 
             Id = payload.Id;
             TargetPosition = payload.Position;
@@ -98,7 +97,7 @@ namespace CryV.Net.Client.Vehicles
 
                 _vehicle.SetVehicleColours(payload.ColorPrimary, payload.ColorSecondary);
 
-                _entityPool.AddEntity(_vehicle);
+                EntityPool.AddEntity(_vehicle);
             });
 
             NativeHelper.OnNativeTick += Tick;
@@ -226,10 +225,10 @@ namespace CryV.Net.Client.Vehicles
 
             NativeHelper.OnNativeTick -= Tick;
 
-            _entityPool.RemoveEntity(_vehicle);
-
             ThreadHelper.Run(() =>
             {
+                EntityPool.RemoveEntity(_vehicle);
+
                 _vehicle?.Delete();
             });
         }

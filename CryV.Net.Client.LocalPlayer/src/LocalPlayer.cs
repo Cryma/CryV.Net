@@ -6,6 +6,7 @@ using Autofac;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
+using CryV.Net.Client.Helpers;
 using CryV.Net.Elements;
 using CryV.Net.Helpers;
 using CryV.Net.Shared.Common.Interfaces;
@@ -31,14 +32,12 @@ namespace CryV.Net.Client.LocalPlayer
 
         private readonly IEventHandler _eventHandler;
         private readonly INetworkManager _networkManager;
-        private readonly IEntityPool _entityPool;
         private readonly IVehicleManager _vehicleManager;
 
-        public LocalPlayer(IEventHandler eventHandler, INetworkManager networkManager, IEntityPool entityPool, IVehicleManager vehicleManager)
+        public LocalPlayer(IEventHandler eventHandler, INetworkManager networkManager, IVehicleManager vehicleManager)
         {
             _eventHandler = eventHandler;
             _networkManager = networkManager;
-            _entityPool = entityPool;
             _vehicleManager = vehicleManager;
         }
 
@@ -56,7 +55,7 @@ namespace CryV.Net.Client.LocalPlayer
         private void OnLocalPlayerDisconnected(LocalPlayerDisconnectedEvent obj)
         {
             _cancellationTokenSource?.Cancel();
-            _entityPool.Clear();
+            EntityPool.Clear();
         }
 
         private void OnBootstrap(NetworkEvent<BootstrapPayload> obj)
