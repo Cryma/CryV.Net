@@ -2,6 +2,7 @@ using CryV.Net.Client.Helpers;
 using CryV.Net.Helpers;
 using CryV.Net.Native;
 using System.Numerics;
+using CryV.Net.Enums;
 
 namespace CryV.Net.Elements
 {
@@ -204,9 +205,9 @@ namespace CryV.Net.Elements
             CryVNative.Native_Brain_TaskGoToEntityWhileAimingAtEntity(CryVNative.Plugin, Handle, entityToWalkTo, entityToAimAt, speed, shootAtEntity, p5, p6, p7, p8, firingPattern);
         }
 
-        public void TaskEnterVehicle(Vehicle vehicle, int timeout, int seat, float speed, int flag, ulong p6 = 0)
+        public void TaskEnterVehicle(Vehicle vehicle, int timeout, VehicleSeat seat, float speed, int flag, ulong p6 = 0)
         {
-            CryVNative.Native_Brain_TaskEnterVehicle(CryVNative.Plugin, Handle, vehicle.Handle, timeout, seat, speed, flag, p6);
+            CryVNative.Native_Brain_TaskEnterVehicle(CryVNative.Plugin, Handle, vehicle.Handle, timeout, (int) seat, speed, flag, p6);
         }
 
         public void TaskLeaveVehicle(Vehicle vehicle, int flags)

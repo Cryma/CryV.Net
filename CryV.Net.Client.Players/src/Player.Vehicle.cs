@@ -1,4 +1,5 @@
-﻿using CryV.Net.Shared.Common.Flags;
+﻿using CryV.Net.Enums;
+using CryV.Net.Shared.Common.Flags;
 using CryV.Net.Shared.Common.Payloads;
 
 namespace CryV.Net.Client.Players
@@ -49,7 +50,7 @@ namespace CryV.Net.Client.Players
                 _ped.ClearPedSecondaryTask();
                 _ped.ClearPedTasksImmediately();
 
-                _ped.TaskEnterVehicle(Vehicle.GetVehicle(), -1, Seat, Speed, 0);
+                _ped.TaskEnterVehicle(Vehicle.GetVehicle(), -1, (VehicleSeat) Seat, Speed, 0);
 
                 _wasEnteringVehicle = true;
 

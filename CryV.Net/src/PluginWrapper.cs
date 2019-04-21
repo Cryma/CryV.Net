@@ -49,6 +49,7 @@ namespace CryV.Net
         public static void PluginTick()
         {
             ThreadHelper.Work();
+            CustomVehicleEntering.Tick();
 
             _plugin.Tick();
         }

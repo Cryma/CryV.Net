@@ -1,6 +1,8 @@
+using System;
 using System.Net.Http.Headers;
 using System.Numerics;
 using CryV.Net.Client.Helpers;
+using CryV.Net.Enums;
 using CryV.Net.Helpers;
 using CryV.Net.Native;
 
@@ -187,6 +189,31 @@ namespace CryV.Net.Elements
         public void Explode(bool isAudible, bool isInvisible)
         {
             CryVNative.Native_Vehicle_ExplodeVehicle(CryVNative.Plugin, Handle, isAudible, isInvisible);
+        }
+
+        public bool IsVehicleSeatFree(VehicleSeat seat)
+        {
+            return CryVNative.Native_Vehicle_IsVehicleSeatFree(CryVNative.Plugin, Handle, (int) seat);
+        }
+
+        public Vector3 GetWorldPositionOfBone(int boneIndex)
+        {
+            return StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetWorldPositionOfEntityBone(CryVNative.Plugin, Handle, boneIndex));
+        }
+
+        public bool IsThisModelABike()
+        {
+            return CryVNative.Native_Vehicle_IsThisModelABike(CryVNative.Plugin, Model);
+        }
+
+        public int GetBoneIndexByName(string boneName)
+        {
+            using (var converter = new StringConverter())
+            {
+                var bonePointer = converter.StringToPointer(boneName);
+
+                return CryVNative.Native_Entity_GetEntityBoneIndexByName(CryVNative.Plugin, Handle, bonePointer);
+            }
         }
 
         private void CreateVehicle(ulong model, Vector3 position, Vector3 rotation)
