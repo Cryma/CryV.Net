@@ -10,55 +10,8 @@ using LiteNetLib;
 
 namespace CryV.Net.Server.Vehicles
 {
-    public class Vehicle : IVehicle
+    public partial class Vehicle : IVehicle
     {
-        
-        public int Id { get; }
-
-        public Vector3 Position { get; set; }
-
-        public Vector3 Velocity { get; set; }
-
-        public Vector3 Rotation { get; set; }
-
-        public float EngineHealth { get; set; } = 1000.0f;
-
-        public string NumberPlate { get; set; }
-
-        public ulong Model { get; set; }
-
-        public bool EngineState { get; set; }
-
-        public byte CurrentGear { get; set; }
-
-        public float CurrentRPM { get; set; }
-
-        public float Clutch { get; set; }
-
-        public float Turbo { get; set; }
-
-        public float Acceleration { get; set; }
-
-        public float Brake { get; set; }
-
-        public float SteeringAngle { get; set; }
-
-        public int ColorPrimary { get; set; } = 112;
-
-        public int ColorSecondary { get; set; } = 112;
-
-        public bool IsHornActive { get; set; }
-
-        public bool IsBurnout { get; set; }
-
-        public bool IsRoofUp { get; set; }
-
-        public bool IsRoofLowering { get; set; }
-
-        public bool IsRoofDown { get; set; }
-
-        public bool IsRoofRaising { get; set; }
-
 
         private readonly List<ISubscription> _subscriptions = new List<ISubscription>();
 
@@ -74,10 +27,10 @@ namespace CryV.Net.Server.Vehicles
             _playerManager = playerManager;
 
             Id = id;
-            Position = position;
-            Rotation = rotation;
-            Model = model;
-            NumberPlate = numberPlate;
+            _position = position;
+            _rotation = rotation;
+            _model = model;
+            _numberPlate = numberPlate;
 
             _subscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(OnNetworkUpdate, x => x.Payload.Id == Id));
 
@@ -93,29 +46,29 @@ namespace CryV.Net.Server.Vehicles
 
         public void ReadPayload(VehicleUpdatePayload payload)
         {
-            Position = payload.Position;
-            Velocity = payload.Velocity;
-            Rotation = payload.Rotation;
-            EngineHealth = payload.EngineHealth;
-            NumberPlate = payload.NumberPlate;
-            Model = payload.Model;
-            EngineState = payload.EngineState;
-            CurrentGear = payload.CurrentGear;
-            CurrentRPM = payload.CurrentRPM;
-            Clutch = payload.Clutch;
-            Turbo = payload.Turbo;
-            Acceleration = payload.Acceleration;
-            Brake = payload.Brake;
-            SteeringAngle = payload.SteeringAngle;
-            ColorPrimary = payload.ColorPrimary;
-            ColorSecondary = payload.ColorSecondary;
+            _position = payload.Position;
+            _velocity = payload.Velocity;
+            _rotation = payload.Rotation;
+            _engineHealth = payload.EngineHealth;
+            _numberPlate = payload.NumberPlate;
+            _model = payload.Model;
+            _engineState = payload.EngineState;
+            _currentGear = payload.CurrentGear;
+            _currentRPM = payload.CurrentRPM;
+            _clutch = payload.Clutch;
+            _turbo = payload.Turbo;
+            _acceleration = payload.Acceleration;
+            _brake = payload.Brake;
+            _steeringAngle = payload.SteeringAngle;
+            _colorPrimary = payload.ColorPrimary;
+            _colorSecondary = payload.ColorSecondary;
 
-            IsHornActive = (payload.VehicleData & (int) VehicleData.IsHornActive) > 0;
-            IsBurnout = (payload.VehicleData & (int) VehicleData.IsBurnout) > 0;
-            IsRoofUp = (payload.VehicleData & (int) VehicleData.RoofUp) > 0;
-            IsRoofLowering = (payload.VehicleData & (int) VehicleData.RoofLowering) > 0;
-            IsRoofDown = (payload.VehicleData & (int) VehicleData.RoofDown) > 0;
-            IsRoofRaising = (payload.VehicleData & (int) VehicleData.RoofRaising) > 0;
+            _isHornActive = (payload.VehicleData & (int) VehicleData.IsHornActive) > 0;
+            _isBurnout = (payload.VehicleData & (int) VehicleData.IsBurnout) > 0;
+            _isRoofUp = (payload.VehicleData & (int) VehicleData.RoofUp) > 0;
+            _isRoofLowering = (payload.VehicleData & (int) VehicleData.RoofLowering) > 0;
+            _isRoofDown = (payload.VehicleData & (int) VehicleData.RoofDown) > 0;
+            _isRoofRaising = (payload.VehicleData & (int) VehicleData.RoofRaising) > 0;
         }
 
         private void PropagateNewVehicle()
