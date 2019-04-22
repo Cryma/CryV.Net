@@ -49,7 +49,7 @@ namespace CryV.Net.Client.FingerPointing.src
             {
                 var player = _playerManager.GetPlayer(payload.Id);
 
-                pointingPlayer = new FingerPointingPlayer(player);
+                pointingPlayer = new FingerPointingPlayer(player, payload);
 
                 _pointingPlayers.TryAdd(payload.Id, pointingPlayer);
 

@@ -25,11 +25,17 @@ namespace CryV.Net.Client.Helpers.Pointing
         private float _targetHeading;
         private float _targetPitch;
 
-        public FingerPointingPlayer(IPlayer player)
+        public FingerPointingPlayer(IPlayer player, PointingUpdatePayload payload)
         {
             _player = player;
 
             StartPointing();
+
+            _currentHeading = payload.Heading;
+            _targetHeading = payload.Heading;
+
+            _currentPitch = payload.Pitch;
+            _targetPitch = payload.Pitch;
         }
 
         public void Tick(float deltaTime)
