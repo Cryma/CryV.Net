@@ -4,6 +4,7 @@ using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Elements;
+using CryV.Net.Enums;
 using CryV.Net.Helpers;
 using CryV.Net.Shared.Common.Flags;
 using CryV.Net.Shared.Common.Interfaces;
@@ -140,7 +141,7 @@ namespace CryV.Net.Client.Vehicles
             IsRoofDown = (payload.VehicleData & (int) VehicleData.RoofDown) > 0;
             IsRoofRaising = (payload.VehicleData & (int) VehicleData.RoofRaising) > 0;
 
-            if (Id == LocalPlayerHelper.VehicleId)
+            if (Id == LocalPlayerHelper.VehicleId && LocalPlayer.Character.Seat == VehicleSeat.Driver)
             {
                 return;
             }
@@ -186,7 +187,7 @@ namespace CryV.Net.Client.Vehicles
 
         private void Tick(float deltatime)
         {
-            if (Id == LocalPlayerHelper.VehicleId)
+            if (Id == LocalPlayerHelper.VehicleId && LocalPlayer.Character.Seat == VehicleSeat.Driver)
             {
                 return;
             }

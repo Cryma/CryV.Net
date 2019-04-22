@@ -148,7 +148,7 @@ namespace CryV.Net.Client.LocalPlayer
 
             var transformPayload = new PlayerUpdatePayload(Id, position, velocity, rotation.Z, aimTarget, Elements.LocalPlayer.Character.Speed(),
                 model, weaponModel, ped.IsPedJumping(), ped.IsPedClimbing(), ped.IsClimbingLadder(), ped.IsPedRagdoll(), isAiming, isEnteringVehicle,
-                isInVehicle, vehicleId, seat, isLeavingVehicle);
+                isInVehicle, vehicleId, (int) seat, isLeavingVehicle);
 
             if (_lastPlayerPayload != null && transformPayload.IsDifferent(_lastPlayerPayload) == false)
             {
