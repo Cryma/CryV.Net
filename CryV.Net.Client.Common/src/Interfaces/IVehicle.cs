@@ -1,5 +1,6 @@
 ﻿using System;
 using CryV.Net.Elements;
+using CryV.Net.Shared.Common.Payloads;
 
 namespace CryV.Net.Client.Common.Interfaces
 {
@@ -11,6 +12,8 @@ namespace CryV.Net.Client.Common.Interfaces
         ulong Model { get; set; }
 
         Vehicle GetVehicle();
+
+        void ReadPayload(VehicleUpdatePayload payload, bool forceSync = false);
 
     }
 }

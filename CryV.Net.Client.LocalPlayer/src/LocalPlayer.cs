@@ -125,6 +125,9 @@ namespace CryV.Net.Client.LocalPlayer
                 return;
             }
 
+            var networkedVehicle = _vehicleManager.GetVehicle(vehicle);
+            networkedVehicle?.ReadPayload(transformPayload);
+
             _lastVehiclePayload = transformPayload;
 
             _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);

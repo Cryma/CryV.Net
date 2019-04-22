@@ -90,7 +90,7 @@ namespace CryV.Net.Client.Vehicles
             Model = payload.Model;
             EngineHealth = payload.EngineHealth;
 
-            _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(update => ReadPayload(update.Payload), x => x.Payload.Id == Id));
+            _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(update => ReadPayload(update.Payload, true), x => x.Payload.Id == Id));
 
             ThreadHelper.Run(() =>
             {
@@ -119,7 +119,7 @@ namespace CryV.Net.Client.Vehicles
             return _vehicle;
         }
 
-        public void ReadPayload(VehicleUpdatePayload payload)
+        public void ReadPayload(VehicleUpdatePayload payload, bool forceSync = false)
         {
             TargetPosition = payload.Position;
             TargetRotation = payload.Rotation;
@@ -143,6 +143,11 @@ namespace CryV.Net.Client.Vehicles
 
             if (Id == LocalPlayerHelper.VehicleId && LocalPlayer.Character.Seat == VehicleSeat.Driver)
             {
+                if (forceSync)
+                {
+                    ForceSync();
+                }
+
                 return;
             }
 
@@ -192,7 +197,12 @@ namespace CryV.Net.Client.Vehicles
                 return;
             }
 
-            Rotation = Interpolation.LerpRotation(Rotation, TargetRotation, deltatime * 5);
+            Sync(deltatime);
+        }
+
+        private void Sync(float deltaTime)
+        {
+            Rotation = Interpolation.LerpRotation(Rotation, TargetRotation, deltaTime * 5);
 
             if (Vector3.DistanceSquared(Position, TargetPosition) > 9.0f)
             {
@@ -208,7 +218,7 @@ namespace CryV.Net.Client.Vehicles
             _vehicle.Turbo = Turbo;
             _vehicle.Acceleration = Acceleration;
             _vehicle.Brake = Brake;
-            _vehicle.SteeringAngle = Interpolation.Lerp(_vehicle.SteeringAngle, TargetSteeringAngle, deltatime * 5);
+            _vehicle.SteeringAngle = Interpolation.Lerp(_vehicle.SteeringAngle, TargetSteeringAngle, deltaTime * 5);
 
             ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_RAISEROOF", IsRoofRaising, () =>
             {
@@ -227,7 +237,7 @@ namespace CryV.Net.Client.Vehicles
             {
                 _vehicle.StartVehicleHorn(1);
             });
-            
+
             ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_BURNOUT", IsBurnout, () =>
             {
                 var driver = _vehicle.GetPedOnSeat(-1);
@@ -241,6 +251,14 @@ namespace CryV.Net.Client.Vehicles
                 driver?.ClearPedTasks();
 
                 _vehicle.SetVehicleBurnout(false);
+            });
+        }
+
+        private void ForceSync()
+        {
+            ThreadHelper.Run(() =>
+            {
+                Sync(1.0f);
             });
         }
 

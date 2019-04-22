@@ -14,6 +14,10 @@ namespace CryV.Net.Server.Common.Interfaces
 
         float Heading { get; set; }
 
+        IVehicle Vehicle { get; set; }
+
+        int Seat { get; set; }
+
         PlayerUpdatePayload GetPayload();
 
         void Send(IPayload payload, DeliveryMethod deliveryMethod);
