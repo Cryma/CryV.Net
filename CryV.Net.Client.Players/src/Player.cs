@@ -213,6 +213,11 @@ namespace CryV.Net.Client.Players
                 return;
             }
 
+            if (Vector3.DistanceSquared(Position, TargetPosition) > 6.25f)
+            {
+                Position = TargetPosition;
+            }
+
             var positionDifference = TargetPosition - Position;
             _ped.Velocity = Velocity + positionDifference * 0.75f;
         }
