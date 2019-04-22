@@ -42,6 +42,11 @@ namespace CryV.Net.Elements
             return CryVNative.Native_Pad_IsDisabledControlJustPressed(CryVNative.Plugin, inputGroup, control);
         }
 
+        public static bool IsControlJustPressed(int inputGroup, int control)
+        {
+            return CryVNative.Native_Pad_IsControlJustPressed(CryVNative.Plugin, inputGroup, control);
+        }
+
         public static void DestroyAllCams(bool thisScriptCheck)
         {
             CryVNative.Native_Cam_DestroyAllCams(CryVNative.Plugin, thisScriptCheck);

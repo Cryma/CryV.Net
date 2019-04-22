@@ -24,6 +24,12 @@ namespace CryV.Net.Helpers
             {
                 EnterAsPassenger();
             }
+
+            if (LocalPlayer.Character.IsEnteringVehicle() && (Gameplay.IsControlJustPressed(0, 30) || Gameplay.IsControlJustPressed(0, 31) 
+                || Gameplay.IsControlJustPressed(0, 32) || Gameplay.IsControlJustPressed(0, 33) || Gameplay.IsControlJustPressed(0, 34) || Gameplay.IsControlJustPressed(0, 35)))
+            {
+                LocalPlayer.Character.ClearPedTasks();
+            }
         }
 
         private static readonly List<string> _seatBones = new List<string>
