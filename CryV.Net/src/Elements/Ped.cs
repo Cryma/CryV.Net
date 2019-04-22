@@ -444,8 +444,15 @@ namespace CryV.Net.Elements
             SetPedDiesWhenInjured(false);
             SetPedFleeAttributes(0, false);
             SetBlockingOfNonTemporaryEvents(true);
+            SetPedCombatAttributes(0, true);
+            SetPedCombatAttributes(2, true);
+            SetPedCombatAttributes(3, false);
+            SetPedCombatAttributes(5, true);
+            SetPedCombatAttributes(8, true);
             SetPedCombatAttributes(17, true);
             SetPedCombatAttributes(46, true);
+            SetPedConfigFlag(32, false);
+            SetPedConfigFlag(281, true);
             SetPedSeeingRange(0.0f);
             SetPedHearingRange(0.0f);
             SetPedAlertness(0);
