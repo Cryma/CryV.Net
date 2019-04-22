@@ -65,6 +65,8 @@ namespace CryV.Net.Client.Console
 
             RegisterCommand("addweapon", CommandAddWeapon);
             RegisterCommand("removeallweapons", CommandRemoveAllWeapons);
+
+            RegisterCommand("cmd", CommandRemoteCommand);
         }
 
         private void RegisterCommand(string commandName, CommandDelegate action)

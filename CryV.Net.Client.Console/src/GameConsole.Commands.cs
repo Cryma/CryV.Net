@@ -1,6 +1,8 @@
 ﻿using System;
 using CryV.Net.Elements;
 using CryV.Net.Enums;
+using CryV.Net.Shared.Common.Payloads;
+using LiteNetLib;
 
 namespace CryV.Net.Client.Console
 {
@@ -138,6 +140,22 @@ namespace CryV.Net.Client.Console
         private void CommandRemoveAllWeapons(GameConsole gameConsole, params string[] arguments)
         {
             LocalPlayer.Character.RemoveAllPedWeapons();
+        }
+
+        private void CommandRemoteCommand(GameConsole gameConsole, params string[] arguments)
+        {
+            if (_networkManager.IsConnected == false)
+            {
+                PrintLine("You are not connected to any server.");
+
+                return;
+            }
+
+            var args = string.Join(' ', arguments);
+
+            var payload = new RemoteCommandPayload(args);
+
+            _networkManager.Send(payload, DeliveryMethod.ReliableOrdered);
         }
 
     }

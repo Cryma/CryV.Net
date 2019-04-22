@@ -11,6 +11,7 @@
         StopPointing,
         AddVehicle,
         RemoveVehicle,
-        UpdateVehicle
+        UpdateVehicle,
+        RemoteCommand
     }
 }
