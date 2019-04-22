@@ -61,6 +61,21 @@ namespace CryV.Net.Server.Players
             return player;
         }
 
+        public IPlayer GetPlayer(NetPeer peer)
+        {
+            foreach (var player in _players.Values)
+            {
+                if (player.GetPeer() != peer)
+                {
+                    continue;
+                }
+
+                return player;
+            }
+
+            return null;
+        }
+
         public ICollection<IPlayer> GetPlayers()
         {
             return _players.Values.ToList();

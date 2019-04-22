@@ -83,6 +83,11 @@ namespace CryV.Net.Server.Players
             _peer.Send(data, deliveryMethod);
         }
 
+        public NetPeer GetPeer()
+        {
+            return _peer;
+        }
+
         public PlayerUpdatePayload GetPayload()
         {
             return new PlayerUpdatePayload(Id, Position, Velocity, Heading, AimTarget, Speed, Model, WeaponModel, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll,

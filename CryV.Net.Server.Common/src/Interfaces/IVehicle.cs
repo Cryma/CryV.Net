@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using CryV.Net.Shared.Common.Payloads;
 
 namespace CryV.Net.Server.Common.Interfaces
@@ -7,7 +8,12 @@ namespace CryV.Net.Server.Common.Interfaces
     {
 
         int Id { get; }
+
+        Vector3 Position { get; set; }
+
         VehicleUpdatePayload GetPayload();
+
+        void ForceSync();
 
     }
 }

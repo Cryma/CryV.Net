@@ -148,6 +148,14 @@ namespace CryV.Net.Server.Vehicles
             }
         }
 
+        public void ForceSync()
+        {
+            foreach (var player in _playerManager.GetPlayers())
+            {
+                player.Send(GetPayload(), DeliveryMethod.ReliableOrdered);
+            }
+        }
+
         public void Dispose()
         {
             foreach (var player in _playerManager.GetPlayers())

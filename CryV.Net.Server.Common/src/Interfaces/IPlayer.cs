@@ -22,5 +22,7 @@ namespace CryV.Net.Server.Common.Interfaces
 
         void Send(IPayload payload, DeliveryMethod deliveryMethod);
 
+        NetPeer GetPeer();
+
     }
 }
