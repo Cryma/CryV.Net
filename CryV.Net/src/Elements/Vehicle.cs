@@ -103,9 +103,13 @@ namespace CryV.Net.Elements
         {
         }
 
-        public Vehicle(ulong model, Vector3 position, Vector3 rotation) : base(0)
+        public Vehicle(ulong model, Vector3 position, Vector3 rotation, Vector3 velocity, int colorPrimary, int colorSecondary, string numberPlate) : base(0)
         {
             CreateVehicle(model, position, rotation);
+            SetVehicleColours(colorPrimary, colorSecondary);
+
+            Velocity = velocity;
+            NumberPlate = numberPlate;
         }
 
         public bool GetIsVehicleEngineRunning()

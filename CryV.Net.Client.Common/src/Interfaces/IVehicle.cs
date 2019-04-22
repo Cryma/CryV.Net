@@ -13,7 +13,7 @@ namespace CryV.Net.Client.Common.Interfaces
 
         Vehicle GetVehicle();
 
-        void ReadPayload(VehicleUpdatePayload payload, bool forceSync = false);
+        void ReadPayload(VehicleUpdatePayload payload);
 
     }
 }

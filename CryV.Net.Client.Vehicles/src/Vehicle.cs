@@ -18,23 +18,11 @@ namespace CryV.Net.Client.Vehicles
 
         public int Id { get; }
 
-        public Vector3 Position
-        {
-            get => _vehicle.Position;
-            set => _vehicle.Position = value;
-        }
+        public Vector3 Position { get; set; }
 
-        public Vector3 TargetPosition { get; set; }
-        
         public Vector3 Velocity { get; set; }
 
-        public Vector3 Rotation
-        {
-            get => _vehicle.Rotation;
-            set => _vehicle.Rotation = value;
-        }
-
-        public Vector3 TargetRotation { get; set; }
+        public Vector3 Rotation { get; set; }
 
         public float EngineHealth { get; set; }
 
@@ -74,6 +62,7 @@ namespace CryV.Net.Client.Vehicles
 
         public bool IsRoofRaising { get; set; }
 
+
         private Elements.Vehicle _vehicle;
 
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
@@ -85,25 +74,29 @@ namespace CryV.Net.Client.Vehicles
             _eventHandler = eventHandler;
 
             Id = payload.Id;
-            TargetPosition = payload.Position;
-            TargetRotation = payload.Rotation;
-            Model = payload.Model;
-            EngineHealth = payload.EngineHealth;
+            
+            ReadPayload(payload);
 
-            _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(update => ReadPayload(update.Payload, true), x => x.Payload.Id == Id));
+            _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(update =>
+            {
+                ReadPayload(update.Payload);
+
+                if (LocalPlayerHelper.Vehicle.Handle == _vehicle.Handle && LocalPlayer.Character.Seat == VehicleSeat.Driver)
+                {
+                    CheckForChanges(update.Payload);
+                    ForceSync();
+                }
+
+            }, x => x.Payload.Id == Id));
 
             ThreadHelper.Run(() =>
             {
-                _vehicle = new Elements.Vehicle(payload.Model, payload.Position, payload.Rotation)
+                _vehicle = new Elements.Vehicle(Model, Position, Rotation, Velocity, ColorPrimary, ColorSecondary, NumberPlate)
                 {
-                    Velocity = payload.Velocity
+                    EngineHealth = EngineHealth
                 };
 
-                _vehicle.SetVehicleColours(payload.ColorPrimary, payload.ColorSecondary);
-                _vehicle.NumberPlate = payload.NumberPlate;
-
-                _vehicle.EngineHealth = payload.EngineHealth;
-                if (payload.EngineHealth < 0.0f)
+                if (EngineHealth < 0.0f)
                 {
                     _vehicle.Explode(false, true);
                 }
@@ -119,10 +112,10 @@ namespace CryV.Net.Client.Vehicles
             return _vehicle;
         }
 
-        public void ReadPayload(VehicleUpdatePayload payload, bool forceSync = false)
+        public void ReadPayload(VehicleUpdatePayload payload)
         {
-            TargetPosition = payload.Position;
-            TargetRotation = payload.Rotation;
+            Position = payload.Position;
+            Rotation = payload.Rotation;
             Velocity = payload.Velocity;
             EngineHealth = payload.EngineHealth;
             Model = payload.Model;
@@ -140,17 +133,10 @@ namespace CryV.Net.Client.Vehicles
             IsRoofLowering = (payload.VehicleData & (int) VehicleData.RoofLowering) > 0;
             IsRoofDown = (payload.VehicleData & (int) VehicleData.RoofDown) > 0;
             IsRoofRaising = (payload.VehicleData & (int) VehicleData.RoofRaising) > 0;
+        }
 
-            if (Id == LocalPlayerHelper.VehicleId && LocalPlayer.Character.Seat == VehicleSeat.Driver)
-            {
-                if (forceSync)
-                {
-                    ForceSync();
-                }
-
-                return;
-            }
-
+        private void CheckForChanges(VehicleUpdatePayload payload)
+        {
             if (EngineState != payload.EngineState)
             {
                 ThreadHelper.Run(() =>
@@ -202,14 +188,14 @@ namespace CryV.Net.Client.Vehicles
 
         private void Sync(float deltaTime)
         {
-            Rotation = Interpolation.LerpRotation(Rotation, TargetRotation, deltaTime * 5);
+            Rotation = Interpolation.LerpRotation(_vehicle.Rotation, Rotation, deltaTime * 5);
 
-            if (Vector3.DistanceSquared(Position, TargetPosition) > 9.0f)
+            if (Vector3.DistanceSquared(_vehicle.Position, Position) > 9.0f)
             {
-                Position = TargetPosition;
+                _vehicle.Position = Position;
             }
 
-            var positionDifference = TargetPosition - Position;
+            var positionDifference = Position - _vehicle.Position;
             _vehicle.Velocity = Velocity + positionDifference;
 
             _vehicle.CurrentGear = CurrentGear;
