@@ -8,6 +8,7 @@ using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Elements;
+using CryV.Net.Enums;
 using CryV.Net.Helpers;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
@@ -91,7 +92,7 @@ namespace CryV.Net.Client.LocalPlayer
 
         private void SyncVehicle()
         {
-            if (LocalPlayerHelper.VehicleId == -1)
+            if (LocalPlayerHelper.VehicleId == -1 || Elements.LocalPlayer.Character.Seat != VehicleSeat.Driver)
             {
                 return;
             }
