@@ -144,7 +144,7 @@ namespace CryV.Net.Client.LocalPlayer
             var isInVehicle = ped.IsInAnyVehicle();
             var isLeavingVehicle = ped.IsLeavingVehicle();
             var vehicleId = GetDesiredVehicleId();
-            var seat = ped.GetSeatPedIsTryingToEnter();
+            var seat = isEnteringVehicle ? ped.GetSeatPedIsTryingToEnter() : ped.Seat;
 
             var transformPayload = new PlayerUpdatePayload(Id, position, velocity, rotation.Z, aimTarget, Elements.LocalPlayer.Character.Speed(),
                 model, weaponModel, ped.IsPedJumping(), ped.IsPedClimbing(), ped.IsClimbingLadder(), ped.IsPedRagdoll(), isAiming, isEnteringVehicle,
