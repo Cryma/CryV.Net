@@ -15,8 +15,8 @@ namespace CryV.Net.Server.Example
             MP.Events.OnPlayerDisconnected += OnPlayerDisconnected;
 
             MP.VehiclePool.CreateVehicle(new Vector3(165.1652f, -1077.867f, 28.433891f), Vector3.Zero, 1274868363, "ehre");
-            //MP.VehiclePool.CreateVehicle(new Vector3(161.1652f, -1077.867f, 28.433891f), Vector3.Zero, 2364918497, "1337");
-            //MP.VehiclePool.CreateVehicle(new Vector3(157.1652f, -1077.867f, 28.433891f), Vector3.Zero, 4180675781);
+            MP.VehiclePool.CreateVehicle(new Vector3(161.1652f, -1077.867f, 28.433891f), Vector3.Zero, 2364918497, "1337");
+            MP.VehiclePool.CreateVehicle(new Vector3(157.1652f, -1077.867f, 28.433891f), Vector3.Zero, 4180675781);
 
             Console.WriteLine("Started example gamemode!");
         }
