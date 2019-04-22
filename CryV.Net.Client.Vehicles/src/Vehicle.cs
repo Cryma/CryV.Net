@@ -194,6 +194,11 @@ namespace CryV.Net.Client.Vehicles
 
             Rotation = Interpolation.LerpRotation(Rotation, TargetRotation, deltatime * 5);
 
+            if (Vector3.DistanceSquared(Position, TargetPosition) > 9.0f)
+            {
+                Position = TargetPosition;
+            }
+
             var positionDifference = TargetPosition - Position;
             _vehicle.Velocity = Velocity + positionDifference;
 
