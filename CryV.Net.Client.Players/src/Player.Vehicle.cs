@@ -1,4 +1,5 @@
-﻿using CryV.Net.Enums;
+﻿using System;
+using CryV.Net.Enums;
 using CryV.Net.Shared.Common.Flags;
 using CryV.Net.Shared.Common.Payloads;
 
@@ -10,6 +11,8 @@ namespace CryV.Net.Client.Players
         private bool _wasEnteringVehicle;
         private bool _wasLeavingVehicle;
 
+        private DateTime _vehicleEnterBegin;
+
         private bool UpdateVehicleAnimations()
         {
             if (Vehicle == null)
@@ -17,7 +20,7 @@ namespace CryV.Net.Client.Players
                 return false;
             }
 
-            if (IsInVehicle && _ped.IsInAnyVehicle(true) == false && Vehicle.GetVehicle().DoesExist())
+            if (IsInVehicle && _ped.IsInAnyVehicle(true) == false && Vehicle.GetVehicle().DoesExist() && (DateTime.UtcNow - _vehicleEnterBegin).TotalSeconds > 2.5f)
             {
                 _ped.SetPedIntoVehicle(Vehicle.GetVehicle(), Seat);
             }
@@ -51,6 +54,8 @@ namespace CryV.Net.Client.Players
                 _ped.ClearPedTasksImmediately();
 
                 _ped.TaskEnterVehicle(Vehicle.GetVehicle(), -1, (VehicleSeat) Seat, Speed, 0);
+
+                _vehicleEnterBegin = DateTime.UtcNow;
 
                 _wasEnteringVehicle = true;
 
