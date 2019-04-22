@@ -62,7 +62,14 @@ namespace CryV.Net.Server.Networking
                 return;
             }
 
+            var senderProperty = eventType.GetProperty("Sender", BindingFlags.Public | BindingFlags.Instance);
+            if (senderProperty == null)
+            {
+                return;
+            }
+
             payloadProperty.SetValue(eventInstance, payload);
+            senderProperty.SetValue(eventInstance, peer);
 
             _eventHandler.Publish(eventType, eventInstance);
         }
