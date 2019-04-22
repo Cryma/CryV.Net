@@ -1,5 +1,4 @@
 using System.Numerics;
-using System.Runtime.Serialization.Formatters;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Helpers;
 using CryV.Net.Native;
@@ -118,6 +117,46 @@ namespace CryV.Net.Elements
             }
 
             Handle = 0;
+        }
+
+        protected bool Equals(Entity other)
+        {
+            return _handle == other._handle;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != GetType())
+            {
+                return false;
+            }
+
+            return Equals((Entity) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return _handle; // TODO: Improve
+        }
+
+        public static bool operator ==(Entity left, Entity right)
+        {
+            return right != null && left != null && left.Handle == right.Handle;
+        }
+
+        public static bool operator !=(Entity left, Entity right)
+        {
+            return !(left == right);
         }
 
     }

@@ -94,7 +94,7 @@ namespace CryV.Net.Client.Vehicles
         {
             foreach (var veh in _vehicles.Values)
             {
-                if (veh.GetVehicle().Handle != vehicle.Handle)
+                if (veh.GetVehicle() != vehicle)
                 {
                     continue;
                 }

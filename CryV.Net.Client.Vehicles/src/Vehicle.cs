@@ -81,7 +81,7 @@ namespace CryV.Net.Client.Vehicles
             {
                 ReadPayload(update.Payload);
 
-                if (LocalPlayerHelper.Vehicle.Handle == _vehicle.Handle && LocalPlayer.Character.Seat == VehicleSeat.Driver)
+                if (LocalPlayerHelper.Vehicle == _vehicle && LocalPlayer.Character.Seat == VehicleSeat.Driver)
                 {
                     CheckForChanges(update.Payload);
                     ForceSync();
