@@ -228,13 +228,15 @@ namespace CryV.Net.Client.Players
         {
             ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_RAGDOLL", IsRagdoll, () =>
             {
-                _ped.ClearPedTasksImmediately();
                 _ped.SetPedCanRagdoll(true);
 
+                _ped.ClearPedTasksImmediately();
                 _ped.SetPedToRagdoll(-1, -1, 0, false, false, false);
             }, () =>
             {
                 _ped.ClearPedTasks();
+
+                _ped.SetPedCanRagdoll(false);
             });
         }
 
