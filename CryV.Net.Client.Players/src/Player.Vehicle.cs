@@ -20,9 +20,9 @@ namespace CryV.Net.Client.Players
                 return false;
             }
 
-            if (IsInVehicle && NativePed.IsInAnyVehicle(true) == false && Vehicle.GetVehicle().DoesExist() && (DateTime.UtcNow - _vehicleEnterBegin).TotalSeconds > 2.5f)
+            if (IsInVehicle && NativePed.IsInAnyVehicle(true) == false && Vehicle.NativeVehicle.DoesExist() && (DateTime.UtcNow - _vehicleEnterBegin).TotalSeconds > 2.5f)
             {
-                NativePed.SetPedIntoVehicle(Vehicle.GetVehicle(), Seat);
+                NativePed.SetPedIntoVehicle(Vehicle.NativeVehicle, Seat);
             }
 
             if (_wasEnteringVehicle || IsInVehicle)
@@ -35,7 +35,7 @@ namespace CryV.Net.Client.Players
                 NativePed.ClearPedTasks();
                 NativePed.ClearPedSecondaryTask();
 
-                NativePed.TaskLeaveVehicle(Vehicle.GetVehicle(), 0);
+                NativePed.TaskLeaveVehicle(Vehicle.NativeVehicle, 0);
 
                 _wasLeavingVehicle = true;
 
@@ -53,7 +53,7 @@ namespace CryV.Net.Client.Players
                 NativePed.ClearPedSecondaryTask();
                 NativePed.ClearPedTasksImmediately();
 
-                NativePed.TaskEnterVehicle(Vehicle.GetVehicle(), -1, (VehicleSeat) Seat, Speed, 0);
+                NativePed.TaskEnterVehicle(Vehicle.NativeVehicle, -1, (VehicleSeat) Seat, Speed, 0);
 
                 _vehicleEnterBegin = DateTime.UtcNow;
 

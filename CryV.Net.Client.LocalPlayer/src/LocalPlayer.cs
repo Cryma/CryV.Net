@@ -173,9 +173,9 @@ namespace CryV.Net.Client.LocalPlayer
                 var vehicle = _vehicleManager.GetVehicle(ped.GetVehiclePedIsTryingToEnter());
                 if (vehicle != null)
                 {
-                    if (vehicle.GetVehicle().GetIsVehicleEngineRunning() == false)
+                    if (vehicle.NativeVehicle.GetIsVehicleEngineRunning() == false)
                     {
-                        vehicle.GetVehicle().SetVehicleEngineOn(true, true);
+                        vehicle.NativeVehicle.SetVehicleEngineOn(true, true);
                     }
 
                     LocalPlayerHelper.SetVehicle(vehicle);
