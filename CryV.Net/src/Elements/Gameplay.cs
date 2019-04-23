@@ -98,5 +98,10 @@ namespace CryV.Net.Elements
             CryVNative.Native_Clock_PauseClock(CryVNative.Plugin, toggle);
         }
 
+        public static void SetSlowmotion(bool toggle)
+        {
+            CryVNative.Native_Memory_SetSlowmotion(CryVNative.Plugin, toggle);
+        }
+
     }
 }

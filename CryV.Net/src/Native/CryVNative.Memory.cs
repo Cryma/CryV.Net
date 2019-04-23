@@ -61,5 +61,8 @@ namespace CryV.Net.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern short Native_Memory_GetPedSeat(IntPtr plugin, int pedId);
 
+        [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
+        public static extern void Native_Memory_SetSlowmotion(IntPtr plugin, bool toggle);
+
     }
 }

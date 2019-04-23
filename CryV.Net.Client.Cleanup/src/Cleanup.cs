@@ -782,6 +782,7 @@ namespace CryV.Net.Client.Cleanup
                 LocalPlayer.Character.Position = new Vector3(412.4f, -976.71f, 29.43f);
 
                 Gameplay.PauseClock(true);
+                Gameplay.SetSlowmotion(false);
 
                 for (var i = 0; i < 50; i++)
                 {
