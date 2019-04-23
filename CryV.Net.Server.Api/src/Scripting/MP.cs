@@ -9,9 +9,9 @@ namespace CryV.Net.Server.Api.Scripting
         private static Script _script;
 
         public static IEvents Events => _script.Events;
-
         public static IPlayerPool PlayerPool => _script.PlayerPool;
         public static IVehiclePool VehiclePool => _script.VehiclePool;
+        public static ICommandHandler CommandHandler => _script.CommandHandler;
 
         internal static void Setup(Script script)
         {
