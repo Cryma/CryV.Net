@@ -90,7 +90,7 @@ namespace CryV.Net.Client.Vehicles
 
             ThreadHelper.Run(() =>
             {
-                _vehicle = new Elements.Vehicle(Model, Position, Rotation, Velocity, ColorPrimary, ColorSecondary, NumberPlate)
+                _vehicle = new Elements.Vehicle(Model, Position, Rotation, Velocity, payload.ColorPrimary, payload.ColorSecondary, payload.NumberPlate)
                 {
                     EngineHealth = EngineHealth
                 };
@@ -187,7 +187,7 @@ namespace CryV.Net.Client.Vehicles
 
         private void Sync(float deltaTime)
         {
-            Rotation = Interpolation.LerpRotation(_vehicle.Rotation, Rotation, deltaTime * 5);
+            _vehicle.Rotation = Interpolation.LerpRotation(_vehicle.Rotation, Rotation, deltaTime * 5);
 
             if (Vector3.DistanceSquared(_vehicle.Position, Position) > 9.0f)
             {
