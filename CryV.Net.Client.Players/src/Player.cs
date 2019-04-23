@@ -72,9 +72,9 @@ namespace CryV.Net.Client.Players
             _vehicleManager = vehicleManager;
 
             Id = payload.Id;
-            Position = payload.Position;
-            Heading = payload.Heading;
-            AimTarget = payload.AimTarget;
+            Model = payload.Model;
+
+            ReadPayload(payload);
 
             _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<PlayerUpdatePayload>>(update =>
             {
@@ -84,10 +84,12 @@ namespace CryV.Net.Client.Players
 
             ThreadHelper.Run(() =>
             {
-                Ped = new Ped(payload.Model, payload.Position, payload.Heading)
+                Ped = new Ped(Model, Position, Heading)
                 {
                     Velocity = Velocity
                 };
+
+                CheckForChanges(payload);
 
                 EntityPool.AddEntity(Ped);
             });
@@ -200,7 +202,7 @@ namespace CryV.Net.Client.Players
 
             if (Vector3.DistanceSquared(pedPosition, Position) > 6.25f)
             {
-                pedPosition = Position;
+                Ped.Position = Position;
             }
 
             var positionDifference = Position - pedPosition;
