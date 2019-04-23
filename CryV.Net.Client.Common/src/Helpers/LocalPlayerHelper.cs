@@ -24,7 +24,7 @@ namespace CryV.Net.Client.Common.Helpers
             }
 
             VehicleId = vehicle.Id;
-            Vehicle = vehicle.GetVehicle();
+            Vehicle = vehicle.NativeVehicle;
         }
 
     }

@@ -11,7 +11,7 @@ namespace CryV.Net.Client.Common.Interfaces
 
         ulong Model { get; set; }
 
-        Vehicle GetVehicle();
+        Vehicle NativeVehicle { get; }
 
         void ReadPayload(VehicleUpdatePayload payload);
 

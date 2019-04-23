@@ -7,7 +7,7 @@ namespace CryV.Net.Client.Common.Interfaces
     {
 
         int Id { get; }
-        Ped Ped { get; }
+        Ped NativePed { get; }
 
     }
 }

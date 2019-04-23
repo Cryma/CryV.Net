@@ -33,18 +33,18 @@ namespace CryV.Net.Client.Players
                 _followProp.Position = Position + Velocity * 3.0f;
             }
 
-            var isPedAiming = Ped.GetIsTaskActive(290);
+            var isPedAiming = NativePed.GetIsTaskActive(290);
 
             if (isPedAiming == false || _ticks % 100 == 0)
             {
                 if (Speed == 0)
                 {
-                    Ped.TaskAimGunAtEntity(_aimProp.Handle, -1, false);
+                    NativePed.TaskAimGunAtEntity(_aimProp.Handle, -1, false);
                 }
                 else
                 {
-                    Ped.TaskGoToEntityWhileAimingAtEntity(_followProp.Handle, _aimProp.Handle, Speed, false, 3.0f, 1082130432, true, false, 3337513804);
-                    Ped.SetPedDesiredMoveBlendRatio(Speed);
+                    NativePed.TaskGoToEntityWhileAimingAtEntity(_followProp.Handle, _aimProp.Handle, Speed, false, 3.0f, 1082130432, true, false, 3337513804);
+                    NativePed.SetPedDesiredMoveBlendRatio(Speed);
                 }
             }
         }

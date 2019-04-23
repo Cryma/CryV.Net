@@ -63,7 +63,7 @@ namespace CryV.Net.Client.Vehicles
         public bool IsRoofRaising { get; set; }
 
 
-        private Elements.Vehicle _vehicle;
+        public Elements.Vehicle NativeVehicle { get; private set; }
 
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
 
@@ -82,7 +82,7 @@ namespace CryV.Net.Client.Vehicles
                 ReadPayload(update.Payload);
                 CheckForChanges(update.Payload);
 
-                if (LocalPlayerHelper.Vehicle == _vehicle && LocalPlayer.Character.Seat == VehicleSeat.Driver)
+                if (LocalPlayerHelper.Vehicle == NativeVehicle && LocalPlayer.Character.Seat == VehicleSeat.Driver)
                 {
                     ForceSync();
                 }
@@ -90,23 +90,18 @@ namespace CryV.Net.Client.Vehicles
 
             ThreadHelper.Run(() =>
             {
-                _vehicle = new Elements.Vehicle(Model, Position, Rotation, Velocity, payload.ColorPrimary, payload.ColorSecondary, payload.NumberPlate)
+                NativeVehicle = new Elements.Vehicle(Model, Position, Rotation, Velocity, payload.ColorPrimary, payload.ColorSecondary, payload.NumberPlate)
                 {
                     EngineHealth = EngineHealth
                 };
 
                 if (EngineHealth < 0.0f)
                 {
-                    _vehicle.Explode(false, true);
+                    NativeVehicle.Explode(false, true);
                 }
             });
 
             NativeHelper.OnNativeTick += Tick;
-        }
-
-        public Elements.Vehicle GetVehicle()
-        {
-            return _vehicle;
         }
 
         public void ReadPayload(VehicleUpdatePayload payload)
@@ -138,7 +133,7 @@ namespace CryV.Net.Client.Vehicles
             {
                 ThreadHelper.Run(() =>
                 {
-                    _vehicle.SetVehicleEngineOn(payload.EngineState, true);
+                    NativeVehicle.SetVehicleEngineOn(payload.EngineState, true);
 
                     EngineState = payload.EngineState;
                 });
@@ -148,7 +143,7 @@ namespace CryV.Net.Client.Vehicles
             {
                 ThreadHelper.Run(() =>
                 {
-                    _vehicle.SetVehicleColours(payload.ColorPrimary, payload.ColorSecondary);
+                    NativeVehicle.SetVehicleColours(payload.ColorPrimary, payload.ColorSecondary);
 
                     ColorPrimary = payload.ColorPrimary;
                     ColorSecondary = payload.ColorSecondary;
@@ -159,7 +154,7 @@ namespace CryV.Net.Client.Vehicles
             {
                 ThreadHelper.Run(() =>
                 {
-                    _vehicle.NumberPlate = payload.NumberPlate;
+                    NativeVehicle.NumberPlate = payload.NumberPlate;
 
                     NumberPlate = payload.NumberPlate;
                 });
@@ -168,7 +163,7 @@ namespace CryV.Net.Client.Vehicles
 
         public VehicleUpdatePayload GetPayload()
         {
-            return new VehicleUpdatePayload(Id, Position, _vehicle.Velocity, Rotation, EngineHealth, NumberPlate, Model, EngineState, CurrentGear,
+            return new VehicleUpdatePayload(Id, Position, NativeVehicle.Velocity, Rotation, EngineHealth, NumberPlate, Model, EngineState, CurrentGear,
                 CurrentRPM, Clutch, Turbo, Acceleration, Brake, TargetSteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout, IsRoofUp, IsRoofLowering,
                 IsRoofDown, IsRoofRaising);
         }
@@ -185,55 +180,55 @@ namespace CryV.Net.Client.Vehicles
 
         private void Sync(float deltaTime)
         {
-            _vehicle.Rotation = Interpolation.LerpRotation(_vehicle.Rotation, Rotation, deltaTime * 5);
+            NativeVehicle.Rotation = Interpolation.LerpRotation(NativeVehicle.Rotation, Rotation, deltaTime * 5);
 
-            if (Vector3.DistanceSquared(_vehicle.Position, Position) > 9.0f)
+            if (Vector3.DistanceSquared(NativeVehicle.Position, Position) > 9.0f)
             {
-                _vehicle.Position = Position;
+                NativeVehicle.Position = Position;
             }
 
-            var positionDifference = Position - _vehicle.Position;
-            _vehicle.Velocity = Velocity + positionDifference;
+            var positionDifference = Position - NativeVehicle.Position;
+            NativeVehicle.Velocity = Velocity + positionDifference;
 
-            _vehicle.CurrentGear = CurrentGear;
-            _vehicle.CurrentRPM = CurrentRPM;
-            _vehicle.Clutch = Clutch;
-            _vehicle.Turbo = Turbo;
-            _vehicle.Acceleration = Acceleration;
-            _vehicle.Brake = Brake;
-            _vehicle.SteeringAngle = Interpolation.Lerp(_vehicle.SteeringAngle, TargetSteeringAngle, deltaTime * 5);
+            NativeVehicle.CurrentGear = CurrentGear;
+            NativeVehicle.CurrentRPM = CurrentRPM;
+            NativeVehicle.Clutch = Clutch;
+            NativeVehicle.Turbo = Turbo;
+            NativeVehicle.Acceleration = Acceleration;
+            NativeVehicle.Brake = Brake;
+            NativeVehicle.SteeringAngle = Interpolation.Lerp(NativeVehicle.SteeringAngle, TargetSteeringAngle, deltaTime * 5);
 
             ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_RAISEROOF", IsRoofRaising, () =>
             {
-                _vehicle.RaiseConvertibleRoof(false);
+                NativeVehicle.RaiseConvertibleRoof(false);
             });
 
             ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_LOWERROOF", IsRoofLowering, () =>
             {
-                _vehicle.LowerConvertibleRoof(false);
+                NativeVehicle.LowerConvertibleRoof(false);
             });
 
             ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_HORN", IsHornActive, () =>
             {
-                _vehicle.StartVehicleHorn(9999);
+                NativeVehicle.StartVehicleHorn(9999);
             }, () =>
             {
-                _vehicle.StartVehicleHorn(1);
+                NativeVehicle.StartVehicleHorn(1);
             });
 
             ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_BURNOUT", IsBurnout, () =>
             {
-                var driver = _vehicle.GetPedOnSeat(-1);
-                driver?.TaskVehicleTempAction(_vehicle, 23, 9999);
+                var driver = NativeVehicle.GetPedOnSeat(-1);
+                driver?.TaskVehicleTempAction(NativeVehicle, 23, 9999);
 
-                _vehicle.SetVehicleBurnout(true);
+                NativeVehicle.SetVehicleBurnout(true);
             }, () =>
             {
-                var driver = _vehicle.GetPedOnSeat(-1);
-                driver?.TaskVehicleTempAction(_vehicle, 6, 1);
+                var driver = NativeVehicle.GetPedOnSeat(-1);
+                driver?.TaskVehicleTempAction(NativeVehicle, 6, 1);
                 driver?.ClearPedTasks();
 
-                _vehicle.SetVehicleBurnout(false);
+                NativeVehicle.SetVehicleBurnout(false);
             });
         }
 
@@ -256,7 +251,7 @@ namespace CryV.Net.Client.Vehicles
 
             ThreadHelper.Run(() =>
             {
-                _vehicle?.Delete();
+                NativeVehicle?.Delete();
             });
         }
 

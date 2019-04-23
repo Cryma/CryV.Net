@@ -52,7 +52,7 @@ namespace CryV.Net.Client.Players
 
         public int Seat { get; set; }
 
-        public Ped Ped { get; private set; }
+        public Ped NativePed { get; private set; }
 
         private static float _interpolationFactor = 3.0f;
 
@@ -84,7 +84,7 @@ namespace CryV.Net.Client.Players
 
             ThreadHelper.Run(() =>
             {
-                Ped = new Ped(Model, Position, Heading)
+                NativePed = new Ped(Model, Position, Heading)
                 {
                     Velocity = Velocity
                 };
@@ -123,7 +123,7 @@ namespace CryV.Net.Client.Players
             {
                 ThreadHelper.Run(() =>
                 {
-                    Ped.Model = payload.Model;
+                    NativePed.Model = payload.Model;
                     Model = payload.Model;
                 });
             }
@@ -132,7 +132,7 @@ namespace CryV.Net.Client.Players
             {
                 ThreadHelper.Run(() =>
                 {
-                    Ped.GiveWeaponToPed(payload.WeaponModel, 999, true, true);
+                    NativePed.GiveWeaponToPed(payload.WeaponModel, 999, true, true);
                     WeaponModel = payload.WeaponModel;
                 });
             }
@@ -146,11 +146,11 @@ namespace CryV.Net.Client.Players
             {
                 var animationName = GetLadderClimbingAnimationName();
 
-                if (Ped.IsEntityPlayingAnim("laddersbase", animationName, 3) == false)
+                if (NativePed.IsEntityPlayingAnim("laddersbase", animationName, 3) == false)
                 {
-                    Ped.ClearPedTasks();
+                    NativePed.ClearPedTasks();
                     Streaming.LoadAnimationDictionary("laddersbase");
-                    Ped.TaskPlayAnim("laddersbase", animationName, 8.0f, 10f, -1, 1 | 2147483648, 1.0f, true, true, true);
+                    NativePed.TaskPlayAnim("laddersbase", animationName, 8.0f, 10f, -1, 1 | 2147483648, 1.0f, true, true, true);
                 }
             }
 
@@ -173,12 +173,12 @@ namespace CryV.Net.Client.Players
 
             ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_JUMPING", IsJumping, () =>
             {
-                Ped.TaskJump();
+                NativePed.TaskJump();
             });
 
             ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_CLIMBING", IsClimbing, () =>
             {
-                Ped.TaskClimb();
+                NativePed.TaskClimb();
             });
         }
 
@@ -189,7 +189,7 @@ namespace CryV.Net.Client.Players
                 return;
             }
 
-            var pedPosition = Ped.Position;
+            var pedPosition = NativePed.Position;
             
             if (IsClimbingLadder)
             {
@@ -200,35 +200,35 @@ namespace CryV.Net.Client.Players
 
             if (Vector3.DistanceSquared(pedPosition, Position) > 6.25f)
             {
-                Ped.Position = Position;
+                NativePed.Position = Position;
             }
 
             var positionDifference = Position - pedPosition;
-            Ped.Velocity = Velocity + positionDifference * 0.75f;
+            NativePed.Velocity = Velocity + positionDifference * 0.75f;
         }
 
         private void UpdateHeading(float deltaTime)
         {
-            var pedRotation = Ped.Rotation;
+            var pedRotation = NativePed.Rotation;
 
             var interpolatedHeading = Interpolation.LerpDegrees(pedRotation.Z, Heading, deltaTime * _interpolationFactor);
 
-            Ped.Rotation = new Vector3(pedRotation.X, pedRotation.Y, interpolatedHeading);
+            NativePed.Rotation = new Vector3(pedRotation.X, pedRotation.Y, interpolatedHeading);
         }
 
         private void UpdateRagdoll()
         {
             ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_RAGDOLL", IsRagdoll, () =>
             {
-                Ped.SetPedCanRagdoll(true);
+                NativePed.SetPedCanRagdoll(true);
 
-                Ped.ClearPedTasksImmediately();
-                Ped.SetPedToRagdoll(-1, -1, 0, false, false, false);
+                NativePed.ClearPedTasksImmediately();
+                NativePed.SetPedToRagdoll(-1, -1, 0, false, false, false);
             }, () =>
             {
-                Ped.ClearPedTasks();
+                NativePed.ClearPedTasks();
 
-                Ped.SetPedCanRagdoll(false);
+                NativePed.SetPedCanRagdoll(false);
             });
         }
 
@@ -246,45 +246,45 @@ namespace CryV.Net.Client.Players
             {
                 case 1:
                     {
-                        if (Ped.IsPedWalking() && range < 0.1f)
+                        if (NativePed.IsPedWalking() && range < 0.1f)
                         {
                             break;
                         }
 
-                        Ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, 1.0f, -1, 0.0f, 0.0f);
-                        Ped.SetPedDesiredMoveBlendRatio(1.0f);
+                        NativePed.TaskGoStraightToCoord(end.X, end.Y, end.Z, 1.0f, -1, 0.0f, 0.0f);
+                        NativePed.SetPedDesiredMoveBlendRatio(1.0f);
 
                         break;
                     }
 
                 case 2:
                     {
-                        if (Ped.IsPedRunning() && range < 0.2f)
+                        if (NativePed.IsPedRunning() && range < 0.2f)
                         {
                             break;
                         }
 
-                        Ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, 2.0f, -1, 0.0f, 0.0f);
-                        Ped.SetPedDesiredMoveBlendRatio(1.0f);
+                        NativePed.TaskGoStraightToCoord(end.X, end.Y, end.Z, 2.0f, -1, 0.0f, 0.0f);
+                        NativePed.SetPedDesiredMoveBlendRatio(1.0f);
 
                         break;
                     }
 
                 case 3:
                     {
-                        if (Ped.IsPedSprinting() && range < 0.3f)
+                        if (NativePed.IsPedSprinting() && range < 0.3f)
                         {
                             break;
                         }
 
-                        Ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, 3.0f, -1, 0.0f, 0.0f);
-                        Ped.SetPedDesiredMoveBlendRatio(1.0f);
+                        NativePed.TaskGoStraightToCoord(end.X, end.Y, end.Z, 3.0f, -1, 0.0f, 0.0f);
+                        NativePed.SetPedDesiredMoveBlendRatio(1.0f);
 
                         break;
                     }
 
                 default:
-                    Ped.TaskStandStill(2000);
+                    NativePed.TaskStandStill(2000);
 
                     break;
             }
@@ -329,7 +329,7 @@ namespace CryV.Net.Client.Players
                 _aimProp?.Delete();
                 _followProp?.Delete();
 
-                Ped.Delete();
+                NativePed.Delete();
             });
         }
 
