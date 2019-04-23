@@ -80,13 +80,12 @@ namespace CryV.Net.Client.Vehicles
             _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(update =>
             {
                 ReadPayload(update.Payload);
+                CheckForChanges(update.Payload);
 
                 if (LocalPlayerHelper.Vehicle == _vehicle && LocalPlayer.Character.Seat == VehicleSeat.Driver)
                 {
-                    CheckForChanges(update.Payload);
                     ForceSync();
                 }
-
             }, x => x.Payload.Id == Id));
 
             ThreadHelper.Run(() =>

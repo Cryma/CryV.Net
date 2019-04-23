@@ -87,15 +87,16 @@ namespace CryV.Net.Server.Vehicles
 
             foreach (var player in _playerManager.GetPlayers())
             {
+#if PEDMIRROR
+                payload.Id = 1;
+                payload.Position.X -= 6.5f;
+                player.Send(payload, DeliveryMethod.Unreliable);
+#else
                 if (player.Vehicle == this && player.Seat == -1)
                 {
                     continue;
                 }
 
-                player.Send(payload, DeliveryMethod.Unreliable);
-#if PEDMIRROR
-                payload.Id = 1;
-                payload.Position.X -= 6.5f;
                 player.Send(payload, DeliveryMethod.Unreliable);
 #endif
             }
