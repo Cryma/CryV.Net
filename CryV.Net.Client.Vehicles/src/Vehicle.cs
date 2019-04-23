@@ -99,8 +99,6 @@ namespace CryV.Net.Client.Vehicles
                 {
                     _vehicle.Explode(false, true);
                 }
-
-                EntityPool.AddEntity(_vehicle);
             });
 
             NativeHelper.OnNativeTick += Tick;
@@ -258,8 +256,6 @@ namespace CryV.Net.Client.Vehicles
 
             ThreadHelper.Run(() =>
             {
-                EntityPool.RemoveEntity(_vehicle);
-
                 _vehicle?.Delete();
             });
         }

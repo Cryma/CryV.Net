@@ -111,10 +111,7 @@ namespace CryV.Net.Elements
 
             CryVNative.Native_Entity_DeleteEntity(CryVNative.Plugin, ref _handle);
 
-            if (EntityPool.ContainsEntity(Handle))
-            {
-                EntityPool.RemoveEntity(Handle);
-            }
+            EntityPool.RemoveEntity(Handle);
 
             Handle = 0;
         }

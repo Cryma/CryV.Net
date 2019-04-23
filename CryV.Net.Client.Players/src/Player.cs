@@ -90,8 +90,6 @@ namespace CryV.Net.Client.Players
                 };
 
                 CheckForChanges(payload);
-
-                EntityPool.AddEntity(Ped);
             });
 
             NativeHelper.OnNativeTick += Tick;
@@ -328,8 +326,6 @@ namespace CryV.Net.Client.Players
 
             ThreadHelper.Run(() =>
             {
-                EntityPool.RemoveEntity(Ped);
-
                 _aimProp?.Delete();
                 _followProp?.Delete();
 
