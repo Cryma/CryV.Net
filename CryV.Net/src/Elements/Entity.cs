@@ -151,7 +151,7 @@ namespace CryV.Net.Elements
 
         public static bool operator ==(Entity left, Entity right)
         {
-            return right != null && left != null && left.Handle == right.Handle;
+            return (object) right != null && (object) left != null && left.Handle == right.Handle;
         }
 
         public static bool operator !=(Entity left, Entity right)
