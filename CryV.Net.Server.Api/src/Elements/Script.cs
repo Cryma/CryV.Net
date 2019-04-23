@@ -9,6 +9,7 @@ namespace CryV.Net.Server.Api.Elements
         public IEvents Events { get; }
         public IPlayerPool PlayerPool { get; }
         public IVehiclePool VehiclePool { get; }
+        public ICommandHandler CommandHandler { get; }
 
         private readonly IEventHandler _eventHandler;
         private readonly IPlayerManager _playerManager;
@@ -23,6 +24,7 @@ namespace CryV.Net.Server.Api.Elements
             Events = new Events(eventHandler);
             PlayerPool = new PlayerPool(playerManager);
             VehiclePool = new VehiclePool(vehicleManager);
+            CommandHandler = new CommandHandler(eventHandler, playerManager);
         }
 
     }
