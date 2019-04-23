@@ -43,7 +43,7 @@ namespace CryV.Net.Client.Helpers.Pointing
             var lerpedPitch = Interpolation.Lerp(_currentPitch, _targetPitch, deltaTime * _syncFactor);
             var lerpedHeading = Interpolation.Lerp(_currentHeading, _targetHeading, deltaTime * _syncFactor);
 
-            var ped = _player?.GetPed();
+            var ped = _player?.Ped;
             if (ped == null)
             {
                 return;
@@ -59,7 +59,7 @@ namespace CryV.Net.Client.Helpers.Pointing
         {
             ThreadHelper.Run(() =>
             {
-                FingerPointingUtils.StartPointing(_player.GetPed());
+                FingerPointingUtils.StartPointing(_player.Ped);
             });
         }
 
@@ -73,7 +73,7 @@ namespace CryV.Net.Client.Helpers.Pointing
         {
             ThreadHelper.Run(() =>
             {
-                FingerPointingUtils.StopPointing(_player.GetPed());
+                FingerPointingUtils.StopPointing(_player.Ped);
             });
         }
 

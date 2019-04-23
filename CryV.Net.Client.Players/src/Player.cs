@@ -18,39 +18,19 @@ namespace CryV.Net.Client.Players
 
         public int Id { get; }
 
-        public Vector3 Position
-        {
-            get => _ped.Position;
-            set => _ped.Position = value;
-        }
-
-        public Vector3 TargetPosition { get; set; }
+        public Vector3 Position { get; set; }
 
         public Vector3 Velocity { get; set; }
 
-        public Vector3 Rotation
-        {
-            get => _ped.Rotation;
-            set => _ped.Rotation = value;
-        }
-
-        public float TargetHeading { get; set; }
+        public float Heading { get; set; }
 
         public Vector3 AimTarget { get; set; }
 
         public int Speed { get; set; }
 
-        public ulong Model
-        {
-            get => _ped.Model;
-            set => _ped.Model = value;
-        }
+        public ulong Model { get; set; }
 
-        public ulong WeaponModel
-        {
-            get => _ped.GetSelectedPedWeapon();
-            set => _ped.GiveWeaponToPed(value, 999, true, true);
-        }
+        public ulong WeaponModel { get; set; }
 
         public bool IsJumping { get; set; }
 
@@ -72,12 +52,9 @@ namespace CryV.Net.Client.Players
 
         public int Seat { get; set; }
 
-        private Ped _ped;
+        public Ped Ped { get; private set; }
 
         private static float _interpolationFactor = 3.0f;
-
-        private float _lastRange;
-        private bool _wasNegative;
 
         private Prop _aimProp;
         private Prop _followProp;
@@ -95,34 +72,33 @@ namespace CryV.Net.Client.Players
             _vehicleManager = vehicleManager;
 
             Id = payload.Id;
-            TargetPosition = payload.Position;
-            TargetHeading = payload.Heading;
+            Position = payload.Position;
+            Heading = payload.Heading;
             AimTarget = payload.AimTarget;
 
-            _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<PlayerUpdatePayload>>(update => ReadPayload(update.Payload), x => x.Payload.Id == Id));
+            _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<PlayerUpdatePayload>>(update =>
+            {
+                ReadPayload(update.Payload);
+                CheckForChanges(update.Payload);
+            }, x => x.Payload.Id == Id));
 
             ThreadHelper.Run(() =>
             {
-                _ped = new Ped(payload.Model, payload.Position, payload.Heading)
+                Ped = new Ped(payload.Model, payload.Position, payload.Heading)
                 {
                     Velocity = Velocity
                 };
 
-                EntityPool.AddEntity(_ped);
+                EntityPool.AddEntity(Ped);
             });
 
             NativeHelper.OnNativeTick += Tick;
         }
 
-        public Ped GetPed()
-        {
-            return _ped;
-        }
-
         public void ReadPayload(PlayerUpdatePayload payload)
         {
-            TargetPosition = payload.Position;
-            TargetHeading = payload.Heading;
+            Position = payload.Position;
+            Heading = payload.Heading;
             Velocity = payload.Velocity;
             Speed = payload.Speed;
             AimTarget = payload.AimTarget;
@@ -139,20 +115,27 @@ namespace CryV.Net.Client.Players
             IsAiming = (payload.PedData & (int) PedData.IsAiming) > 0;
 
             ReadPayloadVehicleRelated(payload);
+        }
 
-            // TODO: Optimize
-            ThreadHelper.Run(() =>
+        private void CheckForChanges(PlayerUpdatePayload payload)
+        {
+            if (Model != payload.Model)
             {
-                if (Model != payload.Model)
+                ThreadHelper.Run(() =>
                 {
+                    Ped.Model = payload.Model;
                     Model = payload.Model;
-                }
+                });
+            }
 
-                if (WeaponModel != payload.WeaponModel)
+            if (WeaponModel != payload.WeaponModel)
+            {
+                ThreadHelper.Run(() =>
                 {
+                    Ped.GiveWeaponToPed(payload.WeaponModel, 999, true, true);
                     WeaponModel = payload.WeaponModel;
-                }
-            });
+                });
+            }
         }
 
         private void Tick(float deltaTime)
@@ -163,11 +146,11 @@ namespace CryV.Net.Client.Players
             {
                 var animationName = GetLadderClimbingAnimationName();
 
-                if (_ped.IsEntityPlayingAnim("laddersbase", animationName, 3) == false)
+                if (Ped.IsEntityPlayingAnim("laddersbase", animationName, 3) == false)
                 {
-                    _ped.ClearPedTasks();
+                    Ped.ClearPedTasks();
                     Streaming.LoadAnimationDictionary("laddersbase");
-                    _ped.TaskPlayAnim("laddersbase", animationName, 8.0f, 10f, -1, 1 | 2147483648, 1.0f, true, true, true);
+                    Ped.TaskPlayAnim("laddersbase", animationName, 8.0f, 10f, -1, 1 | 2147483648, 1.0f, true, true, true);
                 }
             }
 
@@ -190,12 +173,12 @@ namespace CryV.Net.Client.Players
 
             ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_JUMPING", IsJumping, () =>
             {
-                _ped.TaskJump();
+                Ped.TaskJump();
             });
 
             ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_CLIMBING", IsClimbing, () =>
             {
-                _ped.TaskClimb();
+                Ped.TaskClimb();
             });
         }
 
@@ -205,43 +188,47 @@ namespace CryV.Net.Client.Players
             {
                 return;
             }
+
+            var pedPosition = Ped.Position;
             
             if (IsClimbingLadder)
             {
-                Position = Vector3.Lerp(Position, TargetPosition + Velocity * 0.2f, deltaTime * 3);
+                Position = Vector3.Lerp(pedPosition, Position + Velocity * 0.2f, deltaTime * 3);
 
                 return;
             }
 
-            if (Vector3.DistanceSquared(Position, TargetPosition) > 6.25f)
+            if (Vector3.DistanceSquared(pedPosition, Position) > 6.25f)
             {
-                Position = TargetPosition;
+                pedPosition = Position;
             }
 
-            var positionDifference = TargetPosition - Position;
-            _ped.Velocity = Velocity + positionDifference * 0.75f;
+            var positionDifference = Position - pedPosition;
+            Ped.Velocity = Velocity + positionDifference * 0.75f;
         }
 
         private void UpdateHeading(float deltaTime)
         {
-            var interpolatedHeading = Interpolation.LerpDegrees(Rotation.Z, TargetHeading, deltaTime * _interpolationFactor);
+            var pedRotation = Ped.Rotation;
 
-            Rotation = new Vector3(Rotation.X, Rotation.Y, interpolatedHeading);
+            var interpolatedHeading = Interpolation.LerpDegrees(pedRotation.Z, Heading, deltaTime * _interpolationFactor);
+
+            Ped.Rotation = new Vector3(pedRotation.X, pedRotation.Y, interpolatedHeading);
         }
 
         private void UpdateRagdoll()
         {
             ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_RAGDOLL", IsRagdoll, () =>
             {
-                _ped.SetPedCanRagdoll(true);
+                Ped.SetPedCanRagdoll(true);
 
-                _ped.ClearPedTasksImmediately();
-                _ped.SetPedToRagdoll(-1, -1, 0, false, false, false);
+                Ped.ClearPedTasksImmediately();
+                Ped.SetPedToRagdoll(-1, -1, 0, false, false, false);
             }, () =>
             {
-                _ped.ClearPedTasks();
+                Ped.ClearPedTasks();
 
-                _ped.SetPedCanRagdoll(false);
+                Ped.SetPedCanRagdoll(false);
             });
         }
 
@@ -252,71 +239,52 @@ namespace CryV.Net.Client.Players
                 return;
             }
 
-            var end = TargetPosition + Velocity;
-            var range = Vector3.Distance(TargetPosition, end);
-            var deltaRange = range - _lastRange;
-
-            _lastRange = range;
-
-            if (deltaRange < 0)
-            {
-                _wasNegative = true;
-
-                if (_ped.IsPedSprinting())
-                {
-                    _ped.TaskStandStill(2000);
-
-                    return;
-                }
-            }
-            else if (deltaRange > 0)
-            {
-                _wasNegative = false;
-            }
+            var end = Position + Velocity;
+            var range = Vector3.Distance(Position, end);
 
             switch (Speed)
             {
                 case 1:
                     {
-                        if (_ped.IsPedWalking() && range < 0.1f || _wasNegative)
+                        if (Ped.IsPedWalking() && range < 0.1f)
                         {
                             break;
                         }
 
-                        _ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, 1.0f, -1, 0.0f, 0.0f);
-                        _ped.SetPedDesiredMoveBlendRatio(1.0f);
+                        Ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, 1.0f, -1, 0.0f, 0.0f);
+                        Ped.SetPedDesiredMoveBlendRatio(1.0f);
 
                         break;
                     }
 
                 case 2:
                     {
-                        if (_ped.IsPedRunning() && range < 0.2f || _wasNegative)
+                        if (Ped.IsPedRunning() && range < 0.2f)
                         {
                             break;
                         }
 
-                        _ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, 2.0f, -1, 0.0f, 0.0f);
-                        _ped.SetPedDesiredMoveBlendRatio(1.0f);
+                        Ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, 2.0f, -1, 0.0f, 0.0f);
+                        Ped.SetPedDesiredMoveBlendRatio(1.0f);
 
                         break;
                     }
 
                 case 3:
                     {
-                        if (_ped.IsPedSprinting() && range < 0.3f || _wasNegative)
+                        if (Ped.IsPedSprinting() && range < 0.3f)
                         {
                             break;
                         }
 
-                        _ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, 3.0f, -1, 0.0f, 0.0f);
-                        _ped.SetPedDesiredMoveBlendRatio(1.0f);
+                        Ped.TaskGoStraightToCoord(end.X, end.Y, end.Z, 3.0f, -1, 0.0f, 0.0f);
+                        Ped.SetPedDesiredMoveBlendRatio(1.0f);
 
                         break;
                     }
 
                 default:
-                    _ped.TaskStandStill(2000);
+                    Ped.TaskStandStill(2000);
 
                     break;
             }
@@ -358,12 +326,12 @@ namespace CryV.Net.Client.Players
 
             ThreadHelper.Run(() =>
             {
-                EntityPool.RemoveEntity(_ped);
+                EntityPool.RemoveEntity(Ped);
 
                 _aimProp?.Delete();
                 _followProp?.Delete();
 
-                _ped.Delete();
+                Ped.Delete();
             });
         }
 
