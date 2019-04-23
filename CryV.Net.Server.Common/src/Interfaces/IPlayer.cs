@@ -11,11 +11,21 @@ namespace CryV.Net.Server.Common.Interfaces
         int Id { get; }
 
         Vector3 Position { get; set; }
-
+        Vector3 Velocity { get; set; }
         float Heading { get; set; }
-
+        Vector3 AimTarget { get; set; }
+        int Speed { get; }
+        ulong Model { get; set; }
+        ulong WeaponModel { get; set; }
+        bool IsJumping { get; }
+        bool IsClimbing { get; }
+        bool IsClimbingLadder { get; }
+        bool IsRagdoll { get; }
+        bool IsAiming { get; }
+        bool IsEnteringVehicle { get; }
+        bool IsInVehicle { get; }
+        bool IsLeavingVehicle { get; }
         IVehicle Vehicle { get; set; }
-
         int Seat { get; set; }
 
         PlayerUpdatePayload GetPayload();
