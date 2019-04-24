@@ -65,6 +65,8 @@ namespace CryV.Net.Client.Vehicles
 
         public Elements.Vehicle NativeVehicle { get; private set; }
 
+        private VehicleUpdatePayload _lastPayload;
+
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
 
         private readonly IEventHandler _eventHandler;
@@ -72,6 +74,7 @@ namespace CryV.Net.Client.Vehicles
         public Vehicle(IEventHandler eventHandler, VehicleUpdatePayload payload)
         {
             _eventHandler = eventHandler;
+            _lastPayload = payload;
 
             Id = payload.Id;
             
@@ -80,7 +83,6 @@ namespace CryV.Net.Client.Vehicles
             _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(update =>
             {
                 ReadPayload(update.Payload);
-                CheckForChanges(update.Payload);
 
                 if (LocalPlayerHelper.Vehicle == NativeVehicle && LocalPlayer.Character.Seat == VehicleSeat.Driver)
                 {
@@ -125,39 +127,32 @@ namespace CryV.Net.Client.Vehicles
             IsRoofLowering = (payload.VehicleData & (int) VehicleData.RoofLowering) > 0;
             IsRoofDown = (payload.VehicleData & (int) VehicleData.RoofDown) > 0;
             IsRoofRaising = (payload.VehicleData & (int) VehicleData.RoofRaising) > 0;
+
+            _lastPayload = payload;
         }
 
-        private void CheckForChanges(VehicleUpdatePayload payload)
+        private void CheckForChanges()
         {
-            if (EngineState != payload.EngineState)
+            if (EngineState != _lastPayload.EngineState)
             {
-                ThreadHelper.Run(() =>
-                {
-                    NativeVehicle.SetVehicleEngineOn(payload.EngineState, true);
+                NativeVehicle.SetVehicleEngineOn(_lastPayload.EngineState, true);
 
-                    EngineState = payload.EngineState;
-                });
+                EngineState = _lastPayload.EngineState;
             }
 
-            if (ColorPrimary != payload.ColorPrimary || ColorSecondary != payload.ColorSecondary)
+            if (ColorPrimary != _lastPayload.ColorPrimary || ColorSecondary != _lastPayload.ColorSecondary)
             {
-                ThreadHelper.Run(() =>
-                {
-                    NativeVehicle.SetVehicleColours(payload.ColorPrimary, payload.ColorSecondary);
+                NativeVehicle.SetVehicleColours(_lastPayload.ColorPrimary, _lastPayload.ColorSecondary);
 
-                    ColorPrimary = payload.ColorPrimary;
-                    ColorSecondary = payload.ColorSecondary;
-                });
+                ColorPrimary = _lastPayload.ColorPrimary;
+                ColorSecondary = _lastPayload.ColorSecondary;
             }
 
-            if (NumberPlate != payload.NumberPlate)
+            if (NumberPlate != _lastPayload.NumberPlate)
             {
-                ThreadHelper.Run(() =>
-                {
-                    NativeVehicle.NumberPlate = payload.NumberPlate;
+                NativeVehicle.NumberPlate = _lastPayload.NumberPlate;
 
-                    NumberPlate = payload.NumberPlate;
-                });
+                NumberPlate = _lastPayload.NumberPlate;
             }
         }
 
@@ -180,6 +175,8 @@ namespace CryV.Net.Client.Vehicles
 
         private void Sync(float deltaTime)
         {
+            CheckForChanges();
+
             NativeVehicle.Rotation = Interpolation.LerpRotation(NativeVehicle.Rotation, Rotation, deltaTime * 5);
 
             if (Vector3.DistanceSquared(NativeVehicle.Position, Position) > 9.0f)
