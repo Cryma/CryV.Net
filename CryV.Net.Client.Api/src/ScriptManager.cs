@@ -23,6 +23,7 @@ namespace CryV.Net.Client.Http
         private Dictionary<string, List<FileEntry>> _clientFiles = new Dictionary<string, List<FileEntry>>();
 
         private readonly WebClient _webClient = new WebClient();
+        private readonly AssemblyLoader _assemblyLoader;
 
         private readonly IEventHandler _eventHandler;
         private readonly INetworkManager _networkManager;
@@ -31,6 +32,8 @@ namespace CryV.Net.Client.Http
         {
             _eventHandler = eventHandler;
             _networkManager = networkManager;
+            
+            _assemblyLoader = new AssemblyLoader(eventHandler);
         }
 
         public void Start()
@@ -44,6 +47,20 @@ namespace CryV.Net.Client.Http
             _clientFiles = JsonConvert.DeserializeObject<Dictionary<string, List<FileEntry>>>(fileMap);
 
             DownloadFiles();
+            LoadAssemblies();
+        }
+
+        private void LoadAssemblies()
+        {
+            foreach (var element in _clientFiles)
+            {
+                var gamemode = element.Key;
+
+                foreach (var dll in Directory.GetFiles(Path.Combine(GetFileBasePath(), gamemode), "*.dll", SearchOption.AllDirectories))
+                {
+                    _assemblyLoader.LoadAssembly(dll);
+                }
+            }
         }
 
         private void DownloadFiles()
