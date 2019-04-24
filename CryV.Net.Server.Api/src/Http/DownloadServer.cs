@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Nancy;
+using Nancy.Bootstrapper;
 using Nancy.Owin;
+using Nancy.Responses.Negotiation;
 using Newtonsoft.Json;
 
 namespace CryV.Net.Server.Api.Http
@@ -45,7 +47,7 @@ namespace CryV.Net.Server.Api.Http
 
         public DownloadModule()
         {
-            Get("/{gamemode}/{path*}", parameters =>
+            Get("/{gamemode}/{path**}", parameters =>
             {
                 if (Gamemodes == null)
                 {
@@ -86,6 +88,24 @@ namespace CryV.Net.Server.Api.Http
 
     }
 
+    public class CryVBootstrapper : DefaultNancyBootstrapper
+    {
+        protected override Func<ITypeCatalog, NancyInternalConfiguration> InternalConfiguration
+        {
+            get
+            {
+                return NancyInternalConfiguration.WithOverrides(x =>
+                {
+                    x.ResponseProcessors = new List<Type>
+                    {
+                        typeof(ResponseProcessor),
+                        typeof(ViewProcessor)
+                    };
+                });
+            }
+        }
+    }
+
     public sealed class Startup
     {
 
@@ -100,7 +120,7 @@ namespace CryV.Net.Server.Api.Http
 
         public void Configure(IApplicationBuilder application)
         {
-            application.UseOwin(x => x.UseNancy());
+            application.UseOwin(x => x.UseNancy(options => options.Bootstrapper = new CryVBootstrapper()));
         }
 
     }
