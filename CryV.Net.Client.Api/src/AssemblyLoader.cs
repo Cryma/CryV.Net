@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using CryV.Net.Client.Common.Events;
@@ -13,6 +14,8 @@ namespace CryV.Net.Client.Http
     {
 
         private HostAssemblyLoadContext _context = new HostAssemblyLoadContext();
+
+        private List<IGamemode> _instantiatedAssemblies = new List<IGamemode>();
 
         private readonly IEventHandler _eventHandler;
 
@@ -29,6 +32,13 @@ namespace CryV.Net.Client.Http
             {
                 return;
             }
+
+            foreach (var gamemode in _instantiatedAssemblies)
+            {
+                gamemode.Dispose();
+            }
+
+            _instantiatedAssemblies.Clear();
 
             _context.Unload();
             _context = null;
@@ -49,7 +59,9 @@ namespace CryV.Net.Client.Http
                         continue;
                     }
 
-                    Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
+                    var gamemode = (IGamemode) Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
+
+                    _instantiatedAssemblies.Add(gamemode);
                 }
             }
         }
