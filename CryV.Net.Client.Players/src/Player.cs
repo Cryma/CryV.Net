@@ -61,6 +61,8 @@ namespace CryV.Net.Client.Players
 
         private int _ticks;
 
+        private PlayerUpdatePayload _lastPayload;
+
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
 
         private readonly IEventHandler _eventHandler;
@@ -71,6 +73,8 @@ namespace CryV.Net.Client.Players
             _eventHandler = eventHandler;
             _vehicleManager = vehicleManager;
 
+            _lastPayload = payload;
+
             Id = payload.Id;
             Model = payload.Model;
 
@@ -79,7 +83,6 @@ namespace CryV.Net.Client.Players
             _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<PlayerUpdatePayload>>(update =>
             {
                 ReadPayload(update.Payload);
-                CheckForChanges(update.Payload);
             }, x => x.Payload.Id == Id));
 
             ThreadHelper.Run(() =>
@@ -88,8 +91,6 @@ namespace CryV.Net.Client.Players
                 {
                     Velocity = Velocity
                 };
-
-                CheckForChanges(payload);
             });
 
             NativeHelper.OnNativeTick += Tick;
@@ -115,32 +116,30 @@ namespace CryV.Net.Client.Players
             IsAiming = (payload.PedData & (int) PedData.IsAiming) > 0;
 
             ReadPayloadVehicleRelated(payload);
+
+            _lastPayload = payload;
         }
 
-        private void CheckForChanges(PlayerUpdatePayload payload)
+        private void CheckForChanges()
         {
-            if (Model != payload.Model)
+            if (Model != _lastPayload.Model)
             {
-                ThreadHelper.Run(() =>
-                {
-                    NativePed.Model = payload.Model;
-                    Model = payload.Model;
-                });
+                    NativePed.Model = _lastPayload.Model;
+                    Model = _lastPayload.Model;
             }
 
-            if (WeaponModel != payload.WeaponModel)
+            if (WeaponModel != _lastPayload.WeaponModel)
             {
-                ThreadHelper.Run(() =>
-                {
-                    NativePed.GiveWeaponToPed(payload.WeaponModel, 999, true, true);
-                    WeaponModel = payload.WeaponModel;
-                });
+                NativePed.GiveWeaponToPed(_lastPayload.WeaponModel, 999, true, true);
+                WeaponModel = _lastPayload.WeaponModel;
             }
         }
 
         private void Tick(float deltaTime)
         {
             _ticks++;
+
+            CheckForChanges();
 
             if (IsClimbingLadder)
             {
