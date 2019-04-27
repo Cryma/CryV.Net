@@ -34,6 +34,8 @@ namespace CryV.Net.Client.Players
             {
                 NativePed.RemoveAllPedWeapons();
                 NativePed.GiveWeaponToPed(WeaponModel, 999, true, true);
+
+                _wasAiming = false;
             }
 
             var isPedAiming = NativePed.GetIsTaskActive(290);
@@ -50,7 +52,7 @@ namespace CryV.Net.Client.Players
 
         private void UpdateWeaponInVehicle(bool isNativePedAiming)
         {
-            if (_wasAiming == false || IsAiming && isNativePedAiming == false)
+            if (_wasAiming == false)
             {
                 NativePed.SetPedCurrentWeaponVisible(false, false, false, false);
                 NativePed.TaskDriveBy(0, 0, AimTarget.X, AimTarget.Y, AimTarget.Z, 0.0f, 0, false, 1566631136);
