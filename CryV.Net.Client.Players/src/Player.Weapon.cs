@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using CryV.Net.Elements;
 
 namespace CryV.Net.Client.Players
@@ -7,6 +8,7 @@ namespace CryV.Net.Client.Players
     {
 
         private bool _wasAiming;
+        private DateTime _shootPreventionCooldown = DateTime.UtcNow;
 
         private void UpdateWeaponAnimation()
         {
@@ -54,16 +56,23 @@ namespace CryV.Net.Client.Players
         {
             if (_wasAiming == false)
             {
+                _shootPreventionCooldown = DateTime.UtcNow;
+
                 NativePed.SetPedCurrentWeaponVisible(false, false, false, false);
-                NativePed.TaskDriveBy(0, 0, AimTarget.X, AimTarget.Y, AimTarget.Z, 0.0f, 0, false, 1566631136);
-            }
-            else
-            {
-                NativePed.SetPedCurrentWeaponVisible(true, false, false, false);
-                NativePed.SetDrivebyTaskTarget(0, 0, AimTarget.X, AimTarget.Y, AimTarget.Z);
+                NativePed.TaskDriveBy(0, 0, AimTarget.X, AimTarget.Y, AimTarget.Z, 1.0f, 0, false, 1566631136);
+
+                _wasAiming = IsAiming;
+
+                return;
             }
 
-            _wasAiming = IsAiming;
+            if ((DateTime.UtcNow - _shootPreventionCooldown).TotalSeconds < 0.35f)
+            {
+                return;
+            }
+
+            NativePed.SetPedCurrentWeaponVisible(true, false, false, false);
+            NativePed.SetDrivebyTaskTarget(0, 0, AimTarget.X, AimTarget.Y, AimTarget.Z);
         }
 
         private void UpdateWeaponOnFoot(bool isNativePedAiming)
