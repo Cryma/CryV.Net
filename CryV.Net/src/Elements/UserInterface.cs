@@ -84,5 +84,10 @@ namespace CryV.Net.Elements
             CryVNative.Native_Hud_ActivateFrontendMenu(CryVNative.Plugin, hash, togglePause, component);
         }
 
+        public static void DrawLine(Vector3 start, Vector3 end, Color color)
+        {
+            CryVNative.Native_Graphics_DrawLine(CryVNative.Plugin, start.X, start.Y, start.Z, end.X, end.Y, end.Z, color.R, color.G, color.B, color.A);
+        }
+
     }
 }

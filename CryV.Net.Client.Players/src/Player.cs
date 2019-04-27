@@ -153,6 +153,8 @@ namespace CryV.Net.Client.Players
                 }
             }
 
+            UpdateWeaponAnimation();
+
             if (UpdateVehicleAnimations())
             {
                 return;
@@ -160,11 +162,6 @@ namespace CryV.Net.Client.Players
 
             UpdatePosition(deltaTime);
             UpdateHeading(deltaTime);
-
-            if (IsAiming)
-            {
-                UpdateWeaponAnimation();
-            }
 
             UpdateMovementAnimation();
 

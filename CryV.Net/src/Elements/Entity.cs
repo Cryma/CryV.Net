@@ -118,6 +118,11 @@ namespace CryV.Net.Elements
 
         protected bool Equals(Entity other)
         {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+
             return _handle == other._handle;
         }
 
@@ -148,7 +153,7 @@ namespace CryV.Net.Elements
 
         public static bool operator ==(Entity left, Entity right)
         {
-            return (object) right != null && (object) left != null && left.Handle == right.Handle;
+            return left?.Equals(right) ?? ReferenceEquals(right, null);
         }
 
         public static bool operator !=(Entity left, Entity right)

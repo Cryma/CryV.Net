@@ -89,7 +89,7 @@ namespace CryV.Net.Elements
             return new Vector3((float) (-Math.Sin(z) * value), (float) (Math.Cos(z) * value), (float) Math.Sin(x));
         }
 
-        public static Vector3 GetDirection(Vector3 rotation)
+        public static Vector3 GetDirection(Vector3 rotation, float distance = 10.0f)
         {
             var forward = RotationToForward(rotation);
             var rotationUp = rotation + new Vector3(10.0f, 0.0f, 0.0f);
@@ -105,7 +105,7 @@ namespace CryV.Net.Elements
             var rightRoll = right * (float) Math.Cos(rollRadians) - up * (float) Math.Sin(rollRadians);
             var upRoll = right * (float) Math.Sin(rollRadians) + up * (float) Math.Cos(rollRadians);
 
-            return forward * 10.0f + rightRoll + upRoll;
+            return forward * distance + rightRoll + upRoll;
         }
 
         private static double DegreeToRadian(double degree)

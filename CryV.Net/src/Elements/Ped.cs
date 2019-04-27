@@ -287,6 +287,11 @@ namespace CryV.Net.Elements
             CryVNative.Native_Brain_SetPedDesiredMoveBlendRatio(CryVNative.Plugin, Handle, p1);
         }
 
+        public void SetDrivebyTaskTarget(int targetPed, int targetVehicle, float x, float y, float z)
+        {
+            CryVNative.Native_Brain_SetDrivebyTaskTarget(CryVNative.Plugin, Handle, targetPed, targetVehicle, x, y, z);
+        }
+
         public void TaskStandStill(int time)
         {
             CryVNative.Native_Brain_TaskStandStill(CryVNative.Plugin, Handle, time);
@@ -329,6 +334,16 @@ namespace CryV.Net.Elements
         public ulong GetSelectedPedWeapon()
         {
             return CryVNative.Native_Weapon_GetSelectedPedWeapon(CryVNative.Plugin, Handle);
+        }
+
+        public void SetPedCurrentWeaponVisible(bool visible, bool deselectWeapon, bool p3, bool p4)
+        {
+            CryVNative.Native_Weapon_SetPedCurrentWeaponVisible(CryVNative.Plugin, Handle, visible, deselectWeapon, p3, p4);
+        }
+
+        public void TaskDriveBy(int targetPed, int targetVehicle, float x, float y, float z, float distanceToShoot, int pedAccuracy, bool p8, ulong firingPattern)
+        {
+            CryVNative.Native_Brain_TaskDriveBy(CryVNative.Plugin, Handle, targetPed, targetVehicle, x, y, z, distanceToShoot, pedAccuracy, p8, firingPattern);
         }
 
         public void RemoveAllPedWeapons()
@@ -450,6 +465,7 @@ namespace CryV.Net.Elements
             SetPedCombatAttributes(5, true);
             SetPedCombatAttributes(8, true);
             SetPedCombatAttributes(17, true);
+            SetPedCombatAttributes(20, true);
             SetPedCombatAttributes(46, true);
             SetPedConfigFlag(32, false);
             SetPedConfigFlag(281, true);

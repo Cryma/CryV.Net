@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -140,7 +141,7 @@ namespace CryV.Net.Client.LocalPlayer
             var position = ped.Position;
             var rotation = ped.Rotation;
             var velocity = ped.Velocity;
-            var aimTarget = Gameplay.GetGameplayCamCoord() + Utility.GetDirection(Gameplay.GetGameplayCamRot());
+            var aimTarget = Gameplay.GetGameplayCamCoord() + Utility.GetDirection(Gameplay.GetGameplayCamRot(), 50.0f);
             var model = Elements.LocalPlayer.Model;
             var weaponModel = ped.GetCurrentPedWeapon();
             var isAiming = ped.GetIsTaskActive(290);
