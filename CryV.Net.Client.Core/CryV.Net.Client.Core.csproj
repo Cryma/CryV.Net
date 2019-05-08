@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' != 'Release'">
-    <Exec Command="XCOPY $(TargetDir)* $(SolutionDir)..\client\dotnet\resources\ /S /Y" />
+    <Exec Command="C:\Windows\System32\XCOPY $(TargetDir)* $(SolutionDir)..\client\dotnet\resources\ /S /Y" />
   </Target>
 
 </Project>
