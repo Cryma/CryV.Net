@@ -40,8 +40,6 @@ namespace CryV.Net.Client.Sync.src
         {
             var vehicle = _vehicleManager.GetVehicle(obj.Payload.EntityId);
 
-            Utility.Log("Now syncing " + obj.Payload.EntityId);
-
             if (_syncVehicles.Contains(vehicle))
             {
                 Utility.Log($"Tried to add vehicle {vehicle.Id} to sync list that is already in it!");
@@ -84,8 +82,6 @@ namespace CryV.Net.Client.Sync.src
 
         private void SyncVehicle(IVehicle vehicle)
         {
-            Utility.Log("Sync " + vehicle.Id);
-
             var nativeVehicle = vehicle.NativeVehicle;
 
             var id = vehicle.Id;

@@ -39,21 +39,25 @@ namespace CryV.Net.Server.Sync
 
         private void OnPlayerEntersVehicle(PlayerEntersVehicleEvent obj)
         {
-            _vehicleSyncMapping[obj.Vehicle] = obj.Player;
-
-            obj.Player.Send(new AddSyncPayload(obj.Vehicle.Id), DeliveryMethod.ReliableOrdered);
+            ChangeSyncer(obj.Vehicle, obj.Player);
         }
 
-        private void OnVehicleAdded(object sender, IVehicle e)
+        private void OnVehicleAdded(object sender, IVehicle vehicle)
         {
-            var nearestPlayer = GetNearestPlayer(e.Position);
+            var nearestPlayer = GetNearestPlayer(vehicle.Position);
 
-            _vehicleSyncMapping.Add(e, nearestPlayer);
+            _vehicleSyncMapping.Add(vehicle, null);
+            ChangeSyncer(vehicle, nearestPlayer);
         }
 
-        private IPlayer GetNearestPlayer(Vector3 position)
+        private void ChangeSyncer(IVehicle vehicle, IPlayer newSyncer)
         {
-            return _playerManager.GetPlayers().OrderBy(x => Vector3.Distance(x.Position, position)).FirstOrDefault();
+            var oldSyncer = _vehicleSyncMapping[vehicle];
+
+            oldSyncer?.Send(new RemoveSyncPayload(vehicle.Id), DeliveryMethod.ReliableOrdered);
+
+            _vehicleSyncMapping[vehicle] = newSyncer;
+            newSyncer?.Send(new AddSyncPayload(vehicle.Id), DeliveryMethod.ReliableOrdered);
         }
 
         private async Task SyncLoop()
@@ -64,6 +68,11 @@ namespace CryV.Net.Server.Sync
 
 
             }
+        }
+
+        private IPlayer GetNearestPlayer(Vector3 position)
+        {
+            return _playerManager.GetPlayers().OrderBy(x => Vector3.Distance(x.Position, position)).FirstOrDefault();
         }
 
     }
