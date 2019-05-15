@@ -165,7 +165,7 @@ namespace CryV.Net.Client.Vehicles
 
         private void Tick(float deltatime)
         {
-            if (Id == LocalPlayerHelper.VehicleId && LocalPlayer.Character.Seat == VehicleSeat.Driver || NativeVehicle.IsVehicleSeatFree(VehicleSeat.Driver))
+            if (Id == LocalPlayerHelper.VehicleId && LocalPlayer.Character.Seat == VehicleSeat.Driver)
             {
                 return;
             }
