@@ -125,6 +125,9 @@ namespace CryV.Net.Client.Networking
 
                     _netManager.PollEvents();
                 }
+                catch (TaskCanceledException)
+                {
+                }
                 catch (Exception exception)
                 {
                     Utility.Log(exception.ToString());
