@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac;
+using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
 using CryV.Net.Helpers;
@@ -30,10 +31,17 @@ namespace CryV.Net.Client.Sync
 
         public void Start()
         {
+            _eventHandler.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
+
             _eventHandler.Subscribe<NetworkEvent<AddSyncPayload>>(OnSyncAdd);
             _eventHandler.Subscribe<NetworkEvent<RemoveSyncPayload>>(OnSyncRemove);
 
             Task.Run(SyncLoop);
+        }
+
+        private void OnLocalPlayerDisconnected(LocalPlayerDisconnectedEvent obj)
+        {
+            _syncVehicles.Clear();
         }
 
         private void OnSyncAdd(NetworkEvent<AddSyncPayload> obj)
