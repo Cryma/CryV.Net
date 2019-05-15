@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Flags;
 using CryV.Net.Shared.Common.Interfaces;
@@ -105,19 +106,25 @@ namespace CryV.Net.Server.Players
             Speed = payload.Speed;
             Seat = payload.Seat;
 
+            if (payload.VehicleId != -1)
+            {
+                Vehicle = _vehicleManager.GetVehicle(payload.VehicleId);
+            }
+
             IsJumping = (payload.PedData & (int) PedData.IsJumping) > 0;
             IsClimbing = (payload.PedData & (int) PedData.IsClimbing) > 0;
             IsClimbingLadder = (payload.PedData & (int) PedData.IsClimbingLadder) > 0;
             IsRagdoll = (payload.PedData & (int) PedData.IsRagdoll) > 0;
             IsAiming = (payload.PedData & (int) PedData.IsAiming) > 0;
-            IsEnteringVehicle = (payload.PedData & (int) PedData.IsEnteringVehicle) > 0;
+            var isEnteringVehicle = (payload.PedData & (int) PedData.IsEnteringVehicle) > 0;
+            if (isEnteringVehicle && IsEnteringVehicle == false)
+            {
+                _eventHandler.Publish(new PlayerEntersVehicleEvent(this, Vehicle));
+            }
+
+            IsEnteringVehicle = isEnteringVehicle;
             IsInVehicle = (payload.PedData & (int) PedData.IsInVehicle) > 0;
             IsLeavingVehicle = (payload.PedData & (int) PedData.IsLeavingVehicle) > 0;
-
-            if (payload.VehicleId != -1)
-            {
-                Vehicle = _vehicleManager.GetVehicle(payload.VehicleId);
-            }
         }
 
         private void BootstrapPlayer()

@@ -36,6 +36,8 @@ namespace CryV.Net.Server.Vehicles
         {
         }
 
+        public event EventHandler<IVehicle> OnVehicleAdded;
+
         public IVehicle AddVehicle(Vector3 position, Vector3 rotation, ulong model, string numberPlate)
         {
             var id = GetFreeId();
@@ -48,6 +50,8 @@ namespace CryV.Net.Server.Vehicles
             var vehicle = new Vehicle(this, _eventHandler, PlayerManager, id, position, rotation, model, numberPlate);
 
             _vehicles.TryAdd(id, vehicle);
+
+            OnVehicleAdded?.Invoke(this, vehicle);
 
             return vehicle;
         }

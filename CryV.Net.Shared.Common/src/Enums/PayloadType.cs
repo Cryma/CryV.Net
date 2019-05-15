@@ -12,6 +12,8 @@
         AddVehicle,
         RemoveVehicle,
         UpdateVehicle,
-        RemoteCommand
+        RemoteCommand,
+        AddSync,
+        RemoveSync
     }
 }
