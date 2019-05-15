@@ -10,7 +10,7 @@ using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
 
-namespace CryV.Net.Client.Sync.src
+namespace CryV.Net.Client.Sync
 {
     public class SyncManager : IStartable
     {

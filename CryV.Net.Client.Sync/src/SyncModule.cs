@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace CryV.Net.Client.Sync.src
+namespace CryV.Net.Client.Sync
 {
     public class SyncModule : Module
     {
