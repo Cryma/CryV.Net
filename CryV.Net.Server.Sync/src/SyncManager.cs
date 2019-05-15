@@ -53,6 +53,10 @@ namespace CryV.Net.Server.Sync
         private void ChangeSyncer(IVehicle vehicle, IPlayer newSyncer)
         {
             var oldSyncer = _vehicleSyncMapping[vehicle];
+            if (oldSyncer == newSyncer)
+            {
+                return;
+            }
 
             oldSyncer?.Send(new RemoveSyncPayload(vehicle.Id), DeliveryMethod.ReliableOrdered);
 
