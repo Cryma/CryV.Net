@@ -1,5 +1,4 @@
 using System;
-using System.Drawing;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,9 +6,7 @@ using Autofac;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
-using CryV.Net.Client.Helpers;
 using CryV.Net.Elements;
-using CryV.Net.Enums;
 using CryV.Net.Helpers;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
@@ -30,7 +27,6 @@ namespace CryV.Net.Client.LocalPlayer
         private CancellationTokenSource _cancellationTokenSource;
 
         private PlayerUpdatePayload _lastPlayerPayload;
-        private VehicleUpdatePayload _lastVehiclePayload;
 
         private readonly IEventHandler _eventHandler;
         private readonly INetworkManager _networkManager;
@@ -83,55 +79,8 @@ namespace CryV.Net.Client.LocalPlayer
             {
                 await Task.Delay(TimeSpan.FromMilliseconds(50), _cancellationTokenSource.Token);
 
-                ThreadHelper.Run(() =>
-                {
-                    SyncLocalPlayer();
-                    SyncVehicle();
-                });
+                ThreadHelper.Run(SyncLocalPlayer);
             }
-        }
-
-        private void SyncVehicle()
-        {
-            if (LocalPlayerHelper.VehicleId == -1 || Elements.LocalPlayer.Character.Seat != VehicleSeat.Driver)
-            {
-                return;
-            }
-
-            var vehicle = LocalPlayerHelper.Vehicle;
-
-            var id = LocalPlayerHelper.VehicleId;
-            var model = vehicle.Model;
-            var position = vehicle.Position;
-            var velocity = vehicle.Velocity;
-            var rotation = vehicle.Rotation;
-            var engineState = vehicle.GetIsVehicleEngineRunning();
-
-            var currentGear = vehicle.CurrentGear;
-            var currentRPM = vehicle.CurrentRPM;
-            var clutch = vehicle.Clutch;
-            var turbo = vehicle.Turbo;
-            var acceleration = vehicle.Acceleration;
-            var brake = vehicle.Brake;
-            var steeringAngle = vehicle.SteeringAngle;
-            vehicle.GetVehicleColours(out var colorPrimary, out var colorSecondary);
-            var roofState = vehicle.GetConvertibleRoofState();
-
-            var transformPayload = new VehicleUpdatePayload(id, position, velocity, rotation, vehicle.EngineHealth, vehicle.NumberPlate,
-                model, engineState, currentGear, currentRPM, clutch, turbo, acceleration, brake, steeringAngle, colorPrimary, colorSecondary,
-                Elements.LocalPlayer.IsPlayerPressingHorn(), vehicle.IsVehicleInBurnout(), roofState == 0, roofState == 1, roofState == 2, roofState == 3);
-
-            if (_lastVehiclePayload != null && transformPayload.IsDifferent(_lastVehiclePayload) == false)
-            {
-                return;
-            }
-
-            var networkedVehicle = _vehicleManager.GetVehicle(vehicle);
-            networkedVehicle?.ReadPayload(transformPayload);
-
-            _lastVehiclePayload = transformPayload;
-
-            _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
         }
 
         private void SyncLocalPlayer()
