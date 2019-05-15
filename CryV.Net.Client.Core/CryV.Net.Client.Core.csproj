@@ -24,6 +24,7 @@
     <ProjectReference Include="..\CryV.Net.Client.LocalPlayer\CryV.Net.Client.LocalPlayer.csproj" />
     <ProjectReference Include="..\CryV.Net.Client.Networking\CryV.Net.Client.Networking.csproj" />
     <ProjectReference Include="..\CryV.Net.Client.Players\CryV.Net.Client.Players.csproj" />
+    <ProjectReference Include="..\CryV.Net.Client.Sync\CryV.Net.Client.Sync.csproj" />
     <ProjectReference Include="..\CryV.Net.Client.Vehicles\CryV.Net.Client.Vehicles.csproj" />
     <ProjectReference Include="..\CryV.Net.Shared.Events\CryV.Net.Shared.Events.csproj" />
     <ProjectReference Include="..\CryV.Net\CryV.Net.csproj" />
