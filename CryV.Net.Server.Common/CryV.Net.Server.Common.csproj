@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CryV.Net.Shared.Common\CryV.Net.Shared.Common.csproj" />
+    <ProjectReference Include="..\CryV.Net\CryV.Net.csproj" />
   </ItemGroup>
 
   <ItemGroup>

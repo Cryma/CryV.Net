@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Autofac;
+using CryV.Net.Enums;
 using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Interfaces;
@@ -39,6 +40,11 @@ namespace CryV.Net.Server.Sync
 
         private void OnPlayerEntersVehicle(PlayerEntersVehicleEvent obj)
         {
+            if (obj.Seat != VehicleSeat.Driver)
+            {
+                return;
+            }
+
             ChangeSyncer(obj.Vehicle, obj.Player);
         }
 

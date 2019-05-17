@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using CryV.Net.Enums;
 using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Flags;
@@ -119,7 +120,7 @@ namespace CryV.Net.Server.Players
             var isEnteringVehicle = (payload.PedData & (int) PedData.IsEnteringVehicle) > 0;
             if (isEnteringVehicle && IsEnteringVehicle == false)
             {
-                _eventHandler.Publish(new PlayerEntersVehicleEvent(this, Vehicle));
+                _eventHandler.Publish(new PlayerEntersVehicleEvent(this, Vehicle, (VehicleSeat) Seat));
             }
 
             IsEnteringVehicle = isEnteringVehicle;
