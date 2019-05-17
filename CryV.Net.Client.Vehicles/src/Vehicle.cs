@@ -70,10 +70,12 @@ namespace CryV.Net.Client.Vehicles
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
 
         private readonly IEventHandler _eventHandler;
+        private readonly ISyncManager _syncManager;
 
-        public Vehicle(IEventHandler eventHandler, VehicleUpdatePayload payload)
+        public Vehicle(IEventHandler eventHandler, ISyncManager syncManager, VehicleUpdatePayload payload)
         {
             _eventHandler = eventHandler;
+            _syncManager = syncManager;
             _lastPayload = payload;
 
             Id = payload.Id;
@@ -165,7 +167,7 @@ namespace CryV.Net.Client.Vehicles
 
         private void Tick(float deltatime)
         {
-            if (Id == LocalPlayerHelper.VehicleId && LocalPlayer.Character.Seat == VehicleSeat.Driver)
+            if (_syncManager.IsSyncingEntity(this) == false)
             {
                 return;
             }

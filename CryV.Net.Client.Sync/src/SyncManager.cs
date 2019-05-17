@@ -13,7 +13,7 @@ using LiteNetLib;
 
 namespace CryV.Net.Client.Sync
 {
-    public class SyncManager : IStartable
+    public class SyncManager : ISyncManager, IStartable
     {
 
         private readonly List<IVehicle> _syncVehicles = new List<IVehicle>();
@@ -127,5 +127,9 @@ namespace CryV.Net.Client.Sync
 
         }
 
+        public bool IsSyncingEntity(IVehicle entity)
+        {
+            return _syncVehicles.Contains(entity);
+        }
     }
 }
