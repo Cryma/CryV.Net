@@ -784,6 +784,10 @@ namespace CryV.Net.Client.Cleanup
                 Gameplay.PauseClock(true);
                 Gameplay.SetSlowmotion(false);
 
+                // Preloading male and female freemode model
+                Streaming.RequestModel(1885233650);
+                Streaming.RequestModel(2627665880);
+
                 for (var i = 0; i < 50; i++)
                 {
                     Gameplay.DisableStuntJumpSet(i);

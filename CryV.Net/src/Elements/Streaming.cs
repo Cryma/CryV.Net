@@ -1,4 +1,4 @@
-﻿using CryV.Net.Helpers;
+using CryV.Net.Helpers;
 using CryV.Net.Native;
 
 namespace CryV.Net.Elements
@@ -59,7 +59,7 @@ namespace CryV.Net.Elements
             }
         }
 
-        private static void RequestModel(ulong model)
+        public static void RequestModel(ulong model)
         {
             CryVNative.Native_Streaming_RequestModel(CryVNative.Plugin, model);
         }
