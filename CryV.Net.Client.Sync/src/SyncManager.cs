@@ -16,16 +16,16 @@ namespace CryV.Net.Client.Sync
     public class SyncManager : ISyncManager, IStartable
     {
 
+        public IVehicleManager VehicleManager { get; set; }
+
         private readonly List<IVehicle> _syncVehicles = new List<IVehicle>();
 
         private readonly IEventHandler _eventHandler;
-        private readonly IVehicleManager _vehicleManager;
         private readonly INetworkManager _networkManager;
 
-        public SyncManager(IEventHandler eventHandler, IVehicleManager vehicleManager, INetworkManager networkManager)
+        public SyncManager(IEventHandler eventHandler, INetworkManager networkManager)
         {
             _eventHandler = eventHandler;
-            _vehicleManager = vehicleManager;
             _networkManager = networkManager;
         }
 
@@ -46,7 +46,7 @@ namespace CryV.Net.Client.Sync
 
         private void OnSyncAdd(NetworkEvent<AddSyncPayload> obj)
         {
-            var vehicle = _vehicleManager.GetVehicle(obj.Payload.EntityId);
+            var vehicle = VehicleManager.GetVehicle(obj.Payload.EntityId);
 
             if (_syncVehicles.Contains(vehicle))
             {
@@ -60,7 +60,7 @@ namespace CryV.Net.Client.Sync
 
         private void OnSyncRemove(NetworkEvent<RemoveSyncPayload> obj)
         {
-            var vehicle = _vehicleManager.GetVehicle(obj.Payload.EntityId);
+            var vehicle = VehicleManager.GetVehicle(obj.Payload.EntityId);
 
             if (_syncVehicles.Contains(vehicle) == false)
             {

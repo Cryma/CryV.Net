@@ -8,7 +8,8 @@ namespace CryV.Net.Client.Sync
         {
             builder.RegisterType<SyncManager>()
                 .AsImplementedInterfaces()
-                .SingleInstance();
+                .SingleInstance()
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies);
         }
     }
 }
