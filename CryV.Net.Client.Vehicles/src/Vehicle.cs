@@ -167,7 +167,7 @@ namespace CryV.Net.Client.Vehicles
 
         private void Tick(float deltatime)
         {
-            if (_syncManager.IsSyncingEntity(this) == false)
+            if (_syncManager.IsSyncingEntity(this))
             {
                 return;
             }
