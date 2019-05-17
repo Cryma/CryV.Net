@@ -13,6 +13,8 @@ namespace CryV.Net.Client.Common.Interfaces
 
         Vehicle NativeVehicle { get; }
 
+        VehicleUpdatePayload LastSentUpdatePayload { get; set; }
+
         void ReadPayload(VehicleUpdatePayload payload);
 
     }

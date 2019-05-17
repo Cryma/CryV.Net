@@ -65,6 +65,8 @@ namespace CryV.Net.Client.Vehicles
 
         public Elements.Vehicle NativeVehicle { get; private set; }
 
+        public VehicleUpdatePayload LastSentUpdatePayload { get; set; }
+
         private VehicleUpdatePayload _lastPayload;
 
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
