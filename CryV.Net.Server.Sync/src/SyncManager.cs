@@ -74,15 +74,26 @@ namespace CryV.Net.Server.Sync
         {
             while (true)
             {
-                await Task.Delay(TimeSpan.FromSeconds(1));
+                await Task.Delay(TimeSpan.FromSeconds(5));
 
+                // Go through each vehicle that does not have a syncer
+                foreach (var vehicle in _vehicleSyncMapping.Where(x => x.Value == null))
+                {
+                    var nearestPlayer = GetNearestPlayer(vehicle.Key.Position);
+                    if (nearestPlayer == null)
+                    {
+                        // Found no player near vehicle
+                        continue;
+                    }
 
+                    ChangeSyncer(vehicle.Key, nearestPlayer);
+                }
             }
         }
 
         private IPlayer GetNearestPlayer(Vector3 position)
         {
-            return _playerManager.GetPlayers().OrderBy(x => Vector3.Distance(x.Position, position)).FirstOrDefault();
+            return _playerManager.GetPlayers().OrderBy(x => Vector3.DistanceSquared(x.Position, position)).FirstOrDefault();
         }
 
     }
