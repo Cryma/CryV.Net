@@ -218,8 +218,8 @@ namespace CryV.Net.Client.Players
             {
                 NativePed.SetPedCanRagdoll(true);
 
-                NativePed.ClearPedTasksImmediately();
-                NativePed.SetPedToRagdoll(-1, -1, 0, false, false, false);
+                var forward = NativePed.Forward;
+                NativePed.SetPedToRagdollWithFall(99999, 2000, 1, forward.X, forward.Y, forward.Z, 2.0f);
             }, () =>
             {
                 NativePed.ClearPedTasks();

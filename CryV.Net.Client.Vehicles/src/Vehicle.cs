@@ -91,7 +91,6 @@ namespace CryV.Net.Client.Vehicles
 
                 if (_syncManager.IsSyncingEntity(this))
                 {
-                    Utility.Log("hmmm");
                     ForceSync();
                 }
             }, x => x.Payload.Id == Id));
