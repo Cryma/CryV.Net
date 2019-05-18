@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -34,6 +34,7 @@ namespace CryV.Net.Server.Sync
             _vehicleManager.OnVehicleAdded += OnVehicleAdded;
 
             _eventHandler.Subscribe<PlayerEntersVehicleEvent>(OnPlayerEntersVehicle);
+            _eventHandler.Subscribe<PlayerDisconnectedEvent>(OnPlayerDisconnected);
 
             Task.Run(SyncLoop);
         }
@@ -46,6 +47,14 @@ namespace CryV.Net.Server.Sync
             }
 
             ChangeSyncer(obj.Vehicle, obj.Player);
+        }
+
+        private void OnPlayerDisconnected(PlayerDisconnectedEvent obj)
+        {
+            foreach (var syncedVehicles in _vehicleSyncMapping.Where(x => x.Value == obj.Player))
+            {
+                ChangeSyncer(syncedVehicles.Key, null);
+            }
         }
 
         private void OnVehicleAdded(object sender, IVehicle vehicle)
