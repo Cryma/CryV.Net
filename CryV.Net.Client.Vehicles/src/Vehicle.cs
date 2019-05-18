@@ -100,6 +100,11 @@ namespace CryV.Net.Client.Vehicles
                 {
                     EngineHealth = EngineHealth
                 };
+
+                if (IsRoofDown || IsRoofLowering)
+                {
+                    NativeVehicle.LowerConvertibleRoof(true);
+                }
             });
 
             NativeHelper.OnNativeTick += Tick;
