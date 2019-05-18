@@ -90,6 +90,8 @@ namespace CryV.Net.Client.Console
 
             _networkManager.Connect(address, port);
 
+            IsVisible = false;
+
             PrintLine($"You connected to \"{address}:{port}\".");
         }
 
