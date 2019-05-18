@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Numerics;
-using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Interfaces;
@@ -53,7 +51,7 @@ namespace CryV.Net.Server.Vehicles
                 numberPlate = GenerateNumberPlate("CRYV-");
             }
 
-            var vehicle = new Vehicle(this, _eventHandler, PlayerManager, SyncManager, id, position, rotation, model, numberPlate);
+            var vehicle = new Vehicle(_eventHandler, PlayerManager, id, position, rotation, model, numberPlate);
             _vehicles.TryAdd(id, vehicle);
 
             PropagateVehicleAddition(vehicle);

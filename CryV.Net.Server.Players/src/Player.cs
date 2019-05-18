@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Numerics;
 using CryV.Net.Enums;
 using CryV.Net.Server.Common.Events;
@@ -9,7 +7,6 @@ using CryV.Net.Shared.Common.Flags;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Common.Payloads.Helpers;
-using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
 
 namespace CryV.Net.Server.Players
@@ -55,12 +52,10 @@ namespace CryV.Net.Server.Players
 
         private readonly NetPeer _peer;
         private readonly IEventHandler _eventHandler;
-        private readonly IPlayerManager _playerManager;
         private readonly IVehicleManager _vehicleManager;
 
-        public Player(IPlayerManager playerManager, IEventHandler eventHandler, IVehicleManager vehicleManager, NetPeer peer)
+        public Player(IEventHandler eventHandler, IVehicleManager vehicleManager, NetPeer peer)
         {
-            _playerManager = playerManager;
             _eventHandler = eventHandler;
             _vehicleManager = vehicleManager;
             _peer = peer;

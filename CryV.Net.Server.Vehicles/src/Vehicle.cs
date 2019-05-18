@@ -13,18 +13,14 @@ namespace CryV.Net.Server.Vehicles
     public partial class Vehicle : IVehicle
     {
 
-        private readonly IVehicleManager _vehicleManager;
         private readonly IEventHandler _eventHandler;
         private readonly IPlayerManager _playerManager;
-        private readonly ISyncManager _syncManager;
 
-        public Vehicle(IVehicleManager vehicleManager, IEventHandler eventHandler, IPlayerManager playerManager, ISyncManager syncManager, int id, Vector3 position,
+        public Vehicle(IEventHandler eventHandler, IPlayerManager playerManager, int id, Vector3 position,
             Vector3 rotation, ulong model, string numberPlate)
         {
-            _vehicleManager = vehicleManager;
             _eventHandler = eventHandler;
             _playerManager = playerManager;
-            _syncManager = syncManager;
 
             Id = id;
             _position = position;

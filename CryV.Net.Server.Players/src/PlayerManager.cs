@@ -7,7 +7,6 @@ using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
-using CryV.Net.Shared.Common.Payloads.Helpers;
 using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
 
@@ -34,7 +33,7 @@ namespace CryV.Net.Server.Players
 
         public void AddPlayer(NetPeer peer)
         {
-            var player = new Player(this, _eventHandler, _vehicleManager, peer);
+            var player = new Player(_eventHandler, _vehicleManager, peer);
             _players.TryAdd(peer.Id, player);
 
             BootstrapPlayer(player);
