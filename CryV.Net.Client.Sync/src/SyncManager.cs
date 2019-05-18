@@ -109,10 +109,11 @@ namespace CryV.Net.Client.Sync
             var steeringAngle = nativeVehicle.SteeringAngle;
             nativeVehicle.GetVehicleColours(out var colorPrimary, out var colorSecondary);
             var roofState = nativeVehicle.GetConvertibleRoofState();
+            var siren = nativeVehicle.Siren;
 
             var transformPayload = new VehicleUpdatePayload(id, position, velocity, rotation, nativeVehicle.EngineHealth, nativeVehicle.NumberPlate,
                 model, engineState, currentGear, currentRPM, clutch, turbo, acceleration, brake, steeringAngle, colorPrimary, colorSecondary,
-                LocalPlayer.IsPlayerPressingHorn(), nativeVehicle.IsVehicleInBurnout(), roofState == 0, roofState == 1, roofState == 2, roofState == 3);
+                LocalPlayer.IsPlayerPressingHorn(), nativeVehicle.IsVehicleInBurnout(), roofState == 0, roofState == 1, roofState == 2, roofState == 3, siren);
             // TODO: Sync horn correctly
 
             if (vehicle.LastSentUpdatePayload != null && transformPayload.IsDifferent(vehicle.LastSentUpdatePayload) == false)

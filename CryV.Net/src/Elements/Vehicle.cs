@@ -105,6 +105,12 @@ namespace CryV.Net.Elements
             }
         }
 
+        public bool Siren
+        {
+            get => CryVNative.Native_Vehicle_IsVehicleSirenOn(CryVNative.Plugin, Handle);
+            set => CryVNative.Native_Vehicle_SetVehicleSiren(CryVNative.Plugin, Handle, value);
+        }
+
         public ulong Model => CryVNative.Native_Entity_GetEntityModel(CryVNative.Plugin, Handle);
 
         public Vehicle(int handle) : base(handle)

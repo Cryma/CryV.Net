@@ -43,7 +43,7 @@ namespace CryV.Net.Server.Vehicles
         {
             return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, EngineHealth, NumberPlate, Model, EngineState, CurrentGear, CurrentRPM,
                 Clutch, Turbo, Acceleration, Brake, SteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout, IsRoofUp, IsRoofLowering, IsRoofDown,
-                IsRoofRaising);
+                IsRoofRaising, IsSirenActive);
         }
 
         public void ReadPayload(VehicleUpdatePayload payload)
@@ -71,6 +71,7 @@ namespace CryV.Net.Server.Vehicles
             _isRoofLowering = (payload.VehicleData & (int) VehicleData.RoofLowering) > 0;
             _isRoofDown = (payload.VehicleData & (int) VehicleData.RoofDown) > 0;
             _isRoofRaising = (payload.VehicleData & (int) VehicleData.RoofRaising) > 0;
+            _isSirenActive = (payload.VehicleData & (int) VehicleData.IsSirenActive) > 0;
         }
 
         private void PropagateNewVehicle()

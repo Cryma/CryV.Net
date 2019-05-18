@@ -62,6 +62,7 @@ namespace CryV.Net.Client.Vehicles
 
         public bool IsRoofRaising { get; set; }
 
+        public bool IsSirenActive { get; set; }
 
         public Elements.Vehicle NativeVehicle { get; private set; }
 
@@ -106,6 +107,11 @@ namespace CryV.Net.Client.Vehicles
                 {
                     NativeVehicle.LowerConvertibleRoof(true);
                 }
+
+                if (IsSirenActive)
+                {
+                    NativeVehicle.Siren = true;
+                }
             });
 
             NativeHelper.OnNativeTick += Tick;
@@ -132,6 +138,7 @@ namespace CryV.Net.Client.Vehicles
             IsRoofLowering = (payload.VehicleData & (int) VehicleData.RoofLowering) > 0;
             IsRoofDown = (payload.VehicleData & (int) VehicleData.RoofDown) > 0;
             IsRoofRaising = (payload.VehicleData & (int) VehicleData.RoofRaising) > 0;
+            IsSirenActive = (payload.VehicleData & (int) VehicleData.IsSirenActive) > 0;
 
             _lastPayload = payload;
         }
@@ -165,7 +172,7 @@ namespace CryV.Net.Client.Vehicles
         {
             return new VehicleUpdatePayload(Id, Position, NativeVehicle.Velocity, Rotation, EngineHealth, NumberPlate, Model, EngineState, CurrentGear,
                 CurrentRPM, Clutch, Turbo, Acceleration, Brake, TargetSteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout, IsRoofUp, IsRoofLowering,
-                IsRoofDown, IsRoofRaising);
+                IsRoofDown, IsRoofRaising, IsSirenActive);
         }
 
         private void Tick(float deltatime)
@@ -231,6 +238,14 @@ namespace CryV.Net.Client.Vehicles
                 driver?.ClearPedTasks();
 
                 NativeVehicle.SetVehicleBurnout(false);
+            });
+
+            ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_SIREN", IsSirenActive, () =>
+            {
+                NativeVehicle.Siren = true;
+            }, () =>
+            {
+                NativeVehicle.Siren = false;
             });
         }
 

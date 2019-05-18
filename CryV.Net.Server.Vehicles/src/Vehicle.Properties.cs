@@ -271,5 +271,17 @@ namespace CryV.Net.Server.Vehicles
 
         private bool _isRoofRaising;
 
+        public bool IsSirenActive
+        {
+            get => _isSirenActive;
+            set
+            {
+                _isSirenActive = value;
+                ForceSync();
+            }
+        }
+
+        private bool _isSirenActive;
+
     }
 }
