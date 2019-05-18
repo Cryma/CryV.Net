@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Interfaces;
+using CryV.Net.Shared.Common.Payloads;
+using CryV.Net.Shared.Events.Types;
+using LiteNetLib;
 
 namespace CryV.Net.Server.Vehicles
 {
@@ -35,6 +39,7 @@ namespace CryV.Net.Server.Vehicles
 
         public void Start()
         {
+            _eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(OnVehicleUpdate);
         }
 
         public event EventHandler<IVehicle> OnVehicleAdded;
@@ -49,8 +54,9 @@ namespace CryV.Net.Server.Vehicles
             }
 
             var vehicle = new Vehicle(this, _eventHandler, PlayerManager, SyncManager, id, position, rotation, model, numberPlate);
-
             _vehicles.TryAdd(id, vehicle);
+
+            PropagateVehicleAddition(vehicle);
 
             OnVehicleAdded?.Invoke(this, vehicle);
 
@@ -65,6 +71,7 @@ namespace CryV.Net.Server.Vehicles
             }
 
             vehicle.Dispose();
+            PropagateVehicleRemoval(vehicle);
         }
 
         public IVehicle GetVehicle(int vehicleId)
@@ -111,6 +118,48 @@ namespace CryV.Net.Server.Vehicles
             return Enumerable.Range(0, int.MaxValue)
                 .Except(_vehicles.Keys.ToArray())
                 .First();
+        }
+
+        private void OnVehicleUpdate(NetworkEvent<VehicleUpdatePayload> obj)
+        {
+            var payload = obj.Payload;
+
+            if (_vehicles.TryGetValue(payload.Id, out var vehicle) == false)
+            {
+                Console.WriteLine($"Received update from vehicle {payload.Id}, but could not find it in VehicleManager!");
+
+                return;
+            }
+
+            vehicle.ReadPayload(payload);
+
+            foreach (var player in PlayerManager.GetPlayers())
+            {
+                // TODO: Handle ped mirror
+
+                if (SyncManager.IsEntitySyncedByPlayer(vehicle, player))
+                {
+                    continue;
+                }
+
+                player.Send(payload, DeliveryMethod.Unreliable);
+            }
+        }
+
+        private void PropagateVehicleAddition(IVehicle vehicle)
+        {
+            foreach (var player in PlayerManager.GetPlayers())
+            {
+                player.Send(vehicle.GetPayload(), DeliveryMethod.ReliableOrdered);
+            }
+        }
+
+        private void PropagateVehicleRemoval(IVehicle vehicle)
+        {
+            foreach (var player in PlayerManager.GetPlayers())
+            {
+                player.Send(new VehicleRemovePayload(vehicle.Id), DeliveryMethod.ReliableOrdered);
+            }
         }
 
     }

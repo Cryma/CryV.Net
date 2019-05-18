@@ -13,8 +13,6 @@ namespace CryV.Net.Server.Vehicles
     public partial class Vehicle : IVehicle
     {
 
-        private readonly List<ISubscription> _subscriptions = new List<ISubscription>();
-
         private readonly IVehicleManager _vehicleManager;
         private readonly IEventHandler _eventHandler;
         private readonly IPlayerManager _playerManager;
@@ -33,10 +31,6 @@ namespace CryV.Net.Server.Vehicles
             _rotation = rotation;
             _model = model;
             _numberPlate = numberPlate;
-
-            _subscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(OnNetworkUpdate, x => x.Payload.Id == Id));
-
-            PropagateNewVehicle();
         }
 
         public VehicleUpdatePayload GetPayload()
@@ -74,37 +68,6 @@ namespace CryV.Net.Server.Vehicles
             _isSirenActive = (payload.VehicleData & (int) VehicleData.IsSirenActive) > 0;
         }
 
-        private void PropagateNewVehicle()
-        {
-            foreach (var player in _playerManager.GetPlayers())
-            {
-                player.Send(new VehicleAddPayload(GetPayload()), DeliveryMethod.ReliableOrdered);
-            }
-        }
-
-        private void OnNetworkUpdate(NetworkEvent<VehicleUpdatePayload> obj)
-        {
-            var payload = obj.Payload;
-
-            ReadPayload(payload);
-
-            foreach (var player in _playerManager.GetPlayers())
-            {
-#if PEDMIRROR
-                payload.Id = 1;
-                payload.Position.X -= 6.5f;
-                player.Send(payload, DeliveryMethod.Unreliable);
-#else
-                if (_syncManager.IsEntitySyncedByPlayer(this, player))
-                {
-                    continue;
-                }
-
-                player.Send(payload, DeliveryMethod.Unreliable);
-#endif
-            }
-        }
-
         public void ForceSync()
         {
             foreach (var player in _playerManager.GetPlayers())
@@ -115,10 +78,6 @@ namespace CryV.Net.Server.Vehicles
 
         public void Dispose()
         {
-            foreach (var player in _playerManager.GetPlayers())
-            {
-                player.Send(new VehicleRemovePayload(Id), DeliveryMethod.ReliableOrdered);
-            }
         }
 
     }
