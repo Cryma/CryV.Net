@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Drawing;
+using System.Numerics;
+using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Elements;
 using CryV.Net.Enums;
 using CryV.Net.Shared.Common.Payloads;
@@ -8,6 +11,8 @@ namespace CryV.Net.Client.Console
 {
     public partial class GameConsole
     {
+
+        private NativeHelper.NativeTick _syncedEntitiesCallback;
 
         private void CommandOutputText(GameConsole gameConsole, params string[] arguments)
         {
@@ -142,6 +147,30 @@ namespace CryV.Net.Client.Console
         private void CommandRemoveAllWeapons(GameConsole gameConsole, params string[] arguments)
         {
             LocalPlayer.Character.RemoveAllPedWeapons();
+        }
+
+        private void CommandShowSynced(GameConsole gameConsole, params string[] arguments)
+        {
+            _syncedEntitiesCallback = deltaTime =>
+            {
+                foreach (var syncedEntity in _syncManager.GetSyncedEntities())
+                {
+                    UserInterface.DrawMarker(0, syncedEntity.NativeVehicle.Position + Vector3.UnitZ * 2, Vector3.Zero, Vector3.Zero, Vector3.One,
+                        Color.OrangeRed, true);
+                }
+            };
+
+            NativeHelper.OnNativeTick += _syncedEntitiesCallback;
+
+            PrintLine("Entities that are synced by you will now be shown.");
+        }
+
+        private void CommandHideSynced(GameConsole gameConsole, params string[] arguments)
+        {
+            NativeHelper.OnNativeTick -= _syncedEntitiesCallback;
+            _syncedEntitiesCallback = null;
+
+            PrintLine("Entities that are synced by you will no longer be shown.");
         }
 
         private void CommandRemoteCommand(GameConsole gameConsole, params string[] arguments)

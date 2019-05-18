@@ -34,10 +34,12 @@ namespace CryV.Net.Client.Console
         private readonly ConcurrentDictionary<string, CommandDelegate> _commands = new ConcurrentDictionary<string, CommandDelegate>();
 
         private readonly INetworkManager _networkManager;
+        private readonly ISyncManager _syncManager;
 
-        public GameConsole(INetworkManager networkManager)
+        public GameConsole(INetworkManager networkManager, ISyncManager syncManager)
         {
             _networkManager = networkManager;
+            _syncManager = syncManager;
         }
 
         public void Start()
@@ -65,6 +67,9 @@ namespace CryV.Net.Client.Console
 
             RegisterCommand("addweapon", CommandAddWeapon);
             RegisterCommand("removeallweapons", CommandRemoveAllWeapons);
+
+            RegisterCommand("showsynced", CommandShowSynced);
+            RegisterCommand("hidesynced", CommandHideSynced);
 
             RegisterCommand("cmd", CommandRemoteCommand);
         }

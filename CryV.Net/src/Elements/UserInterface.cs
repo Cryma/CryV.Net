@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Numerics;
 using CryV.Net.Enums;
 using CryV.Net.Helpers;
@@ -87,6 +88,13 @@ namespace CryV.Net.Elements
         public static void DrawLine(Vector3 start, Vector3 end, Color color)
         {
             CryVNative.Native_Graphics_DrawLine(CryVNative.Plugin, start.X, start.Y, start.Z, end.X, end.Y, end.Z, color.R, color.G, color.B, color.A);
+        }
+
+        public static void DrawMarker(int type, Vector3 position, Vector3 direction, Vector3 rotation, Vector3 scale, Color color, bool bobUpAndDown)
+        {
+            CryVNative.Native_Graphics_DrawMarker(CryVNative.Plugin, type, position.X, position.Y, position.Z, direction.X, direction.Y, direction.Z,
+                rotation.X, rotation.Y, rotation.Z, scale.X, scale.Y, scale.Z, color.R, color.G, color.B, color.A, bobUpAndDown, false, 2, false,
+                IntPtr.Zero, IntPtr.Zero, false);
         }
 
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Client.Common.Events;
@@ -130,6 +131,11 @@ namespace CryV.Net.Client.Sync
         public bool IsSyncingEntity(IVehicle entity)
         {
             return _syncVehicles.Contains(entity);
+        }
+
+        public ICollection<IVehicle> GetSyncedEntities()
+        {
+            return _syncVehicles.ToList();
         }
     }
 }
