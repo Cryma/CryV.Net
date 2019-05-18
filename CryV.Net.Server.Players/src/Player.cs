@@ -53,8 +53,6 @@ namespace CryV.Net.Server.Players
 
         public int Seat { get; set; }
 
-        private readonly List<ISubscription> _subscriptions = new List<ISubscription>();
-
         private readonly NetPeer _peer;
         private readonly IEventHandler _eventHandler;
         private readonly IPlayerManager _playerManager;
@@ -66,11 +64,6 @@ namespace CryV.Net.Server.Players
             _eventHandler = eventHandler;
             _vehicleManager = vehicleManager;
             _peer = peer;
-
-            _subscriptions.Add(_eventHandler.Subscribe<NetworkEvent<PlayerUpdatePayload>>(OnNetworkUpdate, x => x.Payload.Id == Id));
-
-            BootstrapPlayer();
-            PropagateNewPlayer();
         }
 
         public void Send(IPayload payload, DeliveryMethod deliveryMethod)
@@ -128,100 +121,9 @@ namespace CryV.Net.Server.Players
             IsLeavingVehicle = (payload.PedData & (int) PedData.IsLeavingVehicle) > 0;
         }
 
-        private void BootstrapPlayer()
-        {
-            var existingPlayers = new List<PlayerUpdatePayload>();
-
-            foreach (var player in _playerManager.GetPlayers())
-            {
-                existingPlayers.Add(player.GetPayload());
-            }
-
-            var existingVehicles = new List<VehicleUpdatePayload>();
-
-            foreach (var vehicle in _vehicleManager.GetVehicles())
-            {
-                existingVehicles.Add(vehicle.GetPayload());
-
-#if PEDMIRROR
-                var mirrorVehiclePayload = vehicle.GetPayload();
-                mirrorVehiclePayload.Id = 1;
-                mirrorVehiclePayload.Position.X -= 6.5f;
-                existingVehicles.Add(mirrorVehiclePayload);
-#endif
-            }
-
-#if PEDMIRROR
-            var mirrorPayload = GetPayload();
-
-            mirrorPayload.Id = 1;
-            mirrorPayload.Position.X -= 6.5f;
-
-            existingPlayers.Add(mirrorPayload);
-#endif
-
-            var payload = new BootstrapPayload(_peer.Id, Position, Heading, Model, existingPlayers, existingVehicles);
-
-            Send(payload, DeliveryMethod.ReliableOrdered);
-        }
-
-        private void PropagateNewPlayer()
-        {
-            foreach (var existingPlayer in _playerManager.GetPlayers())
-            {
-                if (existingPlayer == this)
-                {
-                    continue;
-                }
-
-                existingPlayer.Send(new PlayerAddPayload(GetPayload()), DeliveryMethod.ReliableOrdered);
-            }
-        }
-
-        private void OnNetworkUpdate(NetworkEvent<PlayerUpdatePayload> obj)
-        {
-            var payload = obj.Payload;
-
-            ReadPayload(payload);
-
-            foreach (var player in _playerManager.GetPlayers())
-            {
-                if (player == this)
-                {
-#if PEDMIRROR
-                    payload.Id = 1;
-                    payload.Position.X -= 6.5f;
-
-                    if (payload.VehicleId != -1)
-                    {
-                        payload.VehicleId = 1;
-                    }
-
-                    player.Send(payload, DeliveryMethod.Unreliable);
-#endif
-                    continue;
-                }
-
-                player.Send(payload, DeliveryMethod.Unreliable);
-            }
-        }
-
         public void Dispose()
         {
-            foreach (var subscription in _subscriptions)
-            {
-                _eventHandler.Unsubscribe(subscription);
-            }
-
-            foreach (var player in _playerManager.GetPlayers())
-            {
-                if (player == this)
-                {
-                    continue;
-                }
-
-                player.Send(new PlayerRemovePayload(Id), DeliveryMethod.ReliableOrdered);
-            }
         }
+
     }
 }

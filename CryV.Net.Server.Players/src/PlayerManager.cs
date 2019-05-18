@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
@@ -28,13 +29,16 @@ namespace CryV.Net.Server.Players
 
         public void Start()
         {
-            
+            _eventHandler.Subscribe<NetworkEvent<PlayerUpdatePayload>>(OnPlayerUpdate);
         }
 
         public void AddPlayer(NetPeer peer)
         {
             var player = new Player(this, _eventHandler, _vehicleManager, peer);
             _players.TryAdd(peer.Id, player);
+
+            BootstrapPlayer(player);
+            PropagatePlayerAddition(player);
 
             _eventHandler.Publish(new PlayerConnectedEvent(player));
         }
@@ -47,6 +51,7 @@ namespace CryV.Net.Server.Players
             }
 
             player.Dispose();
+            PropagatePlayerRemoval(player);
 
             _eventHandler.Publish(new PlayerDisconnectedEvent(player));
         }
@@ -79,6 +84,69 @@ namespace CryV.Net.Server.Players
         public ICollection<IPlayer> GetPlayers()
         {
             return _players.Values.ToList();
+        }
+
+        private void OnPlayerUpdate(NetworkEvent<PlayerUpdatePayload> obj)
+        {
+            var payload = obj.Payload;
+
+            if (_players.TryGetValue(payload.Id, out var targetPlayer) == false)
+            {
+                Console.WriteLine($"Received update from player {payload.Id}, but could not find it in PlayerManager!");
+
+                return;
+            }
+
+            targetPlayer.ReadPayload(payload);
+
+            foreach (var player in GetPlayers())
+            {
+                if (player == targetPlayer)
+                {
+                    // TODO: Handle ped mirror
+                    continue;
+                }
+
+                player.Send(payload, DeliveryMethod.Unreliable);
+            }
+        }
+
+        private void BootstrapPlayer(IPlayer player)
+        {
+            var existingPlayerPayloads = GetPlayers().Where(x => x != player).Select(x => x.GetPayload()).ToList();
+            var existingVehiclePaylaods = _vehicleManager.GetVehicles().Select(x => x.GetPayload()).ToList();
+
+            // TODO: Handle ped mirror
+
+            var bootstrapPayload = new BootstrapPayload(player.GetPeer().Id, player.Position, player.Heading, player.Model, existingPlayerPayloads, existingVehiclePaylaods);
+
+            player.Send(bootstrapPayload, DeliveryMethod.ReliableOrdered);
+        }
+
+        private void PropagatePlayerAddition(IPlayer player)
+        {
+            foreach (var existingPlayer in GetPlayers())
+            {
+                if (existingPlayer == player)
+                {
+                    continue;
+                }
+
+                existingPlayer.Send(player.GetPayload(), DeliveryMethod.ReliableOrdered);
+            }
+        }
+
+        private void PropagatePlayerRemoval(IPlayer player)
+        {
+            foreach (var existingPlayer in GetPlayers())
+            {
+                if (existingPlayer == player)
+                {
+                    continue;
+                }
+
+                existingPlayer.Send(new PlayerRemovePayload(player.Id), DeliveryMethod.ReliableOrdered);
+            }
         }
 
     }

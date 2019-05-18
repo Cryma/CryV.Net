@@ -29,6 +29,7 @@ namespace CryV.Net.Server.Common.Interfaces
         int Seat { get; set; }
 
         PlayerUpdatePayload GetPayload();
+        void ReadPayload(PlayerUpdatePayload payload);
 
         void Send(IPayload payload, DeliveryMethod deliveryMethod);
 
