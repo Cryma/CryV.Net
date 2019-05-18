@@ -18,13 +18,15 @@ namespace CryV.Net.Server.Vehicles
         private readonly IVehicleManager _vehicleManager;
         private readonly IEventHandler _eventHandler;
         private readonly IPlayerManager _playerManager;
+        private readonly ISyncManager _syncManager;
 
-        public Vehicle(IVehicleManager vehicleManager, IEventHandler eventHandler, IPlayerManager playerManager, int id, Vector3 position, Vector3 rotation, ulong model,
-            string numberPlate)
+        public Vehicle(IVehicleManager vehicleManager, IEventHandler eventHandler, IPlayerManager playerManager, ISyncManager syncManager, int id, Vector3 position,
+            Vector3 rotation, ulong model, string numberPlate)
         {
             _vehicleManager = vehicleManager;
             _eventHandler = eventHandler;
             _playerManager = playerManager;
+            _syncManager = syncManager;
 
             Id = id;
             _position = position;
@@ -92,7 +94,7 @@ namespace CryV.Net.Server.Vehicles
                 payload.Position.X -= 6.5f;
                 player.Send(payload, DeliveryMethod.Unreliable);
 #else
-                if (player.Vehicle == this && player.Seat == -1)
+                if (_syncManager.IsEntitySyncedByPlayer(this, player))
                 {
                     continue;
                 }

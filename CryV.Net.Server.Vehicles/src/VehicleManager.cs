@@ -14,6 +14,7 @@ namespace CryV.Net.Server.Vehicles
     {
 
         public IPlayerManager PlayerManager { get; set; }
+        public ISyncManager SyncManager { get; set; }
 
         private readonly IEventHandler _eventHandler;
 
@@ -47,7 +48,7 @@ namespace CryV.Net.Server.Vehicles
                 numberPlate = GenerateNumberPlate("CRYV-");
             }
 
-            var vehicle = new Vehicle(this, _eventHandler, PlayerManager, id, position, rotation, model, numberPlate);
+            var vehicle = new Vehicle(this, _eventHandler, PlayerManager, SyncManager, id, position, rotation, model, numberPlate);
 
             _vehicles.TryAdd(id, vehicle);
 

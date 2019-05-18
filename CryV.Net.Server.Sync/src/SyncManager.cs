@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -13,7 +13,7 @@ using LiteNetLib;
 
 namespace CryV.Net.Server.Sync
 {
-    public class SyncManager : IStartable
+    public class SyncManager : ISyncManager, IStartable
     {
 
         private readonly Dictionary<IVehicle, IPlayer> _vehicleSyncMapping = new Dictionary<IVehicle, IPlayer>();
@@ -96,5 +96,9 @@ namespace CryV.Net.Server.Sync
             return _playerManager.GetPlayers().OrderBy(x => Vector3.DistanceSquared(x.Position, position)).FirstOrDefault();
         }
 
+        public bool IsEntitySyncedByPlayer(IVehicle vehicle, IPlayer player)
+        {
+            return _vehicleSyncMapping[vehicle] == player;
+        }
     }
 }
