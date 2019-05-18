@@ -94,7 +94,15 @@ namespace CryV.Net.Elements
         public float EngineHealth
         {
             get => CryVNative.Native_Vehicle_GetVehicleEngineHealth(CryVNative.Plugin, Handle);
-            set => CryVNative.Native_Vehicle_SetVehicleEngineHealth(CryVNative.Plugin, Handle, value);
+            set
+            {
+                CryVNative.Native_Vehicle_SetVehicleEngineHealth(CryVNative.Plugin, Handle, value);
+
+                if (EngineHealth < 0.0f)
+                {
+                    Explode(false, true);
+                }
+            }
         }
 
         public ulong Model => CryVNative.Native_Entity_GetEntityModel(CryVNative.Plugin, Handle);

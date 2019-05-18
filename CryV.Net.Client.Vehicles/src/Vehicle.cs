@@ -100,11 +100,6 @@ namespace CryV.Net.Client.Vehicles
                 {
                     EngineHealth = EngineHealth
                 };
-
-                if (EngineHealth < 0.0f)
-                {
-                    NativeVehicle.Explode(false, true);
-                }
             });
 
             NativeHelper.OnNativeTick += Tick;
