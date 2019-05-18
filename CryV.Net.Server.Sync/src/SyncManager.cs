@@ -77,7 +77,7 @@ namespace CryV.Net.Server.Sync
                 await Task.Delay(TimeSpan.FromSeconds(5));
 
                 // Go through each vehicle that does not have a syncer
-                foreach (var vehicle in _vehicleSyncMapping.Where(x => x.Value == null))
+                foreach (var vehicle in _vehicleSyncMapping.Where(x => x.Value == null).ToList())
                 {
                     var nearestPlayer = GetNearestPlayer(vehicle.Key.Position);
                     if (nearestPlayer == null)
