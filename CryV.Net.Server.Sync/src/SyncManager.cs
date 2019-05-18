@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -16,7 +16,7 @@ namespace CryV.Net.Server.Sync
     public class SyncManager : ISyncManager, IStartable
     {
 
-        private readonly Dictionary<IVehicle, IPlayer> _vehicleSyncMapping = new Dictionary<IVehicle, IPlayer>();
+        private readonly ConcurrentDictionary<IVehicle, IPlayer> _vehicleSyncMapping = new ConcurrentDictionary<IVehicle, IPlayer>();
 
         private readonly IEventHandler _eventHandler;
         private readonly IPlayerManager _playerManager;
@@ -61,7 +61,7 @@ namespace CryV.Net.Server.Sync
         {
             var nearestPlayer = GetNearestPlayer(vehicle.Position);
 
-            _vehicleSyncMapping.Add(vehicle, null);
+            _vehicleSyncMapping.TryAdd(vehicle, null);
             ChangeSyncer(vehicle, nearestPlayer);
         }
 
