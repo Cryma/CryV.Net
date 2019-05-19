@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Autofac;
 using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
@@ -102,7 +103,12 @@ namespace CryV.Net.Server.Players
             {
                 if (player == targetPlayer)
                 {
-                    // TODO: Handle ped mirror
+#if PEDMIRROR
+                    payload.Id = 1;
+                    payload.Position.X -= 4.0f;
+
+                    player.Send(payload, DeliveryMethod.Unreliable);
+#endif
                     continue;
                 }
 
@@ -115,7 +121,14 @@ namespace CryV.Net.Server.Players
             var existingPlayerPayloads = GetPlayers().Where(x => x != player).Select(x => x.GetPayload()).ToList();
             var existingVehiclePaylaods = _vehicleManager.GetVehicles().Select(x => x.GetPayload()).ToList();
 
-            // TODO: Handle ped mirror
+#if PEDMIRROR
+            var payload = player.GetPayload();
+
+            payload.Id = 1;
+            payload.Position.X -= 5.0f;
+
+            existingPlayerPayloads.Add(payload);
+#endif
 
             var bootstrapPayload = new BootstrapPayload(player.GetPeer().Id, player.Position, player.Heading, player.Model, existingPlayerPayloads, existingVehiclePaylaods);
 
