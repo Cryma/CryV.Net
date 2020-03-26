@@ -1,0 +1,42 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Copy Files
+      shell: cmd
+      run: |
+        mkdir out
+        mkdir out\client\dotnet\runtime
+        mkdir out\client\dotnet\resources
+        mkdir out\server\gamemode\example\server
+        mkdir out\server\gamemode\example\client
+        xcopy /S /Y CryV.Net\bin\Release\netcoreapp3.1 out\client\dotnet\runtime\
+        xcopy /S /Y CryV.Net.Client.Core\bin\Release\netcoreapp3.1 out\client\dotnet\resources\
+        xcopy /S /Y CryV.Net.Server.Core\bin\Release\netcoreapp3.1 out\server\
+        xcopy /S /Y CryV.Net.Server.Example\bin\Release\netcoreapp3.1 out\server\gamemode\example\server\
+        xcopy /S /Y CryV.Net.Client.Example\bin\Release\netcoreapp3.1 out\server\gamemode\example\client\
+        
+    - uses: actions/upload-artifact@v2-preview
+      with:
+        name: CryV.Net
+        path: out/
