@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "CryV.Net.Server.Example": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Development\\CryV\\server\\CryV.Net.Server.Core.exe",
+      "workingDirectory": "C:\\Development\\CryV\\server"
+    }
+  }
+}
