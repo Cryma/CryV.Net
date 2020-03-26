@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -145,6 +145,7 @@ namespace CryV.Net.Server.Players
                 }
 
                 existingPlayer.Send(player.GetPayload(), DeliveryMethod.ReliableOrdered);
+                existingPlayer.Send(new PlayerAddPayload(player.GetPayload()), DeliveryMethod.ReliableOrdered);
             }
         }
 
