@@ -7,7 +7,6 @@ using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
-using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 

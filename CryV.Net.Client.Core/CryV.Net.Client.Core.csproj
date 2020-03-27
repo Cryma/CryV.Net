@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.1.2" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +27,6 @@
     <ProjectReference Include="..\CryV.Net.Client.Players\CryV.Net.Client.Players.csproj" />
     <ProjectReference Include="..\CryV.Net.Client.Sync\CryV.Net.Client.Sync.csproj" />
     <ProjectReference Include="..\CryV.Net.Client.Vehicles\CryV.Net.Client.Vehicles.csproj" />
-    <ProjectReference Include="..\CryV.Net.Shared.Events\CryV.Net.Shared.Events.csproj" />
     <ProjectReference Include="..\CryV.Net\CryV.Net.csproj" />
   </ItemGroup>
 

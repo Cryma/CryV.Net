@@ -6,13 +6,14 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
+using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Http;
-using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
-using CryV.Net.Shared.Events.Types;
+using Micky5991.EventAggregator.Interfaces;
 using Newtonsoft.Json;
 
 namespace CryV.Net.Client.Http
@@ -25,29 +26,31 @@ namespace CryV.Net.Client.Http
         private readonly WebClient _webClient = new WebClient();
         private readonly AssemblyLoader _assemblyLoader;
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
         private readonly INetworkManager _networkManager;
 
-        public ScriptManager(IEventHandler eventHandler, INetworkManager networkManager)
+        public ScriptManager(IEventAggregator eventAggregator, INetworkManager networkManager)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
             _networkManager = networkManager;
             
-            _assemblyLoader = new AssemblyLoader(eventHandler);
+            _assemblyLoader = new AssemblyLoader(eventAggregator);
         }
 
         public void Start()
         {
-            _eventHandler.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
+            _eventAggregator.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
         }
 
-        private void OnBootstrap(NetworkEvent<BootstrapPayload> obj)
+        private Task OnBootstrap(NetworkEvent<BootstrapPayload> obj)
         {
             var fileMap = _webClient.DownloadString($"http://{_networkManager.EndPoint.Address}:{_networkManager.EndPoint.Port + 1}/filemap.json");
             _clientFiles = JsonConvert.DeserializeObject<Dictionary<string, List<FileEntry>>>(fileMap);
 
             DownloadFiles();
             LoadAssemblies();
+
+            return Task.CompletedTask;
         }
 
         private void LoadAssemblies()

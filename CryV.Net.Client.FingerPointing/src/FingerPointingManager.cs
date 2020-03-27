@@ -1,12 +1,13 @@
 ﻿using System.Collections.Concurrent;
+using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Client.Helpers.Pointing;
-using CryV.Net.Shared.Common.Interfaces;
+using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
-using CryV.Net.Shared.Events.Types;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Client.FingerPointing.src
 {
@@ -15,20 +16,20 @@ namespace CryV.Net.Client.FingerPointing.src
 
         private readonly ConcurrentDictionary<int, FingerPointingPlayer> _pointingPlayers = new ConcurrentDictionary<int, FingerPointingPlayer>();
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
         private readonly IPlayerManager _playerManager;
 
-        public FingerPointingManager(IEventHandler eventHandler, IPlayerManager playerManager)
+        public FingerPointingManager(IEventAggregator eventAggregator, IPlayerManager playerManager)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
             _playerManager = playerManager;
         }
 
         public void Start()
         {
-            _eventHandler.Subscribe<NetworkEvent<PointingUpdatePayload>>(OnPointingUpdate);
-            _eventHandler.Subscribe<NetworkEvent<StopPointingPayload>>(x => OnStopPointing(x.Payload.Id));
-            _eventHandler.Subscribe<PlayerDisconnectedEvent>(x => OnStopPointing(x.Player.Id));
+            _eventAggregator.Subscribe<NetworkEvent<PointingUpdatePayload>>(OnPointingUpdate);
+            _eventAggregator.Subscribe<NetworkEvent<StopPointingPayload>>(x => OnStopPointing(x.Payload.Id));
+            _eventAggregator.Subscribe<PlayerDisconnectedEvent>(x => OnStopPointing(x.Player.Id));
 
             NativeHelper.OnNativeTick += Tick;
         }
@@ -41,7 +42,7 @@ namespace CryV.Net.Client.FingerPointing.src
             }
         }
 
-        private void OnPointingUpdate(NetworkEvent<PointingUpdatePayload> obj)
+        private Task OnPointingUpdate(NetworkEvent<PointingUpdatePayload> obj)
         {
             var payload = obj.Payload;
 
@@ -53,20 +54,24 @@ namespace CryV.Net.Client.FingerPointing.src
 
                 _pointingPlayers.TryAdd(payload.Id, pointingPlayer);
 
-                return;
+                return Task.CompletedTask;
             }
 
             pointingPlayer.UpdatePointing(payload);
+
+            return Task.CompletedTask;
         }
 
-        private void OnStopPointing(int playerId)
+        private Task OnStopPointing(int playerId)
         {
             if (_pointingPlayers.TryRemove(playerId, out var pointingPlayer) == false)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             pointingPlayer.Dispose();
+
+            return Task.CompletedTask;
         }
 
     }

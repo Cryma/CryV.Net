@@ -7,9 +7,9 @@ using Autofac;
 using CryV.Net.Enums;
 using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
-using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Server.Sync
 {
@@ -18,13 +18,13 @@ namespace CryV.Net.Server.Sync
 
         private readonly ConcurrentDictionary<IVehicle, IPlayer> _vehicleSyncMapping = new ConcurrentDictionary<IVehicle, IPlayer>();
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
         private readonly IPlayerManager _playerManager;
         private readonly IVehicleManager _vehicleManager;
 
-        public SyncManager(IEventHandler eventHandler, IPlayerManager playerManager, IVehicleManager vehicleManager)
+        public SyncManager(IEventAggregator eventAggregator, IPlayerManager playerManager, IVehicleManager vehicleManager)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
             _playerManager = playerManager;
             _vehicleManager = vehicleManager;
         }
@@ -33,28 +33,32 @@ namespace CryV.Net.Server.Sync
         {
             _vehicleManager.OnVehicleAdded += OnVehicleAdded;
 
-            _eventHandler.Subscribe<PlayerEntersVehicleEvent>(OnPlayerEntersVehicle);
-            _eventHandler.Subscribe<PlayerDisconnectedEvent>(OnPlayerDisconnected);
+            _eventAggregator.Subscribe<PlayerEntersVehicleEvent>(OnPlayerEntersVehicle);
+            _eventAggregator.Subscribe<PlayerDisconnectedEvent>(OnPlayerDisconnected);
 
             Task.Run(SyncLoop);
         }
 
-        private void OnPlayerEntersVehicle(PlayerEntersVehicleEvent obj)
+        private Task OnPlayerEntersVehicle(PlayerEntersVehicleEvent obj)
         {
             if (obj.Seat != VehicleSeat.Driver)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             ChangeSyncer(obj.Vehicle, obj.Player);
+
+            return Task.CompletedTask;
         }
 
-        private void OnPlayerDisconnected(PlayerDisconnectedEvent obj)
+        private Task OnPlayerDisconnected(PlayerDisconnectedEvent obj)
         {
             foreach (var syncedVehicles in _vehicleSyncMapping.Where(x => x.Value == obj.Player))
             {
                 ChangeSyncer(syncedVehicles.Key, null);
             }
+
+            return Task.CompletedTask;
         }
 
         private void OnVehicleAdded(object sender, IVehicle vehicle)

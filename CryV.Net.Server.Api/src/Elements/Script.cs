@@ -1,6 +1,6 @@
 ﻿using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Server.Common.Interfaces.Api;
-using CryV.Net.Shared.Common.Interfaces;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Server.Api.Elements
 {
@@ -11,20 +11,20 @@ namespace CryV.Net.Server.Api.Elements
         public IVehiclePool VehiclePool { get; }
         public ICommandHandler CommandHandler { get; }
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
         private readonly IPlayerManager _playerManager;
         private readonly IVehicleManager _vehicleManager;
 
-        public Script(IEventHandler eventHandler, IPlayerManager playerManager, IVehicleManager vehicleManager)
+        public Script(IEventAggregator eventAggregator, IPlayerManager playerManager, IVehicleManager vehicleManager)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
             _playerManager = playerManager;
             _vehicleManager = vehicleManager;
 
-            Events = new Events(eventHandler);
+            Events = new Events(_eventAggregator);
             PlayerPool = new PlayerPool(playerManager);
             VehiclePool = new VehiclePool(vehicleManager);
-            CommandHandler = new CommandHandler(eventHandler, playerManager);
+            CommandHandler = new CommandHandler(_eventAggregator, playerManager);
         }
 
     }

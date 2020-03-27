@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Enums;
-using CryV.Net.Shared.Common.Interfaces;
+using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads.Helpers;
-using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Server.Networking
 {
@@ -21,12 +21,12 @@ namespace CryV.Net.Server.Networking
         private const int _maxPlayers = 32;
 
         private readonly IPlayerManager _playerManager;
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
 
-        public NetworkManager(IPlayerManager playerManager, IEventHandler eventHandler)
+        public NetworkManager(IPlayerManager playerManager, IEventAggregator eventAggregator)
         {
             _playerManager = playerManager;
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
 
             _listener.ConnectionRequestEvent += OnConectionRequest;
             _listener.NetworkReceiveEvent += OnNetworkReceive;
@@ -71,7 +71,7 @@ namespace CryV.Net.Server.Networking
             payloadProperty.SetValue(eventInstance, payload);
             senderProperty.SetValue(eventInstance, peer);
 
-            _eventHandler.Publish(eventType, eventInstance);
+            _eventAggregator.Publish(eventInstance);
         }
 
         private void OnConectionRequest(ConnectionRequest request)

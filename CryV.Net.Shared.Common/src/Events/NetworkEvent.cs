@@ -2,7 +2,7 @@
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
 
-namespace CryV.Net.Shared.Events.Types
+namespace CryV.Net.Shared.Common.Events
 {
     public class NetworkEvent<TPayload> : IEvent where TPayload : IPayload
     {

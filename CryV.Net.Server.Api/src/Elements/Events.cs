@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Server.Common.Interfaces.Api;
-using CryV.Net.Shared.Common.Interfaces;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Server.Api.Elements
 {
@@ -12,20 +13,24 @@ namespace CryV.Net.Server.Api.Elements
         public event EventHandler<IPlayer> OnPlayerConnected;
         public event EventHandler<IPlayer> OnPlayerDisconnected;
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
         
-        public Events(IEventHandler eventHandler)
+        public Events(IEventAggregator eventAggregator)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
 
-            _eventHandler.Subscribe<PlayerConnectedEvent>(onPlayerConnected =>
+            _eventAggregator.Subscribe<PlayerConnectedEvent>(onPlayerConnected =>
             {
                 InvokeOnPlayerConnected(onPlayerConnected.Player);
+
+                return Task.CompletedTask;
             });
 
-            _eventHandler.Subscribe<PlayerDisconnectedEvent>(onPlayerDisconnected =>
+            eventAggregator.Subscribe<PlayerDisconnectedEvent>(onPlayerDisconnected =>
             {
                 InvokeOnPlayerDisconnected(onPlayerDisconnected.Player);
+
+                return Task.CompletedTask;
             });
         }
         

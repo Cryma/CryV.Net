@@ -7,10 +7,10 @@ using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
 using CryV.Net.Helpers;
-using CryV.Net.Shared.Common.Interfaces;
+using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
-using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Client.Sync
 {
@@ -21,31 +21,33 @@ namespace CryV.Net.Client.Sync
 
         private readonly List<IVehicle> _syncVehicles = new List<IVehicle>();
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
         private readonly INetworkManager _networkManager;
 
-        public SyncManager(IEventHandler eventHandler, INetworkManager networkManager)
+        public SyncManager(IEventAggregator eventAggregator, INetworkManager networkManager)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
             _networkManager = networkManager;
         }
 
         public void Start()
         {
-            _eventHandler.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
+            _eventAggregator.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
 
-            _eventHandler.Subscribe<NetworkEvent<AddSyncPayload>>(OnSyncAdd);
-            _eventHandler.Subscribe<NetworkEvent<RemoveSyncPayload>>(OnSyncRemove);
+            _eventAggregator.Subscribe<NetworkEvent<AddSyncPayload>>(OnSyncAdd);
+            _eventAggregator.Subscribe<NetworkEvent<RemoveSyncPayload>>(OnSyncRemove);
 
             Task.Run(SyncLoop);
         }
 
-        private void OnLocalPlayerDisconnected(LocalPlayerDisconnectedEvent obj)
+        private Task OnLocalPlayerDisconnected(LocalPlayerDisconnectedEvent obj)
         {
             _syncVehicles.Clear();
+
+            return Task.CompletedTask;
         }
 
-        private void OnSyncAdd(NetworkEvent<AddSyncPayload> obj)
+        private Task OnSyncAdd(NetworkEvent<AddSyncPayload> obj)
         {
             var vehicle = VehicleManager.GetVehicle(obj.Payload.EntityId);
 
@@ -53,13 +55,15 @@ namespace CryV.Net.Client.Sync
             {
                 Utility.Log($"Tried to add vehicle {vehicle.Id} to sync list that is already in it!");
 
-                return;
+                return Task.CompletedTask;
             }
 
             _syncVehicles.Add(vehicle);
+
+            return Task.CompletedTask;
         }
 
-        private void OnSyncRemove(NetworkEvent<RemoveSyncPayload> obj)
+        private Task OnSyncRemove(NetworkEvent<RemoveSyncPayload> obj)
         {
             var vehicle = VehicleManager.GetVehicle(obj.Payload.EntityId);
 
@@ -67,10 +71,12 @@ namespace CryV.Net.Client.Sync
             {
                 Utility.Log($"Tried to remove vehicle {vehicle.Id} from sync list that is not in it!");
 
-                return;
+                return Task.CompletedTask;
             }
 
             _syncVehicles.Remove(vehicle);
+            
+            return Task.CompletedTask;
         }
 
         private async Task SyncLoop()

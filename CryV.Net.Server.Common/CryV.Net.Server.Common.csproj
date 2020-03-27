@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Micky5991.EventAggregator" Version="1.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CryV.Net.Shared.Common\CryV.Net.Shared.Common.csproj" />
     <ProjectReference Include="..\CryV.Net\CryV.Net.csproj" />
   </ItemGroup>

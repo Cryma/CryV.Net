@@ -4,10 +4,10 @@ using CryV.Net.Enums;
 using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Flags;
-using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Common.Payloads.Helpers;
 using LiteNetLib;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Server.Players
 {
@@ -51,12 +51,12 @@ namespace CryV.Net.Server.Players
         public int Seat { get; set; }
 
         private readonly NetPeer _peer;
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
         private readonly IVehicleManager _vehicleManager;
 
-        public Player(IEventHandler eventHandler, IVehicleManager vehicleManager, NetPeer peer)
+        public Player(IEventAggregator eventAggregator, IVehicleManager vehicleManager, NetPeer peer)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
             _vehicleManager = vehicleManager;
             _peer = peer;
         }
@@ -108,7 +108,7 @@ namespace CryV.Net.Server.Players
             var isEnteringVehicle = (payload.PedData & (int) PedData.IsEnteringVehicle) > 0;
             if (isEnteringVehicle && IsEnteringVehicle == false)
             {
-                _eventHandler.Publish(new PlayerEntersVehicleEvent(this, Vehicle, (VehicleSeat) Seat));
+                _eventAggregator.Publish(new PlayerEntersVehicleEvent(this, Vehicle, (VehicleSeat) Seat));
             }
 
             IsEnteringVehicle = isEnteringVehicle;

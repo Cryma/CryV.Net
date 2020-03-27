@@ -3,12 +3,13 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Server.Common.Interfaces;
-using CryV.Net.Shared.Common.Interfaces;
+using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
-using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Server.Vehicles
 {
@@ -18,7 +19,7 @@ namespace CryV.Net.Server.Vehicles
         public IPlayerManager PlayerManager { get; set; }
         public ISyncManager SyncManager { get; set; }
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
 
         private readonly ConcurrentDictionary<int, IVehicle> _vehicles = new ConcurrentDictionary<int, IVehicle>();
 
@@ -30,14 +31,14 @@ namespace CryV.Net.Server.Vehicles
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
         };
 
-        public VehicleManager(IEventHandler eventHandler)
+        public VehicleManager(IEventAggregator eventAggregator)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
         }
 
         public void Start()
         {
-            _eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(OnVehicleUpdate);
+            _eventAggregator.Subscribe<NetworkEvent<VehicleUpdatePayload>>(OnVehicleUpdate);
         }
 
         public event EventHandler<IVehicle> OnVehicleAdded;
@@ -51,7 +52,7 @@ namespace CryV.Net.Server.Vehicles
                 numberPlate = GenerateNumberPlate("CRYV-");
             }
 
-            var vehicle = new Vehicle(_eventHandler, PlayerManager, id, position, rotation, model, numberPlate);
+            var vehicle = new Vehicle(_eventAggregator, PlayerManager, id, position, rotation, model, numberPlate);
             _vehicles.TryAdd(id, vehicle);
 
             PropagateVehicleAddition(vehicle);
@@ -118,7 +119,7 @@ namespace CryV.Net.Server.Vehicles
                 .First();
         }
 
-        private void OnVehicleUpdate(NetworkEvent<VehicleUpdatePayload> obj)
+        private Task OnVehicleUpdate(NetworkEvent<VehicleUpdatePayload> obj)
         {
             var payload = obj.Payload;
 
@@ -126,7 +127,7 @@ namespace CryV.Net.Server.Vehicles
             {
                 Console.WriteLine($"Received update from vehicle {payload.Id}, but could not find it in VehicleManager!");
 
-                return;
+                return Task.CompletedTask;
             }
 
             vehicle.ReadPayload(payload);
@@ -142,6 +143,8 @@ namespace CryV.Net.Server.Vehicles
 
                 player.Send(payload, DeliveryMethod.Unreliable);
             }
+
+            return Task.CompletedTask;
         }
 
         private void PropagateVehicleAddition(IVehicle vehicle)

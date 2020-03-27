@@ -1,37 +1,38 @@
-﻿using Autofac;
+﻿using System.Threading.Tasks;
+using Autofac;
 using CryV.Net.Server.Common.Interfaces;
-using CryV.Net.Shared.Common.Interfaces;
+using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
-using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Server.FingerPointing
 {
     public class FingerPointingManager : IStartable
     {
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
         private readonly IPlayerManager _playerManager;
 
-        public FingerPointingManager(IEventHandler eventHandler, IPlayerManager playerManager)
+        public FingerPointingManager(IEventAggregator eventAggregator, IPlayerManager playerManager)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
             _playerManager = playerManager;
         }
 
         public void Start()
         {
-            _eventHandler.Subscribe<NetworkEvent<PointingUpdatePayload>>(OnPointingUpdate);
-            _eventHandler.Subscribe<NetworkEvent<StopPointingPayload>>(OnStopPointing);
+            _eventAggregator.Subscribe<NetworkEvent<PointingUpdatePayload>>(OnPointingUpdate);
+            _eventAggregator.Subscribe<NetworkEvent<StopPointingPayload>>(OnStopPointing);
         }
 
-        private void OnPointingUpdate(NetworkEvent<PointingUpdatePayload> obj)
+        private Task OnPointingUpdate(NetworkEvent<PointingUpdatePayload> obj)
         {
             var player = _playerManager.GetPlayer(obj.Payload.Id);
 
             if (player == null)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             foreach (var otherPlayer in _playerManager.GetPlayers())
@@ -47,15 +48,17 @@ namespace CryV.Net.Server.FingerPointing
 
                 otherPlayer.Send(obj.Payload, DeliveryMethod.Unreliable);
             }
+
+            return Task.CompletedTask;
         }
 
-        private void OnStopPointing(NetworkEvent<StopPointingPayload> obj)
+        private Task OnStopPointing(NetworkEvent<StopPointingPayload> obj)
         {
             var player = _playerManager.GetPlayer(obj.Payload.Id);
 
             if (player == null)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             foreach (var otherPlayer in _playerManager.GetPlayers())
@@ -71,6 +74,8 @@ namespace CryV.Net.Server.FingerPointing
 
                 otherPlayer.Send(obj.Payload, DeliveryMethod.Unreliable);
             }
+
+            return Task.CompletedTask;
         }
 
     }

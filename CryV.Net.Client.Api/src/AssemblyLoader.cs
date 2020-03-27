@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces.Api;
 using CryV.Net.Client.Http.Context;
-using CryV.Net.Elements;
-using CryV.Net.Shared.Common.Interfaces;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Client.Http
 {
@@ -17,20 +17,20 @@ namespace CryV.Net.Client.Http
 
         private List<IGamemode> _instantiatedAssemblies = new List<IGamemode>();
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
 
-        public AssemblyLoader(IEventHandler eventHandler)
+        public AssemblyLoader(IEventAggregator eventAggregator)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
 
-            _eventHandler.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
+            _eventAggregator.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
         }
 
-        private void OnLocalPlayerDisconnected(LocalPlayerDisconnectedEvent obj)
+        private Task OnLocalPlayerDisconnected(LocalPlayerDisconnectedEvent obj)
         {
             if (_context == null)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             foreach (var gamemode in _instantiatedAssemblies)
@@ -44,6 +44,8 @@ namespace CryV.Net.Client.Http
             _context = null;
 
             _context = new HostAssemblyLoadContext();
+
+            return Task.CompletedTask;
         }
 
         public void LoadAssembly(string path)

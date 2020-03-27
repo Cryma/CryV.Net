@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Numerics;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Flags;
-using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
-using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Server.Vehicles
 {
     public partial class Vehicle : IVehicle
     {
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
         private readonly IPlayerManager _playerManager;
 
-        public Vehicle(IEventHandler eventHandler, IPlayerManager playerManager, int id, Vector3 position,
+        public Vehicle(IEventAggregator eventAggregator, IPlayerManager playerManager, int id, Vector3 position,
             Vector3 rotation, ulong model, string numberPlate)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
             _playerManager = playerManager;
 
             Id = id;

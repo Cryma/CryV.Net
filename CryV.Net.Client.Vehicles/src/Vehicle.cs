@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Helpers;
+using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Flags;
-using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
-using CryV.Net.Shared.Events.Types;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Client.Vehicles
 {
@@ -69,12 +70,12 @@ namespace CryV.Net.Client.Vehicles
 
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
         private readonly ISyncManager _syncManager;
 
-        public Vehicle(IEventHandler eventHandler, ISyncManager syncManager, VehicleUpdatePayload payload)
+        public Vehicle(IEventAggregator eventAggregator, ISyncManager syncManager, VehicleUpdatePayload payload)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
             _syncManager = syncManager;
             _lastPayload = payload;
 
@@ -82,7 +83,7 @@ namespace CryV.Net.Client.Vehicles
             
             ReadPayload(payload);
 
-            _eventSubscriptions.Add(_eventHandler.Subscribe<NetworkEvent<VehicleUpdatePayload>>(update =>
+            _eventSubscriptions.Add(_eventAggregator.Subscribe<NetworkEvent<VehicleUpdatePayload>>(update =>
             {
                 ReadPayload(update.Payload);
 
@@ -90,7 +91,9 @@ namespace CryV.Net.Client.Vehicles
                 {
                     ForceSync();
                 }
-            }, x => x.Payload.Id == Id));
+
+                return Task.CompletedTask;
+            }, x => Task.FromResult(x.Payload.Id == Id)));
 
             ThreadHelper.Run(() =>
             {
@@ -257,7 +260,7 @@ namespace CryV.Net.Client.Vehicles
         {
             foreach (var subscription in _eventSubscriptions)
             {
-                _eventHandler.Unsubscribe(subscription);
+                subscription.Dispose();
             }
 
             NativeHelper.OnNativeTick -= Tick;

@@ -6,9 +6,7 @@ using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Client.FingerPointing;
 using CryV.Net.Elements;
 using CryV.Net.Helpers;
-using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
-using CryV.Net.Shared.Events.Types;
 
 namespace CryV.Net.Client.Helpers.Pointing
 {

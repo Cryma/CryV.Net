@@ -3,44 +3,45 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
-using CryV.Net.Shared.Common.Interfaces;
+using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
-using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Server.Players
 {
     public class PlayerManager : IPlayerManager, IStartable
     {
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
         private readonly IVehicleManager _vehicleManager;
 
         private readonly ConcurrentDictionary<int, IPlayer> _players = new ConcurrentDictionary<int, IPlayer>();
 
-        public PlayerManager(IEventHandler eventHandler, IVehicleManager vehicleManager)
+        public PlayerManager(IEventAggregator eventAggregator, IVehicleManager vehicleManager)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
             _vehicleManager = vehicleManager;
         }
 
         public void Start()
         {
-            _eventHandler.Subscribe<NetworkEvent<PlayerUpdatePayload>>(OnPlayerUpdate);
+            _eventAggregator.Subscribe<NetworkEvent<PlayerUpdatePayload>>(OnPlayerUpdate);
         }
 
         public void AddPlayer(NetPeer peer)
         {
-            var player = new Player(_eventHandler, _vehicleManager, peer);
+            var player = new Player(_eventAggregator, _vehicleManager, peer);
             _players.TryAdd(peer.Id, player);
 
             BootstrapPlayer(player);
             PropagatePlayerAddition(player);
 
-            _eventHandler.Publish(new PlayerConnectedEvent(player));
+            _eventAggregator.Publish(new PlayerConnectedEvent(player));
         }
 
         public void RemovePlayer(NetPeer peer)
@@ -53,7 +54,7 @@ namespace CryV.Net.Server.Players
             player.Dispose();
             PropagatePlayerRemoval(player);
 
-            _eventHandler.Publish(new PlayerDisconnectedEvent(player));
+            _eventAggregator.Publish(new PlayerDisconnectedEvent(player));
         }
 
         public IPlayer GetPlayer(int playerId)
@@ -86,7 +87,7 @@ namespace CryV.Net.Server.Players
             return _players.Values.ToList();
         }
 
-        private void OnPlayerUpdate(NetworkEvent<PlayerUpdatePayload> obj)
+        private Task OnPlayerUpdate(NetworkEvent<PlayerUpdatePayload> obj)
         {
             var payload = obj.Payload;
 
@@ -94,7 +95,7 @@ namespace CryV.Net.Server.Players
             {
                 Console.WriteLine($"Received update from player {payload.Id}, but could not find it in PlayerManager!");
 
-                return;
+                return Task.CompletedTask;
             }
 
             targetPlayer.ReadPayload(payload);
@@ -114,6 +115,8 @@ namespace CryV.Net.Server.Players
 
                 player.Send(payload, DeliveryMethod.Unreliable);
             }
+
+            return Task.CompletedTask;
         }
 
         private void BootstrapPlayer(IPlayer player)

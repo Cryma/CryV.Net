@@ -9,10 +9,10 @@ using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Client.Helpers;
 using CryV.Net.Elements;
 using CryV.Net.Helpers;
-using CryV.Net.Shared.Common.Interfaces;
+using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
-using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Client.LocalPlayer
 {
@@ -29,36 +29,39 @@ namespace CryV.Net.Client.LocalPlayer
 
         private PlayerUpdatePayload _lastPlayerPayload;
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
         private readonly INetworkManager _networkManager;
         private readonly IVehicleManager _vehicleManager;
 
-        public LocalPlayer(IEventHandler eventHandler, INetworkManager networkManager, IVehicleManager vehicleManager)
+        public LocalPlayer(IEventAggregator eventAggregator, INetworkManager networkManager, IVehicleManager vehicleManager)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
             _networkManager = networkManager;
             _vehicleManager = vehicleManager;
         }
 
         public void Start()
         {
-            _eventHandler.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
-            _eventHandler.Subscribe<LocalPlayerConnectedEvent>(OnLocalPlayerConnected);
-            _eventHandler.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
+            _eventAggregator.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
+            _eventAggregator.Subscribe<LocalPlayerConnectedEvent>(OnLocalPlayerConnected);
+            _eventAggregator.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
         }
 
-        private void OnLocalPlayerConnected(LocalPlayerConnectedEvent obj)
+        private Task OnLocalPlayerConnected(LocalPlayerConnectedEvent obj)
         {
+            return Task.CompletedTask;
         }
 
-        private void OnLocalPlayerDisconnected(LocalPlayerDisconnectedEvent obj)
+        private Task OnLocalPlayerDisconnected(LocalPlayerDisconnectedEvent obj)
         {
             _cancellationTokenSource?.Cancel();
 
-            EntityPool.Clear();
+            ThreadHelper.Run(EntityPool.Clear);
+
+            return Task.CompletedTask;
         }
 
-        private void OnBootstrap(NetworkEvent<BootstrapPayload> obj)
+        private Task OnBootstrap(NetworkEvent<BootstrapPayload> obj)
         {
             var payload = obj.Payload;
             Id = payload.LocalId;
@@ -74,6 +77,8 @@ namespace CryV.Net.Client.LocalPlayer
                 _cancellationTokenSource = new CancellationTokenSource();
                 Task.Run(Sync, _cancellationTokenSource.Token);
             });
+
+            return Task.CompletedTask;
         }
 
         private async Task Sync()

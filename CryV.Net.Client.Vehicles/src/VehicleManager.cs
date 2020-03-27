@@ -1,62 +1,71 @@
 ﻿using System.Collections.Concurrent;
+using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
-using CryV.Net.Shared.Common.Interfaces;
+using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
-using CryV.Net.Shared.Events.Types;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Client.Vehicles
 {
     public class VehicleManager : IVehicleManager, IStartable
     {
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
         private readonly ISyncManager _syncManager;
 
         private readonly ConcurrentDictionary<int, IVehicle> _vehicles = new ConcurrentDictionary<int, IVehicle>();
 
-        public VehicleManager(IEventHandler eventHandler, ISyncManager syncManager)
+        public VehicleManager(IEventAggregator eventAggregator, ISyncManager syncManager)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
             _syncManager = syncManager;
         }
 
         public void Start()
         {
-            _eventHandler.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
+            _eventAggregator.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
 
-            _eventHandler.Subscribe<NetworkEvent<VehicleAddPayload>>(OnAddVehicle);
-            _eventHandler.Subscribe<NetworkEvent<VehicleRemovePayload>>(OnRemoveVehicle);
+            _eventAggregator.Subscribe<NetworkEvent<VehicleAddPayload>>(OnAddVehicle);
+            _eventAggregator.Subscribe<NetworkEvent<VehicleRemovePayload>>(OnRemoveVehicle);
 
-            _eventHandler.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
+            _eventAggregator.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
         }
 
-        private void OnBootstrap(NetworkEvent<BootstrapPayload> obj)
+        private Task OnBootstrap(NetworkEvent<BootstrapPayload> obj)
         {
+            Utility.Log(_eventAggregator.GetType().ToString());
+
             if (obj.Payload.ExistingVehicles == null)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             foreach (var vehicle in obj.Payload.ExistingVehicles)
             {
                 AddVehicle(vehicle);
             }
+
+            return Task.CompletedTask;
         }
 
-        private void OnAddVehicle(NetworkEvent<VehicleAddPayload> obj)
+        private Task OnAddVehicle(NetworkEvent<VehicleAddPayload> obj)
         {
             AddVehicle(obj.Payload.Data);
+
+            return Task.CompletedTask;
         }
 
-        private void OnRemoveVehicle(NetworkEvent<VehicleRemovePayload> obj)
+        private Task OnRemoveVehicle(NetworkEvent<VehicleRemovePayload> obj)
         {
             RemoveVehicle(obj.Payload.Id);
+
+            return Task.CompletedTask;
         }
 
-        private void OnLocalPlayerDisconnected(LocalPlayerDisconnectedEvent obj)
+        private Task OnLocalPlayerDisconnected(LocalPlayerDisconnectedEvent obj)
         {
             foreach (var vehicle in _vehicles.Values)
             {
@@ -64,11 +73,13 @@ namespace CryV.Net.Client.Vehicles
             }
 
             _vehicles.Clear();
+
+            return Task.CompletedTask;
         }
 
         private void AddVehicle(VehicleUpdatePayload payload)
         {
-            var vehicle = new Vehicle(_eventHandler, _syncManager, payload);
+            var vehicle = new Vehicle(_eventAggregator, _syncManager, payload);
             _vehicles.TryAdd(payload.Id, vehicle);
         }
 

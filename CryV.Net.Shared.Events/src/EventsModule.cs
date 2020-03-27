@@ -7,9 +7,6 @@ namespace CryV.Net.Shared.Events
 
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<EventHandler>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
         }
 
     }

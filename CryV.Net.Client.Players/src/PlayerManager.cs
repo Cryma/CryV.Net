@@ -1,56 +1,59 @@
 ﻿using System.Collections.Concurrent;
+using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
-using CryV.Net.Shared.Common.Interfaces;
+using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
-using CryV.Net.Shared.Events.Types;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Client.Players
 {
     public class PlayerManager : IPlayerManager, IStartable
     {
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
         private readonly IVehicleManager _vehicleManager;
 
         private readonly ConcurrentDictionary<int, IPlayer> _players = new ConcurrentDictionary<int, IPlayer>();
 
-        public PlayerManager(IEventHandler eventHandler, IVehicleManager vehicleManager)
+        public PlayerManager(IEventAggregator eventAggregator, IVehicleManager vehicleManager)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
             _vehicleManager = vehicleManager;
         }
 
         public void Start()
         {
-            _eventHandler.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
-            _eventHandler.Subscribe<NetworkEvent<PlayerAddPayload>>(OnAddPlayer);
-            _eventHandler.Subscribe<NetworkEvent<PlayerRemovePayload>>(OnRemovePlayer);
+            _eventAggregator.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
+            _eventAggregator.Subscribe<NetworkEvent<PlayerAddPayload>>(OnAddPlayer);
+            _eventAggregator.Subscribe<NetworkEvent<PlayerRemovePayload>>(OnRemovePlayer);
 
-            _eventHandler.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnect);
+            _eventAggregator.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnect);
         }
 
-        private void OnLocalPlayerDisconnect(LocalPlayerDisconnectedEvent obj)
+        private Task OnLocalPlayerDisconnect(LocalPlayerDisconnectedEvent obj)
         {
             foreach (var player in _players.Values)
             {
-                _eventHandler.Publish(new PlayerDisconnectedEvent(player));
+                _eventAggregator.Publish(new PlayerDisconnectedEvent(player));
 
                 player.Dispose();
             }
 
             _players.Clear();
+
+            return Task.CompletedTask;
         }
 
         public void AddPlayer(PlayerUpdatePayload payload)
         {
-            var player = new Player(_eventHandler, _vehicleManager, payload);
+            var player = new Player(_eventAggregator, _vehicleManager, payload);
 
             _players.TryAdd(payload.Id, player);
 
-            _eventHandler.Publish(new PlayerConnectedEvent(player));
+            _eventAggregator.Publish(new PlayerConnectedEvent(player));
         }
 
         public void RemovePlayer(int playerId)
@@ -60,7 +63,7 @@ namespace CryV.Net.Client.Players
                 return;
             }
 
-            _eventHandler.Publish(new PlayerDisconnectedEvent(player));
+            _eventAggregator.Publish(new PlayerDisconnectedEvent(player));
 
             player.Dispose();
         }
@@ -75,27 +78,33 @@ namespace CryV.Net.Client.Players
             return player;
         }
 
-        private void OnBootstrap(NetworkEvent<BootstrapPayload> obj)
+        private Task OnBootstrap(NetworkEvent<BootstrapPayload> obj)
         {
             if (obj.Payload.ExistingPlayers == null)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             foreach (var player in obj.Payload.ExistingPlayers)
             {
                 AddPlayer(player);
             }
+
+            return Task.CompletedTask;
         }
 
-        private void OnAddPlayer(NetworkEvent<PlayerAddPayload> obj)
+        private Task OnAddPlayer(NetworkEvent<PlayerAddPayload> obj)
         {
             AddPlayer(obj.Payload.Data);
+
+            return Task.CompletedTask;
         }
 
-        private void OnRemovePlayer(NetworkEvent<PlayerRemovePayload> obj)
+        private Task OnRemovePlayer(NetworkEvent<PlayerRemovePayload> obj)
         {
             RemovePlayer(obj.Payload.Id);
+
+            return Task.CompletedTask;
         }
 
     }

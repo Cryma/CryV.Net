@@ -10,11 +10,11 @@ using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
 using CryV.Net.Shared.Common.Enums;
-using CryV.Net.Shared.Common.Interfaces;
+using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Common.Payloads.Helpers;
-using CryV.Net.Shared.Events.Types;
 using LiteNetLib;
+using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Client.Networking
 {
@@ -36,11 +36,11 @@ namespace CryV.Net.Client.Networking
         private readonly EventBasedNetListener _listener = new EventBasedNetListener();
         private readonly NetManager _netManager;
 
-        private readonly IEventHandler _eventHandler;
+        private readonly IEventAggregator _eventAggregator;
 
-        public NetworkManager(IEventHandler eventHandler)
+        public NetworkManager(IEventAggregator eventAggregator)
         {
-            _eventHandler = eventHandler;
+            _eventAggregator = eventAggregator;
 
             _listener.NetworkReceiveEvent += OnNetworkReceive;
 
@@ -65,7 +65,7 @@ namespace CryV.Net.Client.Networking
 
             payloadProperty.SetValue(eventInstance, payload);
 
-            _eventHandler.Publish(eventType, eventInstance);
+            _eventAggregator.Publish(eventInstance);
         }
 
         public void Start()
@@ -82,7 +82,7 @@ namespace CryV.Net.Client.Networking
 
             _peer = _netManager.Connect(address, port, "hihihi");
 
-            _eventHandler.Publish(new LocalPlayerConnectedEvent());
+            _eventAggregator.Publish(new LocalPlayerConnectedEvent());
 
             _cancellationTokenSource = new CancellationTokenSource();
             Task.Run(Tick, _cancellationTokenSource.Token);
@@ -97,7 +97,7 @@ namespace CryV.Net.Client.Networking
 
             _cancellationTokenSource.Cancel();
 
-            _eventHandler.Publish(new LocalPlayerDisconnectedEvent());
+            _eventAggregator.Publish(new LocalPlayerDisconnectedEvent());
 
             _peer.Disconnect();
             _peer = null;

@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.1.2" />
+    <PackageReference Include="Micky5991.EventAggregator" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>

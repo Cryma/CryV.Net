@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.1.2" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,7 +19,6 @@
     <ProjectReference Include="..\CryV.Net.Server.Players\CryV.Net.Server.Players.csproj" />
     <ProjectReference Include="..\CryV.Net.Server.Sync\CryV.Net.Server.Sync.csproj" />
     <ProjectReference Include="..\CryV.Net.Server.Vehicles\CryV.Net.Server.Vehicles.csproj" />
-    <ProjectReference Include="..\CryV.Net.Shared.Events\CryV.Net.Shared.Events.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' != 'Release'">

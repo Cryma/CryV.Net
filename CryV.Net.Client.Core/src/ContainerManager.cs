@@ -4,7 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using CryV.Net.Elements;
+using Micky5991.EventAggregator.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CryV.Net.Client.Core
 {
@@ -16,6 +19,11 @@ namespace CryV.Net.Client.Core
         public void Start()
         {
             var builder = new ContainerBuilder();
+            
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddEventAggregator();
+            serviceCollection.AddLogging();
+            builder.Populate(serviceCollection);
 
             builder.RegisterAssemblyModules(GetAssemblies().ToArray());
 
