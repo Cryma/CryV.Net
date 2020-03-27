@@ -8,9 +8,11 @@ using Autofac.Extensions.DependencyInjection;
 using CryV.Net.Elements;
 using Micky5991.EventAggregator.Extensions;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+#if DEBUG
+using System.Runtime.InteropServices;
+#endif
 
 namespace CryV.Net.Client.Core
 {
@@ -21,6 +23,10 @@ namespace CryV.Net.Client.Core
 
         public void Start()
         {
+#if DEBUG
+            AllocConsole();
+#endif
+
             var builder = new ContainerBuilder();
 
             var serviceCollection = new ServiceCollection();
@@ -31,9 +37,12 @@ namespace CryV.Net.Client.Core
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.File(Path.Combine(Utility.GetInstallDirectory(), "cryv-net.log"))
+#if DEBUG
+                .WriteTo.Console()
+#endif
                 .CreateLogger();
 
-            serviceCollection.AddLogging(builder => builder.AddSerilog(serilogLogger));
+            serviceCollection.AddLogging(serilogBuilder => serilogBuilder.AddSerilog(serilogLogger));
 
             builder.Populate(serviceCollection);
 
@@ -78,6 +87,12 @@ namespace CryV.Net.Client.Core
         {
             return Path.Combine(Path.GetDirectoryName(Assembly.GetAssembly(typeof(CryV)).Location), path);
         }
+
+#if DEBUG
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool AllocConsole();
+#endif
 
     }
 }
