@@ -25,38 +25,46 @@ namespace CryV.Net.Shared.Common.Payloads
         public float Heading { get; set; }
 
         [ProtoMember(5)]
-        public SerializableVector3 AimTarget { get; set; }
+        public float FingerPointingPitch { get; set; }
 
         [ProtoMember(6)]
-        public int Speed { get; set; }
+        public float FingerPointingHeading { get; set; }
 
         [ProtoMember(7)]
-        public ulong Model { get; set; }
+        public SerializableVector3 AimTarget { get; set; }
 
         [ProtoMember(8)]
-        public ulong WeaponModel { get; set; }
+        public int Speed { get; set; }
 
         [ProtoMember(9)]
-        public int PedData { get; set; }
+        public ulong Model { get; set; }
 
         [ProtoMember(10)]
-        public int VehicleId { get; set; }
+        public ulong WeaponModel { get; set; }
 
         [ProtoMember(11)]
+        public int PedData { get; set; }
+
+        [ProtoMember(12)]
+        public int VehicleId { get; set; }
+
+        [ProtoMember(13)]
         public int Seat { get; set; }
 
         public PlayerUpdatePayload()
         {
         }
 
-        public PlayerUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, Vector3 aimTarget, int speed, ulong model, ulong weaponModel,
-            bool isJumping, bool isClimbing, bool isClimbingLadder, bool isRagdoll, bool isAiming, bool isEnteringVehicle, bool isInVehicle, int vehicleId,
-            int seat, bool isLeavingVehicle)
+        public PlayerUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, float fingerPointingPitch, float fingerPointingHeading,
+            Vector3 aimTarget, int speed, ulong model, ulong weaponModel, bool isJumping, bool isClimbing, bool isClimbingLadder, bool isRagdoll,
+            bool isAiming, bool isEnteringVehicle, bool isInVehicle, int vehicleId, int seat, bool isLeavingVehicle, bool isFingerPointing)
         {
             Id = id;
             Position = position;
             Velocity = velocity;
             Heading = heading;
+            FingerPointingPitch = fingerPointingPitch;
+            FingerPointingHeading = fingerPointingHeading;
             AimTarget = aimTarget;
             Speed = speed;
             Model = model;
@@ -103,6 +111,11 @@ namespace CryV.Net.Shared.Common.Payloads
             {
                 PedData |= (int) Flags.PedData.IsLeavingVehicle;
             }
+
+            if (isFingerPointing)
+            {
+                PedData |= (int) Flags.PedData.IsFingerPointing;
+            }
         }
 
         public bool IsDifferent(PlayerUpdatePayload payload)
@@ -110,6 +123,8 @@ namespace CryV.Net.Shared.Common.Payloads
             return ((Vector3) Position - payload.Position).Length() > 0.1f ||
                    ((Vector3) Velocity - payload.Velocity).Length() > 0.1f ||
                    Math.Abs(Heading - payload.Heading) > 0.05f ||
+                   Math.Abs(FingerPointingPitch - payload.FingerPointingPitch) > 0.05f ||
+                   Math.Abs(FingerPointingHeading - payload.FingerPointingHeading) > 0.05f ||
                    Model != payload.Model ||
                    WeaponModel != payload.WeaponModel ||
                    ((Vector3) AimTarget - payload.AimTarget).Length() > 0.1f ||

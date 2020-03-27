@@ -8,6 +8,7 @@ using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Common.Payloads.Helpers;
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Server.Players
 {
@@ -21,6 +22,10 @@ namespace CryV.Net.Server.Players
         public Vector3 Velocity { get; set; }
 
         public float Heading { get; set; }
+
+        public float FingerPointingPitch { get; set; }
+
+        public float FingerPointingHeading { get; set; }
 
         public Vector3 AimTarget { get; set; }
 
@@ -46,18 +51,22 @@ namespace CryV.Net.Server.Players
 
         public bool IsLeavingVehicle { get; set; }
 
+        public bool IsFingerPointing { get; set; }
+
         public IVehicle Vehicle { get; set; }
 
         public int Seat { get; set; }
 
-        private readonly NetPeer _peer;
         private readonly IEventAggregator _eventAggregator;
         private readonly IVehicleManager _vehicleManager;
+        private readonly ILogger _logger;
+        private readonly NetPeer _peer;
 
-        public Player(IEventAggregator eventAggregator, IVehicleManager vehicleManager, NetPeer peer)
+        public Player(IEventAggregator eventAggregator, IVehicleManager vehicleManager, ILogger logger, NetPeer peer)
         {
             _eventAggregator = eventAggregator;
             _vehicleManager = vehicleManager;
+            _logger = logger;
             _peer = peer;
         }
 
@@ -80,8 +89,8 @@ namespace CryV.Net.Server.Players
 
         public PlayerUpdatePayload GetPayload()
         {
-            return new PlayerUpdatePayload(Id, Position, Velocity, Heading, AimTarget, Speed, Model, WeaponModel, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll,
-                IsAiming, IsEnteringVehicle, IsInVehicle, Vehicle?.Id ?? -1, Seat, IsLeavingVehicle);
+            return new PlayerUpdatePayload(Id, Position, Velocity, Heading, FingerPointingPitch, FingerPointingHeading, AimTarget, Speed, Model, WeaponModel, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll,
+                IsAiming, IsEnteringVehicle, IsInVehicle, Vehicle?.Id ?? -1, Seat, IsLeavingVehicle, IsFingerPointing);
         }
 
         public void ReadPayload(PlayerUpdatePayload payload)
@@ -89,6 +98,8 @@ namespace CryV.Net.Server.Players
             Position = payload.Position;
             Velocity = payload.Velocity;
             Heading = payload.Heading;
+            FingerPointingPitch = payload.FingerPointingPitch;
+            FingerPointingHeading = payload.FingerPointingHeading;
             AimTarget = payload.AimTarget;
             Model = payload.Model;
             WeaponModel = payload.WeaponModel;
@@ -114,6 +125,9 @@ namespace CryV.Net.Server.Players
             IsEnteringVehicle = isEnteringVehicle;
             IsInVehicle = (payload.PedData & (int) PedData.IsInVehicle) > 0;
             IsLeavingVehicle = (payload.PedData & (int) PedData.IsLeavingVehicle) > 0;
+            IsFingerPointing = (payload.PedData & (int) PedData.IsFingerPointing) > 0;
+
+            _logger.LogDebug("IsPlayerPointing: {IsPointing} - Pitch {Pitch} - Heading {Heading}", IsFingerPointing, FingerPointingPitch, FingerPointingHeading);
         }
 
         public void Dispose()

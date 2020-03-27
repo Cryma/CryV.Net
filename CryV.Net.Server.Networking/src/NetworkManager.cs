@@ -86,7 +86,7 @@ namespace CryV.Net.Server.Networking
                 return;
             }
 
-            request.AcceptIfKey("hihihi");
+            request.AcceptIfKey("cryv-0.1.0");
         }
 
         public void Start()

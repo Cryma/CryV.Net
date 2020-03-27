@@ -13,6 +13,7 @@ namespace CryV.Net.Shared.Common.Flags
         IsAiming = 1 << 5,
         IsEnteringVehicle = 1 << 6,
         IsInVehicle = 1 << 7,
-        IsLeavingVehicle = 1 << 8
+        IsLeavingVehicle = 1 << 8,
+        IsFingerPointing = 1 << 9,
     }
 }

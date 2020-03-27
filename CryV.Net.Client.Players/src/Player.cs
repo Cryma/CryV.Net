@@ -24,6 +24,10 @@ namespace CryV.Net.Client.Players
 
         public float Heading { get; set; }
 
+        public float FingerPointingPitch { get; set; }
+
+        public float FingerPointingHeading { get; set; }
+
         public Vector3 AimTarget { get; set; }
 
         public int Speed { get; set; }
@@ -47,6 +51,8 @@ namespace CryV.Net.Client.Players
         public bool IsInVehicle { get; set; }
 
         public bool IsLeavingVehicle { get; set; }
+
+        public bool IsFingerPointing { get; set; }
 
         public IVehicle Vehicle { get; set; }
 
@@ -102,6 +108,8 @@ namespace CryV.Net.Client.Players
         {
             Position = payload.Position;
             Heading = payload.Heading;
+            FingerPointingPitch = payload.FingerPointingPitch;
+            FingerPointingHeading = payload.FingerPointingHeading;
             Velocity = payload.Velocity;
             Speed = payload.Speed;
             AimTarget = payload.AimTarget;
@@ -116,6 +124,8 @@ namespace CryV.Net.Client.Players
             IsRagdoll = (payload.PedData & (int) PedData.IsRagdoll) > 0;
 
             IsAiming = (payload.PedData & (int) PedData.IsAiming) > 0;
+
+            IsFingerPointing = (payload.PedData & (int) PedData.IsFingerPointing) > 0;
 
             ReadPayloadVehicleRelated(payload);
 
@@ -168,6 +178,19 @@ namespace CryV.Net.Client.Players
             UpdateMovementAnimation();
 
             UpdateRagdoll();
+
+            ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_POINTING", IsFingerPointing, () =>
+            {
+                FingerPointingHelper.StartPointing(NativePed);
+            }, () =>
+            {
+                FingerPointingHelper.StopPointing(NativePed);
+            });
+
+            if (IsFingerPointing)
+            {
+                FingerPointingHelper.UpdatePointing(NativePed, FingerPointingPitch, FingerPointingHeading, false);
+            }
 
             ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_JUMPING", IsJumping, () =>
             {

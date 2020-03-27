@@ -38,7 +38,7 @@ namespace CryV.Net.Server.Players
 
         public void AddPlayer(NetPeer peer)
         {
-            var player = new Player(_eventAggregator, _vehicleManager, peer);
+            var player = new Player(_eventAggregator, _vehicleManager, _logger, peer);
             _players.TryAdd(peer.Id, player);
 
             BootstrapPlayer(player);

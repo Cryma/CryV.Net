@@ -15,7 +15,7 @@ using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Client.LocalPlayer
 {
-    public class LocalPlayer : IStartable
+    public partial class LocalPlayer : IStartable
     {
 
         public int Id
@@ -41,6 +41,8 @@ namespace CryV.Net.Client.LocalPlayer
 
         public void Start()
         {
+            NativeHelper.OnNativeTick += FingerPointingTick;
+
             _eventAggregator.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
             _eventAggregator.Subscribe<LocalPlayerConnectedEvent>(OnLocalPlayerConnected);
             _eventAggregator.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
@@ -107,9 +109,9 @@ namespace CryV.Net.Client.LocalPlayer
             var vehicleId = GetDesiredVehicleId();
             var seat = isEnteringVehicle ? ped.GetSeatPedIsTryingToEnter() : ped.Seat;
 
-            var transformPayload = new PlayerUpdatePayload(Id, position, velocity, rotation.Z, aimTarget, Elements.LocalPlayer.Character.Speed(),
-                model, weaponModel, ped.IsPedJumping(), ped.IsPedClimbing(), ped.IsClimbingLadder(), ped.IsPedRagdoll(), isAiming, isEnteringVehicle,
-                isInVehicle, vehicleId, (int) seat, isLeavingVehicle);
+            var transformPayload = new PlayerUpdatePayload(Id, position, velocity, rotation.Z, _fingerPointingPitch, _fingerPointingHeading, aimTarget,
+                Elements.LocalPlayer.Character.Speed(), model, weaponModel, ped.IsPedJumping(), ped.IsPedClimbing(), ped.IsClimbingLadder(),
+                ped.IsPedRagdoll(), isAiming, isEnteringVehicle, isInVehicle, vehicleId, (int) seat, isLeavingVehicle, _isFingerPointing);
 
             if (_lastPlayerPayload != null && transformPayload.IsDifferent(_lastPlayerPayload) == false)
             {

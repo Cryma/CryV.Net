@@ -1,8 +1,8 @@
 ﻿using CryV.Net.Elements;
 
-namespace CryV.Net.Client.FingerPointing
+namespace CryV.Net.Client.Common.Helpers
 {
-    public static class FingerPointingUtils
+    public static class FingerPointingHelper
     {
 
         public static void StartPointing(Ped ped)

@@ -83,7 +83,7 @@ namespace CryV.Net.Client.Networking
                 return;
             }
 
-            _peer = _netManager.Connect(address, port, "hihihi");
+            _peer = _netManager.Connect(address, port, "cryv-0.1.0");
 
             _eventAggregator.Publish(new LocalPlayerConnectedEvent());
 
