@@ -1,0 +1,4 @@
+buttons:
+  - title: Run build
+    action: "run_build"
+    description: Run CryV.Net build
