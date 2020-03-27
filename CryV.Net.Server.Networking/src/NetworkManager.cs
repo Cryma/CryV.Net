@@ -9,6 +9,7 @@ using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads.Helpers;
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Server.Networking
 {
@@ -22,11 +23,13 @@ namespace CryV.Net.Server.Networking
 
         private readonly IPlayerManager _playerManager;
         private readonly IEventAggregator _eventAggregator;
+        private readonly ILogger _logger;
 
-        public NetworkManager(IPlayerManager playerManager, IEventAggregator eventAggregator)
+        public NetworkManager(IPlayerManager playerManager, IEventAggregator eventAggregator, ILogger<NetworkManager> logger)
         {
             _playerManager = playerManager;
             _eventAggregator = eventAggregator;
+            _logger = logger;
 
             _listener.ConnectionRequestEvent += OnConectionRequest;
             _listener.NetworkReceiveEvent += OnNetworkReceive;
@@ -108,7 +111,7 @@ namespace CryV.Net.Server.Networking
                 }
                 catch (Exception exception)
                 {
-                    Console.WriteLine(exception.ToString());
+                    _logger.LogError(exception, "Exception in NetworkManager tick thread");
                 }
             }
         }

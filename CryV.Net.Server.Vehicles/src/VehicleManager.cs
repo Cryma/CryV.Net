@@ -10,6 +10,7 @@ using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Server.Vehicles
 {
@@ -20,6 +21,7 @@ namespace CryV.Net.Server.Vehicles
         public ISyncManager SyncManager { get; set; }
 
         private readonly IEventAggregator _eventAggregator;
+        private readonly ILogger _logger;
 
         private readonly ConcurrentDictionary<int, IVehicle> _vehicles = new ConcurrentDictionary<int, IVehicle>();
 
@@ -31,9 +33,10 @@ namespace CryV.Net.Server.Vehicles
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
         };
 
-        public VehicleManager(IEventAggregator eventAggregator)
+        public VehicleManager(IEventAggregator eventAggregator, ILogger<VehicleManager> logger)
         {
             _eventAggregator = eventAggregator;
+            _logger = logger;
         }
 
         public void Start()
@@ -125,7 +128,7 @@ namespace CryV.Net.Server.Vehicles
 
             if (_vehicles.TryGetValue(payload.Id, out var vehicle) == false)
             {
-                Console.WriteLine($"Received update from vehicle {payload.Id}, but could not find it in VehicleManager!");
+                _logger.LogWarning("Received update from vehicle {VehicleId}, but could not find it in VehicleManager!", payload.Id);
 
                 return Task.CompletedTask;
             }

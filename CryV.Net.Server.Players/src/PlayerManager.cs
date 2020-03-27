@@ -11,6 +11,7 @@ using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Server.Players
 {
@@ -19,13 +20,15 @@ namespace CryV.Net.Server.Players
 
         private readonly IEventAggregator _eventAggregator;
         private readonly IVehicleManager _vehicleManager;
+        private readonly ILogger _logger;
 
         private readonly ConcurrentDictionary<int, IPlayer> _players = new ConcurrentDictionary<int, IPlayer>();
 
-        public PlayerManager(IEventAggregator eventAggregator, IVehicleManager vehicleManager)
+        public PlayerManager(IEventAggregator eventAggregator, IVehicleManager vehicleManager, ILogger<PlayerManager> logger)
         {
             _eventAggregator = eventAggregator;
             _vehicleManager = vehicleManager;
+            _logger = logger;
         }
 
         public void Start()
@@ -93,7 +96,7 @@ namespace CryV.Net.Server.Players
 
             if (_players.TryGetValue(payload.Id, out var targetPlayer) == false)
             {
-                Console.WriteLine($"Received update from player {payload.Id}, but could not find it in PlayerManager!");
+                _logger.LogWarning("Received update from player {PlayerId}, but could not find it in PlayerManager!", payload.Id);
 
                 return Task.CompletedTask;
             }
