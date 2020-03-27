@@ -15,6 +15,7 @@ using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Common.Payloads.Helpers;
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Client.Networking
 {
@@ -37,10 +38,12 @@ namespace CryV.Net.Client.Networking
         private readonly NetManager _netManager;
 
         private readonly IEventAggregator _eventAggregator;
+        private readonly ILogger _logger;
 
-        public NetworkManager(IEventAggregator eventAggregator)
+        public NetworkManager(IEventAggregator eventAggregator, ILogger<NetworkManager> logger)
         {
             _eventAggregator = eventAggregator;
+            _logger = logger;
 
             _listener.NetworkReceiveEvent += OnNetworkReceive;
 
@@ -130,7 +133,7 @@ namespace CryV.Net.Client.Networking
                 }
                 catch (Exception exception)
                 {
-                    Utility.Log(exception.ToString());
+                    _logger.LogError(exception, "Exception in NetworkManager tick thread");
                 }
             }
         }

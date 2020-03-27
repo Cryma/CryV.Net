@@ -9,6 +9,7 @@ using CryV.Net.Client.Helpers;
 using CryV.Net.Elements;
 using CryV.Net.Enums;
 using CryV.Net.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Client.Cleanup
 {
@@ -767,6 +768,13 @@ namespace CryV.Net.Client.Cleanup
             "selector"
         };
 
+        private readonly ILogger _logger;
+
+        public Cleanup(ILogger<Cleanup> logger)
+        {
+            _logger = logger;
+        }
+
         public void Start()
         {
             ThreadHelper.Run(() =>
@@ -830,7 +838,7 @@ namespace CryV.Net.Client.Cleanup
 
                     if (deletedPeds != 0)
                     {
-                        Utility.Log($"Deleted {deletedPeds} peds!");
+                        _logger.LogDebug("Deleted {Amount} peds!", deletedPeds);
                     }
 
                     var deletedVehicles = 0;
@@ -851,7 +859,7 @@ namespace CryV.Net.Client.Cleanup
 
                     if (deletedVehicles != 0)
                     {
-                        Utility.Log($"Deleted {deletedVehicles} vehicles!");
+                        _logger.LogDebug("Deleted {Amount} vehicles!", deletedVehicles);
                     }
                 });
             }

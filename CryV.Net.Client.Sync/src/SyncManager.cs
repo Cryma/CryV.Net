@@ -11,6 +11,7 @@ using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Client.Sync
 {
@@ -23,11 +24,13 @@ namespace CryV.Net.Client.Sync
 
         private readonly IEventAggregator _eventAggregator;
         private readonly INetworkManager _networkManager;
+        private readonly ILogger _logger;
 
-        public SyncManager(IEventAggregator eventAggregator, INetworkManager networkManager)
+            public SyncManager(IEventAggregator eventAggregator, INetworkManager networkManager, ILogger<SyncManager> logger)
         {
             _eventAggregator = eventAggregator;
             _networkManager = networkManager;
+            _logger = logger;
         }
 
         public void Start()
@@ -53,7 +56,7 @@ namespace CryV.Net.Client.Sync
 
             if (_syncVehicles.Contains(vehicle))
             {
-                Utility.Log($"Tried to add vehicle {vehicle.Id} to sync list that is already in it!");
+                _logger.LogInformation("Tried to add vehicle {VehicleId} to sync list that is already in it!", vehicle.Id);
 
                 return Task.CompletedTask;
             }
@@ -69,7 +72,7 @@ namespace CryV.Net.Client.Sync
 
             if (_syncVehicles.Contains(vehicle) == false)
             {
-                Utility.Log($"Tried to remove vehicle {vehicle.Id} from sync list that is not in it!");
+                _logger.LogInformation("Tried to remove vehicle {VehicleId} from sync list that is not in it!", vehicle.Id);
 
                 return Task.CompletedTask;
             }

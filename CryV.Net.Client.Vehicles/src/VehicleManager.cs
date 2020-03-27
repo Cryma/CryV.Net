@@ -7,6 +7,7 @@ using CryV.Net.Elements;
 using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
 using Micky5991.EventAggregator.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Client.Vehicles
 {
@@ -36,8 +37,6 @@ namespace CryV.Net.Client.Vehicles
 
         private Task OnBootstrap(NetworkEvent<BootstrapPayload> obj)
         {
-            Utility.Log(_eventAggregator.GetType().ToString());
-
             if (obj.Payload.ExistingVehicles == null)
             {
                 return Task.CompletedTask;

@@ -8,21 +8,33 @@ using Autofac.Extensions.DependencyInjection;
 using CryV.Net.Elements;
 using Micky5991.EventAggregator.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 
 namespace CryV.Net.Client.Core
 {
     public class ContainerManager
     {
-        
+
         public IContainer Container { get; set; }
 
         public void Start()
         {
             var builder = new ContainerBuilder();
-            
+
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddEventAggregator();
-            serviceCollection.AddLogging();
+
+            var serilogLogger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.File(Path.Combine(Utility.GetInstallDirectory(), "cryv-net.log"))
+                .CreateLogger();
+
+            serviceCollection.AddLogging(builder => builder.AddSerilog(serilogLogger));
+
             builder.Populate(serviceCollection);
 
             builder.RegisterAssemblyModules(GetAssemblies().ToArray());
@@ -57,11 +69,6 @@ namespace CryV.Net.Client.Core
                 }
 
                 componentAssemblies.Add(Assembly.LoadFrom(file));
-            }
-
-            foreach (var assembly in componentAssemblies)
-            {
-                Utility.Log("Loaded: " + assembly.FullName);
             }
 
             return componentAssemblies;

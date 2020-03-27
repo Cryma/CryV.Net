@@ -9,7 +9,7 @@ namespace CryV.Net.Elements
     public static class Utility
     {
 
-        public static void Log(string message)
+        internal static void Log(string message)
         {
             using (var converter = new StringConverter())
             {
