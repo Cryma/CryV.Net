@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Threading;
-using Autofac;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
-using CryV.Net.Client.FingerPointing;
-using CryV.Net.Elements;
 using CryV.Net.Helpers;
 using CryV.Net.Shared.Common.Payloads;
 
-namespace CryV.Net.Client.Helpers.Pointing
+namespace CryV.Net.Client.FingerPointing
 {
     public class FingerPointingPlayer : IDisposable
     {

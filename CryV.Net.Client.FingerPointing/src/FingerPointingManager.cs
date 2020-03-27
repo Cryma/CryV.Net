@@ -4,12 +4,11 @@ using Autofac;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
-using CryV.Net.Client.Helpers.Pointing;
 using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
 using Micky5991.EventAggregator.Interfaces;
 
-namespace CryV.Net.Client.FingerPointing.src
+namespace CryV.Net.Client.FingerPointing
 {
     public class FingerPointingManager : IStartable
     {

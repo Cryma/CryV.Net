@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CryV.Net.Elements;
 
-namespace CryV.Net.Client.Helpers
+namespace CryV.Net.Helpers
 {
     public static class EntityPool
     {

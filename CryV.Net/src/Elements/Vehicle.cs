@@ -1,7 +1,6 @@
 using System;
 using System.Net.Http.Headers;
 using System.Numerics;
-using CryV.Net.Client.Helpers;
 using CryV.Net.Enums;
 using CryV.Net.Helpers;
 using CryV.Net.Native;

@@ -4,7 +4,6 @@ using System.Numerics;
 using System.Threading.Tasks;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
-using CryV.Net.Client.Helpers;
 using CryV.Net.Elements;
 using CryV.Net.Helpers;
 using CryV.Net.Shared.Common.Events;

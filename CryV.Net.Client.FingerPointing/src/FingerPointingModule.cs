@@ -1,6 +1,5 @@
 ﻿using System;
 using Autofac;
-using CryV.Net.Client.FingerPointing.src;
 
 namespace CryV.Net.Client.FingerPointing
 {

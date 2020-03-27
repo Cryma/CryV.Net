@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
-using CryV.Net.Client.Helpers;
 using CryV.Net.Elements;
 using CryV.Net.Enums;
 using CryV.Net.Helpers;

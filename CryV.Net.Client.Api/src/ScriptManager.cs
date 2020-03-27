@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ using CryV.Net.Shared.Common.Payloads;
 using Micky5991.EventAggregator.Interfaces;
 using Newtonsoft.Json;
 
-namespace CryV.Net.Client.Http
+namespace CryV.Net.Client.Api
 {
     public class ScriptManager : IStartable, IDisposable
     {

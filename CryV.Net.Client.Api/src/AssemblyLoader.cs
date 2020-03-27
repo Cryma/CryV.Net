@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using CryV.Net.Client.Api.Context;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces.Api;
-using CryV.Net.Client.Http.Context;
 using Micky5991.EventAggregator.Interfaces;
 
-namespace CryV.Net.Client.Http
+namespace CryV.Net.Client.Api
 {
     public class AssemblyLoader
     {

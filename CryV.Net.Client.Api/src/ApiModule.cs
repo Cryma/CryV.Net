@@ -1,7 +1,6 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 
-namespace CryV.Net.Client.Http
+namespace CryV.Net.Client.Api
 {
     public class ApiModule : Module
     {

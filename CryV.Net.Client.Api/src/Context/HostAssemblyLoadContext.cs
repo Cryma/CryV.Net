@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
 
-namespace CryV.Net.Client.Http.Context
+namespace CryV.Net.Client.Api.Context
 {
     public class HostAssemblyLoadContext : AssemblyLoadContext
     {

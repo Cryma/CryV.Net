@@ -1,4 +1,3 @@
-using CryV.Net.Client.Helpers;
 using CryV.Net.Helpers;
 using CryV.Net.Native;
 using System.Numerics;
