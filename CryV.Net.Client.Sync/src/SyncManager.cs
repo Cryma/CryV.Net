@@ -54,6 +54,13 @@ namespace CryV.Net.Client.Sync
         {
             var vehicle = VehicleManager.GetVehicle(obj.Payload.EntityId);
 
+            if (vehicle == null)
+            {
+                _logger.LogWarning("Tried to add vehicle {VehicleId} to sync vehicles but it was not found!", obj.Payload.EntityId);
+
+                return Task.CompletedTask;
+            }
+
             if (_syncVehicles.Contains(vehicle))
             {
                 _logger.LogInformation("Tried to add vehicle {VehicleId} to sync list that is already in it!", vehicle.Id);
@@ -100,6 +107,13 @@ namespace CryV.Net.Client.Sync
 
         private void SyncVehicle(IVehicle vehicle)
         {
+            if (vehicle == null)
+            {
+                _logger.LogWarning("Trying to sync null vehicle!");
+
+                return;
+            }
+
             var nativeVehicle = vehicle.NativeVehicle;
 
             var id = vehicle.Id;
