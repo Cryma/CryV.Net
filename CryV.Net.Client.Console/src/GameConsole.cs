@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
+using CryV.Net.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Client.Console
 {
@@ -35,11 +38,13 @@ namespace CryV.Net.Client.Console
 
         private readonly INetworkManager _networkManager;
         private readonly ISyncManager _syncManager;
+        private readonly ILogger _logger;
 
-        public GameConsole(INetworkManager networkManager, ISyncManager syncManager)
+        public GameConsole(INetworkManager networkManager, ISyncManager syncManager, ILogger<GameConsole> logger)
         {
             _networkManager = networkManager;
             _syncManager = syncManager;
+            _logger = logger;
         }
 
         public void Start()
@@ -50,6 +55,18 @@ namespace CryV.Net.Client.Console
 
             NativeHelper.OnNativeTick += Tick;
             NativeHelper.OnKeyboardTick += HandleKeyboardCallback;
+
+#if DEBUG
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    var input = System.Console.ReadLine();
+
+                    ThreadHelper.Run(() => HandleCommand(input));
+                }
+            });
+#endif
         }
 
         private void RegisterCommands()
@@ -288,6 +305,8 @@ namespace CryV.Net.Client.Console
                     _output.RemoveAt(0);
                 }
             }
+
+            _logger.LogInformation("GameConsole: {Output}", text);
         }
 
         private void DrawText(string text, float x, float y)
