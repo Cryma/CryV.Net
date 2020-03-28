@@ -189,7 +189,10 @@ namespace CryV.Net.Client.Players
 
             if (IsFingerPointing)
             {
-                FingerPointingHelper.UpdatePointing(NativePed, FingerPointingPitch, FingerPointingHeading, false);
+                var pitch = Interpolation.Lerp(_lastPayload.FingerPointingPitch, FingerPointingPitch, deltaTime * 2);
+                var heading = Interpolation.Lerp(_lastPayload.FingerPointingHeading, FingerPointingHeading, deltaTime * 2);
+
+                FingerPointingHelper.UpdatePointing(NativePed, pitch, heading, false);
             }
 
             ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_JUMPING", IsJumping, () =>
