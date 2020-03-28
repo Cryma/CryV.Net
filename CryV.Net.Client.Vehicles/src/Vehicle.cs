@@ -200,6 +200,7 @@ namespace CryV.Net.Client.Vehicles
                 }
                 else
                 {
+                    // TODO: Use ATTACH_VEHICLE_ON_TO_TRAILER native to attach with a specific offset
                     NativeVehicle.AttachToTrailer(Trailer.NativeVehicle);
                     Trailer.IsAttachedTrailer = true;
                 }

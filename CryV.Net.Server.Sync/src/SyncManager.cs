@@ -76,7 +76,11 @@ namespace CryV.Net.Server.Sync
                 return;
             }
 
-            ChangeSyncer(trailer, null);
+            // TODO: Check if last syncer is still available instead of using nearest player
+            // Syncer-Migrations look wonky for all players
+
+            var nearestPlayer = GetNearestPlayer(trailer.Position);
+            ChangeSyncer(trailer, nearestPlayer);
         }
 
         private Task OnPlayerEntersVehicle(PlayerEntersVehicleEvent obj)
