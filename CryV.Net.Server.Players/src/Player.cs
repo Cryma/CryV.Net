@@ -126,8 +126,6 @@ namespace CryV.Net.Server.Players
             IsInVehicle = (payload.PedData & (int) PedData.IsInVehicle) > 0;
             IsLeavingVehicle = (payload.PedData & (int) PedData.IsLeavingVehicle) > 0;
             IsFingerPointing = (payload.PedData & (int) PedData.IsFingerPointing) > 0;
-
-            _logger.LogDebug("IsPlayerPointing: {IsPointing} - Pitch {Pitch} - Heading {Heading}", IsFingerPointing, FingerPointingPitch, FingerPointingHeading);
         }
 
         public void Dispose()
