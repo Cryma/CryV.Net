@@ -66,13 +66,17 @@ namespace CryV.Net.Shared.Common.Payloads
         [ProtoMember(18)]
         public int VehicleData { get; set; }
 
+        [ProtoMember(19)]
+        public int TrailerId { get; set; }
+
         public VehicleUpdatePayload()
         {
         }
 
         public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, float engineHealth, string numberPlate,
             ulong model, bool engineState, byte currentGear, float currentRPM, float clutch, float turbo, float acceleration, float brake, float steeringAngle,
-            int colorPrimary, int colorSecondary, bool isHornActive, bool isBurnout, bool roofUp, bool roofLowering, bool roofDown, bool roofRaising, bool siren)
+            int colorPrimary, int colorSecondary, bool isHornActive, bool isBurnout, bool roofUp, bool roofLowering, bool roofDown, bool roofRaising, bool siren,
+            int trailerId)
         {
             Id = id;
             Position = position;
@@ -91,6 +95,7 @@ namespace CryV.Net.Shared.Common.Payloads
             SteeringAngle = steeringAngle;
             ColorPrimary = colorPrimary;
             ColorSecondary = colorSecondary;
+            TrailerId = trailerId;
 
             if (isHornActive)
             {
@@ -140,7 +145,8 @@ namespace CryV.Net.Shared.Common.Payloads
                    Math.Abs(SteeringAngle - payload.SteeringAngle) > 0.02f ||
                    ColorPrimary != payload.ColorPrimary ||
                    ColorSecondary != payload.ColorSecondary ||
-                   VehicleData != payload.VehicleData;
+                   VehicleData != payload.VehicleData ||
+                   TrailerId != payload.TrailerId;
         }
 
     }

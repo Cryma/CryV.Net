@@ -62,6 +62,8 @@ namespace CryV.Net.Client.Vehicles
 
         public bool IsSirenActive { get; set; }
 
+        public IVehicle Trailer { get; set; }
+
         public Elements.Vehicle NativeVehicle { get; private set; }
 
         public VehicleUpdatePayload LastSentUpdatePayload { get; set; }
@@ -171,7 +173,7 @@ namespace CryV.Net.Client.Vehicles
         {
             return new VehicleUpdatePayload(Id, Position, NativeVehicle.Velocity, Rotation, EngineHealth, NumberPlate, Model, EngineState, CurrentGear,
                 CurrentRPM, Clutch, Turbo, Acceleration, Brake, TargetSteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout, IsRoofUp, IsRoofLowering,
-                IsRoofDown, IsRoofRaising, IsSirenActive);
+                IsRoofDown, IsRoofRaising, IsSirenActive, Trailer.Id);
         }
 
         private void Tick(float deltatime)

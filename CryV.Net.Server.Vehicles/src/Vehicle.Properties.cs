@@ -283,5 +283,17 @@ namespace CryV.Net.Server.Vehicles
 
         private bool _isSirenActive;
 
+        public int TrailerId
+        {
+            get => _trailerId;
+            set
+            {
+                _trailerId = value;
+                ForceSync();
+            }
+        }
+
+        private int _trailerId = -1;
+
     }
 }

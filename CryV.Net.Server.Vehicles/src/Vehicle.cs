@@ -32,7 +32,7 @@ namespace CryV.Net.Server.Vehicles
         {
             return new VehicleUpdatePayload(Id, Position, Velocity, Rotation, EngineHealth, NumberPlate, Model, EngineState, CurrentGear, CurrentRPM,
                 Clutch, Turbo, Acceleration, Brake, SteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout, IsRoofUp, IsRoofLowering, IsRoofDown,
-                IsRoofRaising, IsSirenActive);
+                IsRoofRaising, IsSirenActive, TrailerId);
         }
 
         public void ReadPayload(VehicleUpdatePayload payload)
@@ -53,6 +53,7 @@ namespace CryV.Net.Server.Vehicles
             _steeringAngle = payload.SteeringAngle;
             _colorPrimary = payload.ColorPrimary;
             _colorSecondary = payload.ColorSecondary;
+            _trailerId = payload.TrailerId;
 
             _isHornActive = (payload.VehicleData & (int) VehicleData.IsHornActive) > 0;
             _isBurnout = (payload.VehicleData & (int) VehicleData.IsBurnout) > 0;
