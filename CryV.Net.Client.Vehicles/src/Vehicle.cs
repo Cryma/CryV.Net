@@ -133,7 +133,7 @@ namespace CryV.Net.Client.Vehicles
                 {
                     NativeVehicle.Siren = true;
                 }
-            });
+            }).Wait();
 
             NativeHelper.OnNativeTick += Tick;
         }

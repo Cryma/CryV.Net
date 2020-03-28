@@ -99,7 +99,7 @@ namespace CryV.Net.Client.Players
                 {
                     Velocity = Velocity
                 };
-            });
+            }).Wait();
 
             NativeHelper.OnNativeTick += Tick;
         }
