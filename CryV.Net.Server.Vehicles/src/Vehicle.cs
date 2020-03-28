@@ -59,14 +59,14 @@ namespace CryV.Net.Server.Vehicles
             {
                 _trailerId = payload.TrailerId;
 
-                _eventAggregator.Publish(new VehicleTrailerAttachedEvent(this));
+                _eventAggregator.PublishSync(new VehicleTrailerAttachedEvent(this));
             }
 
             if (_trailerId != -1 && payload.TrailerId == -1)
             {
-                _trailerId = payload.TrailerId;
+                _eventAggregator.PublishSync(new VehicleTrailerDetachEvent(this));
 
-                _eventAggregator.Publish(new VehicleTrailerDetachedEvent(this));
+                _trailerId = payload.TrailerId;
             }
 
             _isHornActive = (payload.VehicleData & (int) VehicleData.IsHornActive) > 0;

@@ -3,16 +3,16 @@ using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Server.Common.Events
 {
-    public class VehicleTrailerDetachedEvent : IEvent
+    public class VehicleTrailerDetachEvent : IEvent
     {
 
         public IVehicle Vehicle { get; set; }
 
-        public VehicleTrailerDetachedEvent()
+        public VehicleTrailerDetachEvent()
         {
         }
 
-        public VehicleTrailerDetachedEvent(IVehicle vehicle)
+        public VehicleTrailerDetachEvent(IVehicle vehicle)
         {
             Vehicle = vehicle;
         }
