@@ -6,6 +6,7 @@ using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
 using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
+using Micky5991.EventAggregator;
 using Micky5991.EventAggregator.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -14,13 +15,15 @@ namespace CryV.Net.Client.Vehicles
     public class VehicleManager : IVehicleManager, IStartable
     {
 
+        private readonly ILogger _logger;
         private readonly IEventAggregator _eventAggregator;
         private readonly ISyncManager _syncManager;
 
         private readonly ConcurrentDictionary<int, IVehicle> _vehicles = new ConcurrentDictionary<int, IVehicle>();
 
-        public VehicleManager(IEventAggregator eventAggregator, ISyncManager syncManager)
+        public VehicleManager(ILogger<VehicleManager> logger, IEventAggregator eventAggregator, ISyncManager syncManager)
         {
+            _logger = logger;
             _eventAggregator = eventAggregator;
             _syncManager = syncManager;
         }
@@ -78,7 +81,7 @@ namespace CryV.Net.Client.Vehicles
 
         private void AddVehicle(VehicleUpdatePayload payload)
         {
-            var vehicle = new Vehicle(_eventAggregator, _syncManager, this, payload);
+            var vehicle = new Vehicle(_logger, _eventAggregator, _syncManager, this, payload);
             _vehicles.TryAdd(payload.Id, vehicle);
         }
 

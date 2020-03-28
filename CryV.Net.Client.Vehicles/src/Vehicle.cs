@@ -8,6 +8,7 @@ using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Flags;
 using CryV.Net.Shared.Common.Payloads;
 using Micky5991.EventAggregator.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Client.Vehicles
 {
@@ -92,12 +93,14 @@ namespace CryV.Net.Client.Vehicles
 
         private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
 
+        private readonly ILogger _logger;
         private readonly IEventAggregator _eventAggregator;
         private readonly ISyncManager _syncManager;
         private readonly IVehicleManager _vehicleManager;
 
-        public Vehicle(IEventAggregator eventAggregator, ISyncManager syncManager, IVehicleManager vehicleManager, VehicleUpdatePayload payload)
+        public Vehicle(ILogger logger, IEventAggregator eventAggregator, ISyncManager syncManager, IVehicleManager vehicleManager, VehicleUpdatePayload payload)
         {
+            _logger = logger;
             _eventAggregator = eventAggregator;
             _syncManager = syncManager;
             _vehicleManager = vehicleManager;
@@ -153,24 +156,6 @@ namespace CryV.Net.Client.Vehicles
             Brake = payload.Brake;
             TargetSteeringAngle = payload.SteeringAngle;
 
-            if (Trailer == null && payload.TrailerId != -1)
-            {
-                Trailer = _vehicleManager.GetVehicle(payload.TrailerId);
-
-                NativeVehicle.AttachToTrailer(Trailer.NativeVehicle);
-                Trailer.IsAttachedTrailer = true;
-            }
-
-            if (Trailer != null && payload.TrailerId == -1)
-            {
-                Trailer.NativeVehicle.SetTrailerLegsLowered();
-                Trailer.IsAttachedTrailer = false;
-
-                Trailer = null;
-            }
-
-            Trailer?.NativeVehicle.SetTrailerLegsRaised();
-
             IsHornActive = (payload.VehicleData & (int) VehicleData.IsHornActive) > 0;
             IsBurnout = (payload.VehicleData & (int) VehicleData.IsBurnout) > 0;
             IsRoofUp = (payload.VehicleData & (int) VehicleData.RoofUp) > 0;
@@ -204,6 +189,28 @@ namespace CryV.Net.Client.Vehicles
                 NativeVehicle.NumberPlate = _lastPayload.NumberPlate;
 
                 NumberPlate = _lastPayload.NumberPlate;
+            }
+
+            if (Trailer == null && _lastPayload.TrailerId != -1)
+            {
+                Trailer = _vehicleManager.GetVehicle(_lastPayload.TrailerId);
+                if (Trailer == null)
+                {
+                    _logger.LogWarning("Could not find trailer {TrailerId} for vehicle {VehicleId} in vehicle manager!", _lastPayload.TrailerId, Id);
+                }
+                else
+                {
+                    NativeVehicle.AttachToTrailer(Trailer.NativeVehicle);
+                    Trailer.IsAttachedTrailer = true;
+                }
+            }
+
+            if (Trailer != null && _lastPayload.TrailerId == -1)
+            {
+                Trailer.NativeVehicle.SetTrailerLegsLowered();
+                Trailer.IsAttachedTrailer = false;
+
+                Trailer = null;
             }
         }
 
@@ -245,6 +252,8 @@ namespace CryV.Net.Client.Vehicles
             NativeVehicle.Acceleration = Acceleration;
             NativeVehicle.Brake = Brake;
             NativeVehicle.SteeringAngle = Interpolation.Lerp(NativeVehicle.SteeringAngle, TargetSteeringAngle, deltaTime * 5);
+
+            Trailer?.NativeVehicle?.SetTrailerLegsRaised();
 
             ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_RAISEROOF", IsRoofRaising, () =>
             {
