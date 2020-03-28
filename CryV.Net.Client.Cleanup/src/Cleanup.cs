@@ -776,7 +776,7 @@ namespace CryV.Net.Client.Cleanup
 
         public void Start()
         {
-            ThreadHelper.Run(() =>
+            ThreadHelper.RunAsync(() =>
             {
                 Gameplay.DestroyAllCams(true);
                 Gameplay.SetNoLoadingScreen(true);
@@ -817,7 +817,7 @@ namespace CryV.Net.Client.Cleanup
             {
                 await Task.Delay(TimeSpan.FromMilliseconds(500));
 
-                ThreadHelper.Run(() =>
+                await ThreadHelper.RunAsync(() =>
                 {
                     var deletedPeds = 0;
                     foreach (var ped in World.GetAllPeds())

@@ -93,7 +93,7 @@ namespace CryV.Net.Client.Players
                 return Task.CompletedTask;
             }, x => Task.FromResult(x.Payload.Id == Id)));
 
-            ThreadHelper.Run(() =>
+            ThreadHelper.RunAsync(() =>
             {
                 NativePed = new Ped(Model, Position, Heading)
                 {
@@ -348,13 +348,13 @@ namespace CryV.Net.Client.Players
 
             NativeHelper.OnNativeTick -= Tick;
 
-            ThreadHelper.Run(() =>
+            ThreadHelper.RunAsync(() =>
             {
                 _aimProp?.Delete();
                 _followProp?.Delete();
 
                 NativePed.Delete();
-            });
+            }).Wait();
         }
 
     }

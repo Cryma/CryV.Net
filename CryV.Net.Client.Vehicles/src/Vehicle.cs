@@ -107,19 +107,17 @@ namespace CryV.Net.Client.Vehicles
             
             ReadPayload(payload);
 
-            _eventSubscriptions.Add(_eventAggregator.Subscribe<NetworkEvent<VehicleUpdatePayload>>(update =>
+            _eventSubscriptions.Add(_eventAggregator.Subscribe<NetworkEvent<VehicleUpdatePayload>>(async update =>
             {
                 ReadPayload(update.Payload);
 
                 if (_syncManager.IsSyncingEntity(this))
                 {
-                    ForceSync();
+                    await ForceSync();
                 }
-
-                return Task.CompletedTask;
             }, x => Task.FromResult(x.Payload.Id == Id)));
 
-            ThreadHelper.Run(() =>
+            ThreadHelper.RunAsync(() =>
             {
                 NativeVehicle = new Elements.Vehicle(Model, Position, Rotation, Velocity, payload.ColorPrimary, payload.ColorSecondary, payload.NumberPlate)
                 {
@@ -295,12 +293,9 @@ namespace CryV.Net.Client.Vehicles
             NativeVehicle.SetTrailerLegsRaised();
         }
 
-        private void ForceSync()
+        private Task ForceSync()
         {
-            ThreadHelper.Run(() =>
-            {
-                Sync(1.0f);
-            });
+            return ThreadHelper.RunAsync(() => Sync(1.0f));
         }
 
         public void Dispose()
@@ -312,10 +307,7 @@ namespace CryV.Net.Client.Vehicles
 
             NativeHelper.OnNativeTick -= Tick;
 
-            ThreadHelper.Run(() =>
-            {
-                NativeVehicle?.Delete();
-            });
+            ThreadHelper.RunAsync(() => NativeVehicle?.Delete()).Wait();
         }
 
     }

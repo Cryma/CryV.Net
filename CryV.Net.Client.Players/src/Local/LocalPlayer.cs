@@ -57,9 +57,7 @@ namespace CryV.Net.Client.Players.Local
         {
             _cancellationTokenSource?.Cancel();
 
-            ThreadHelper.Run(EntityPool.Clear);
-
-            return Task.CompletedTask;
+            return ThreadHelper.RunAsync(EntityPool.Clear);
         }
 
         private Task OnBootstrap(NetworkEvent<BootstrapPayload> obj)
@@ -67,7 +65,7 @@ namespace CryV.Net.Client.Players.Local
             var payload = obj.Payload;
             Id = payload.LocalId;
 
-            ThreadHelper.Run(() =>
+            return ThreadHelper.RunAsync(() =>
             {
                 var rotation = Elements.LocalPlayer.Character.Rotation;
 
@@ -78,8 +76,6 @@ namespace CryV.Net.Client.Players.Local
                 _cancellationTokenSource = new CancellationTokenSource();
                 Task.Run(Sync, _cancellationTokenSource.Token);
             });
-
-            return Task.CompletedTask;
         }
 
         private async Task Sync()
@@ -88,7 +84,7 @@ namespace CryV.Net.Client.Players.Local
             {
                 await Task.Delay(TimeSpan.FromMilliseconds(50), _cancellationTokenSource.Token);
 
-                ThreadHelper.Run(SyncLocalPlayer);
+                await ThreadHelper.RunAsync(SyncLocalPlayer);
             }
         }
 

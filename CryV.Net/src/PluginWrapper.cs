@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 using CryV.Net.Helpers;
 using CryV.Net.Native;
 using CryV.Net.Plugins;
@@ -23,6 +24,8 @@ namespace CryV.Net
 
         public static void PluginMain(IntPtr plugin)
         {
+            ThreadHelper.SetMainThread(Thread.CurrentThread);
+
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
             SetNativePath();

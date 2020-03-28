@@ -57,13 +57,13 @@ namespace CryV.Net.Client.Console
             NativeHelper.OnKeyboardTick += HandleKeyboardCallback;
 
 #if DEBUG
-            Task.Run(() =>
+            Task.Run(async () =>
             {
                 while (true)
                 {
                     var input = System.Console.ReadLine();
 
-                    ThreadHelper.Run(() => HandleCommand(input));
+                    await ThreadHelper.RunAsync(() => HandleCommand(input));
                 }
             });
 #endif

@@ -95,7 +95,7 @@ namespace CryV.Net.Client.Sync
             {
                 await Task.Delay(TimeSpan.FromMilliseconds(50));
 
-                ThreadHelper.Run(() =>
+                await ThreadHelper.RunAsync(() =>
                 {
                     foreach (var vehicle in _syncVehicles)
                     {

@@ -1,34 +1,66 @@
 ﻿using System;
-using System.Collections.Concurrent;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CryV.Net.Helpers
 {
     public static class ThreadHelper
     {
 
-        private static readonly ConcurrentQueue<Action> _mainThreadQueue = new ConcurrentQueue<Action>();
+        private static Thread _mainThread;
+        private static NativeTaskScheduler _nativeTaskScheduler;
 
-        public static void Run(Action action)
+        internal static void SetMainThread(Thread thread)
         {
-            _mainThreadQueue.Enqueue(action);
+            _mainThread = thread;
+
+            _nativeTaskScheduler = new NativeTaskScheduler();
         }
 
-        public static void Run<T>(Func<T> action, Action<T> callback)
+        public static Task RunAsync(Action action)
         {
-            _mainThreadQueue.Enqueue(() =>
+            if (Thread.CurrentThread == _mainThread)
             {
-                var result = action();
+                try
+                {
+                    action();
 
-                callback(result);
-            });
+                    return Task.CompletedTask;
+                }
+                catch (Exception exception)
+                {
+                    return Task.FromException(exception);
+                }
+            }
+
+            return Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.DenyChildAttach, _nativeTaskScheduler);
+        }
+
+        public static Task<T> RunAsync<T>(Func<T> action)
+        {
+            if (Thread.CurrentThread == _mainThread)
+            {
+                try
+                {
+                    return Task.FromResult(action());
+                }
+                catch (Exception exception)
+                {
+                    return Task.FromException<T>(exception);
+                }
+            }
+
+            return Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.DenyChildAttach, _nativeTaskScheduler);
         }
 
         public static void Work()
         {
-            while (_mainThreadQueue.TryDequeue(out var action))
+            if (_nativeTaskScheduler == null)
             {
-                action();
+                _nativeTaskScheduler = new NativeTaskScheduler();
             }
+
+            _nativeTaskScheduler.Tick();
         }
 
     }
