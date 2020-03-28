@@ -10,6 +10,7 @@ using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Server.Sync
 {
@@ -21,12 +22,14 @@ namespace CryV.Net.Server.Sync
         private readonly IEventAggregator _eventAggregator;
         private readonly IPlayerManager _playerManager;
         private readonly IVehicleManager _vehicleManager;
-
-        public SyncManager(IEventAggregator eventAggregator, IPlayerManager playerManager, IVehicleManager vehicleManager)
+        private readonly ILogger _logger;
+ 
+        public SyncManager(IEventAggregator eventAggregator, IPlayerManager playerManager, IVehicleManager vehicleManager, ILogger<SyncManager> logger)
         {
             _eventAggregator = eventAggregator;
             _playerManager = playerManager;
             _vehicleManager = vehicleManager;
+            _logger = logger;
         }
 
         public void Start()
@@ -36,7 +39,48 @@ namespace CryV.Net.Server.Sync
             _eventAggregator.Subscribe<PlayerEntersVehicleEvent>(OnPlayerEntersVehicle);
             _eventAggregator.Subscribe<PlayerDisconnectedEvent>(OnPlayerDisconnected);
 
+            _eventAggregator.Subscribe<VehicleTrailerAttachedEvent>(OnVehicleTrailerAttached);
+            _eventAggregator.Subscribe<VehicleTrailerDetachedEvent>(OnVehicleTrailerDetached);
+
             Task.Run(SyncLoop);
+        }
+
+        private Task OnVehicleTrailerAttached(VehicleTrailerAttachedEvent eventdata)
+        {
+            var trailer = _vehicleManager.GetVehicle(eventdata.Vehicle.TrailerId);
+            if (trailer == null)
+            {
+                _logger.LogWarning("Could not find attached trailer {TrailerId} in vehicle manager!", eventdata.Vehicle.TrailerId);
+
+                return Task.CompletedTask;
+            }
+
+            var player = _playerManager.GetPlayers().FirstOrDefault(x => x.Vehicle == eventdata.Vehicle);
+            if (player == null)
+            {
+                _logger.LogWarning("No player sitting in vehicle {VehicleId} that the trailer {TrailerId}", eventdata.Vehicle.Id, eventdata.Vehicle.TrailerId);
+
+                return Task.CompletedTask;
+            }
+
+            ChangeSyncer(trailer, player);
+
+            return Task.CompletedTask;
+        }
+
+        private Task OnVehicleTrailerDetached(VehicleTrailerDetachedEvent eventdata)
+        {
+            var trailer = _vehicleManager.GetVehicle(eventdata.Vehicle.TrailerId);
+            if (trailer == null)
+            {
+                _logger.LogWarning("Could not find detached trailer {TrailerId} in vehicle manager!", eventdata.Vehicle.TrailerId);
+
+                return Task.CompletedTask;
+            }
+
+            ChangeSyncer(trailer, null);
+
+            return Task.CompletedTask;
         }
 
         private Task OnPlayerEntersVehicle(PlayerEntersVehicleEvent obj)

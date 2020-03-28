@@ -708,7 +708,7 @@ namespace CryV.Net.Native
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Vehicle__0x870B8B7A766615C8(IntPtr plugin, ulong p0, ulong p1, ulong p2);
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
-        public static extern ulong Native_Vehicle__0x878C75C09FBDB942(IntPtr plugin);
+        public static extern void Native_Vehicle__0x878C75C09FBDB942(IntPtr plugin, int vehicle);
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]
         public static extern void Native_Vehicle__0x88BC673CA9E0AE99(IntPtr plugin, int vehicle, bool p1);
         [DllImport(_dllLocation, CallingConvention = CallingConvention.StdCall)]

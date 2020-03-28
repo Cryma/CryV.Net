@@ -66,6 +66,26 @@ namespace CryV.Net.Client.Vehicles
 
         public Elements.Vehicle NativeVehicle { get; private set; }
 
+        public bool IsAttachedTrailer
+        {
+            get => _isAttachedTrailer;
+            set
+            {
+                if (value)
+                {
+                    NativeHelper.OnNativeTick += TrailerTick;
+                }
+                else
+                {
+                    NativeHelper.OnNativeTick -= TrailerTick;
+                }
+
+                _isAttachedTrailer = value;
+            }
+        }
+
+        private bool _isAttachedTrailer;
+
         public VehicleUpdatePayload LastSentUpdatePayload { get; set; }
 
         private VehicleUpdatePayload _lastPayload;
@@ -74,11 +94,13 @@ namespace CryV.Net.Client.Vehicles
 
         private readonly IEventAggregator _eventAggregator;
         private readonly ISyncManager _syncManager;
+        private readonly IVehicleManager _vehicleManager;
 
-        public Vehicle(IEventAggregator eventAggregator, ISyncManager syncManager, VehicleUpdatePayload payload)
+        public Vehicle(IEventAggregator eventAggregator, ISyncManager syncManager, IVehicleManager vehicleManager, VehicleUpdatePayload payload)
         {
             _eventAggregator = eventAggregator;
             _syncManager = syncManager;
+            _vehicleManager = vehicleManager;
             _lastPayload = payload;
 
             Id = payload.Id;
@@ -132,6 +154,24 @@ namespace CryV.Net.Client.Vehicles
             Acceleration = payload.Acceleration;
             Brake = payload.Brake;
             TargetSteeringAngle = payload.SteeringAngle;
+
+            if (Trailer == null && payload.TrailerId != -1)
+            {
+                Trailer = _vehicleManager.GetVehicle(payload.TrailerId);
+
+                NativeVehicle.AttachToTrailer(Trailer.NativeVehicle);
+                Trailer.IsAttachedTrailer = true;
+            }
+
+            if (Trailer != null && payload.TrailerId == -1)
+            {
+                Trailer.NativeVehicle.SetTrailerLegsLowered();
+                Trailer.IsAttachedTrailer = false;
+
+                Trailer = null;
+            }
+
+            Trailer?.NativeVehicle.SetTrailerLegsRaised();
 
             IsHornActive = (payload.VehicleData & (int) VehicleData.IsHornActive) > 0;
             IsBurnout = (payload.VehicleData & (int) VehicleData.IsBurnout) > 0;
@@ -248,6 +288,11 @@ namespace CryV.Net.Client.Vehicles
             {
                 NativeVehicle.Siren = false;
             });
+        }
+
+        private void TrailerTick(float deltaTime)
+        {
+            NativeVehicle.SetTrailerLegsRaised();
         }
 
         private void ForceSync()

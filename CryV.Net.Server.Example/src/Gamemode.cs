@@ -18,7 +18,7 @@ namespace CryV.Net.Server.Example
             MP.VehiclePool.CreateVehicle(new Vector3(161.1652f, -1077.867f, 28.433891f), Vector3.Zero, 2364918497, "1337");
             MP.VehiclePool.CreateVehicle(new Vector3(157.1652f, -1077.867f, 28.433891f), Vector3.Zero, 4180675781);
             MP.VehiclePool.CreateVehicle(new Vector3(154.1652f, -1077.867f, 28.433891f), Vector3.Zero, 0xCBB2BE0E);
-            MP.VehiclePool.CreateVehicle(new Vector3(151.1652f, -1077.867f, 28.433891f), Vector3.Zero, 1912215274);
+            //MP.VehiclePool.CreateVehicle(new Vector3(151.1652f, -1077.867f, 28.433891f), Vector3.Zero, 1912215274);
             MP.VehiclePool.CreateVehicle(new Vector3(148.1652f, -1077.867f, 28.433891f), Vector3.Zero, 0x21EEE87D);
 
             Console.WriteLine("Started example gamemode!");

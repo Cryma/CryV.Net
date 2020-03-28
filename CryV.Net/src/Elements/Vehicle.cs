@@ -232,9 +232,29 @@ namespace CryV.Net.Elements
             return new Vehicle(vehicle);
         }
 
+        public void AttachToTrailer(Vehicle trailer)
+        {
+            CryVNative.Native_Vehicle_AttachVehicleToTrailer(CryVNative.Plugin, Handle, trailer.Handle, 10.0f);
+        }
+
+        public void DetachFromTrailer()
+        {
+            CryVNative.Native_Vehicle_DetachVehicleFromTrailer(CryVNative.Plugin, Handle);
+        }
+
         public bool IsThisModelABike()
         {
             return CryVNative.Native_Vehicle_IsThisModelABike(CryVNative.Plugin, Model);
+        }
+
+        public void SetTrailerLegsRaised()
+        {
+            CryVNative.Native_Vehicle__0x95CF53B3D687F9FA(CryVNative.Plugin, Handle);
+        }
+
+        public void SetTrailerLegsLowered()
+        {
+            CryVNative.Native_Vehicle__0x878C75C09FBDB942(CryVNative.Plugin, Handle);
         }
 
         public int GetBoneIndexByName(string boneName)

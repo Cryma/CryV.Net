@@ -30,6 +30,7 @@ namespace CryV.Net.Server.Common.Interfaces
         bool IsRoofLowering { get; }
         bool IsRoofDown { get; }
         bool IsRoofRaising { get; }
+        int TrailerId { get; }
 
         VehicleUpdatePayload GetPayload();
         void ReadPayload(VehicleUpdatePayload payload);

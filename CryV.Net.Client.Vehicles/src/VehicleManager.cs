@@ -78,7 +78,7 @@ namespace CryV.Net.Client.Vehicles
 
         private void AddVehicle(VehicleUpdatePayload payload)
         {
-            var vehicle = new Vehicle(_eventAggregator, _syncManager, payload);
+            var vehicle = new Vehicle(_eventAggregator, _syncManager, this, payload);
             _vehicles.TryAdd(payload.Id, vehicle);
         }
 

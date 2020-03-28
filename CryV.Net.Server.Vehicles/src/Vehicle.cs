@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Flags;
 using CryV.Net.Shared.Common.Payloads;
@@ -53,7 +54,20 @@ namespace CryV.Net.Server.Vehicles
             _steeringAngle = payload.SteeringAngle;
             _colorPrimary = payload.ColorPrimary;
             _colorSecondary = payload.ColorSecondary;
-            _trailerId = payload.TrailerId;
+
+            if (_trailerId == -1 && payload.TrailerId != -1)
+            {
+                _trailerId = payload.TrailerId;
+
+                _eventAggregator.Publish(new VehicleTrailerAttachedEvent(this));
+            }
+
+            if (_trailerId != -1 && payload.TrailerId == -1)
+            {
+                _trailerId = payload.TrailerId;
+
+                _eventAggregator.Publish(new VehicleTrailerDetachedEvent(this));
+            }
 
             _isHornActive = (payload.VehicleData & (int) VehicleData.IsHornActive) > 0;
             _isBurnout = (payload.VehicleData & (int) VehicleData.IsBurnout) > 0;
