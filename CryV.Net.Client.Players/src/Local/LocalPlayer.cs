@@ -13,7 +13,7 @@ using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
 
-namespace CryV.Net.Client.LocalPlayer
+namespace CryV.Net.Client.Players.Local
 {
     public partial class LocalPlayer : IStartable
     {

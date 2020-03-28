@@ -1,5 +1,5 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
+using CryV.Net.Client.Players.Local;
 
 namespace CryV.Net.Client.Players
 {
@@ -8,6 +8,10 @@ namespace CryV.Net.Client.Players
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<PlayerManager>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<LocalPlayer>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

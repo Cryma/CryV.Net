@@ -3,7 +3,7 @@ using System.Numerics;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Elements;
 
-namespace CryV.Net.Client.LocalPlayer
+namespace CryV.Net.Client.Players.Local
 {
     public partial class LocalPlayer
     {
