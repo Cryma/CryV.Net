@@ -207,6 +207,7 @@ namespace CryV.Net.Client.Vehicles
 
             if (Trailer != null && _lastPayload.TrailerId == -1)
             {
+                NativeVehicle.DetachFromTrailer();
                 Trailer.NativeVehicle.SetTrailerLegsLowered();
                 Trailer.IsAttachedTrailer = false;
 
