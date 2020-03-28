@@ -173,6 +173,29 @@ namespace CryV.Net.Client.Console
             PrintLine("Entities that are synced by you will no longer be shown.");
         }
 
+        private void CommandGetTrailer(GameConsole gameConsole, params string[] arguments)
+        {
+            if (LocalPlayer.Character.IsInAnyVehicle() == false)
+            {
+                PrintLine("You are not in any vehicle.");
+
+                return;
+            }
+
+            var vehicle = LocalPlayer.Character.GetVehiclePedIsIn();
+
+            var trailer = vehicle.GetTrailer();
+
+            if (trailer == null)
+            {
+                PrintLine("There is no trailer attached.");
+
+                return;
+            }
+
+            PrintLine("Current trailer: " + trailer.Model.ToString("x8"));
+        }
+
         private void CommandRemoteCommand(GameConsole gameConsole, params string[] arguments)
         {
             if (_networkManager.IsConnected == false)

@@ -218,6 +218,20 @@ namespace CryV.Net.Elements
             return StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetWorldPositionOfEntityBone(CryVNative.Plugin, Handle, boneIndex));
         }
 
+        public Vehicle GetTrailer()
+        {
+            var vehicle = 0;
+
+            CryVNative.Native_Vehicle_GetVehicleTrailerVehicle(CryVNative.Plugin, Handle, ref vehicle);
+
+            if (vehicle == 0)
+            {
+                return null;
+            }
+
+            return new Vehicle(vehicle);
+        }
+
         public bool IsThisModelABike()
         {
             return CryVNative.Native_Vehicle_IsThisModelABike(CryVNative.Plugin, Model);

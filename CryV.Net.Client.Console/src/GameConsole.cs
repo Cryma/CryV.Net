@@ -88,6 +88,8 @@ namespace CryV.Net.Client.Console
             RegisterCommand("showsynced", CommandShowSynced);
             RegisterCommand("hidesynced", CommandHideSynced);
 
+            RegisterCommand("gettrailer", CommandGetTrailer);
+
             RegisterCommand("cmd", CommandRemoteCommand);
         }
 
