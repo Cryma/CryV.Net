@@ -75,8 +75,14 @@ namespace CryV.Net.Client.Debugging.Menu
             if (LocalPlayer.Character.IsInAnyVehicle())
             {
                 var vehicle = LocalPlayer.Character.GetVehiclePedIsIn();
+                var trailer = vehicle.GetTrailer();
 
                 PrintLine("Vehicle Health: " + vehicle.EngineHealth);
+
+                if (trailer != null)
+                {
+                    PrintLine("Vehicle Trailer: " + trailer.Handle);
+                }
             }
 
             _line++;
