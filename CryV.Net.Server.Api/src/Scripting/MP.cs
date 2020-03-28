@@ -8,6 +8,7 @@ namespace CryV.Net.Server.Api.Scripting
 
         private static Script _script;
 
+        public static ILogging Logging => _script.Logging;
         public static IEvents Events => _script.Events;
         public static IPlayerPool PlayerPool => _script.PlayerPool;
         public static IVehiclePool VehiclePool => _script.VehiclePool;

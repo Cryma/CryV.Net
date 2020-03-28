@@ -3,14 +3,19 @@ using System.Numerics;
 using CryV.Net.Server.Api.Scripting;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Server.Common.Interfaces.Api;
+using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Server.Example
 {
     public class Gamemode : IGamemode
     {
 
+        private readonly ILogger _logger;
+
         public Gamemode()
         {
+            _logger = MP.Logging.GetLogger<Gamemode>();
+
             MP.Events.OnPlayerConnected += OnPlayerConnected;
             MP.Events.OnPlayerDisconnected += OnPlayerDisconnected;
 
@@ -21,17 +26,17 @@ namespace CryV.Net.Server.Example
             //MP.VehiclePool.CreateVehicle(new Vector3(151.1652f, -1077.867f, 28.433891f), Vector3.Zero, 1912215274);
             MP.VehiclePool.CreateVehicle(new Vector3(148.1652f, -1077.867f, 28.433891f), Vector3.Zero, 0x21EEE87D);
 
-            Console.WriteLine("Started example gamemode!");
+            _logger.LogInformation("Started example gamemode!");
         }
 
         private void OnPlayerConnected(object sender, IPlayer e)
         {
-            Console.WriteLine($"Player {e.Id} connected!");
+            _logger.LogInformation("Player {PlayerId} connected!", e.Id);
         }
 
         private void OnPlayerDisconnected(object sender, IPlayer e)
         {
-            Console.WriteLine($"Player {e.Id} disconnected!");
+            _logger.LogInformation("Player {PlayerId} disconnected!", e.Id);
         }
 
     }

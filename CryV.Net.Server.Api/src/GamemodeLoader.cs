@@ -20,6 +20,7 @@ namespace CryV.Net.Server.Api
 
         private Script _script;
 
+        private readonly IServiceProvider _serviceProvider;
         private readonly IEventAggregator _eventAggregator;
         private readonly IPlayerManager _playerManager;
         private readonly IVehicleManager _vehicleManager;
@@ -28,8 +29,9 @@ namespace CryV.Net.Server.Api
 
         private readonly DownloadServer _downloadServer;
 
-        public GamemodeLoader(IEventAggregator eventAggregator, IPlayerManager playerManager, IVehicleManager vehicleManager)
+        public GamemodeLoader(IServiceProvider serviceProvider, IEventAggregator eventAggregator, IPlayerManager playerManager, IVehicleManager vehicleManager)
         {
+            _serviceProvider = serviceProvider;
             _eventAggregator = eventAggregator;
             _playerManager = playerManager;
             _vehicleManager = vehicleManager;
@@ -39,7 +41,7 @@ namespace CryV.Net.Server.Api
 
         public void Start()
         {
-            _script = new Script(_eventAggregator, _playerManager, _vehicleManager);
+            _script = new Script(_serviceProvider, _eventAggregator, _playerManager, _vehicleManager);
             MP.Setup(_script);
 
             LoadGamemodes();
