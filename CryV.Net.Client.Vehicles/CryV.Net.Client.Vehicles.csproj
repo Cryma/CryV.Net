@@ -13,10 +13,4 @@
     <ProjectReference Include="..\CryV.Net.Client.Common\CryV.Net.Client.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="LiteNetLib">
-      <HintPath>..\lib\LiteNetLib.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

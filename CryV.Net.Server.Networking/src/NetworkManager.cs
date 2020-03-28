@@ -79,7 +79,7 @@ namespace CryV.Net.Server.Networking
 
         private void OnConectionRequest(ConnectionRequest request)
         {
-            if (_netManager.PeersCount >= _maxPlayers)
+            if (_netManager.GetPeersCount(ConnectionState.Any) >= _maxPlayers)
             {
                 request.Reject();
 

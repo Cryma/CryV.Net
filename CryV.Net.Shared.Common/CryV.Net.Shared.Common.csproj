@@ -6,14 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LiteNetLib" Version="0.9.1-beta" />
     <PackageReference Include="Micky5991.EventAggregator" Version="1.1.1" />
     <PackageReference Include="protobuf-net" Version="2.4.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="LiteNetLib">
-      <HintPath>..\lib\LiteNetLib.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
