@@ -11,6 +11,12 @@ namespace CryV.Net.Client.Debugging
             builder.RegisterType<DebugMenu>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+#if DEBUG
+            builder.RegisterType<DebugKeybinds>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+#endif
         }
     }
 }
