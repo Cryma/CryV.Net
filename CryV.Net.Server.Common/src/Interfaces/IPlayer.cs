@@ -2,6 +2,7 @@
 using System.Numerics;
 using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
+using ConnectionState = CryV.Net.Server.Common.Enums.ConnectionState;
 
 namespace CryV.Net.Server.Common.Interfaces
 {
@@ -9,6 +10,8 @@ namespace CryV.Net.Server.Common.Interfaces
     {
         
         int Id { get; }
+
+        ConnectionState ConnectionState { get; set; }
 
         Vector3 Position { get; set; }
         Vector3 Velocity { get; set; }

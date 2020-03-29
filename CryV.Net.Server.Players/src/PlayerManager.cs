@@ -12,6 +12,7 @@ using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
 using Microsoft.Extensions.Logging;
+using ConnectionState = CryV.Net.Server.Common.Enums.ConnectionState;
 
 namespace CryV.Net.Server.Players
 {
@@ -34,6 +35,23 @@ namespace CryV.Net.Server.Players
         public void Start()
         {
             _eventAggregator.Subscribe<NetworkEvent<PlayerUpdatePayload>>(OnPlayerUpdate);
+            _eventAggregator.SubscribeSync<NetworkEvent<BootstrapFinishedPayload>>(OnBootstrapFinished);
+        }
+
+        private void OnBootstrapFinished(NetworkEvent<BootstrapFinishedPayload> obj)
+        {
+            var payload = obj.Payload;
+
+            if (_players.TryGetValue(payload.Id, out var targetPlayer) == false)
+            {
+                _logger.LogWarning("Received finished bootstrap from player {PlayerId}, but could not find it in PlayerManager!", payload.Id);
+
+                return;
+            }
+
+            targetPlayer.ConnectionState = ConnectionState.Connected;
+
+            _logger.LogDebug("Received bootstrap finished payload from player {PlayerId}", payload.Id);
         }
 
         public void AddPlayer(NetPeer peer)
@@ -85,9 +103,14 @@ namespace CryV.Net.Server.Players
             return null;
         }
 
-        public ICollection<IPlayer> GetPlayers()
+        public ICollection<IPlayer> GetPlayers(Func<IPlayer, bool> filter = null)
         {
-            return _players.Values.ToList();
+            if (filter == null)
+            {
+                return _players.Values.ToList();
+            }
+
+            return _players.Values.Where(filter).ToList();
         }
 
         private Task OnPlayerUpdate(NetworkEvent<PlayerUpdatePayload> obj)
@@ -135,6 +158,8 @@ namespace CryV.Net.Server.Players
 
             existingPlayerPayloads.Add(payload);
 #endif
+
+            _logger.LogDebug("Sending bootstrap payload to player {PlayerId}", player.Id);
 
             var bootstrapPayload = new BootstrapPayload(player.GetPeer().Id, player.Position, player.Heading, player.Model, existingPlayerPayloads, existingVehiclePaylaods);
 

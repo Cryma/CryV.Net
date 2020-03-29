@@ -4,6 +4,7 @@
     {
         None,
         Bootstrap,
+        BootstrapFinished,
         AddPlayer,
         RemovePlayer,
         UpdatePlayer,

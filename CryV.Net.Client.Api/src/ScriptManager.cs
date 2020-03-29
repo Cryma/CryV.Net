@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
+using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
 using CryV.Net.Shared.Common.Events;
@@ -38,10 +39,10 @@ namespace CryV.Net.Client.Api
 
         public void Start()
         {
-            _eventAggregator.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
+            _eventAggregator.Subscribe<LocalPlayerBootstrapEvent>(OnBootstrap);
         }
 
-        private Task OnBootstrap(NetworkEvent<BootstrapPayload> obj)
+        private Task OnBootstrap(LocalPlayerBootstrapEvent obj)
         {
             var fileMap = _webClient.DownloadString($"http://{_networkManager.EndPoint.Address}:{_networkManager.EndPoint.Port + 1}/filemap.json");
             _clientFiles = JsonConvert.DeserializeObject<Dictionary<string, List<FileEntry>>>(fileMap);

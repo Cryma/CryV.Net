@@ -30,7 +30,7 @@ namespace CryV.Net.Client.Vehicles
 
         public void Start()
         {
-            _eventAggregator.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
+            _eventAggregator.Subscribe<LocalPlayerBootstrapEvent>(OnBootstrap);
 
             _eventAggregator.Subscribe<NetworkEvent<VehicleAddPayload>>(OnAddVehicle);
             _eventAggregator.Subscribe<NetworkEvent<VehicleRemovePayload>>(OnRemoveVehicle);
@@ -38,14 +38,14 @@ namespace CryV.Net.Client.Vehicles
             _eventAggregator.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
         }
 
-        private Task OnBootstrap(NetworkEvent<BootstrapPayload> obj)
+        private Task OnBootstrap(LocalPlayerBootstrapEvent obj)
         {
-            if (obj.Payload.ExistingVehicles == null)
+            if (obj.ExistingVehicles == null)
             {
                 return Task.CompletedTask;
             }
 
-            foreach (var vehicle in obj.Payload.ExistingVehicles)
+            foreach (var vehicle in obj.ExistingVehicles)
             {
                 AddVehicle(vehicle);
             }

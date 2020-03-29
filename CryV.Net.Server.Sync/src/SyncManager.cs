@@ -11,6 +11,7 @@ using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
 using Microsoft.Extensions.Logging;
+using ConnectionState = CryV.Net.Server.Common.Enums.ConnectionState;
 
 namespace CryV.Net.Server.Sync
 {
@@ -145,7 +146,10 @@ namespace CryV.Net.Server.Sync
 
         private IPlayer GetNearestPlayer(Vector3 position)
         {
-            return _playerManager.GetPlayers().OrderBy(x => Vector3.DistanceSquared(x.Position, position)).FirstOrDefault();
+            return _playerManager
+                .GetPlayers(x => x.ConnectionState == ConnectionState.Connected)
+                .OrderBy(x => Vector3.DistanceSquared(x.Position, position))
+                .FirstOrDefault();
         }
 
         public bool IsEntitySyncedByPlayer(IVehicle vehicle, IPlayer player)

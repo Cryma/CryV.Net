@@ -9,6 +9,7 @@ using CryV.Net.Shared.Common.Payloads.Helpers;
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
 using Microsoft.Extensions.Logging;
+using ConnectionState = CryV.Net.Server.Common.Enums.ConnectionState;
 
 namespace CryV.Net.Server.Players
 {
@@ -16,6 +17,8 @@ namespace CryV.Net.Server.Players
     {
 
         public int Id => _peer.Id;
+
+        public ConnectionState ConnectionState { get; set; }
 
         public Vector3 Position { get; set; } = new Vector3(161.1652f, -1069.867f, 29.19238f);
 

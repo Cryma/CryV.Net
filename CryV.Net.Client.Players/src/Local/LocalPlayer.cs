@@ -43,9 +43,10 @@ namespace CryV.Net.Client.Players.Local
         {
             NativeHelper.OnNativeTick += FingerPointingTick;
 
-            _eventAggregator.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
             _eventAggregator.Subscribe<LocalPlayerConnectedEvent>(OnLocalPlayerConnected);
             _eventAggregator.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
+
+            _eventAggregator.Subscribe<LocalPlayerBootstrapEvent>(OnBootstrap);
         }
 
         private Task OnLocalPlayerConnected(LocalPlayerConnectedEvent obj)
@@ -60,18 +61,17 @@ namespace CryV.Net.Client.Players.Local
             return ThreadHelper.RunAsync(EntityPool.Clear);
         }
 
-        private Task OnBootstrap(NetworkEvent<BootstrapPayload> obj)
+        private Task OnBootstrap(LocalPlayerBootstrapEvent obj)
         {
-            var payload = obj.Payload;
-            Id = payload.LocalId;
+            Id = obj.LocalId;
 
             return ThreadHelper.RunAsync(() =>
             {
                 var rotation = Elements.LocalPlayer.Character.Rotation;
 
-                Elements.LocalPlayer.Character.Position = payload.StartPosition;
-                Elements.LocalPlayer.Model = payload.StartModel;
-                Elements.LocalPlayer.Character.Rotation = new Vector3(rotation.X, rotation.Y, payload.StartHeading);
+                Elements.LocalPlayer.Character.Position = obj.StartPosition;
+                Elements.LocalPlayer.Model = obj.StartModel;
+                Elements.LocalPlayer.Character.Rotation = new Vector3(rotation.X, rotation.Y, obj.StartHeading);
 
                 _cancellationTokenSource = new CancellationTokenSource();
                 Task.Run(Sync, _cancellationTokenSource.Token);

@@ -6,31 +6,38 @@ using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
 using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
+using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Client.Players
 {
     public class PlayerManager : IPlayerManager, IStartable
     {
 
+        private readonly ILogger _logger;
         private readonly IEventAggregator _eventAggregator;
         private readonly IVehicleManager _vehicleManager;
+        private readonly INetworkManager _networkManager;
 
         private readonly ConcurrentDictionary<int, IPlayer> _players = new ConcurrentDictionary<int, IPlayer>();
 
-        public PlayerManager(IEventAggregator eventAggregator, IVehicleManager vehicleManager)
+        public PlayerManager(ILogger<PlayerManager> logger, IEventAggregator eventAggregator, IVehicleManager vehicleManager, INetworkManager networkManager)
         {
+            _logger = logger;
             _eventAggregator = eventAggregator;
             _vehicleManager = vehicleManager;
+            _networkManager = networkManager;
         }
 
         public void Start()
         {
-            _eventAggregator.Subscribe<NetworkEvent<BootstrapPayload>>(OnBootstrap);
+            _eventAggregator.Subscribe<NetworkEvent<BootstrapPayload>>(HandleBootstrap);
             _eventAggregator.Subscribe<NetworkEvent<PlayerAddPayload>>(OnAddPlayer);
             _eventAggregator.Subscribe<NetworkEvent<PlayerRemovePayload>>(OnRemovePlayer);
 
             _eventAggregator.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnect);
+            _eventAggregator.Subscribe<LocalPlayerBootstrapEvent>(OnBootstrap);
         }
 
         private Task OnLocalPlayerDisconnect(LocalPlayerDisconnectedEvent obj)
@@ -78,14 +85,32 @@ namespace CryV.Net.Client.Players
             return player;
         }
 
-        private Task OnBootstrap(NetworkEvent<BootstrapPayload> obj)
+        private async Task HandleBootstrap(NetworkEvent<BootstrapPayload> obj)
         {
-            if (obj.Payload.ExistingPlayers == null)
+            _logger.LogDebug("Bootstrapping local player...");
+
+            var payload = obj.Payload;
+
+            await _eventAggregator.PublishAsync(
+                new LocalPlayerBootstrapEvent(payload.LocalId, payload.StartPosition, payload.StartHeading, payload.StartModel, payload.ExistingPlayers, payload.ExistingVehicles)
+            );
+
+            _logger.LogDebug("Bootstrapping complete.");
+
+            _networkManager.Send(new BootstrapFinishedPayload
+            {
+                Id = payload.LocalId
+            }, DeliveryMethod.ReliableOrdered);
+        }
+
+        private Task OnBootstrap(LocalPlayerBootstrapEvent obj)
+        {
+            if (obj.ExistingPlayers == null)
             {
                 return Task.CompletedTask;
             }
 
-            foreach (var player in obj.Payload.ExistingPlayers)
+            foreach (var player in obj.ExistingPlayers)
             {
                 AddPlayer(player);
             }
