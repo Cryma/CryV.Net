@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
@@ -86,7 +86,7 @@ namespace CryV.Net.Server.Networking
                 return;
             }
 
-            request.AcceptIfKey("cryv-0.1.0");
+            request.AcceptIfKey("cryv-0.1.1");
         }
 
         public void Start()

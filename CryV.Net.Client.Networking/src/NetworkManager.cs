@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -83,7 +83,7 @@ namespace CryV.Net.Client.Networking
                 return;
             }
 
-            _peer = _netManager.Connect(address, port, "cryv-0.1.0");
+            _peer = _netManager.Connect(address, port, "cryv-0.1.1");
 
             _eventAggregator.Publish(new LocalPlayerConnectedEvent());
 
