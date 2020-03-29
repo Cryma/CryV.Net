@@ -40,7 +40,6 @@ namespace CryV.Net.Server.Sync
             _eventAggregator.Subscribe<PlayerDisconnectedEvent>(OnPlayerDisconnected);
 
             _eventAggregator.SubscribeSync<VehicleTrailerAttachedEvent>(OnVehicleTrailerAttached);
-            _eventAggregator.SubscribeSync<VehicleTrailerDetachEvent>(OnVehicleTrailerDetached);
 
             Task.Run(SyncLoop);
         }
@@ -55,7 +54,7 @@ namespace CryV.Net.Server.Sync
                 return;
             }
 
-            var player = _playerManager.GetPlayers().FirstOrDefault(x => x.Vehicle == eventdata.Vehicle);
+            var player = _playerManager.GetPlayers().FirstOrDefault(x => x.Vehicle == eventdata.Vehicle && x.Seat == -1);
             if (player == null)
             {
                 _logger.LogWarning("No player sitting in vehicle {VehicleId} that the trailer {TrailerId}", eventdata.Vehicle.Id, eventdata.Vehicle.TrailerId);
@@ -66,23 +65,6 @@ namespace CryV.Net.Server.Sync
             ChangeSyncer(trailer, player);
         }
 
-        private void OnVehicleTrailerDetached(VehicleTrailerDetachEvent eventdata)
-        {
-            var trailer = _vehicleManager.GetVehicle(eventdata.Vehicle.TrailerId);
-            if (trailer == null)
-            {
-                _logger.LogWarning("Could not find detached trailer {TrailerId} in vehicle manager!", eventdata.Vehicle.TrailerId);
-
-                return;
-            }
-
-            // TODO: Check if last syncer is still available instead of using nearest player
-            // Syncer-Migrations look wonky for all players
-
-            var nearestPlayer = GetNearestPlayer(trailer.Position);
-            ChangeSyncer(trailer, nearestPlayer);
-        }
-
         private Task OnPlayerEntersVehicle(PlayerEntersVehicleEvent obj)
         {
             if (obj.Seat != VehicleSeat.Driver)
@@ -91,6 +73,19 @@ namespace CryV.Net.Server.Sync
             }
 
             ChangeSyncer(obj.Vehicle, obj.Player);
+
+            if (obj.Vehicle.TrailerId != -1)
+            {
+                var trailer = _vehicleManager.GetVehicle(obj.Vehicle.TrailerId);
+                if (trailer == null)
+                {
+                    _logger.LogWarning("Tried to find trailer {TrailerId} for vehicle {VehicleId} in vehicle manager but found none!", obj.Vehicle.TrailerId, obj.Vehicle.Id);
+
+                    return Task.CompletedTask;
+                }
+
+                ChangeSyncer(trailer, obj.Player);
+            }
 
             return Task.CompletedTask;
         }
