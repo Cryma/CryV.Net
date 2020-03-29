@@ -147,7 +147,7 @@ namespace CryV.Net.Server.Sync
         private IPlayer GetNearestPlayer(Vector3 position)
         {
             return _playerManager
-                .GetPlayers(x => x.ConnectionState == ConnectionState.Connected)
+                .GetPlayers()
                 .OrderBy(x => Vector3.DistanceSquared(x.Position, position))
                 .FirstOrDefault();
         }

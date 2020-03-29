@@ -2,7 +2,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Autofac;
 using CryV.Net.Server.Common.Events;
@@ -103,14 +102,18 @@ namespace CryV.Net.Server.Players
             return null;
         }
 
-        public ICollection<IPlayer> GetPlayers(Func<IPlayer, bool> filter = null)
+        public ICollection<IPlayer> GetPlayers(Func<IPlayer, bool> filter = null, bool onlyConnected = true)
         {
+            var onlyConnectedFilter = onlyConnected
+                ? new Func<IPlayer, bool>(x => x.ConnectionState == ConnectionState.Connected)
+                : _ => true;
+
             if (filter == null)
             {
-                return _players.Values.ToList();
+                filter = _ => true;
             }
 
-            return _players.Values.Where(filter).ToList();
+            return _players.Values.Where(onlyConnectedFilter).Where(filter).ToList();
         }
 
         private Task OnPlayerUpdate(NetworkEvent<PlayerUpdatePayload> obj)
@@ -147,7 +150,7 @@ namespace CryV.Net.Server.Players
 
         private void BootstrapPlayer(IPlayer player)
         {
-            var existingPlayerPayloads = GetPlayers().Where(x => x != player).Select(x => x.GetPayload()).ToList();
+            var existingPlayerPayloads = GetPlayers(onlyConnected: false).Where(x => x != player).Select(x => x.GetPayload()).ToList();
             var existingVehiclePaylaods = _vehicleManager.GetVehicles().Select(x => x.GetPayload()).ToList();
 
 #if PEDMIRROR
@@ -168,7 +171,7 @@ namespace CryV.Net.Server.Players
 
         private void PropagatePlayerAddition(IPlayer player)
         {
-            foreach (var existingPlayer in GetPlayers())
+            foreach (var existingPlayer in GetPlayers(onlyConnected: false))
             {
                 if (existingPlayer == player)
                 {
@@ -182,7 +185,7 @@ namespace CryV.Net.Server.Players
 
         private void PropagatePlayerRemoval(IPlayer player)
         {
-            foreach (var existingPlayer in GetPlayers())
+            foreach (var existingPlayer in GetPlayers(onlyConnected: false))
             {
                 if (existingPlayer == player)
                 {

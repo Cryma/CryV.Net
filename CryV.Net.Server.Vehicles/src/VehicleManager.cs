@@ -152,7 +152,7 @@ namespace CryV.Net.Server.Vehicles
 
         private void PropagateVehicleAddition(IVehicle vehicle)
         {
-            foreach (var player in PlayerManager.GetPlayers())
+            foreach (var player in PlayerManager.GetPlayers(onlyConnected: false))
             {
                 player.Send(vehicle.GetPayload(), DeliveryMethod.ReliableOrdered);
             }
@@ -160,7 +160,7 @@ namespace CryV.Net.Server.Vehicles
 
         private void PropagateVehicleRemoval(IVehicle vehicle)
         {
-            foreach (var player in PlayerManager.GetPlayers())
+            foreach (var player in PlayerManager.GetPlayers(onlyConnected: false))
             {
                 player.Send(new VehicleRemovePayload(vehicle.Id), DeliveryMethod.ReliableOrdered);
             }

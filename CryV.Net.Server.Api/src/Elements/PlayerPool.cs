@@ -16,7 +16,7 @@ namespace CryV.Net.Server.Api.Elements
 
         public ICollection<IPlayer> GetPlayers()
         {
-            return _playerManager.GetPlayers();
+            return _playerManager.GetPlayers(onlyConnected: false);
         }
 
     }
