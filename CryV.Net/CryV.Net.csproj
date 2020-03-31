@@ -7,9 +7,15 @@
     <OutputType>Exe</OutputType>
     <StartupObject />
     <Configurations>Debug;Release;PedMirror</Configurations>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PedMirror|AnyCPU'">
+    <DefineConstants>TRACE;PedMirror</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PedMirror|x64'">
     <DefineConstants>TRACE;PedMirror</DefineConstants>
   </PropertyGroup>
 
@@ -18,13 +24,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CryV\CryV.vcxproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Microsoft.Win32.Registry">
       <HintPath>..\lib\Microsoft.Win32.Registry.dll</HintPath>
     </Reference>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' != 'Release'">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="C:\Windows\System32\XCOPY $(TargetDir)* $(SolutionDir)..\client\dotnet\runtime\ /S /Y" />
+    <Exec Command="C:\Windows\System32\XCOPY $(TargetDir)* $(SolutionDir)..\client\ /S /Y" />
   </Target>
 
 </Project>

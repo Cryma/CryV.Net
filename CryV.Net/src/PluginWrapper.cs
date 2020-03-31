@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -7,9 +8,6 @@ using CryV.Net.Helpers;
 using CryV.Net.Native;
 using CryV.Net.Plugins;
 using Microsoft.Win32;
-#if RELEASE
-using Sentry;
-#endif
 
 namespace CryV.Net
 {
@@ -22,26 +20,32 @@ namespace CryV.Net
         {
         }
 
-        public static void PluginMain(IntPtr plugin)
+        public static void PluginMain()
         {
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies().Select(x => x.ToString());
+            File.WriteAllLines("C:\\Development\\CryV\\client\\assemblies.txt", assemblies);
+
+            var hm = CryV.Main.GetSomething();
+
+            File.WriteAllText("C:\\Development\\CryV\\client\\atmp.txt", hm);
+
+            //CryV.Natives.SetPos();
+
+            return;
+
             ThreadHelper.SetMainThread(Thread.CurrentThread);
 
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
             SetNativePath();
 
-            CryVNative.Plugin = plugin;
+            //CryVNative.Plugin = plugin;
 
             LoadPlugin();
         }
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-#if RELEASE
-            {
-                SentrySdk.CaptureException((Exception) e.ExceptionObject);
-            }
-#endif
         }
 
         public static void PluginKeyboardCallback(ConsoleKey key, char character, bool isPressed)
