@@ -15,7 +15,7 @@ namespace CryV.Net.Client.Debugging.Menu
 
         private bool _enabled;
 
-        private float _width = 400 / 1920f;
+        private float _width = 550 / 1920f;
         private float _x;
         private float _y;
         private int _line;
@@ -78,10 +78,17 @@ namespace CryV.Net.Client.Debugging.Menu
                 var trailer = vehicle.GetTrailer();
 
                 PrintLine("Vehicle Health: " + vehicle.EngineHealth);
+                PrintLine("Vehicle Model: " + vehicle.Model);
+                PrintVector(vehicle.Position, "Vehicle Position");
+                PrintVector(vehicle.Rotation, "Vehicle Rotation");
 
                 if (trailer != null)
                 {
+                    _line++;
                     PrintLine("Vehicle Trailer: " + trailer.Handle);
+                    PrintLine("Vehicle Trailer Model: " + trailer.Model);
+                    PrintVector(trailer.Position, "Vehicle Trailer Position");
+                    PrintVector(trailer.Rotation, "Vehicle Trailer Rotation");
                 }
             }
 
