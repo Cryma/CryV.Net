@@ -4,9 +4,9 @@ namespace CryV.Net.Client.Common.Interfaces
 {
     public interface ISyncManager
     {
-        bool IsSyncingEntity(IVehicle entity);
+        bool IsSyncingEntity(IClientVehicle entity);
 
-        ICollection<IVehicle> GetSyncedEntities();
+        ICollection<IClientVehicle> GetSyncedEntities();
 
     }
 }

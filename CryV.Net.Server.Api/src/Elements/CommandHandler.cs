@@ -13,7 +13,7 @@ namespace CryV.Net.Server.Api.Elements
     public class CommandHandler : ICommandHandler
     {
 
-        private readonly ConcurrentDictionary<string, Action<IPlayer, string[]>> _commands = new ConcurrentDictionary<string, Action<IPlayer, string[]>>();
+        private readonly ConcurrentDictionary<string, Action<IServerPlayer, string[]>> _commands = new ConcurrentDictionary<string, Action<IServerPlayer, string[]>>();
 
         private readonly IEventAggregator _eventAggregator;
 
@@ -27,7 +27,7 @@ namespace CryV.Net.Server.Api.Elements
             _eventAggregator.Subscribe<NetworkEvent<RemoteCommandPayload>>(OnRemoteCommand);
         }
 
-        public void AddCommand(string commandName, Action<IPlayer, string[]> callback)
+        public void AddCommand(string commandName, Action<IServerPlayer, string[]> callback)
         {
             _commands.TryAdd(commandName, callback);
         }

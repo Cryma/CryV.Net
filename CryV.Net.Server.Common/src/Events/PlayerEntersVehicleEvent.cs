@@ -7,8 +7,8 @@ namespace CryV.Net.Server.Common.Events
     public class PlayerEntersVehicleEvent : IEvent
     {
         
-        public IPlayer Player { get; set; }
-        public IVehicle Vehicle { get; set; }
+        public IServerPlayer Player { get; set; }
+        public IServerVehicle Vehicle { get; set; }
 
         public VehicleSeat Seat { get; set; }
 
@@ -16,7 +16,7 @@ namespace CryV.Net.Server.Common.Events
         {
         }
 
-        public PlayerEntersVehicleEvent(IPlayer player, IVehicle vehicle, VehicleSeat seat)
+        public PlayerEntersVehicleEvent(IServerPlayer player, IServerVehicle vehicle, VehicleSeat seat)
         {
             Player = player;
             Vehicle = vehicle;

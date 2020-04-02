@@ -6,13 +6,13 @@ namespace CryV.Net.Server.Common.Events
     public class PlayerDisconnectedEvent : IEvent
     {
         
-        public IPlayer Player { get; set; }
+        public IServerPlayer Player { get; set; }
 
         public PlayerDisconnectedEvent()
         {
         }
 
-        public PlayerDisconnectedEvent(IPlayer player)
+        public PlayerDisconnectedEvent(IServerPlayer player)
         {
             Player = player;
         }

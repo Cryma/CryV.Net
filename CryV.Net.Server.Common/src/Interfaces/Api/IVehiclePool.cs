@@ -6,9 +6,9 @@ namespace CryV.Net.Server.Common.Interfaces.Api
     public interface IVehiclePool
     {
 
-        ICollection<IVehicle> GetVehicles();
+        ICollection<IServerVehicle> GetVehicles();
 
-        IVehicle CreateVehicle(Vector3 position, Vector3 rotation, ulong model, string numberPlate = null);
+        IServerVehicle CreateVehicle(Vector3 position, Vector3 rotation, ulong model, string numberPlate = null);
 
     }
 }

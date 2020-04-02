@@ -7,11 +7,11 @@ namespace CryV.Net.Server.Common.Interfaces
     public interface IVehicleManager
     {
 
-        event EventHandler<IVehicle> OnVehicleAdded;
+        event EventHandler<IServerVehicle> OnVehicleAdded;
 
-        IVehicle AddVehicle(Vector3 position, Vector3 rotation, ulong model, string numberPlate);
-        IVehicle GetVehicle(int vehicleId);
-        ICollection<IVehicle> GetVehicles();
+        IServerVehicle AddVehicle(Vector3 position, Vector3 rotation, ulong model, string numberPlate);
+        IServerVehicle GetVehicle(int vehicleId);
+        ICollection<IServerVehicle> GetVehicles();
 
     }
 }

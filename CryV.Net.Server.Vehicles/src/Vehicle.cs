@@ -10,7 +10,7 @@ using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Server.Vehicles
 {
-    public partial class Vehicle : IVehicle
+    public partial class Vehicle : IServerVehicle
     {
 
         private readonly IEventAggregator _eventAggregator;

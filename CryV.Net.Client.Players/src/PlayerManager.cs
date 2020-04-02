@@ -20,7 +20,7 @@ namespace CryV.Net.Client.Players
         private readonly IVehicleManager _vehicleManager;
         private readonly INetworkManager _networkManager;
 
-        private readonly ConcurrentDictionary<int, IPlayer> _players = new ConcurrentDictionary<int, IPlayer>();
+        private readonly ConcurrentDictionary<int, IClientPlayer> _players = new ConcurrentDictionary<int, IClientPlayer>();
 
         public PlayerManager(ILogger<PlayerManager> logger, IEventAggregator eventAggregator, IVehicleManager vehicleManager, INetworkManager networkManager)
         {
@@ -75,7 +75,7 @@ namespace CryV.Net.Client.Players
             player.Dispose();
         }
 
-        public IPlayer GetPlayer(int playerId)
+        public IClientPlayer GetPlayer(int playerId)
         {
             if (_players.TryGetValue(playerId, out var player) == false)
             {

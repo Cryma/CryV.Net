@@ -22,7 +22,7 @@ namespace CryV.Net.Server.Players
         private readonly IVehicleManager _vehicleManager;
         private readonly ILogger _logger;
 
-        private readonly ConcurrentDictionary<int, IPlayer> _players = new ConcurrentDictionary<int, IPlayer>();
+        private readonly ConcurrentDictionary<int, IServerPlayer> _players = new ConcurrentDictionary<int, IServerPlayer>();
 
         public PlayerManager(IEventAggregator eventAggregator, IVehicleManager vehicleManager, ILogger<PlayerManager> logger)
         {
@@ -77,7 +77,7 @@ namespace CryV.Net.Server.Players
             _eventAggregator.Publish(new PlayerDisconnectedEvent(player));
         }
 
-        public IPlayer GetPlayer(int playerId)
+        public IServerPlayer GetPlayer(int playerId)
         {
             if (_players.TryGetValue(playerId, out var player) == false)
             {
@@ -87,7 +87,7 @@ namespace CryV.Net.Server.Players
             return player;
         }
 
-        public IPlayer GetPlayer(NetPeer peer)
+        public IServerPlayer GetPlayer(NetPeer peer)
         {
             foreach (var player in _players.Values)
             {
@@ -102,10 +102,10 @@ namespace CryV.Net.Server.Players
             return null;
         }
 
-        public ICollection<IPlayer> GetPlayers(Func<IPlayer, bool> filter = null, bool onlyConnected = true)
+        public ICollection<IServerPlayer> GetPlayers(Func<IServerPlayer, bool> filter = null, bool onlyConnected = true)
         {
             var onlyConnectedFilter = onlyConnected
-                ? new Func<IPlayer, bool>(x => x.ConnectionState == ConnectionState.Connected)
+                ? new Func<IServerPlayer, bool>(x => x.ConnectionState == ConnectionState.Connected)
                 : _ => true;
 
             if (filter == null)
@@ -148,7 +148,7 @@ namespace CryV.Net.Server.Players
             return Task.CompletedTask;
         }
 
-        private void BootstrapPlayer(IPlayer player)
+        private void BootstrapPlayer(IServerPlayer player)
         {
             var existingPlayerPayloads = GetPlayers(onlyConnected: false).Where(x => x != player).Select(x => x.GetPayload()).ToList();
             var existingVehiclePaylaods = _vehicleManager.GetVehicles().Select(x => x.GetPayload()).ToList();
@@ -164,12 +164,12 @@ namespace CryV.Net.Server.Players
 
             _logger.LogDebug("Sending bootstrap payload to player {PlayerId}", player.Id);
 
-            var bootstrapPayload = new BootstrapPayload(player.GetPeer().Id, player.Position, player.Heading, player.Model, existingPlayerPayloads, existingVehiclePaylaods);
+            var bootstrapPayload = new BootstrapPayload(player.GetPeer().Id, player.Position, player.Rotation.Z, player.Model, existingPlayerPayloads, existingVehiclePaylaods);
 
             player.Send(bootstrapPayload, DeliveryMethod.ReliableOrdered);
         }
 
-        private void PropagatePlayerAddition(IPlayer player)
+        private void PropagatePlayerAddition(IServerPlayer player)
         {
             foreach (var existingPlayer in GetPlayers(onlyConnected: false))
             {
@@ -183,7 +183,7 @@ namespace CryV.Net.Server.Players
             }
         }
 
-        private void PropagatePlayerRemoval(IPlayer player)
+        private void PropagatePlayerRemoval(IServerPlayer player)
         {
             foreach (var existingPlayer in GetPlayers(onlyConnected: false))
             {

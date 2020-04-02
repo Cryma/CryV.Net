@@ -18,7 +18,7 @@ namespace CryV.Net.Server.Sync
     public class SyncManager : ISyncManager, IStartable
     {
 
-        private readonly ConcurrentDictionary<IVehicle, IPlayer> _vehicleSyncMapping = new ConcurrentDictionary<IVehicle, IPlayer>();
+        private readonly ConcurrentDictionary<IServerVehicle, IServerPlayer> _vehicleSyncMapping = new ConcurrentDictionary<IServerVehicle, IServerPlayer>();
 
         private readonly IEventAggregator _eventAggregator;
         private readonly IPlayerManager _playerManager;
@@ -101,7 +101,7 @@ namespace CryV.Net.Server.Sync
             return Task.CompletedTask;
         }
 
-        private void OnVehicleAdded(object sender, IVehicle vehicle)
+        private void OnVehicleAdded(object sender, IServerVehicle vehicle)
         {
             var nearestPlayer = GetNearestPlayer(vehicle.Position);
 
@@ -109,7 +109,7 @@ namespace CryV.Net.Server.Sync
             ChangeSyncer(vehicle, nearestPlayer);
         }
 
-        private void ChangeSyncer(IVehicle vehicle, IPlayer newSyncer)
+        private void ChangeSyncer(IServerVehicle vehicle, IServerPlayer newSyncer)
         {
             var oldSyncer = _vehicleSyncMapping[vehicle];
             if (oldSyncer == newSyncer)
@@ -144,7 +144,7 @@ namespace CryV.Net.Server.Sync
             }
         }
 
-        private IPlayer GetNearestPlayer(Vector3 position)
+        private IServerPlayer GetNearestPlayer(Vector3 position)
         {
             return _playerManager
                 .GetPlayers()
@@ -152,7 +152,7 @@ namespace CryV.Net.Server.Sync
                 .FirstOrDefault();
         }
 
-        public bool IsEntitySyncedByPlayer(IVehicle vehicle, IPlayer player)
+        public bool IsEntitySyncedByPlayer(IServerVehicle vehicle, IServerPlayer player)
         {
             return _vehicleSyncMapping[vehicle] == player;
         }

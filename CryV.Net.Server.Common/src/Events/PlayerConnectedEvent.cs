@@ -6,13 +6,13 @@ namespace CryV.Net.Server.Common.Events
     public class PlayerConnectedEvent : IEvent
     {
 
-        public IPlayer Player { get; set; }
+        public IServerPlayer Player { get; set; }
 
         public PlayerConnectedEvent()
         {
         }
 
-        public PlayerConnectedEvent(IPlayer player)
+        public PlayerConnectedEvent(IServerPlayer player)
         {
             Player = player;
         }

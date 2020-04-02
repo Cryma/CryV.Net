@@ -5,7 +5,7 @@ namespace CryV.Net.Server.Common.Interfaces
     public interface ISyncManager
     {
 
-        bool IsEntitySyncedByPlayer(IVehicle vehicle, IPlayer player);
+        bool IsEntitySyncedByPlayer(IServerVehicle vehicle, IServerPlayer player);
 
     }
 }

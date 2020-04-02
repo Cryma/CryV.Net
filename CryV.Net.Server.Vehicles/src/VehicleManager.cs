@@ -23,7 +23,7 @@ namespace CryV.Net.Server.Vehicles
         private readonly IEventAggregator _eventAggregator;
         private readonly ILogger _logger;
 
-        private readonly ConcurrentDictionary<int, IVehicle> _vehicles = new ConcurrentDictionary<int, IVehicle>();
+        private readonly ConcurrentDictionary<int, IServerVehicle> _vehicles = new ConcurrentDictionary<int, IServerVehicle>();
 
         private readonly Random _random = new Random();
 
@@ -44,9 +44,9 @@ namespace CryV.Net.Server.Vehicles
             _eventAggregator.Subscribe<NetworkEvent<VehicleUpdatePayload>>(OnVehicleUpdate);
         }
 
-        public event EventHandler<IVehicle> OnVehicleAdded;
+        public event EventHandler<IServerVehicle> OnVehicleAdded;
 
-        public IVehicle AddVehicle(Vector3 position, Vector3 rotation, ulong model, string numberPlate)
+        public IServerVehicle AddVehicle(Vector3 position, Vector3 rotation, ulong model, string numberPlate)
         {
             var id = GetFreeId();
 
@@ -76,7 +76,7 @@ namespace CryV.Net.Server.Vehicles
             PropagateVehicleRemoval(vehicle);
         }
 
-        public IVehicle GetVehicle(int vehicleId)
+        public IServerVehicle GetVehicle(int vehicleId)
         {
             if (_vehicles.TryGetValue(vehicleId, out var vehicle) == false)
             {
@@ -86,7 +86,7 @@ namespace CryV.Net.Server.Vehicles
             return vehicle;
         }
 
-        public ICollection<IVehicle> GetVehicles()
+        public ICollection<IServerVehicle> GetVehicles()
         {
             return _vehicles.Values;
         }
@@ -150,7 +150,7 @@ namespace CryV.Net.Server.Vehicles
             return Task.CompletedTask;
         }
 
-        private void PropagateVehicleAddition(IVehicle vehicle)
+        private void PropagateVehicleAddition(IServerVehicle vehicle)
         {
             foreach (var player in PlayerManager.GetPlayers(onlyConnected: false))
             {
@@ -158,7 +158,7 @@ namespace CryV.Net.Server.Vehicles
             }
         }
 
-        private void PropagateVehicleRemoval(IVehicle vehicle)
+        private void PropagateVehicleRemoval(IServerVehicle vehicle)
         {
             foreach (var player in PlayerManager.GetPlayers(onlyConnected: false))
             {

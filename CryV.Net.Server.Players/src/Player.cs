@@ -13,7 +13,7 @@ using ConnectionState = CryV.Net.Server.Common.Enums.ConnectionState;
 
 namespace CryV.Net.Server.Players
 {
-    public class Player : IPlayer
+    public class Player : IServerPlayer
     {
 
         public int Id => _peer.Id;
@@ -22,9 +22,9 @@ namespace CryV.Net.Server.Players
 
         public Vector3 Position { get; set; } = new Vector3(161.1652f, -1069.867f, 29.19238f);
 
-        public Vector3 Velocity { get; set; }
+        public Vector3 Rotation { get; set; }
 
-        public float Heading { get; set; }
+        public Vector3 Velocity { get; set; }
 
         public float FingerPointingPitch { get; set; }
 
@@ -56,7 +56,7 @@ namespace CryV.Net.Server.Players
 
         public bool IsFingerPointing { get; set; }
 
-        public IVehicle Vehicle { get; set; }
+        public IServerVehicle Vehicle { get; set; }
 
         public int Seat { get; set; }
 
@@ -92,15 +92,16 @@ namespace CryV.Net.Server.Players
 
         public PlayerUpdatePayload GetPayload()
         {
-            return new PlayerUpdatePayload(Id, Position, Velocity, Heading, FingerPointingPitch, FingerPointingHeading, AimTarget, Speed, Model, WeaponModel, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll,
-                IsAiming, IsEnteringVehicle, IsInVehicle, Vehicle?.Id ?? -1, Seat, IsLeavingVehicle, IsFingerPointing);
+            return new PlayerUpdatePayload(Id, Position, Velocity, Rotation.Z, FingerPointingPitch, FingerPointingHeading, AimTarget, Speed, Model,
+                WeaponModel, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll, IsAiming, IsEnteringVehicle, IsInVehicle, Vehicle?.Id ?? -1, Seat,
+                IsLeavingVehicle, IsFingerPointing);
         }
 
         public void ReadPayload(PlayerUpdatePayload payload)
         {
             Position = payload.Position;
             Velocity = payload.Velocity;
-            Heading = payload.Heading;
+            Rotation = new Vector3(Rotation.X, Rotation.Y, payload.Heading);
             FingerPointingPitch = payload.FingerPointingPitch;
             FingerPointingHeading = payload.FingerPointingHeading;
             AimTarget = payload.AimTarget;

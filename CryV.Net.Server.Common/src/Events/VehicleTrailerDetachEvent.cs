@@ -6,13 +6,13 @@ namespace CryV.Net.Server.Common.Events
     public class VehicleTrailerDetachEvent : IEvent
     {
 
-        public IVehicle Vehicle { get; set; }
+        public IServerVehicle Vehicle { get; set; }
 
         public VehicleTrailerDetachEvent()
         {
         }
 
-        public VehicleTrailerDetachEvent(IVehicle vehicle)
+        public VehicleTrailerDetachEvent(IServerVehicle vehicle)
         {
             Vehicle = vehicle;
         }

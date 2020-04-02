@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Client.Vehicles
 {
-    public class Vehicle : IVehicle
+    public class Vehicle : IClientVehicle
     {
 
         public int Id { get; }
@@ -63,7 +63,7 @@ namespace CryV.Net.Client.Vehicles
 
         public bool IsSirenActive { get; set; }
 
-        public IVehicle Trailer { get; set; }
+        public IClientVehicle Trailer { get; set; }
 
         public Elements.Vehicle NativeVehicle { get; private set; }
 

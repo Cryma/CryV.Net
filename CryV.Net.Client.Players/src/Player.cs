@@ -13,16 +13,16 @@ using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Client.Players
 {
-    public partial class Player : IPlayer
+    public partial class Player : IClientPlayer
     {
 
         public int Id { get; }
 
         public Vector3 Position { get; set; }
 
-        public Vector3 Velocity { get; set; }
+        public Vector3 Rotation { get; set; }
 
-        public float Heading { get; set; }
+        public Vector3 Velocity { get; set; }
 
         public float FingerPointingPitch { get; set; }
 
@@ -54,7 +54,7 @@ namespace CryV.Net.Client.Players
 
         public bool IsFingerPointing { get; set; }
 
-        public IVehicle Vehicle { get; set; }
+        public IClientVehicle Vehicle { get; set; }
 
         public int Seat { get; set; }
 
@@ -95,7 +95,7 @@ namespace CryV.Net.Client.Players
 
             ThreadHelper.RunAsync(() =>
             {
-                NativePed = new Ped(Model, Position, Heading)
+                NativePed = new Ped(Model, Position, Rotation.Z)
                 {
                     Velocity = Velocity
                 };
@@ -107,7 +107,7 @@ namespace CryV.Net.Client.Players
         public void ReadPayload(PlayerUpdatePayload payload)
         {
             Position = payload.Position;
-            Heading = payload.Heading;
+            Rotation = new Vector3(Rotation.X, Rotation.Y, payload.Heading);
             FingerPointingPitch = payload.FingerPointingPitch;
             FingerPointingHeading = payload.FingerPointingHeading;
             Velocity = payload.Velocity;
@@ -222,7 +222,7 @@ namespace CryV.Net.Client.Players
         {
             var pedRotation = NativePed.Rotation;
 
-            var interpolatedHeading = Interpolation.LerpDegrees(pedRotation.Z, Heading, deltaTime * _interpolationFactor);
+            var interpolatedHeading = Interpolation.LerpDegrees(pedRotation.Z, Rotation.Z, deltaTime * _interpolationFactor);
 
             NativePed.Rotation = new Vector3(pedRotation.X, pedRotation.Y, interpolatedHeading);
         }

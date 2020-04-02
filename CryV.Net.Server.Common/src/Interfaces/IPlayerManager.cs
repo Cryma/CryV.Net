@@ -10,9 +10,9 @@ namespace CryV.Net.Server.Common.Interfaces
 
         void AddPlayer(NetPeer peer);
         void RemovePlayer(NetPeer peer);
-        IPlayer GetPlayer(int playerId);
-        IPlayer GetPlayer(NetPeer peer);
-        ICollection<IPlayer> GetPlayers(Func<IPlayer, bool> filter = null, bool onlyConnected = true);
+        IServerPlayer GetPlayer(int playerId);
+        IServerPlayer GetPlayer(NetPeer peer);
+        ICollection<IServerPlayer> GetPlayers(Func<IServerPlayer, bool> filter = null, bool onlyConnected = true);
 
     }
 }

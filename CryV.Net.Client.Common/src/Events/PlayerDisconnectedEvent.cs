@@ -6,9 +6,9 @@ namespace CryV.Net.Client.Common.Events
     public class PlayerDisconnectedEvent : IEvent
     {
         
-        public IPlayer Player { get; set; }
+        public IClientPlayer Player { get; set; }
 
-        public PlayerDisconnectedEvent(IPlayer player)
+        public PlayerDisconnectedEvent(IClientPlayer player)
         {
             Player = player;
         }

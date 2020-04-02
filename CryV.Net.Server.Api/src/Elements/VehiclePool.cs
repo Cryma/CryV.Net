@@ -15,12 +15,12 @@ namespace CryV.Net.Server.Api.Elements
             _vehicleManager = vehicleManager;
         }
 
-        public ICollection<IVehicle> GetVehicles()
+        public ICollection<IServerVehicle> GetVehicles()
         {
             return _vehicleManager.GetVehicles();
         }
 
-        public IVehicle CreateVehicle(Vector3 position, Vector3 rotation, ulong model, string numberPlate = null)
+        public IServerVehicle CreateVehicle(Vector3 position, Vector3 rotation, ulong model, string numberPlate = null)
         {
             return _vehicleManager.AddVehicle(position, rotation, model, numberPlate);
         }

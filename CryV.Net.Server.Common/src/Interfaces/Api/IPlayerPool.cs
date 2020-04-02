@@ -5,7 +5,7 @@ namespace CryV.Net.Server.Common.Interfaces.Api
     public interface IPlayerPool
     {
 
-        ICollection<IPlayer> GetPlayers();
+        ICollection<IServerPlayer> GetPlayers();
 
     }
 }

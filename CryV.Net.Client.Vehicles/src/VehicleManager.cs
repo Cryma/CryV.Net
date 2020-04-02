@@ -19,7 +19,7 @@ namespace CryV.Net.Client.Vehicles
         private readonly IEventAggregator _eventAggregator;
         private readonly ISyncManager _syncManager;
 
-        private readonly ConcurrentDictionary<int, IVehicle> _vehicles = new ConcurrentDictionary<int, IVehicle>();
+        private readonly ConcurrentDictionary<int, IClientVehicle> _vehicles = new ConcurrentDictionary<int, IClientVehicle>();
 
         public VehicleManager(ILogger<VehicleManager> logger, IEventAggregator eventAggregator, ISyncManager syncManager)
         {
@@ -95,7 +95,7 @@ namespace CryV.Net.Client.Vehicles
             vehicle.Dispose();
         }
 
-        public IVehicle GetVehicle(int vehicleId)
+        public IClientVehicle GetVehicle(int vehicleId)
         {
             if (_vehicles.TryGetValue(vehicleId, out var vehicle) == false)
             {
@@ -105,7 +105,7 @@ namespace CryV.Net.Client.Vehicles
             return vehicle;
         }
 
-        public IVehicle GetVehicle(Elements.Vehicle vehicle)
+        public IClientVehicle GetVehicle(Elements.Vehicle vehicle)
         {
             foreach (var veh in _vehicles.Values)
             {

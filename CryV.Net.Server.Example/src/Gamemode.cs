@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 using CryV.Net.Server.Api.Scripting;
 using CryV.Net.Server.Common.Interfaces;
@@ -29,12 +29,12 @@ namespace CryV.Net.Server.Example
             _logger.LogInformation("Started example gamemode!");
         }
 
-        private void OnPlayerConnected(object sender, IPlayer e)
+        private void OnPlayerConnected(object sender, IServerPlayer e)
         {
             _logger.LogInformation("Player {PlayerId} connected!", e.Id);
         }
 
-        private void OnPlayerDisconnected(object sender, IPlayer e)
+        private void OnPlayerDisconnected(object sender, IServerPlayer e)
         {
             _logger.LogInformation("Player {PlayerId} disconnected!", e.Id);
         }

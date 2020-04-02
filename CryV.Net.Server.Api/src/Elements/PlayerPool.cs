@@ -14,7 +14,7 @@ namespace CryV.Net.Server.Api.Elements
             _playerManager = playerManager;
         }
 
-        public ICollection<IPlayer> GetPlayers()
+        public ICollection<IServerPlayer> GetPlayers()
         {
             return _playerManager.GetPlayers(onlyConnected: false);
         }

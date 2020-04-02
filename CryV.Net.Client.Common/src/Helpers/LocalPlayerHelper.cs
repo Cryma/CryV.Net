@@ -13,7 +13,7 @@ namespace CryV.Net.Client.Common.Helpers
 
         public static Vehicle Vehicle { get; set; }
 
-        public static void SetVehicle(IVehicle vehicle)
+        public static void SetVehicle(IClientVehicle vehicle)
         {
             if (vehicle == null)
             {

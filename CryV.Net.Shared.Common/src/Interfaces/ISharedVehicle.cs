@@ -1,20 +1,9 @@
-﻿using System;
-using System.Numerics;
-using CryV.Net.Shared.Common.Payloads;
-
-namespace CryV.Net.Server.Common.Interfaces
+﻿namespace CryV.Net.Shared.Common.Interfaces
 {
-    public interface IVehicle : IDisposable
+    public interface ISharedVehicle : ISharedEntity
     {
-
-        int Id { get; }
-
-        Vector3 Position { get; set; }
-        Vector3 Velocity { get; set; }
-        Vector3 Rotation { get; set; }
         float EngineHealth { get; set; }
         string NumberPlate { get; set; }
-        ulong Model { get; }
         bool EngineState { get; set; }
         byte CurrentGear { get; set; }
         float CurrentRPM { get; set; }
@@ -30,12 +19,5 @@ namespace CryV.Net.Server.Common.Interfaces
         bool IsRoofLowering { get; }
         bool IsRoofDown { get; }
         bool IsRoofRaising { get; }
-        int TrailerId { get; }
-
-        VehicleUpdatePayload GetPayload();
-        void ReadPayload(VehicleUpdatePayload payload);
-
-        void ForceSync();
-
     }
 }

@@ -20,7 +20,7 @@ namespace CryV.Net.Client.Sync
 
         public IVehicleManager VehicleManager { get; set; }
 
-        private readonly List<IVehicle> _syncVehicles = new List<IVehicle>();
+        private readonly List<IClientVehicle> _syncVehicles = new List<IClientVehicle>();
 
         private readonly IEventAggregator _eventAggregator;
         private readonly INetworkManager _networkManager;
@@ -105,7 +105,7 @@ namespace CryV.Net.Client.Sync
             }
         }
 
-        private void SyncVehicle(IVehicle vehicle)
+        private void SyncVehicle(IClientVehicle vehicle)
         {
             if (vehicle == null)
             {
@@ -164,12 +164,12 @@ namespace CryV.Net.Client.Sync
 
         }
 
-        public bool IsSyncingEntity(IVehicle entity)
+        public bool IsSyncingEntity(IClientVehicle entity)
         {
             return _syncVehicles.Contains(entity);
         }
 
-        public ICollection<IVehicle> GetSyncedEntities()
+        public ICollection<IClientVehicle> GetSyncedEntities()
         {
             return _syncVehicles.ToList();
         }

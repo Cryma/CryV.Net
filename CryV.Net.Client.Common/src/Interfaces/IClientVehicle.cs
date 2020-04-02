@@ -1,15 +1,12 @@
 ﻿using System;
 using CryV.Net.Elements;
+using CryV.Net.Shared.Common.Interfaces;
 using CryV.Net.Shared.Common.Payloads;
 
 namespace CryV.Net.Client.Common.Interfaces
 {
-    public interface IVehicle : IDisposable
+    public interface IClientVehicle : ISharedVehicle, IDisposable
     {
-
-        int Id { get; }
-
-        ulong Model { get; set; }
 
         Vehicle NativeVehicle { get; }
 

@@ -10,8 +10,8 @@ namespace CryV.Net.Server.Api.Elements
     public class Events : IEvents
     {
 
-        public event EventHandler<IPlayer> OnPlayerConnected;
-        public event EventHandler<IPlayer> OnPlayerDisconnected;
+        public event EventHandler<IServerPlayer> OnPlayerConnected;
+        public event EventHandler<IServerPlayer> OnPlayerDisconnected;
 
         private readonly IEventAggregator _eventAggregator;
         
@@ -34,12 +34,12 @@ namespace CryV.Net.Server.Api.Elements
             });
         }
         
-        protected virtual void InvokeOnPlayerConnected(IPlayer e)
+        protected virtual void InvokeOnPlayerConnected(IServerPlayer e)
         {
             OnPlayerConnected?.Invoke(this, e);
         }
 
-        protected virtual void InvokeOnPlayerDisconnected(IPlayer e)
+        protected virtual void InvokeOnPlayerDisconnected(IServerPlayer e)
         {
             OnPlayerDisconnected?.Invoke(this, e);
         }

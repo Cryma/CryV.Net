@@ -5,8 +5,8 @@ namespace CryV.Net.Client.Common.Interfaces
     public interface IVehicleManager
     {
 
-        IVehicle GetVehicle(int vehicleId);
-        IVehicle GetVehicle(Vehicle vehicle);
+        IClientVehicle GetVehicle(int vehicleId);
+        IClientVehicle GetVehicle(Vehicle vehicle);
 
     }
 }
