@@ -13,12 +13,11 @@ namespace CryV.Net.Server.Common.Interfaces
 
         IServerVehicle Vehicle { get; set; }
 
+        NetPeer Peer { get; }
+
         PlayerUpdatePayload GetPayload();
-        void ReadPayload(PlayerUpdatePayload payload);
 
         void Send(IPayload payload, DeliveryMethod deliveryMethod);
-
-        NetPeer GetPeer();
 
     }
 }

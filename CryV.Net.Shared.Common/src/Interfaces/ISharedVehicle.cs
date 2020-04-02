@@ -1,4 +1,6 @@
-﻿namespace CryV.Net.Shared.Common.Interfaces
+﻿using CryV.Net.Shared.Common.Payloads;
+
+namespace CryV.Net.Shared.Common.Interfaces
 {
     public interface ISharedVehicle : ISharedEntity
     {
@@ -19,5 +21,8 @@
         bool IsRoofLowering { get; }
         bool IsRoofDown { get; }
         bool IsRoofRaising { get; }
+
+        void ReadPayload(VehicleUpdatePayload payload);
+
     }
 }

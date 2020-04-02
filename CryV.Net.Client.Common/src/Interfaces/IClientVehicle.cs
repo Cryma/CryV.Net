@@ -14,7 +14,5 @@ namespace CryV.Net.Client.Common.Interfaces
 
         VehicleUpdatePayload LastSentUpdatePayload { get; set; }
 
-        void ReadPayload(VehicleUpdatePayload payload);
-
     }
 }

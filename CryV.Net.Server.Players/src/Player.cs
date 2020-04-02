@@ -16,7 +16,7 @@ namespace CryV.Net.Server.Players
     public class Player : IServerPlayer
     {
 
-        public int Id => _peer.Id;
+        public int Id => Peer.Id;
 
         public ConnectionState ConnectionState { get; set; }
 
@@ -58,36 +58,32 @@ namespace CryV.Net.Server.Players
 
         public IServerVehicle Vehicle { get; set; }
 
+        public NetPeer Peer { get; }
+
         public int Seat { get; set; }
 
         private readonly IEventAggregator _eventAggregator;
         private readonly IVehicleManager _vehicleManager;
         private readonly ILogger _logger;
-        private readonly NetPeer _peer;
 
         public Player(IEventAggregator eventAggregator, IVehicleManager vehicleManager, ILogger logger, NetPeer peer)
         {
             _eventAggregator = eventAggregator;
             _vehicleManager = vehicleManager;
             _logger = logger;
-            _peer = peer;
+            Peer = peer;
         }
 
         public void Send(IPayload payload, DeliveryMethod deliveryMethod)
         {
             var data = PayloadHandler.SerializePayload(payload).Prepend((byte)payload.PayloadType).ToArray();
 
-            if (_peer == null)
+            if (Peer == null)
             {
                 return;
             }
 
-            _peer.Send(data, deliveryMethod);
-        }
-
-        public NetPeer GetPeer()
-        {
-            return _peer;
+            Peer.Send(data, deliveryMethod);
         }
 
         public PlayerUpdatePayload GetPayload()

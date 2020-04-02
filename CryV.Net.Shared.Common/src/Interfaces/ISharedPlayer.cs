@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using CryV.Net.Shared.Common.Payloads;
 
 namespace CryV.Net.Shared.Common.Interfaces
 {
@@ -17,6 +18,8 @@ namespace CryV.Net.Shared.Common.Interfaces
         bool IsEnteringVehicle { get; }
         bool IsInVehicle { get; }
         bool IsLeavingVehicle { get; }
+
+        void ReadPayload(PlayerUpdatePayload payload);
 
     }
 }

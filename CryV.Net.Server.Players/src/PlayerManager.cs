@@ -91,7 +91,7 @@ namespace CryV.Net.Server.Players
         {
             foreach (var player in _players.Values)
             {
-                if (player.GetPeer() != peer)
+                if (player.Peer != peer)
                 {
                     continue;
                 }
@@ -164,7 +164,7 @@ namespace CryV.Net.Server.Players
 
             _logger.LogDebug("Sending bootstrap payload to player {PlayerId}", player.Id);
 
-            var bootstrapPayload = new BootstrapPayload(player.GetPeer().Id, player.Position, player.Rotation.Z, player.Model, existingPlayerPayloads, existingVehiclePaylaods);
+            var bootstrapPayload = new BootstrapPayload(player.Id, player.Position, player.Rotation.Z, player.Model, existingPlayerPayloads, existingVehiclePaylaods);
 
             player.Send(bootstrapPayload, DeliveryMethod.ReliableOrdered);
         }

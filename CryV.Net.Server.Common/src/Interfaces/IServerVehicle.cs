@@ -12,8 +12,6 @@ namespace CryV.Net.Server.Common.Interfaces
 
         VehicleUpdatePayload GetPayload();
 
-        void ReadPayload(VehicleUpdatePayload payload);
-
         void ForceSync();
 
     }
