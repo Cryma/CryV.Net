@@ -257,31 +257,31 @@ namespace CryV.Net.Client.Vehicles
 
             Trailer?.NativeVehicle?.SetTrailerLegsRaised();
 
-            ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_RAISEROOF", IsRoofRaising, () =>
+            ExecutionHelper.Execute($"VEHICLE_{Id}_RAISEROOF", IsRoofRaising, () =>
             {
                 NativeVehicle.RaiseConvertibleRoof(false);
             });
 
-            ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_LOWERROOF", IsRoofLowering, () =>
+            ExecutionHelper.Execute($"VEHICLE_{Id}_LOWERROOF", IsRoofLowering, () =>
             {
                 NativeVehicle.LowerConvertibleRoof(false);
             });
 
-            ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_HORN", IsHornActive, () =>
+            ExecutionHelper.Execute($"VEHICLE_{Id}_HORN", IsHornActive, () =>
             {
                 NativeVehicle.StartVehicleHorn(9999);
-            }, () =>
+            }, onReset: () =>
             {
                 NativeVehicle.StartVehicleHorn(1);
             });
 
-            ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_BURNOUT", IsBurnout, () =>
+            ExecutionHelper.Execute($"VEHICLE_{Id}_BURNOUT", IsBurnout, () =>
             {
                 var driver = NativeVehicle.GetPedOnSeat(-1);
                 driver?.TaskVehicleTempAction(NativeVehicle, 23, 9999);
 
                 NativeVehicle.SetVehicleBurnout(true);
-            }, () =>
+            }, onReset: () =>
             {
                 var driver = NativeVehicle.GetPedOnSeat(-1);
                 driver?.TaskVehicleTempAction(NativeVehicle, 6, 1);
@@ -290,13 +290,10 @@ namespace CryV.Net.Client.Vehicles
                 NativeVehicle.SetVehicleBurnout(false);
             });
 
-            ExecutionHelper.ExecuteOnce($"VEHICLE_{Id}_SIREN", IsSirenActive, () =>
-            {
-                NativeVehicle.Siren = true;
-            }, () =>
-            {
-                NativeVehicle.Siren = false;
-            });
+            ExecutionHelper.Execute($"VEHICLE_{Id}_SIREN", IsSirenActive,
+                () => NativeVehicle.Siren = true,
+                onReset: () => NativeVehicle.Siren = false
+            );
         }
 
         private void TrailerTick(float deltaTime)

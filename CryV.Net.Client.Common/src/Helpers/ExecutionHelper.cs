@@ -7,32 +7,39 @@ namespace CryV.Net.Client.Common.Helpers
     public static class ExecutionHelper
     {
 
-        private static readonly ConcurrentDictionary<string, Action> _executions = new ConcurrentDictionary<string, Action>();
+        //private static readonly ConcurrentDictionary<string, Action> _executions = new ConcurrentDictionary<string, Action>();
+        private static readonly List<string> _executions = new List<string>();
 
-        public static void ExecuteOnce(string key, bool state, Action onBegin, Action onReset = null)
+        public static void Execute(string key, bool state, Action onBegin = null, Action onTick = null, Action onReset = null)
         {
             if (state)
             {
-                if (_executions.ContainsKey(key))
+                lock (_executions)
                 {
-                    return;
+                    if (_executions.Contains(key) == false)
+                    {
+                        onBegin();
+
+                        _executions.Add(key);
+                    }
                 }
 
-                onBegin();
-
-                _executions.TryAdd(key, onReset);
+                onTick();
 
                 return;
             }
 
-            if (_executions.TryRemove(key, out var resetAction))
+            lock (_executions)
             {
-                if (resetAction == null)
+                if (_executions.Remove(key))
                 {
-                    return;
-                }
+                    if (onReset == null)
+                    {
+                        return;
+                    }
 
-                resetAction();
+                    onReset();
+                }
             }
         }
 

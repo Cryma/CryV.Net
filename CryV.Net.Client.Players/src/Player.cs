@@ -179,31 +179,18 @@ namespace CryV.Net.Client.Players
 
             UpdateRagdoll();
 
-            ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_POINTING", IsFingerPointing, () =>
-            {
-                FingerPointingHelper.StartPointing(NativePed);
-            }, () =>
-            {
-                FingerPointingHelper.StopPointing(NativePed);
-            });
+            ExecutionHelper.Execute($"PLAYER_{Id}_POINTING", IsFingerPointing,
+                () => FingerPointingHelper.StartPointing(NativePed),
+                () => {
+                    var pitch = Interpolation.Lerp(_lastPayload.FingerPointingPitch, FingerPointingPitch, deltaTime * 2);
+                    var heading = Interpolation.Lerp(_lastPayload.FingerPointingHeading, FingerPointingHeading, deltaTime * 2);
 
-            if (IsFingerPointing)
-            {
-                var pitch = Interpolation.Lerp(_lastPayload.FingerPointingPitch, FingerPointingPitch, deltaTime * 2);
-                var heading = Interpolation.Lerp(_lastPayload.FingerPointingHeading, FingerPointingHeading, deltaTime * 2);
+                    FingerPointingHelper.UpdatePointing(NativePed, pitch, heading, false);
+                },
+                () => FingerPointingHelper.StopPointing(NativePed));
 
-                FingerPointingHelper.UpdatePointing(NativePed, pitch, heading, false);
-            }
-
-            ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_JUMPING", IsJumping, () =>
-            {
-                NativePed.TaskJump();
-            });
-
-            ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_CLIMBING", IsClimbing, () =>
-            {
-                NativePed.TaskClimb();
-            });
+            ExecutionHelper.Execute($"PLAYER_{Id}_JUMPING", IsJumping, () => NativePed.TaskJump());
+            ExecutionHelper.Execute($"PLAYER_{Id}_CLIMBING", IsClimbing, () => NativePed.TaskClimb());
         }
 
         private void UpdatePosition(float deltaTime)
@@ -242,13 +229,13 @@ namespace CryV.Net.Client.Players
 
         private void UpdateRagdoll()
         {
-            ExecutionHelper.ExecuteOnce($"PLAYER_{Id}_RAGDOLL", IsRagdoll, () =>
+            ExecutionHelper.Execute($"PLAYER_{Id}_RAGDOLL", IsRagdoll, () =>
             {
                 NativePed.SetPedCanRagdoll(true);
 
                 var forward = NativePed.Forward;
                 NativePed.SetPedToRagdollWithFall(99999, 2000, 1, forward.X, forward.Y, forward.Z, 2.0f);
-            }, () =>
+            }, onReset: () =>
             {
                 NativePed.ClearPedTasks();
 
