@@ -2,8 +2,8 @@
   "profiles": {
     "CryV.Net.Server.Core": {
       "commandName": "Executable",
-      "executablePath": "C:\\Development\\CryV\\server\\CryV.Net.Server.Core.exe",
-      "workingDirectory": "C:\\Development\\CryV\\server"
+      "executablePath": "F:\\CryV\\server\\CryV.Net.Server.Core.exe",
+      "workingDirectory": "F:\\CryV\\server"
     }
   }
 }

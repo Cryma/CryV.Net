@@ -1,4 +1,4 @@
-name: .NET Core
+name: Build .NET
 
 on: repository_dispatch
 
@@ -9,10 +9,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core
+    - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 7.0.x
     - name: Install dependencies
       run: dotnet restore
     - name: Build
@@ -26,11 +26,11 @@ jobs:
         mkdir out\client\dotnet\resources
         mkdir out\server\gamemode\example\server
         mkdir out\server\gamemode\example\client
-        xcopy /S /Y CryV.Net\bin\Release\netcoreapp3.1 out\client\dotnet\runtime\
-        xcopy /S /Y CryV.Net.Client.Core\bin\Release\netcoreapp3.1 out\client\dotnet\resources\
-        xcopy /S /Y CryV.Net.Server.Core\bin\Release\netcoreapp3.1 out\server\
-        xcopy /S /Y CryV.Net.Server.Example\bin\Release\netcoreapp3.1 out\server\gamemode\example\server\
-        xcopy /S /Y CryV.Net.Client.Example\bin\Release\netcoreapp3.1 out\server\gamemode\example\client\
+        xcopy /S /Y CryV.Net\bin\Release\net7.0 out\client\dotnet\runtime\
+        xcopy /S /Y CryV.Net.Client.Core\bin\Release\net7.0 out\client\dotnet\resources\
+        xcopy /S /Y CryV.Net.Server.Core\bin\Release\net7.0 out\server\
+        xcopy /S /Y CryV.Net.Server.Example\bin\Release\net7.0 out\server\gamemode\example\server\
+        xcopy /S /Y CryV.Net.Client.Example\bin\Release\net7.0 out\server\gamemode\example\client\
         
     - uses: actions/upload-artifact@v2-preview
       with:
