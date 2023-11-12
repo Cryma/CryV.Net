@@ -1,4 +1,4 @@
-﻿namespace CryV.Net.Enums
+﻿namespace CryV.Net.Shared.Common.Enums
 {
     public enum VehicleSeat
     {

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Numerics;
-using CryV.Net.Enums;
 using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
+using CryV.Net.Shared.Common.Enums;
 using CryV.Net.Shared.Common.Flags;
 using CryV.Net.Shared.Common.Payloads;
 using CryV.Net.Shared.Common.Payloads.Helpers;

@@ -1,5 +1,5 @@
-﻿using CryV.Net.Enums;
-using CryV.Net.Server.Common.Interfaces;
+﻿using CryV.Net.Server.Common.Interfaces;
+using CryV.Net.Shared.Common.Enums;
 using Micky5991.EventAggregator.Interfaces;
 
 namespace CryV.Net.Server.Common.Events
