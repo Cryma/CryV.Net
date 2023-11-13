@@ -23,9 +23,15 @@ public class DownloadServer : IDisposable
     public DownloadServer()
     {
         _webHost = new WebHostBuilder()
+#if DEBUG
+            .UseEnvironment("Development")
+#else
+            .UseEnvironment("Production")
+#endif
             .UseKestrel(options =>
             {
                 options.Listen(IPAddress.Any, 1338);
+                options.AllowSynchronousIO = true;
             })
             .UseStartup<Startup>()
             .Build();
@@ -111,7 +117,7 @@ public sealed class Startup
 
     private readonly IConfiguration _configuration;
 
-    public Startup(IHostingEnvironment environment)
+    public Startup(IWebHostEnvironment environment)
     {
         var builder = new ConfigurationBuilder();
 

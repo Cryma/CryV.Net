@@ -35,6 +35,12 @@ public class Program
 
         var builder = new HostBuilder();
 
+#if DEBUG
+        builder.UseEnvironment("Development");
+#else
+        builder.UseEnvironment("Production");
+#endif
+
         builder.ConfigureServices(services =>
         {
             services.AddSingleton<IEventAggregator, EventAggregatorService>();
