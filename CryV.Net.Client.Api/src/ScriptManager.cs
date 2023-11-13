@@ -5,20 +5,18 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
-using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Http;
-using CryV.Net.Shared.Common.Payloads;
 using Micky5991.EventAggregator.Interfaces;
 using Newtonsoft.Json;
 
 namespace CryV.Net.Client.Api
 {
-    public class ScriptManager : IStartable, IDisposable
+    public class ScriptManager : IScriptManager, IDisposable
     {
 
         private Dictionary<string, List<FileEntry>> _clientFiles = new Dictionary<string, List<FileEntry>>();
@@ -37,9 +35,16 @@ namespace CryV.Net.Client.Api
             _assemblyLoader = new AssemblyLoader(eventAggregator);
         }
 
-        public void Start()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             _eventAggregator.Subscribe<LocalPlayerBootstrapEvent>(OnBootstrap);
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
 
         private Task OnBootstrap(LocalPlayerBootstrapEvent obj)
@@ -150,6 +155,5 @@ namespace CryV.Net.Client.Api
         {
             _webClient.Dispose();
         }
-
     }
 }

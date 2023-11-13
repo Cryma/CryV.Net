@@ -1,9 +1,8 @@
 ﻿using System.Collections.Concurrent;
+using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
-using CryV.Net.Elements;
 using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
@@ -12,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Client.Players
 {
-    public class PlayerManager : IPlayerManager, IStartable
+    public class PlayerManager : IPlayerManager
     {
 
         private readonly ILogger _logger;
@@ -30,7 +29,7 @@ namespace CryV.Net.Client.Players
             _networkManager = networkManager;
         }
 
-        public void Start()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             _eventAggregator.Subscribe<NetworkEvent<BootstrapPayload>>(HandleBootstrap);
             _eventAggregator.Subscribe<NetworkEvent<PlayerAddPayload>>(OnAddPlayer);
@@ -38,6 +37,13 @@ namespace CryV.Net.Client.Players
 
             _eventAggregator.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnect);
             _eventAggregator.Subscribe<LocalPlayerBootstrapEvent>(OnBootstrap);
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
 
         private Task OnLocalPlayerDisconnect(LocalPlayerDisconnectedEvent obj)
@@ -85,13 +91,13 @@ namespace CryV.Net.Client.Players
             return player;
         }
 
-        private async Task HandleBootstrap(NetworkEvent<BootstrapPayload> obj)
+        private void HandleBootstrap(NetworkEvent<BootstrapPayload> obj)
         {
             _logger.LogDebug("Bootstrapping local player...");
 
             var payload = obj.Payload;
 
-            await _eventAggregator.PublishAsync(
+            _eventAggregator.Publish(
                 new LocalPlayerBootstrapEvent(payload.LocalId, payload.StartPosition, payload.StartHeading, payload.StartModel, payload.ExistingPlayers, payload.ExistingVehicles)
             );
 
@@ -131,6 +137,5 @@ namespace CryV.Net.Client.Players
 
             return Task.CompletedTask;
         }
-
     }
 }

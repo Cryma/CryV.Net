@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using CryV.Net.Client.Common.Helpers;
-using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
 using CryV.Net.Enums;
 using CryV.Net.Helpers;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Client.Cleanup
 {
-    public class Cleanup : IStartable
+    public class Cleanup : IHostedService
     {
 
         private static readonly List<string> _gameplayScripts = new List<string>
@@ -774,10 +774,12 @@ namespace CryV.Net.Client.Cleanup
             _logger = logger;
         }
 
-        public void Start()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             ThreadHelper.RunAsync(() =>
             {
+                _logger.LogInformation("running cleanup start");
+
                 Gameplay.DestroyAllCams(true);
                 Gameplay.SetNoLoadingScreen(true);
 
@@ -809,6 +811,8 @@ namespace CryV.Net.Client.Cleanup
 
             NativeHelper.OnNativeTick += Tick;
             Task.Run(ClearEntities);
+
+            return Task.CompletedTask;
         }
 
         public async Task ClearEntities()
@@ -864,7 +868,7 @@ namespace CryV.Net.Client.Cleanup
             }
         }
 
-        public static void Tick(float deltaTime)
+        public void Tick(float deltaTime)
         {
             World.SetRandomTrains(false);
             World.SetRandomBoats(false);
@@ -901,5 +905,9 @@ namespace CryV.Net.Client.Cleanup
             Gameplay.DisableControlAction(0, 243, true);
         }
 
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

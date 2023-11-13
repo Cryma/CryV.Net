@@ -3,25 +3,27 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Server.Vehicles
 {
-    public class VehicleManager : IVehicleManager, IStartable
+    public class VehicleManager : IVehicleManager
     {
 
-        public IPlayerManager PlayerManager { get; set; }
-        public ISyncManager SyncManager { get; set; }
+        private IPlayerManager _playerManager;
+        private ISyncManager _syncManager;
 
         private readonly IEventAggregator _eventAggregator;
         private readonly ILogger _logger;
+        private readonly IServiceProvider _serviceProvider;
 
         private readonly ConcurrentDictionary<int, IServerVehicle> _vehicles = new ConcurrentDictionary<int, IServerVehicle>();
 
@@ -33,15 +35,27 @@ namespace CryV.Net.Server.Vehicles
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
         };
 
-        public VehicleManager(IEventAggregator eventAggregator, ILogger<VehicleManager> logger)
+        public VehicleManager(IEventAggregator eventAggregator, ILogger<VehicleManager> logger, IServiceProvider serviceProvider)
         {
             _eventAggregator = eventAggregator;
             _logger = logger;
+            _serviceProvider = serviceProvider;
         }
 
-        public void Start()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
+            // Prevent circular dependency
+            _playerManager = _serviceProvider.GetRequiredService<IPlayerManager>();
+            _syncManager = _serviceProvider.GetRequiredService<ISyncManager>();
+
             _eventAggregator.Subscribe<NetworkEvent<VehicleUpdatePayload>>(OnVehicleUpdate);
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
 
         public event EventHandler<IServerVehicle> OnVehicleAdded;
@@ -55,7 +69,7 @@ namespace CryV.Net.Server.Vehicles
                 numberPlate = GenerateNumberPlate("CRYV-");
             }
 
-            var vehicle = new Vehicle(_eventAggregator, PlayerManager, id, position, rotation, model, numberPlate);
+            var vehicle = new Vehicle(_eventAggregator, _playerManager, id, position, rotation, model, numberPlate);
             _vehicles.TryAdd(id, vehicle);
 
             PropagateVehicleAddition(vehicle);
@@ -135,11 +149,11 @@ namespace CryV.Net.Server.Vehicles
 
             vehicle.ReadPayload(payload);
 
-            foreach (var player in PlayerManager.GetPlayers())
+            foreach (var player in _playerManager.GetPlayers())
             {
                 // TODO: Handle ped mirror
 
-                if (SyncManager.IsEntitySyncedByPlayer(vehicle, player))
+                if (_syncManager.IsEntitySyncedByPlayer(vehicle, player))
                 {
                     continue;
                 }
@@ -152,7 +166,7 @@ namespace CryV.Net.Server.Vehicles
 
         private void PropagateVehicleAddition(IServerVehicle vehicle)
         {
-            foreach (var player in PlayerManager.GetPlayers(onlyConnected: false))
+            foreach (var player in _playerManager.GetPlayers(onlyConnected: false))
             {
                 player.Send(vehicle.GetPayload(), DeliveryMethod.ReliableOrdered);
             }
@@ -160,11 +174,10 @@ namespace CryV.Net.Server.Vehicles
 
         private void PropagateVehicleRemoval(IServerVehicle vehicle)
         {
-            foreach (var player in PlayerManager.GetPlayers(onlyConnected: false))
+            foreach (var player in _playerManager.GetPlayers(onlyConnected: false))
             {
                 player.Send(new VehicleRemovePayload(vehicle.Id), DeliveryMethod.ReliableOrdered);
             }
         }
-
     }
 }

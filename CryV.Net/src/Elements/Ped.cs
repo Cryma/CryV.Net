@@ -1,6 +1,6 @@
+using CryV.Net.Enums;
 using CryV.Net.Helpers;
 using CryV.Net.Native;
-using CryV.Net.Shared.Common.Enums;
 using System.Numerics;
 
 namespace CryV.Net.Elements

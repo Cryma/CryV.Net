@@ -30,5 +30,10 @@ namespace CryV.Net.Client.Common.Events
             ExistingVehicles = existingVehicles;
         }
 
+        public bool IsCancellable()
+        {
+            return false;
+        }
+
     }
 }

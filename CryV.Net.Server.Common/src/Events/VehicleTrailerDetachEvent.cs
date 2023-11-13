@@ -17,5 +17,10 @@ namespace CryV.Net.Server.Common.Events
             Vehicle = vehicle;
         }
 
+        public bool IsCancellable()
+        {
+            return false;
+        }
+
     }
 }

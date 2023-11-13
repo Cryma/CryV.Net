@@ -23,5 +23,10 @@ namespace CryV.Net.Server.Common.Events
             Seat = seat;
         }
 
+        public bool IsCancellable()
+        {
+            return false;
+        }
+
     }
 }

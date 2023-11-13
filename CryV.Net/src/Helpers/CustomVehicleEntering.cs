@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using CryV.Net.Elements;
-using CryV.Net.Shared.Common.Enums;
+using CryV.Net.Enums;
 
 namespace CryV.Net.Helpers
 {

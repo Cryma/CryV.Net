@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
+using Microsoft.Extensions.Hosting;
 
 namespace CryV.Net.Server.Common.Interfaces
 {
-    public interface IPlayerManager
+    public interface IPlayerManager : IHostedService
     {
 
         void AddPlayer(NetPeer peer);

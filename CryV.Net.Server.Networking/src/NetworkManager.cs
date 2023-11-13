@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Enums;
 using CryV.Net.Shared.Common.Events;
@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Server.Networking
 {
-    public class NetworkManager : INetworkManager, IStartable
+    public class NetworkManager : INetworkManager
     {
 
         private readonly EventBasedNetListener _listener = new EventBasedNetListener();
@@ -39,6 +39,20 @@ namespace CryV.Net.Server.Networking
             _netManager = new NetManager(_listener);
         }
 
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            _netManager.Start(1337);
+
+            Task.Run(Tick);
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
         private void OnPeerConnected(NetPeer peer)
         {
             _playerManager.AddPlayer(peer);
@@ -49,7 +63,7 @@ namespace CryV.Net.Server.Networking
             _playerManager.RemovePlayer(peer);
         }
 
-        private void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliverymethod)
+        private void OnNetworkReceive(NetPeer peer, NetPacketReader reader, byte channel, DeliveryMethod deliverymethod)
         {
             var type = (PayloadType) reader.GetByte();
 
@@ -89,13 +103,6 @@ namespace CryV.Net.Server.Networking
             request.AcceptIfKey("cryv-0.1.1");
         }
 
-        public void Start()
-        {
-            _netManager.Start(1337);
-
-            Task.Run(Tick);
-        }
-
         private async Task Tick()
         {
             while (true)
@@ -115,6 +122,5 @@ namespace CryV.Net.Server.Networking
                 }
             }
         }
-
     }
 }

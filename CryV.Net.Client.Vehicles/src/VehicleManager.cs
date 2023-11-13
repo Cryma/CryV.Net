@@ -1,18 +1,16 @@
 ﻿using System.Collections.Concurrent;
+using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
-using CryV.Net.Elements;
 using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
-using Micky5991.EventAggregator;
 using Micky5991.EventAggregator.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Client.Vehicles
 {
-    public class VehicleManager : IVehicleManager, IStartable
+    public class VehicleManager : IVehicleManager
     {
 
         private readonly ILogger _logger;
@@ -28,7 +26,7 @@ namespace CryV.Net.Client.Vehicles
             _syncManager = syncManager;
         }
 
-        public void Start()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             _eventAggregator.Subscribe<LocalPlayerBootstrapEvent>(OnBootstrap);
 
@@ -36,6 +34,13 @@ namespace CryV.Net.Client.Vehicles
             _eventAggregator.Subscribe<NetworkEvent<VehicleRemovePayload>>(OnRemoveVehicle);
 
             _eventAggregator.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
 
         private Task OnBootstrap(LocalPlayerBootstrapEvent obj)
@@ -119,6 +124,5 @@ namespace CryV.Net.Client.Vehicles
 
             return null;
         }
-
     }
 }

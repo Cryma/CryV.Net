@@ -1,13 +1,14 @@
 ﻿using System;
-using Autofac;
+using System.Threading;
+using System.Threading.Tasks;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
-using LiteNetLib.Utils;
+using Microsoft.Extensions.Hosting;
 
 namespace CryV.Net.Client.Debugging.Menu
 {
-    public class DebugKeybinds : IStartable
+    public class DebugKeybinds : IHostedService
     {
 
         private readonly INetworkManager _networkManager;
@@ -17,9 +18,16 @@ namespace CryV.Net.Client.Debugging.Menu
             _networkManager = networkManager;
         }
 
-        public void Start()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             NativeHelper.OnNativeTick += Tick;
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
 
         private void Tick(float deltatime)

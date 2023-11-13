@@ -88,10 +88,15 @@ namespace CryV.Net.Client.Players
 
             _eventSubscriptions.Add(_eventAggregator.Subscribe<NetworkEvent<PlayerUpdatePayload>>(update =>
             {
+                if (update.Payload.Id != Id)
+                {
+                    return Task.CompletedTask;
+                }
+
                 ReadPayload(update.Payload);
 
                 return Task.CompletedTask;
-            }, x => Task.FromResult(x.Payload.Id == Id)));
+            }/*, x => Task.FromResult(x.Payload.Id == Id)*/));
 
             ThreadHelper.RunAsync(() =>
             {

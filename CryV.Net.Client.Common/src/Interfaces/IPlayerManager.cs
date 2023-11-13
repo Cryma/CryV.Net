@@ -1,8 +1,9 @@
 ﻿using CryV.Net.Shared.Common.Payloads;
+using Microsoft.Extensions.Hosting;
 
 namespace CryV.Net.Client.Common.Interfaces
 {
-    public interface IPlayerManager
+    public interface IPlayerManager : IHostedService
     {
 
         void AddPlayer(PlayerUpdatePayload payload);

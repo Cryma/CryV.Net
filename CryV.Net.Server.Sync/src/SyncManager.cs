@@ -2,8 +2,8 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Enums;
@@ -11,11 +11,10 @@ using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
 using Microsoft.Extensions.Logging;
-using ConnectionState = CryV.Net.Server.Common.Enums.ConnectionState;
 
 namespace CryV.Net.Server.Sync
 {
-    public class SyncManager : ISyncManager, IStartable
+    public class SyncManager : ISyncManager
     {
 
         private readonly ConcurrentDictionary<IServerVehicle, IServerPlayer> _vehicleSyncMapping = new ConcurrentDictionary<IServerVehicle, IServerPlayer>();
@@ -33,16 +32,23 @@ namespace CryV.Net.Server.Sync
             _logger = logger;
         }
 
-        public void Start()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             _vehicleManager.OnVehicleAdded += OnVehicleAdded;
 
             _eventAggregator.Subscribe<PlayerEntersVehicleEvent>(OnPlayerEntersVehicle);
             _eventAggregator.Subscribe<PlayerDisconnectedEvent>(OnPlayerDisconnected);
 
-            _eventAggregator.SubscribeSync<VehicleTrailerAttachedEvent>(OnVehicleTrailerAttached);
+            _eventAggregator.Subscribe<VehicleTrailerAttachedEvent>(OnVehicleTrailerAttached);
 
             Task.Run(SyncLoop);
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
 
         private void OnVehicleTrailerAttached(VehicleTrailerAttachedEvent eventdata)

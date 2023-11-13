@@ -1,19 +1,27 @@
 ﻿using System;
 using System.Drawing;
 using System.Numerics;
-using Autofac;
+using System.Threading;
+using System.Threading.Tasks;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Elements;
 using CryV.Net.Enums;
+using Microsoft.Extensions.Hosting;
 
 namespace CryV.Net.Client.Helpers
 {
-    public class PauseMenuHelper : IStartable
+    public class PauseMenuHelper : IHostedService
     {
-
-        public void Start()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             NativeHelper.OnNativeTick += Tick;
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
 
         private void Tick(float deltatime)

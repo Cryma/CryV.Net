@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Extensions.Hosting;
 
 namespace CryV.Net.Server.Common.Interfaces
 {
-    public interface ISyncManager
+    public interface ISyncManager : IHostedService
     {
 
         bool IsEntitySyncedByPlayer(IServerVehicle vehicle, IServerPlayer player);

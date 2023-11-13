@@ -1,10 +1,11 @@
 ﻿using System.Net;
 using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
+using Microsoft.Extensions.Hosting;
 
 namespace CryV.Net.Client.Common.Interfaces
 {
-    public interface INetworkManager
+    public interface INetworkManager : IHostedService
     {
 
         bool IsConnected { get; }

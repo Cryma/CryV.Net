@@ -53,7 +53,7 @@ namespace CryV.Net.Client.Players
                 NativePed.ClearPedSecondaryTask();
                 NativePed.ClearPedTasksImmediately();
 
-                NativePed.TaskEnterVehicle(Vehicle.NativeVehicle, -1, (VehicleSeat) Seat, Speed, 0);
+                NativePed.TaskEnterVehicle(Vehicle.NativeVehicle, -1, (CryV.Net.Enums.VehicleSeat) Seat, Speed, 0);
 
                 _vehicleEnterBegin = DateTime.UtcNow;
 

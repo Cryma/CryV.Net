@@ -112,13 +112,18 @@ namespace CryV.Net.Client.Vehicles
 
             _eventSubscriptions.Add(_eventAggregator.Subscribe<NetworkEvent<VehicleUpdatePayload>>(async update =>
             {
+                if (update.Payload.Id != Id)
+                {
+                    return;
+                }
+
                 ReadPayload(update.Payload);
 
                 if (_syncManager.IsSyncingEntity(this))
                 {
                     await ForceSync();
                 }
-            }, x => Task.FromResult(x.Payload.Id == Id)));
+            }/*, x => Task.FromResult(x.Payload.Id == Id)*/));
 
             ThreadHelper.RunAsync(() =>
             {

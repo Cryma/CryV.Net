@@ -21,5 +21,9 @@ namespace CryV.Net.Shared.Common.Events
             Payload = payload;
         }
 
+        public bool IsCancellable()
+        {
+            return false;
+        }
     }
 }

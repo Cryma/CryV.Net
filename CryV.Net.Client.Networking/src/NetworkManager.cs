@@ -5,10 +5,8 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
-using CryV.Net.Elements;
 using CryV.Net.Shared.Common.Enums;
 using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
@@ -19,7 +17,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Client.Networking
 {
-    public class NetworkManager : INetworkManager, IStartable
+    public class NetworkManager : INetworkManager
     {
 
         public bool IsConnected => _peer != null && _peer.ConnectionState == ConnectionState.Connected;
@@ -50,7 +48,19 @@ namespace CryV.Net.Client.Networking
             _netManager = new NetManager(_listener);
         }
 
-        private void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliverymethod)
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            _netManager.Start();
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        private void OnNetworkReceive(NetPeer peer, NetPacketReader reader, byte channel, DeliveryMethod deliverymethod)
         {
             var type = (PayloadType) reader.GetByte();
 
@@ -69,11 +79,6 @@ namespace CryV.Net.Client.Networking
             payloadProperty.SetValue(eventInstance, payload);
 
             _eventAggregator.Publish(eventInstance);
-        }
-
-        public void Start()
-        {
-            _netManager.Start();
         }
 
         public void Connect(string address, int port)
@@ -137,6 +142,5 @@ namespace CryV.Net.Client.Networking
                 }
             }
         }
-
     }
 }

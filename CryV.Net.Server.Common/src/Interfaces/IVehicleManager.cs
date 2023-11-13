@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Microsoft.Extensions.Hosting;
 
 namespace CryV.Net.Server.Common.Interfaces
 {
-    public interface IVehicleManager
+    public interface IVehicleManager : IHostedService
     {
 
         event EventHandler<IServerVehicle> OnVehicleAdded;

@@ -13,5 +13,10 @@ namespace CryV.Net.Client.Common.Events
             Player = player;
         }
 
+        public bool IsCancellable()
+        {
+            return false;
+        }
+
     }
 }

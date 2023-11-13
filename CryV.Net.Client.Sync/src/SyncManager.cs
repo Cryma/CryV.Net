@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
@@ -11,36 +11,48 @@ using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Client.Sync
 {
-    public class SyncManager : ISyncManager, IStartable
+    public class SyncManager : ISyncManager
     {
 
-        public IVehicleManager VehicleManager { get; set; }
 
         private readonly List<IClientVehicle> _syncVehicles = new List<IClientVehicle>();
 
+        private IVehicleManager _vehicleManager;
         private readonly IEventAggregator _eventAggregator;
         private readonly INetworkManager _networkManager;
         private readonly ILogger _logger;
+        private IServiceProvider _serviceProvider;
 
-            public SyncManager(IEventAggregator eventAggregator, INetworkManager networkManager, ILogger<SyncManager> logger)
+        public SyncManager(IEventAggregator eventAggregator, INetworkManager networkManager, ILogger<SyncManager> logger, IServiceProvider serviceProvider)
         {
             _eventAggregator = eventAggregator;
             _networkManager = networkManager;
             _logger = logger;
+            _serviceProvider = serviceProvider;
         }
 
-        public void Start()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
+            _vehicleManager = _serviceProvider.GetRequiredService<IVehicleManager>();
+
             _eventAggregator.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
 
             _eventAggregator.Subscribe<NetworkEvent<AddSyncPayload>>(OnSyncAdd);
             _eventAggregator.Subscribe<NetworkEvent<RemoveSyncPayload>>(OnSyncRemove);
 
             Task.Run(SyncLoop);
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
 
         private Task OnLocalPlayerDisconnected(LocalPlayerDisconnectedEvent obj)
@@ -52,7 +64,7 @@ namespace CryV.Net.Client.Sync
 
         private Task OnSyncAdd(NetworkEvent<AddSyncPayload> obj)
         {
-            var vehicle = VehicleManager.GetVehicle(obj.Payload.EntityId);
+            var vehicle = _vehicleManager.GetVehicle(obj.Payload.EntityId);
 
             if (vehicle == null)
             {
@@ -75,7 +87,7 @@ namespace CryV.Net.Client.Sync
 
         private Task OnSyncRemove(NetworkEvent<RemoveSyncPayload> obj)
         {
-            var vehicle = VehicleManager.GetVehicle(obj.Payload.EntityId);
+            var vehicle = _vehicleManager.GetVehicle(obj.Payload.EntityId);
 
             if (_syncVehicles.Contains(vehicle) == false)
             {
@@ -138,7 +150,7 @@ namespace CryV.Net.Client.Sync
             var nativeTrailer = nativeVehicle.GetTrailer();
             if (nativeTrailer != null)
             {
-                var trailer = VehicleManager.GetVehicle(nativeTrailer);
+                var trailer = _vehicleManager.GetVehicle(nativeTrailer);
                 if (trailer != null)
                 {
                     trailerId = trailer.Id;

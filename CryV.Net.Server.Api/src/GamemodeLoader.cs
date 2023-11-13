@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Reflection;
-using Autofac;
+using System.Threading;
+using System.Threading.Tasks;
 using CryV.Net.Server.Api.Elements;
 using CryV.Net.Server.Api.Gamemode;
 using CryV.Net.Server.Api.Http;
@@ -12,10 +11,11 @@ using CryV.Net.Server.Api.Scripting;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Server.Common.Interfaces.Api;
 using Micky5991.EventAggregator.Interfaces;
+using Microsoft.Extensions.Hosting;
 
 namespace CryV.Net.Server.Api
 {
-    public class GamemodeLoader : IStartable, IDisposable
+    public class GamemodeLoader : IHostedService
     {
 
         private Script _script;
@@ -39,13 +39,22 @@ namespace CryV.Net.Server.Api
             _downloadServer = new DownloadServer();
         }
 
-        public void Start()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             _script = new Script(_serviceProvider, _eventAggregator, _playerManager, _vehicleManager);
             MP.Setup(_script);
 
             LoadGamemodes();
             DownloadModule.Gamemodes = _gamemodes;
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            _downloadServer?.Dispose();
+
+            return Task.CompletedTask;
         }
 
         private void LoadGamemodes()
@@ -80,11 +89,5 @@ namespace CryV.Net.Server.Api
                 }
             }
         }
-
-        public void Dispose()
-        {
-            _downloadServer?.Dispose();
-        }
-
     }
 }

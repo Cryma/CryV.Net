@@ -1,8 +1,8 @@
-﻿using LiteNetLib;
+﻿using Microsoft.Extensions.Hosting;
 
 namespace CryV.Net.Server.Common.Interfaces
 {
-    public interface INetworkManager
+    public interface INetworkManager : IHostedService
     {
 
     }

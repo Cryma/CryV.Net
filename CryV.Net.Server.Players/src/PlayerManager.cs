@@ -2,8 +2,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Events;
@@ -15,7 +15,7 @@ using ConnectionState = CryV.Net.Server.Common.Enums.ConnectionState;
 
 namespace CryV.Net.Server.Players
 {
-    public class PlayerManager : IPlayerManager, IStartable
+    public class PlayerManager : IPlayerManager
     {
 
         private readonly IEventAggregator _eventAggregator;
@@ -31,10 +31,17 @@ namespace CryV.Net.Server.Players
             _logger = logger;
         }
 
-        public void Start()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             _eventAggregator.Subscribe<NetworkEvent<PlayerUpdatePayload>>(OnPlayerUpdate);
-            _eventAggregator.SubscribeSync<NetworkEvent<BootstrapFinishedPayload>>(OnBootstrapFinished);
+            _eventAggregator.Subscribe<NetworkEvent<BootstrapFinishedPayload>>(OnBootstrapFinished);
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
 
         private void OnBootstrapFinished(NetworkEvent<BootstrapFinishedPayload> obj)
@@ -195,6 +202,5 @@ namespace CryV.Net.Server.Players
                 existingPlayer.Send(new PlayerRemovePayload(player.Id), DeliveryMethod.ReliableOrdered);
             }
         }
-
     }
 }

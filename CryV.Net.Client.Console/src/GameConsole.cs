@@ -4,17 +4,18 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
 using CryV.Net.Helpers;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace CryV.Net.Client.Console
 {
-    public partial class GameConsole : IStartable
+    public partial class GameConsole : IHostedService
     {
 
         public bool IsVisible { get; private set; }
@@ -47,7 +48,7 @@ namespace CryV.Net.Client.Console
             _logger = logger;
         }
 
-        public void Start()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             _cursorIndex = 0;
 
@@ -67,6 +68,13 @@ namespace CryV.Net.Client.Console
                 }
             });
 #endif
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
 
         private void RegisterCommands()
@@ -315,6 +323,5 @@ namespace CryV.Net.Client.Console
         {
             UserInterface.DrawText(text, new Vector2(x, y), 0.3f, Color.FromArgb(255, 255, 255, 255));
         }
-
     }
 }

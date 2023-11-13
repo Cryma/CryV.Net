@@ -2,23 +2,22 @@ using System;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using CryV.Net.Client.Common.Events;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
 using CryV.Net.Helpers;
-using CryV.Net.Shared.Common.Events;
 using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
+using Microsoft.Extensions.Hosting;
 
 namespace CryV.Net.Client.Players.Local
 {
-    public partial class LocalPlayer : IStartable
+    public partial class LocalPlayer : IHostedService
     {
 
-        public int Id
+        public static int Id
         {
             get => LocalPlayerHelper.LocalId;
             set => LocalPlayerHelper.LocalId = value;
@@ -39,7 +38,7 @@ namespace CryV.Net.Client.Players.Local
             _vehicleManager = vehicleManager;
         }
 
-        public void Start()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             NativeHelper.OnNativeTick += FingerPointingTick;
 
@@ -47,6 +46,13 @@ namespace CryV.Net.Client.Players.Local
             _eventAggregator.Subscribe<LocalPlayerDisconnectedEvent>(OnLocalPlayerDisconnected);
 
             _eventAggregator.Subscribe<LocalPlayerBootstrapEvent>(OnBootstrap);
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
 
         private Task OnLocalPlayerConnected(LocalPlayerConnectedEvent obj)
@@ -163,6 +169,5 @@ namespace CryV.Net.Client.Players.Local
 
             return -1;
         }
-
     }
 }

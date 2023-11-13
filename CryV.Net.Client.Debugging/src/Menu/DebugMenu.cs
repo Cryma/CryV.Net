@@ -2,15 +2,17 @@
 using System.Drawing;
 using System.Linq;
 using System.Numerics;
-using Autofac;
+using System.Threading;
+using System.Threading.Tasks;
 using CryV.Net.Client.Common.Helpers;
 using CryV.Net.Client.Common.Interfaces;
 using CryV.Net.Elements;
 using CryV.Net.Helpers;
+using Microsoft.Extensions.Hosting;
 
 namespace CryV.Net.Client.Debugging.Menu
 {
-    public class DebugMenu : IStartable
+    public class DebugMenu : IHostedService
     {
 
         private bool _enabled;
@@ -27,9 +29,16 @@ namespace CryV.Net.Client.Debugging.Menu
             _networkManager = networkManager;
         }
 
-        public void Start()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             NativeHelper.OnNativeTick += Tick;
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
 
         public void Tick(float deltaTime)
@@ -133,6 +142,5 @@ namespace CryV.Net.Client.Debugging.Menu
             var text = string.IsNullOrEmpty(prefix) ? "" : prefix + ": ";
             PrintLine($"{text}{vector}");
         }
-
     }
 }
