@@ -1,11 +1,10 @@
-﻿namespace CryV.Net.Enums
+﻿namespace CryV.Net.Enums;
+
+public enum TextFont
 {
-    public enum TextFont
-    {
-        ChaletLondon,
-        HouseScript,
-        Monospace,
-        ChaletComprimeCologne = 4,
-        Pricedown = 7
-    }
+    ChaletLondon,
+    HouseScript,
+    Monospace,
+    ChaletComprimeCologne = 4,
+    Pricedown = 7
 }

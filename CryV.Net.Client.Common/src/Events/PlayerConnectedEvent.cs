@@ -1,22 +1,21 @@
 ﻿using CryV.Net.Client.Common.Interfaces;
 using Micky5991.EventAggregator.Interfaces;
 
-namespace CryV.Net.Client.Common.Events
+namespace CryV.Net.Client.Common.Events;
+
+public class PlayerConnectedEvent : IEvent
 {
-    public class PlayerConnectedEvent : IEvent
+    
+    public IClientPlayer Player { get; set; }
+
+    public PlayerConnectedEvent(IClientPlayer player)
     {
-        
-        public IClientPlayer Player { get; set; }
-
-        public PlayerConnectedEvent(IClientPlayer player)
-        {
-            Player = player;
-        }
-
-        public bool IsCancellable()
-        {
-            return false;
-        }
-
+        Player = player;
     }
+
+    public bool IsCancellable()
+    {
+        return false;
+    }
+
 }

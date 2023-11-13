@@ -1,9 +1,8 @@
-﻿namespace CryV.Net.Enums
+﻿namespace CryV.Net.Enums;
+
+public enum TextAlignment
 {
-    public enum TextAlignment
-    {
-        Center,
-        Left,
-        Right
-    }
+    Center,
+    Left,
+    Right
 }

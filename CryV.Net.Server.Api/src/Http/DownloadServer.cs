@@ -13,116 +13,114 @@ using Nancy.Owin;
 using Nancy.Responses.Negotiation;
 using Newtonsoft.Json;
 
-namespace CryV.Net.Server.Api.Http
+namespace CryV.Net.Server.Api.Http;
+
+public class DownloadServer : IDisposable
 {
-    public class DownloadServer : IDisposable
+
+    private readonly IWebHost _webHost;
+
+    public DownloadServer()
     {
+        _webHost = new WebHostBuilder()
+            .UseKestrel(options =>
+            {
+                options.Listen(IPAddress.Any, 1338);
+            })
+            .UseStartup<Startup>()
+            .Build();
 
-        private readonly IWebHost _webHost;
-
-        public DownloadServer()
-        {
-            _webHost = new WebHostBuilder()
-                .UseKestrel(options =>
-                {
-                    options.Listen(IPAddress.Any, 1338);
-                })
-                .UseStartup<Startup>()
-                .Build();
-
-            _webHost.Start();
-        }
-
-        public void Dispose()
-        {
-            _webHost.Dispose();
-        }
-
+        _webHost.Start();
     }
 
-    public sealed class DownloadModule : NancyModule
+    public void Dispose()
     {
+        _webHost.Dispose();
+    }
 
-        public static Dictionary<string, GamemodeEntry> Gamemodes;
+}
 
-        public DownloadModule()
+public sealed class DownloadModule : NancyModule
+{
+
+    public static Dictionary<string, GamemodeEntry> Gamemodes;
+
+    public DownloadModule()
+    {
+        Get("/{gamemode}/{path**}", parameters =>
         {
-            Get("/{gamemode}/{path**}", parameters =>
+            if (Gamemodes == null)
             {
-                if (Gamemodes == null)
-                {
-                    return 404;
-                }
-
-                var gamemodeName = (string) parameters.gamemode;
-                if (Gamemodes.ContainsKey(gamemodeName) == false)
-                {
-                    return 404;
-                }
-
-                var path = (string) parameters.path;
-                if (Gamemodes.Values.Any(x => x.ClientsideFiles.Any(y => y.Path.Replace('\\', '/') == path)) == false)
-                {
-                    return 404;
-                }
-
-                var filePath = Path.Combine(Environment.CurrentDirectory, "gamemode", gamemodeName, "client", path);
-                if (File.Exists(filePath))
-                {
-                    return Response.AsFile(filePath);
-                }
-
                 return 404;
-            });
-
-            Get("/filemap.json", _ =>
-            {
-                if (Gamemodes == null)
-                {
-                    return 404;
-                }
-
-                return JsonConvert.SerializeObject(Gamemodes.ToDictionary(x => x.Key, y => y.Value.ClientsideFiles));
-            });
-        }
-
-    }
-
-    public class CryVBootstrapper : DefaultNancyBootstrapper
-    {
-        protected override Func<ITypeCatalog, NancyInternalConfiguration> InternalConfiguration
-        {
-            get
-            {
-                return NancyInternalConfiguration.WithOverrides(x =>
-                {
-                    x.ResponseProcessors = new List<Type>
-                    {
-                        typeof(ResponseProcessor),
-                        typeof(ViewProcessor)
-                    };
-                });
             }
-        }
+
+            var gamemodeName = (string) parameters.gamemode;
+            if (Gamemodes.ContainsKey(gamemodeName) == false)
+            {
+                return 404;
+            }
+
+            var path = (string) parameters.path;
+            if (Gamemodes.Values.Any(x => x.ClientsideFiles.Any(y => y.Path.Replace('\\', '/') == path)) == false)
+            {
+                return 404;
+            }
+
+            var filePath = Path.Combine(Environment.CurrentDirectory, "gamemode", gamemodeName, "client", path);
+            if (File.Exists(filePath))
+            {
+                return Response.AsFile(filePath);
+            }
+
+            return 404;
+        });
+
+        Get("/filemap.json", _ =>
+        {
+            if (Gamemodes == null)
+            {
+                return 404;
+            }
+
+            return JsonConvert.SerializeObject(Gamemodes.ToDictionary(x => x.Key, y => y.Value.ClientsideFiles));
+        });
     }
 
-    public sealed class Startup
+}
+
+public class CryVBootstrapper : DefaultNancyBootstrapper
+{
+    protected override Func<ITypeCatalog, NancyInternalConfiguration> InternalConfiguration
     {
-
-        private readonly IConfiguration _configuration;
-
-        public Startup(IHostingEnvironment environment)
+        get
         {
-            var builder = new ConfigurationBuilder();
-
-            _configuration = builder.Build();
+            return NancyInternalConfiguration.WithOverrides(x =>
+            {
+                x.ResponseProcessors = new List<Type>
+                {
+                    typeof(ResponseProcessor),
+                    typeof(ViewProcessor)
+                };
+            });
         }
+    }
+}
 
-        public void Configure(IApplicationBuilder application)
-        {
-            application.UseOwin(x => x.UseNancy(options => options.Bootstrapper = new CryVBootstrapper()));
-        }
+public sealed class Startup
+{
 
+    private readonly IConfiguration _configuration;
+
+    public Startup(IHostingEnvironment environment)
+    {
+        var builder = new ConfigurationBuilder();
+
+        _configuration = builder.Build();
+    }
+
+    public void Configure(IApplicationBuilder application)
+    {
+        application.UseOwin(x => x.UseNancy(options => options.Bootstrapper = new CryVBootstrapper()));
     }
 
 }

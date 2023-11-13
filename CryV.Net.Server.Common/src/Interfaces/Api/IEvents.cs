@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace CryV.Net.Server.Common.Interfaces.Api
+namespace CryV.Net.Server.Common.Interfaces.Api;
+
+public interface IEvents
 {
-    public interface IEvents
-    {
 
-        event EventHandler<IServerPlayer> OnPlayerConnected;
-        event EventHandler<IServerPlayer> OnPlayerDisconnected;
+    event EventHandler<IServerPlayer> OnPlayerConnected;
+    event EventHandler<IServerPlayer> OnPlayerDisconnected;
 
-    }
 }

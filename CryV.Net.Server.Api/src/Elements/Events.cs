@@ -5,44 +5,43 @@ using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Server.Common.Interfaces.Api;
 using Micky5991.EventAggregator.Interfaces;
 
-namespace CryV.Net.Server.Api.Elements
+namespace CryV.Net.Server.Api.Elements;
+
+public class Events : IEvents
 {
-    public class Events : IEvents
+
+    public event EventHandler<IServerPlayer> OnPlayerConnected;
+    public event EventHandler<IServerPlayer> OnPlayerDisconnected;
+
+    private readonly IEventAggregator _eventAggregator;
+    
+    public Events(IEventAggregator eventAggregator)
     {
+        _eventAggregator = eventAggregator;
 
-        public event EventHandler<IServerPlayer> OnPlayerConnected;
-        public event EventHandler<IServerPlayer> OnPlayerDisconnected;
-
-        private readonly IEventAggregator _eventAggregator;
-        
-        public Events(IEventAggregator eventAggregator)
+        _eventAggregator.Subscribe<PlayerConnectedEvent>(onPlayerConnected =>
         {
-            _eventAggregator = eventAggregator;
+            InvokeOnPlayerConnected(onPlayerConnected.Player);
 
-            _eventAggregator.Subscribe<PlayerConnectedEvent>(onPlayerConnected =>
-            {
-                InvokeOnPlayerConnected(onPlayerConnected.Player);
+            return Task.CompletedTask;
+        });
 
-                return Task.CompletedTask;
-            });
-
-            eventAggregator.Subscribe<PlayerDisconnectedEvent>(onPlayerDisconnected =>
-            {
-                InvokeOnPlayerDisconnected(onPlayerDisconnected.Player);
-
-                return Task.CompletedTask;
-            });
-        }
-        
-        protected virtual void InvokeOnPlayerConnected(IServerPlayer e)
+        eventAggregator.Subscribe<PlayerDisconnectedEvent>(onPlayerDisconnected =>
         {
-            OnPlayerConnected?.Invoke(this, e);
-        }
+            InvokeOnPlayerDisconnected(onPlayerDisconnected.Player);
 
-        protected virtual void InvokeOnPlayerDisconnected(IServerPlayer e)
-        {
-            OnPlayerDisconnected?.Invoke(this, e);
-        }
-
+            return Task.CompletedTask;
+        });
     }
+    
+    protected virtual void InvokeOnPlayerConnected(IServerPlayer e)
+    {
+        OnPlayerConnected?.Invoke(this, e);
+    }
+
+    protected virtual void InvokeOnPlayerDisconnected(IServerPlayer e)
+    {
+        OnPlayerDisconnected?.Invoke(this, e);
+    }
+
 }

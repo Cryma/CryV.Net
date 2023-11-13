@@ -2,28 +2,27 @@
 using LiteNetLib;
 using Micky5991.EventAggregator.Interfaces;
 
-namespace CryV.Net.Shared.Common.Events
+namespace CryV.Net.Shared.Common.Events;
+
+public class NetworkEvent<TPayload> : IEvent where TPayload : IPayload
 {
-    public class NetworkEvent<TPayload> : IEvent where TPayload : IPayload
+    
+    public NetPeer Sender { get; set; }
+
+    public TPayload Payload { get; set; }
+
+    public NetworkEvent()
     {
-        
-        public NetPeer Sender { get; set; }
+    }
 
-        public TPayload Payload { get; set; }
+    public NetworkEvent(NetPeer sender, TPayload payload)
+    {
+        Sender = sender;
+        Payload = payload;
+    }
 
-        public NetworkEvent()
-        {
-        }
-
-        public NetworkEvent(NetPeer sender, TPayload payload)
-        {
-            Sender = sender;
-            Payload = payload;
-        }
-
-        public bool IsCancellable()
-        {
-            return false;
-        }
+    public bool IsCancellable()
+    {
+        return false;
     }
 }

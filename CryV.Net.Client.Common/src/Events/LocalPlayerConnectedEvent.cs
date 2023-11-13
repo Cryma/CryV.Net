@@ -1,12 +1,11 @@
 ﻿using Micky5991.EventAggregator.Interfaces;
 
-namespace CryV.Net.Client.Common.Events
+namespace CryV.Net.Client.Common.Events;
+
+public class LocalPlayerConnectedEvent : IEvent
 {
-    public class LocalPlayerConnectedEvent : IEvent
+    public bool IsCancellable()
     {
-        public bool IsCancellable()
-        {
-            return false;
-        }
+        return false;
     }
 }

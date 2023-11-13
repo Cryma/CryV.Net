@@ -3,24 +3,23 @@ using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 using Microsoft.Extensions.Hosting;
 
-namespace CryV.Net.Client.Common.Interfaces
+namespace CryV.Net.Client.Common.Interfaces;
+
+public interface INetworkManager : IHostedService
 {
-    public interface INetworkManager : IHostedService
-    {
 
-        bool IsConnected { get; }
+    bool IsConnected { get; }
 
-        NetStatistics Statistics { get; }
+    NetStatistics Statistics { get; }
 
-        IPEndPoint EndPoint { get; }
+    IPEndPoint EndPoint { get; }
 
-        int Ping { get; }
+    int Ping { get; }
 
-        void Connect(string address, int port);
+    void Connect(string address, int port);
 
-        void Disconnect();
+    void Disconnect();
 
-        void Send(IPayload payload, DeliveryMethod deliveryMethod);
+    void Send(IPayload payload, DeliveryMethod deliveryMethod);
 
-    }
 }

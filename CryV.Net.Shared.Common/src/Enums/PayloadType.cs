@@ -1,20 +1,19 @@
-﻿namespace CryV.Net.Shared.Common.Enums
+﻿namespace CryV.Net.Shared.Common.Enums;
+
+public enum PayloadType
 {
-    public enum PayloadType
-    {
-        None,
-        Bootstrap,
-        BootstrapFinished,
-        AddPlayer,
-        RemovePlayer,
-        UpdatePlayer,
-        UpdatePointing,
-        StopPointing,
-        AddVehicle,
-        RemoveVehicle,
-        UpdateVehicle,
-        RemoteCommand,
-        AddSync,
-        RemoveSync
-    }
+    None,
+    Bootstrap,
+    BootstrapFinished,
+    AddPlayer,
+    RemovePlayer,
+    UpdatePlayer,
+    UpdatePointing,
+    StopPointing,
+    AddVehicle,
+    RemoveVehicle,
+    UpdateVehicle,
+    RemoteCommand,
+    AddSync,
+    RemoveSync
 }

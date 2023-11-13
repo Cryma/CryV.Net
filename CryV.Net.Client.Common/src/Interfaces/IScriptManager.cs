@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
-namespace CryV.Net.Client.Common.Interfaces
+namespace CryV.Net.Client.Common.Interfaces;
+
+public interface IScriptManager : IHostedService
 {
-    public interface IScriptManager : IHostedService
-    {
-    }
 }

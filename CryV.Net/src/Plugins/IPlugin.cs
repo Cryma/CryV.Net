@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace CryV.Net.Plugins
+namespace CryV.Net.Plugins;
+
+public interface IPlugin
 {
-    public interface IPlugin
-    {
-        void Tick();
+    void Tick();
 
-        void OnKeyboard(ConsoleKey key, char character, bool isPressed);
+    void OnKeyboard(ConsoleKey key, char character, bool isPressed);
 
-    }
 }

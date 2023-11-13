@@ -4,20 +4,19 @@ using CryV.Net.Shared.Common.Payloads;
 using LiteNetLib;
 using ConnectionState = CryV.Net.Server.Common.Enums.ConnectionState;
 
-namespace CryV.Net.Server.Common.Interfaces
+namespace CryV.Net.Server.Common.Interfaces;
+
+public interface IServerPlayer : ISharedPlayer, IDisposable
 {
-    public interface IServerPlayer : ISharedPlayer, IDisposable
-    {
-        
-        ConnectionState ConnectionState { get; set; }
+    
+    ConnectionState ConnectionState { get; set; }
 
-        IServerVehicle Vehicle { get; set; }
+    IServerVehicle Vehicle { get; set; }
 
-        NetPeer Peer { get; }
+    NetPeer Peer { get; }
 
-        PlayerUpdatePayload GetPayload();
+    PlayerUpdatePayload GetPayload();
 
-        void Send(IPayload payload, DeliveryMethod deliveryMethod);
+    void Send(IPayload payload, DeliveryMethod deliveryMethod);
 
-    }
 }

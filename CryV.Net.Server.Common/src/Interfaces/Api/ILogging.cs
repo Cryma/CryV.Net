@@ -1,11 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace CryV.Net.Server.Common.Interfaces.Api
+namespace CryV.Net.Server.Common.Interfaces.Api;
+
+public interface ILogging
 {
-    public interface ILogging
-    {
 
-        ILogger<T> GetLogger<T>();
+    ILogger<T> GetLogger<T>();
 
-    }
 }

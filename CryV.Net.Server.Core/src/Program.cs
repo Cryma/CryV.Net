@@ -15,53 +15,52 @@ using CryV.Net.Server.Sync;
 using CryV.Net.Server.Players;
 using CryV.Net.Server.Networking;
 
-namespace CryV.Net.Server.Core
+namespace CryV.Net.Server.Core;
+
+public class Program
 {
-    public class Program
+
+    public static async Task Main(string[] args)
     {
+        var serilogLogger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .Enrich.FromLogContext()
+            .WriteTo.File(Path.Combine(Directory.GetCurrentDirectory(), "cryv-net.log"))
+            .WriteTo.Console()
+            .CreateLogger();
 
-        public static async Task Main(string[] args)
+        serilogLogger.Information(new string('-', 20));
+        serilogLogger.Information("Starting CryV Server..");
+
+        var builder = new HostBuilder();
+
+        builder.ConfigureServices(services =>
         {
-            var serilogLogger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                .Enrich.FromLogContext()
-                .WriteTo.File(Path.Combine(Directory.GetCurrentDirectory(), "cryv-net.log"))
-                .WriteTo.Console()
-                .CreateLogger();
+            services.AddSingleton<IEventAggregator, EventAggregatorService>();
 
-            serilogLogger.Information(new string('-', 20));
-            serilogLogger.Information("Starting CryV Server..");
+            services.AddSingleton<INetworkManager, NetworkManager>();
+            services.AddHostedService(p => p.GetRequiredService<INetworkManager>());
 
-            var builder = new HostBuilder();
+            services.AddSingleton<IPlayerManager, PlayerManager>();
+            services.AddHostedService(p => p.GetRequiredService<IPlayerManager>());
 
-            builder.ConfigureServices(services =>
-            {
-                services.AddSingleton<IEventAggregator, EventAggregatorService>();
+            services.AddSingleton<IVehicleManager, VehicleManager>();
+            services.AddHostedService(p => p.GetRequiredService<IVehicleManager>());
 
-                services.AddSingleton<INetworkManager, NetworkManager>();
-                services.AddHostedService(p => p.GetRequiredService<INetworkManager>());
+            services.AddSingleton<ISyncManager, SyncManager>();
+            services.AddHostedService(p => p.GetRequiredService<ISyncManager>());
 
-                services.AddSingleton<IPlayerManager, PlayerManager>();
-                services.AddHostedService(p => p.GetRequiredService<IPlayerManager>());
+            services.AddHostedService<GamemodeLoader>();
+        });
 
-                services.AddSingleton<IVehicleManager, VehicleManager>();
-                services.AddHostedService(p => p.GetRequiredService<IVehicleManager>());
+        builder.ConfigureLogging(logging =>
+        {
+            logging.AddSerilog(serilogLogger);
+        });
 
-                services.AddSingleton<ISyncManager, SyncManager>();
-                services.AddHostedService(p => p.GetRequiredService<ISyncManager>());
+        var host = builder.Build();
 
-                services.AddHostedService<GamemodeLoader>();
-            });
-
-            builder.ConfigureLogging(logging =>
-            {
-                logging.AddSerilog(serilogLogger);
-            });
-
-            var host = builder.Build();
-
-            await host.RunAsync();
-        }
+        await host.RunAsync();
     }
 }

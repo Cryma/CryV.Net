@@ -1,8 +1,7 @@
-﻿namespace CryV.Net.Server.Common.Enums
+﻿namespace CryV.Net.Server.Common.Enums;
+
+public enum ConnectionState
 {
-    public enum ConnectionState
-    {
-        Connecting,
-        Connected
-    }
+    Connecting,
+    Connected
 }

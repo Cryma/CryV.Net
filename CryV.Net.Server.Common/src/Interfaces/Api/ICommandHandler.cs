@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace CryV.Net.Server.Common.Interfaces.Api
+namespace CryV.Net.Server.Common.Interfaces.Api;
+
+public interface ICommandHandler
 {
-    public interface ICommandHandler
-    {
 
-        void AddCommand(string commandName, Action<IServerPlayer, string[]> callback);
+    void AddCommand(string commandName, Action<IServerPlayer, string[]> callback);
 
-    }
 }
