@@ -9,7 +9,7 @@
     <PackageReference Include="LiteNetLib" Version="1.1.0" />
     <PackageReference Include="Micky5991.EventAggregator" Version="2.4.1" />
     <PackageReference Include="protobuf-net" Version="3.2.26" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
 </Project>
