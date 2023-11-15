@@ -1,0 +1,110 @@
+﻿@page "/players"
+@using CryV.Net.Server.Common.Events
+@using CryV.Net.Server.Common.Interfaces
+@using Micky5991.EventAggregator.Interfaces
+@inject IEventAggregator EventAggregator;
+@inject IPlayerManager PlayerManager;
+@inject IVehicleManager VehicleManager;
+
+<PageTitle>Players</PageTitle>
+
+<h3>Players</h3>
+
+@if (_players.Count == 0)
+{
+    <p>There is currently no player on the server.</p>
+}
+else
+{
+    <ul>
+        @foreach (var player in _players)
+        {
+            <li>@player</li>
+        }
+    </ul>
+}
+
+<h3>Vehicles</h3>
+
+@if (_vehicles.Count == 0)
+{
+    <p>There is currently no vehicle on the server.</p>
+}
+else
+{
+    <ul>
+        @foreach (var vehicle in _vehicles)
+        {
+            <li>@vehicle</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<string> _players = new();
+    private List<string> _vehicles = new();
+
+    protected override void OnInitialized()
+    {
+        EventAggregator.Subscribe<PlayerConnectedEvent>(OnPlayerConnected);
+        EventAggregator.Subscribe<PlayerDisconnectedEvent>(OnPlayerDisconnected);
+
+        VehicleManager.OnVehicleAdded += OnVehicleAdded;
+
+        foreach (var existingPlayer in PlayerManager.GetPlayers())
+        {
+            AddPlayerToList(existingPlayer);
+        }
+
+        foreach (var existingVehicle in VehicleManager.GetVehicles())
+        {
+            AddVehicleToList(existingVehicle);
+        }
+    }
+
+    private async void OnVehicleAdded(object? sender, IServerVehicle? vehicle)
+    {
+        if (vehicle == null)
+        {
+            return;
+        }
+
+        await InvokeAsync(() =>
+        {
+            AddVehicleToList(vehicle);
+
+            StateHasChanged();
+        });
+    }
+
+    private void AddPlayerToList(IServerPlayer player)
+    {
+        _players.Add(player.Peer.EndPoint.ToString());
+    }
+
+    private void AddVehicleToList(IServerVehicle vehicle)
+    {
+        _vehicles.Add($"{vehicle.Model} - Number plate: {vehicle.NumberPlate}");
+    }
+
+    private async Task OnPlayerConnected(PlayerConnectedEvent playerConnectedEvent)
+    {
+        await InvokeAsync(() =>
+        {
+            AddPlayerToList(playerConnectedEvent.Player);
+
+            StateHasChanged();
+        });
+    }
+
+    private async Task OnPlayerDisconnected(PlayerDisconnectedEvent playerDisconnectedEvent)
+    {
+        await InvokeAsync(() =>
+        {
+            _players.Remove(playerDisconnectedEvent.Player.Peer.EndPoint.ToString());
+
+            StateHasChanged();
+        });
+    }
+
+}

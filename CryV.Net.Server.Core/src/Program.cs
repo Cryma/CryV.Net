@@ -17,6 +17,7 @@ using CryV.Net.Server.Networking;
 
 namespace CryV.Net.Server.Core;
 
+// This is the legacy server host, without Blazor.
 public class Program
 {
 
