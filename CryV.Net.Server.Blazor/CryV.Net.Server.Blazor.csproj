@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CryV.Net.Server.Api\CryV.Net.Server.Api.csproj" />
+    <ProjectReference Include="..\CryV.Net.Server.Core\CryV.Net.Server.Core.csproj" />
+    <ProjectReference Include="..\CryV.Net.Server.Networking\CryV.Net.Server.Networking.csproj" />
+    <ProjectReference Include="..\CryV.Net.Server.Players\CryV.Net.Server.Players.csproj" />
+    <ProjectReference Include="..\CryV.Net.Server.Sync\CryV.Net.Server.Sync.csproj" />
+    <ProjectReference Include="..\CryV.Net.Server.Vehicles\CryV.Net.Server.Vehicles.csproj" />
+    <ProjectReference Include="..\CryV.Net.Shared.Common\CryV.Net.Shared.Common.csproj" />
+  </ItemGroup>
+
+</Project>

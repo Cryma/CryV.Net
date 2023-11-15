@@ -19,7 +19,7 @@ public class Gamemode : IGamemode
         MP.Events.OnPlayerConnected += OnPlayerConnected;
         MP.Events.OnPlayerDisconnected += OnPlayerDisconnected;
 
-        MP.VehiclePool.CreateVehicle(new Vector3(104.39481f, -1078.5488f, 28.43744f), new Vector3(0.0f, 0.0f, -19.036509f), 1274868363, "ehre");
+        MP.VehiclePool.CreateVehicle(new Vector3(104.39481f, -1078.5488f, 28.43744f), new Vector3(0.0f, 0.0f, -19.036509f), 1274868363, "EHRE");
         MP.VehiclePool.CreateVehicle(new Vector3(107.84033f, -1079.7783f, 28.64444f), new Vector3(0.0f, 0.0f, -19.036509f), 2364918497, "1337");
         MP.VehiclePool.CreateVehicle(new Vector3(111.060104f, -1049.2864f, 28.566235f), new Vector3(0.0f, 0.0f, -114.83127f), 4180675781);
         MP.VehiclePool.CreateVehicle(new Vector3(107.0332f, -1063.8341f, 29.297525f), new Vector3(0.0f, 0.0f, -113.37058f), 0x21EEE87D);

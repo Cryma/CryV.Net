@@ -66,7 +66,7 @@ public class VehicleManager : IVehicleManager
 
         if (numberPlate == null)
         {
-            numberPlate = GenerateNumberPlate("CRYV-");
+            numberPlate = GenerateNumberPlate("CRYV ");
         }
 
         var vehicle = new Vehicle(_eventAggregator, _playerManager, id, position, rotation, model, numberPlate);
