@@ -1,5 +1,13 @@
 ﻿@CryV.Net.Server.Blazor_HostAddress = https://localhost:7060
 
+GET {{CryV.Net.Server.Blazor_HostAddress}}/api/players/0
+
+###
+
+GET {{CryV.Net.Server.Blazor_HostAddress}}/api/players
+
+###
+
 GET {{CryV.Net.Server.Blazor_HostAddress}}/api/vehicles
 
 ###
