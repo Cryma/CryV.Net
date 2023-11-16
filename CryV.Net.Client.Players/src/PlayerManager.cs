@@ -19,7 +19,7 @@ public class PlayerManager : IPlayerManager
     private readonly IVehicleManager _vehicleManager;
     private readonly INetworkManager _networkManager;
 
-    private readonly ConcurrentDictionary<int, IClientPlayer> _players = new ConcurrentDictionary<int, IClientPlayer>();
+    private readonly ConcurrentDictionary<int, IClientPlayer> _players = new();
 
     public PlayerManager(ILogger<PlayerManager> logger, IEventAggregator eventAggregator, IVehicleManager vehicleManager, INetworkManager networkManager)
     {

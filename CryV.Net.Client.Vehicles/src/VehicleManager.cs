@@ -17,7 +17,7 @@ public class VehicleManager : IVehicleManager
     private readonly IEventAggregator _eventAggregator;
     private readonly ISyncManager _syncManager;
 
-    private readonly ConcurrentDictionary<int, IClientVehicle> _vehicles = new ConcurrentDictionary<int, IClientVehicle>();
+    private readonly ConcurrentDictionary<int, IClientVehicle> _vehicles = new();
 
     public VehicleManager(ILogger<VehicleManager> logger, IEventAggregator eventAggregator, ISyncManager syncManager)
     {

@@ -91,7 +91,7 @@ public class Vehicle : IClientVehicle
 
     private VehicleUpdatePayload _lastPayload;
 
-    private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
+    private readonly List<ISubscription> _eventSubscriptions = new();
 
     private readonly ILogger _logger;
     private readonly IEventAggregator _eventAggregator;

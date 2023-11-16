@@ -31,7 +31,7 @@ public static class CustomVehicleEntering
         }
     }
 
-    private static readonly List<string> _seatBones = new List<string>
+    private static readonly List<string> _seatBones = new()
     {
         "seat_dside_r",
         "seat_dside_r1",

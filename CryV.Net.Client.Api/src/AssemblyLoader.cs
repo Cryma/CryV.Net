@@ -13,9 +13,9 @@ namespace CryV.Net.Client.Api;
 public class AssemblyLoader
 {
 
-    private HostAssemblyLoadContext _context = new HostAssemblyLoadContext();
+    private HostAssemblyLoadContext _context = new();
 
-    private List<IGamemode> _instantiatedAssemblies = new List<IGamemode>();
+    private List<IGamemode> _instantiatedAssemblies = new();
 
     private readonly IEventAggregator _eventAggregator;
 

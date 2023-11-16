@@ -8,7 +8,7 @@ namespace CryV.Net.Helpers;
 public static class EntityPool
 {
 
-    private static readonly ConcurrentDictionary<int, Entity> _entities = new ConcurrentDictionary<int, Entity>();
+    private static readonly ConcurrentDictionary<int, Entity> _entities = new();
 
     public static void AddEntity(Entity entity)
     {

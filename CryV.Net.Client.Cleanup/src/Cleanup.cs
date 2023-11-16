@@ -15,7 +15,7 @@ namespace CryV.Net.Client.Cleanup;
 public class Cleanup : IHostedService
 {
 
-    private static readonly List<string> _gameplayScripts = new List<string>
+    private static readonly List<string> _gameplayScripts = new()
     {
         "abigail1",
         "abigail2",

@@ -69,7 +69,7 @@ public partial class Player : IClientPlayer
 
     private PlayerUpdatePayload _lastPayload;
 
-    private readonly List<ISubscription> _eventSubscriptions = new List<ISubscription>();
+    private readonly List<ISubscription> _eventSubscriptions = new();
 
     private readonly IEventAggregator _eventAggregator;
     private readonly IVehicleManager _vehicleManager;

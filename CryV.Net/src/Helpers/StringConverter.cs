@@ -8,7 +8,7 @@ namespace CryV.Net.Helpers;
 
 internal class StringConverter : IDisposable
 {
-    private readonly List<IntPtr> _convertedStrings = new List<IntPtr>();
+    private readonly List<IntPtr> _convertedStrings = new();
 
     public static string PointerToString(IntPtr pointer, bool freePointer = true)
     {

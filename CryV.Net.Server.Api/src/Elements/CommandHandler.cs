@@ -13,7 +13,7 @@ namespace CryV.Net.Server.Api.Elements;
 public class CommandHandler : ICommandHandler
 {
 
-    private readonly ConcurrentDictionary<string, Action<IServerPlayer, string[]>> _commands = new ConcurrentDictionary<string, Action<IServerPlayer, string[]>>();
+    private readonly ConcurrentDictionary<string, Action<IServerPlayer, string[]>> _commands = new();
 
     private readonly IEventAggregator _eventAggregator;
 

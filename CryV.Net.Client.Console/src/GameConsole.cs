@@ -21,13 +21,13 @@ public partial class GameConsole : IHostedService
     public bool IsVisible { get; private set; }
 
     private string _input = string.Empty;
-    private readonly List<string> _output = new List<string>();
+    private readonly List<string> _output = new();
     private int _outputLines = 5;
     private bool _blinkState;
     private DateTime _lastBlinkUpdate = DateTime.UtcNow;
     private int _cursorIndex;
 
-    private readonly List<string> _inputHistory = new List<string>();
+    private readonly List<string> _inputHistory = new();
     private int _currentHistoryIndex = -1;
 
     private const float _backgroundInputHeight = 18.0f;
@@ -35,7 +35,7 @@ public partial class GameConsole : IHostedService
 
     private delegate void CommandDelegate(GameConsole gameConsole, params string[] arguments);
 
-    private readonly ConcurrentDictionary<string, CommandDelegate> _commands = new ConcurrentDictionary<string, CommandDelegate>();
+    private readonly ConcurrentDictionary<string, CommandDelegate> _commands = new();
 
     private readonly INetworkManager _networkManager;
     private readonly ISyncManager _syncManager;

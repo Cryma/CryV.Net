@@ -32,7 +32,7 @@ public class NetworkManager : INetworkManager
 
     private CancellationTokenSource _cancellationTokenSource;
 
-    private readonly EventBasedNetListener _listener = new EventBasedNetListener();
+    private readonly EventBasedNetListener _listener = new();
     private readonly NetManager _netManager;
 
     private readonly IEventAggregator _eventAggregator;

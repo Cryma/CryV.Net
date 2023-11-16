@@ -17,7 +17,7 @@ namespace CryV.Net.Server.Sync;
 public class SyncManager : ISyncManager
 {
 
-    private readonly ConcurrentDictionary<IServerVehicle, IServerPlayer> _vehicleSyncMapping = new ConcurrentDictionary<IServerVehicle, IServerPlayer>();
+    private readonly ConcurrentDictionary<IServerVehicle, IServerPlayer> _vehicleSyncMapping = new();
 
     private readonly IEventAggregator _eventAggregator;
     private readonly IPlayerManager _playerManager;

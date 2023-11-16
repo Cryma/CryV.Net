@@ -9,7 +9,7 @@ public static class LocalPlayer
 {
 
     // TODO: Cache ped or pedId
-    public static Ped Character => new Ped(PedId());
+    public static Ped Character => new(PedId());
 
     public static ulong Model
     {

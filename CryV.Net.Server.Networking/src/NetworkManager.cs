@@ -16,7 +16,7 @@ namespace CryV.Net.Server.Networking;
 public class NetworkManager : INetworkManager
 {
 
-    private readonly EventBasedNetListener _listener = new EventBasedNetListener();
+    private readonly EventBasedNetListener _listener = new();
     private readonly NetManager _netManager;
 
     private const int _maxPlayers = 32;

@@ -15,7 +15,7 @@ public class GamemodeEntry
 
     public string BasePath { get; }
 
-    public List<FileEntry> ClientsideFiles = new List<FileEntry>();
+    public List<FileEntry> ClientsideFiles = new();
 
     public GamemodeEntry(IGamemode gamemodeInstance, string basePath)
     {

@@ -20,7 +20,7 @@ public class SyncManager : ISyncManager
 {
 
 
-    private readonly List<IClientVehicle> _syncVehicles = new List<IClientVehicle>();
+    private readonly List<IClientVehicle> _syncVehicles = new();
 
     private IVehicleManager _vehicleManager;
     private readonly IEventAggregator _eventAggregator;

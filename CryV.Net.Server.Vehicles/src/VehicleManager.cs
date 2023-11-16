@@ -25,9 +25,9 @@ public class VehicleManager : IVehicleManager
     private readonly ILogger _logger;
     private readonly IServiceProvider _serviceProvider;
 
-    private readonly ConcurrentDictionary<int, IServerVehicle> _vehicles = new ConcurrentDictionary<int, IServerVehicle>();
+    private readonly ConcurrentDictionary<int, IServerVehicle> _vehicles = new();
 
-    private readonly Random _random = new Random();
+    private readonly Random _random = new();
 
     private readonly char[] _numberPlateCharacters =
     {

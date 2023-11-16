@@ -10,7 +10,7 @@ public class NativeTaskScheduler : TaskScheduler
 
     private readonly Thread _nativeThread;
 
-    private readonly ConcurrentQueue<Task> _tasks = new ConcurrentQueue<Task>();
+    private readonly ConcurrentQueue<Task> _tasks = new();
 
     public NativeTaskScheduler()
     {

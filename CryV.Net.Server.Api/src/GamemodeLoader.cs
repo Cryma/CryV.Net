@@ -25,7 +25,7 @@ public class GamemodeLoader : IHostedService
     private readonly IPlayerManager _playerManager;
     private readonly IVehicleManager _vehicleManager;
 
-    private readonly Dictionary<string, GamemodeEntry> _gamemodes = new Dictionary<string, GamemodeEntry>();
+    private readonly Dictionary<string, GamemodeEntry> _gamemodes = new();
 
     private readonly DownloadServer _downloadServer;
 

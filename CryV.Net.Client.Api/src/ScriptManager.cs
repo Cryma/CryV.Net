@@ -19,9 +19,9 @@ namespace CryV.Net.Client.Api;
 public class ScriptManager : IScriptManager, IDisposable
 {
 
-    private Dictionary<string, List<FileEntry>> _clientFiles = new Dictionary<string, List<FileEntry>>();
+    private Dictionary<string, List<FileEntry>> _clientFiles = new();
 
-    private readonly WebClient _webClient = new WebClient();
+    private readonly WebClient _webClient = new();
     private readonly AssemblyLoader _assemblyLoader;
 
     private readonly IEventAggregator _eventAggregator;
