@@ -40,15 +40,13 @@ public static class UserInterface
         CryVNative.Native_Hud_SetTextDropshadow(CryVNative.Plugin, 0, 0, 0, 0, 0);
         CryVNative.Native_Hud_SetTextEdge(CryVNative.Plugin, 1, 0, 0, 0, 205);
 
-        using (var converter = new StringConverter())
-        {
-            var commandTypePointer = converter.StringToPointer("STRING");
-            var textPointer = converter.StringToPointer(text);
+        using var converter = new StringConverter();
+        var commandTypePointer = converter.StringToPointer("STRING");
+        var textPointer = converter.StringToPointer(text);
 
-            CryVNative.Native_Hud_BeginTextCommandDisplayText(CryVNative.Plugin, commandTypePointer);
-            CryVNative.Native_Hud_AddTextComponentSubstringPlayerName(CryVNative.Plugin, textPointer);
-            CryVNative.Native_Hud_EndTextCommandDisplayText(CryVNative.Plugin, position.X, position.Y);
-        }
+        CryVNative.Native_Hud_BeginTextCommandDisplayText(CryVNative.Plugin, commandTypePointer);
+        CryVNative.Native_Hud_AddTextComponentSubstringPlayerName(CryVNative.Plugin, textPointer);
+        CryVNative.Native_Hud_EndTextCommandDisplayText(CryVNative.Plugin, position.X, position.Y);
     }
 
     public static float GetTextWidth(string text, float scale, TextFont textFont = TextFont.ChaletLondon)

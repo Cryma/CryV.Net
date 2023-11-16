@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
+﻿using System.Numerics;
 using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
 using CryV.Net.Shared.Common.Flags;
@@ -55,14 +53,14 @@ public partial class Vehicle : IServerVehicle
         _colorPrimary = payload.ColorPrimary;
         _colorSecondary = payload.ColorSecondary;
 
-        if (_trailerId == -1 && payload.TrailerId != -1)
+        if (_trailerId == null && payload.TrailerId != null)
         {
             _trailerId = payload.TrailerId;
 
             _eventAggregator.Publish(new VehicleTrailerAttachedEvent(this));
         }
 
-        if (_trailerId != -1 && payload.TrailerId == -1)
+        if (_trailerId != null && payload.TrailerId == null)
         {
             _eventAggregator.Publish(new VehicleTrailerDetachEvent(this));
 

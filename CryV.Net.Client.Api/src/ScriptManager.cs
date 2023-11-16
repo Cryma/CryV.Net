@@ -19,7 +19,7 @@ namespace CryV.Net.Client.Api;
 public class ScriptManager : IScriptManager, IDisposable
 {
 
-    private Dictionary<string, List<FileEntry>> _clientFiles = new();
+    private Dictionary<string, List<FileEntry>> _clientFiles = [];
 
     private readonly WebClient _webClient = new();
     private readonly AssemblyLoader _assemblyLoader;
@@ -31,7 +31,7 @@ public class ScriptManager : IScriptManager, IDisposable
     {
         _eventAggregator = eventAggregator;
         _networkManager = networkManager;
-        
+
         _assemblyLoader = new AssemblyLoader(eventAggregator);
     }
 
@@ -49,8 +49,15 @@ public class ScriptManager : IScriptManager, IDisposable
 
     private Task OnBootstrap(LocalPlayerBootstrapEvent obj)
     {
+        if (_networkManager.EndPoint == null)
+        {
+            throw new InvalidOperationException("Cannot fetch filemap because NetworkManager endpoint is null!");
+        }
+
         var fileMap = _webClient.DownloadString($"http://{_networkManager.EndPoint.Address}:{_networkManager.EndPoint.Port + 1}/filemap.json");
-        _clientFiles = JsonConvert.DeserializeObject<Dictionary<string, List<FileEntry>>>(fileMap);
+
+        var clientFiles = JsonConvert.DeserializeObject<Dictionary<string, List<FileEntry>>>(fileMap) ?? throw new InvalidOperationException("Could not deserialize filemap!");
+        _clientFiles = clientFiles;
 
         DownloadFiles();
         LoadAssemblies();
@@ -73,6 +80,11 @@ public class ScriptManager : IScriptManager, IDisposable
 
     private void DownloadFiles()
     {
+        if (_networkManager.EndPoint == null)
+        {
+            throw new InvalidOperationException("Cannot fetch filemap because NetworkManager endpoint is null!");
+        }
+
         foreach (var element in _clientFiles)
         {
             var gamemodePath = Path.Combine(GetFileBasePath(), element.Key);
@@ -93,7 +105,9 @@ public class ScriptManager : IScriptManager, IDisposable
 
                 if (Directory.Exists(Path.GetDirectoryName(filePath)) == false)
                 {
-                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+                    var pathName = Path.GetDirectoryName(filePath) ?? throw new InvalidOperationException("Could not get directory name for file path: " + filePath);
+
+                    Directory.CreateDirectory(pathName);
                 }
 
                 _webClient.DownloadFile($"http://{_networkManager.EndPoint.Address}:{_networkManager.EndPoint.Port + 1}/{element.Key}/{file.Path}", filePath);
@@ -112,18 +126,15 @@ public class ScriptManager : IScriptManager, IDisposable
             return false;
         }
 
-        using (var sha = SHA256.Create())
+        var hash = SHA256.HashData(File.ReadAllBytes(absolutePath));
+
+        var stringBuilder = new StringBuilder();
+        foreach (var element in hash)
         {
-            var hash = sha.ComputeHash(File.ReadAllBytes(absolutePath));
-
-            var stringBuilder = new StringBuilder();
-            foreach (var element in hash)
-            {
-                stringBuilder.Append(element.ToString("x2"));
-            }
-
-            return stringBuilder.ToString() == fileEntry.Hash;
+            stringBuilder.Append(element.ToString("x2"));
         }
+
+        return stringBuilder.ToString() == fileEntry.Hash;
     }
 
     private void CheckForDeletedFiles()
@@ -148,6 +159,11 @@ public class ScriptManager : IScriptManager, IDisposable
 
     private string GetFileBasePath()
     {
+        if (_networkManager.EndPoint == null)
+        {
+            throw new InvalidOperationException("Cannot fetch filemap because NetworkManager endpoint is null!");
+        }
+
         return Path.Combine(Utility.GetInstallDirectory(), "dotnet", "clientresources", _networkManager.EndPoint.ToString().Replace(':', '_'));
     }
 

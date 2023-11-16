@@ -16,7 +16,7 @@ namespace CryV.Net;
 internal static class PluginWrapper
 {
 
-    private static IPlugin _plugin;
+    private static IPlugin? _plugin;
 
     public static void Main()
     {
@@ -46,7 +46,7 @@ internal static class PluginWrapper
 
     public static void PluginKeyboardCallback(ConsoleKey key, char character, bool isPressed)
     {
-        _plugin.OnKeyboard(key, character, isPressed);
+        _plugin?.OnKeyboard(key, character, isPressed);
     }
 
     public static void PluginTick()
@@ -54,12 +54,14 @@ internal static class PluginWrapper
         ThreadHelper.Work();
         CustomVehicleEntering.Tick();
 
-        _plugin.Tick();
+        _plugin?.Tick();
     }
 
     private static void LoadPlugin()
     {
-        var assembly = Assembly.LoadFrom(Path.Combine(GetInstallDirectory(), "dotnet/resources/CryV.Net.Client.Core.dll"));
+        var installDirectory = GetInstallDirectory() ?? throw new InvalidOperationException("Install directory could not be determined!");
+
+        var assembly = Assembly.LoadFrom(Path.Combine(installDirectory, "dotnet/resources/CryV.Net.Client.Core.dll"));
 
         foreach (var type in assembly.GetTypes())
         {
@@ -70,9 +72,9 @@ internal static class PluginWrapper
 
             var constructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, Type.EmptyTypes, null);
 
-            var plugin = constructor.Invoke(null);
+            var plugin = constructor?.Invoke(null);
 
-            _plugin = (IPlugin) plugin;
+            _plugin = (IPlugin) plugin!;
 
             return;
         }
@@ -83,15 +85,16 @@ internal static class PluginWrapper
 
     private static void SetNativePath()
     {
-        SetDllDirectory(GetInstallDirectory());
+        var installDirectory = GetInstallDirectory() ?? throw new InvalidOperationException("Install directory could not be determined!");
+
+        SetDllDirectory(installDirectory);
     }
 
-    public static string GetInstallDirectory()
+    public static string? GetInstallDirectory()
     {
-        using (var key = Registry.CurrentUser.OpenSubKey("Software\\CryV"))
-        {
-            return key?.GetValue("InstallDir").ToString();
-        }
+        using var key = Registry.CurrentUser.OpenSubKey("Software\\CryV");
+
+        return key?.GetValue("InstallDir")?.ToString();
     }
 
 }

@@ -49,7 +49,7 @@ public class DownloadServer : IDisposable
 public sealed class DownloadModule : NancyModule
 {
 
-    public static Dictionary<string, GamemodeEntry> Gamemodes;
+    public static Dictionary<string, GamemodeEntry>? Gamemodes;
 
     public DownloadModule()
     {

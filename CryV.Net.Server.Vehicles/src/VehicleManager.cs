@@ -18,8 +18,8 @@ namespace CryV.Net.Server.Vehicles;
 public class VehicleManager : IVehicleManager
 {
 
-    private IPlayerManager _playerManager;
-    private ISyncManager _syncManager;
+    private IPlayerManager? _playerManager;
+    private ISyncManager? _syncManager;
 
     private readonly IEventAggregator _eventAggregator;
     private readonly ILogger _logger;
@@ -34,6 +34,8 @@ public class VehicleManager : IVehicleManager
         '1', '2', '3', '4', '5', '6', '7', '8', '9',
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
     };
+
+    public event EventHandler<IServerVehicle>? OnVehicleAdded;
 
     public VehicleManager(IEventAggregator eventAggregator, ILogger<VehicleManager> logger, IServiceProvider serviceProvider)
     {
@@ -58,18 +60,13 @@ public class VehicleManager : IVehicleManager
         return Task.CompletedTask;
     }
 
-    public event EventHandler<IServerVehicle> OnVehicleAdded;
-
-    public IServerVehicle AddVehicle(Vector3 position, Vector3 rotation, ulong model, string numberPlate)
+    public IServerVehicle AddVehicle(Vector3 position, Vector3 rotation, ulong model, string? numberPlate)
     {
         var id = GetFreeId();
 
-        if (numberPlate == null)
-        {
-            numberPlate = GenerateNumberPlate("CRYV ");
-        }
+        numberPlate ??= GenerateNumberPlate("CRYV ");
 
-        var vehicle = new Vehicle(_eventAggregator, _playerManager, id, position, rotation, model, numberPlate);
+        var vehicle = new Vehicle(_eventAggregator, _playerManager!, id, position, rotation, model, numberPlate);
         _vehicles.TryAdd(id, vehicle);
 
         PropagateVehicleAddition(vehicle);
@@ -90,7 +87,7 @@ public class VehicleManager : IVehicleManager
         PropagateVehicleRemoval(vehicle);
     }
 
-    public IServerVehicle GetVehicle(int vehicleId)
+    public IServerVehicle? GetVehicle(int vehicleId)
     {
         if (_vehicles.TryGetValue(vehicleId, out var vehicle) == false)
         {
@@ -149,11 +146,11 @@ public class VehicleManager : IVehicleManager
 
         vehicle.ReadPayload(payload);
 
-        foreach (var player in _playerManager.GetPlayers())
+        foreach (var player in _playerManager!.GetPlayers())
         {
             // TODO: Handle ped mirror
 
-            if (_syncManager.IsEntitySyncedByPlayer(vehicle, player))
+            if (_syncManager!.IsEntitySyncedByPlayer(vehicle, player))
             {
                 continue;
             }
@@ -166,7 +163,7 @@ public class VehicleManager : IVehicleManager
 
     private void PropagateVehicleAddition(IServerVehicle vehicle)
     {
-        foreach (var player in _playerManager.GetPlayers(onlyConnected: false))
+        foreach (var player in _playerManager!.GetPlayers(onlyConnected: false))
         {
             player.Send(vehicle.GetPayload(), DeliveryMethod.ReliableOrdered);
         }
@@ -174,7 +171,7 @@ public class VehicleManager : IVehicleManager
 
     private void PropagateVehicleRemoval(IServerVehicle vehicle)
     {
-        foreach (var player in _playerManager.GetPlayers(onlyConnected: false))
+        foreach (var player in _playerManager!.GetPlayers(onlyConnected: false))
         {
             player.Send(new VehicleRemovePayload(vehicle.Id), DeliveryMethod.ReliableOrdered);
         }

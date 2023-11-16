@@ -7,7 +7,7 @@ namespace CryV.Net.Helpers;
 internal static class StructConverter
 {
 
-    public static T PointerToStruct<T>(IntPtr pointer, bool freePointer = true)
+    public static T PointerToStruct<T>(IntPtr pointer, bool freePointer = true) where T : struct
     {
         var value = Marshal.PtrToStructure<T>(pointer);
 

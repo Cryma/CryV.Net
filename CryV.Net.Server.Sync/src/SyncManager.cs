@@ -17,7 +17,7 @@ namespace CryV.Net.Server.Sync;
 public class SyncManager : ISyncManager
 {
 
-    private readonly ConcurrentDictionary<IServerVehicle, IServerPlayer> _vehicleSyncMapping = new();
+    private readonly ConcurrentDictionary<IServerVehicle, IServerPlayer?> _vehicleSyncMapping = new();
 
     private readonly IEventAggregator _eventAggregator;
     private readonly IPlayerManager _playerManager;
@@ -53,7 +53,12 @@ public class SyncManager : ISyncManager
 
     private void OnVehicleTrailerAttached(VehicleTrailerAttachedEvent eventdata)
     {
-        var trailer = _vehicleManager.GetVehicle(eventdata.Vehicle.TrailerId);
+        if (eventdata.Vehicle.TrailerId == null)
+        {
+            throw new InvalidOperationException("TrailerId is null in VehicleTrailerAttachedEvent!");
+        }
+
+        var trailer = _vehicleManager.GetVehicle(eventdata.Vehicle.TrailerId.Value);
         if (trailer == null)
         {
             _logger.LogWarning("Could not find attached trailer {TrailerId} in vehicle manager!", eventdata.Vehicle.TrailerId);
@@ -81,9 +86,9 @@ public class SyncManager : ISyncManager
 
         ChangeSyncer(obj.Vehicle, obj.Player);
 
-        if (obj.Vehicle.TrailerId != -1)
+        if (obj.Vehicle.TrailerId != null)
         {
-            var trailer = _vehicleManager.GetVehicle(obj.Vehicle.TrailerId);
+            var trailer = _vehicleManager.GetVehicle(obj.Vehicle.TrailerId.Value);
             if (trailer == null)
             {
                 _logger.LogWarning("Tried to find trailer {TrailerId} for vehicle {VehicleId} in vehicle manager but found none!", obj.Vehicle.TrailerId, obj.Vehicle.Id);
@@ -107,7 +112,7 @@ public class SyncManager : ISyncManager
         return Task.CompletedTask;
     }
 
-    private void OnVehicleAdded(object sender, IServerVehicle vehicle)
+    private void OnVehicleAdded(object? sender, IServerVehicle vehicle)
     {
         var nearestPlayer = GetNearestPlayer(vehicle.Position);
 
@@ -115,7 +120,7 @@ public class SyncManager : ISyncManager
         ChangeSyncer(vehicle, nearestPlayer);
     }
 
-    private void ChangeSyncer(IServerVehicle vehicle, IServerPlayer newSyncer)
+    private void ChangeSyncer(IServerVehicle vehicle, IServerPlayer? newSyncer)
     {
         var oldSyncer = _vehicleSyncMapping[vehicle];
         if (oldSyncer == newSyncer)
@@ -150,7 +155,7 @@ public class SyncManager : ISyncManager
         }
     }
 
-    private IServerPlayer GetNearestPlayer(Vector3 position)
+    private IServerPlayer? GetNearestPlayer(Vector3 position)
     {
         return _playerManager
             .GetPlayers()

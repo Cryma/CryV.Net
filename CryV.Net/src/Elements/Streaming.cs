@@ -45,18 +45,14 @@ public static class Streaming
 
     public static bool HasAnimDictLoaded(string animDict)
     {
-        using (var converter = new StringConverter())
-        {
-            return CryVNative.Native_Streaming_HasAnimDictLoaded(CryVNative.Plugin, converter.StringToPointer(animDict));
-        }
+        using var converter = new StringConverter();
+        return CryVNative.Native_Streaming_HasAnimDictLoaded(CryVNative.Plugin, converter.StringToPointer(animDict));
     }
 
     public static void RequestAnimDict(string animDict)
     {
-        using (var converter = new StringConverter())
-        {
-            CryVNative.Native_Streaming_RequestAnimDict(CryVNative.Plugin, converter.StringToPointer(animDict));
-        }
+        using var converter = new StringConverter();
+        CryVNative.Native_Streaming_RequestAnimDict(CryVNative.Plugin, converter.StringToPointer(animDict));
     }
 
     public static void RequestModel(ulong model)

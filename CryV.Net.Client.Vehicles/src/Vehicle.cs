@@ -25,7 +25,7 @@ public class Vehicle : IClientVehicle
 
     public float EngineHealth { get; set; }
 
-    public string NumberPlate { get; set; }
+    public string? NumberPlate { get; set; }
 
     public ulong Model { get; set; }
 
@@ -63,7 +63,7 @@ public class Vehicle : IClientVehicle
 
     public bool IsSirenActive { get; set; }
 
-    public IClientVehicle Trailer { get; set; }
+    public IClientVehicle? Trailer { get; set; }
 
     public Elements.Vehicle NativeVehicle { get; private set; }
 
@@ -87,18 +87,20 @@ public class Vehicle : IClientVehicle
 
     private bool _isAttachedTrailer;
 
-    public VehicleUpdatePayload LastSentUpdatePayload { get; set; }
+    public VehicleUpdatePayload? LastSentUpdatePayload { get; set; }
 
     private VehicleUpdatePayload _lastPayload;
 
-    private readonly List<ISubscription> _eventSubscriptions = new();
+    private readonly List<ISubscription> _eventSubscriptions = [];
 
     private readonly ILogger _logger;
     private readonly IEventAggregator _eventAggregator;
     private readonly ISyncManager _syncManager;
     private readonly IVehicleManager _vehicleManager;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public Vehicle(ILogger logger, IEventAggregator eventAggregator, ISyncManager syncManager, IVehicleManager vehicleManager, VehicleUpdatePayload payload)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
         _logger = logger;
         _eventAggregator = eventAggregator;
@@ -123,7 +125,7 @@ public class Vehicle : IClientVehicle
             {
                 await ForceSync();
             }
-        }/*, x => Task.FromResult(x.Payload.Id == Id)*/));
+        }));
 
         ThreadHelper.RunAsync(() =>
         {
@@ -196,12 +198,12 @@ public class Vehicle : IClientVehicle
             NumberPlate = _lastPayload.NumberPlate;
         }
 
-        if (Trailer == null && _lastPayload.TrailerId != -1)
+        if (Trailer == null && _lastPayload.TrailerId != null)
         {
-            Trailer = _vehicleManager.GetVehicle(_lastPayload.TrailerId);
+            Trailer = _vehicleManager.GetVehicle(_lastPayload.TrailerId.Value);
             if (Trailer == null)
             {
-                _logger.LogWarning("Could not find trailer {TrailerId} for vehicle {VehicleId} in vehicle manager!", _lastPayload.TrailerId, Id);
+                _logger.LogWarning("Could not find trailer {TrailerId} for vehicle {VehicleId} in vehicle manager!", _lastPayload.TrailerId.Value, Id);
             }
             else
             {
@@ -211,7 +213,7 @@ public class Vehicle : IClientVehicle
             }
         }
 
-        if (Trailer != null && _lastPayload.TrailerId == -1)
+        if (Trailer != null && _lastPayload.TrailerId != null)
         {
             NativeVehicle.DetachFromTrailer();
             Trailer.NativeVehicle.SetTrailerLegsLowered();
@@ -225,7 +227,7 @@ public class Vehicle : IClientVehicle
     {
         return new VehicleUpdatePayload(Id, Position, NativeVehicle.Velocity, Rotation, EngineHealth, NumberPlate, Model, EngineState, CurrentGear,
             CurrentRPM, Clutch, Turbo, Acceleration, Brake, TargetSteeringAngle, ColorPrimary, ColorSecondary, IsHornActive, IsBurnout, IsRoofUp, IsRoofLowering,
-            IsRoofDown, IsRoofRaising, IsSirenActive, Trailer.Id);
+            IsRoofDown, IsRoofRaising, IsSirenActive, Trailer?.Id);
     }
 
     private void Tick(float deltatime)

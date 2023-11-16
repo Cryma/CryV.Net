@@ -8,10 +8,6 @@ public class VehicleTrailerAttachedEvent : IEvent
 
     public IServerVehicle Vehicle { get; set; }
 
-    public VehicleTrailerAttachedEvent()
-    {
-    }
-
     public VehicleTrailerAttachedEvent(IServerVehicle vehicle)
     {
         Vehicle = vehicle;

@@ -15,7 +15,7 @@ public class AssemblyLoader
 
     private HostAssemblyLoadContext _context = new();
 
-    private List<IGamemode> _instantiatedAssemblies = new();
+    private List<IGamemode> _instantiatedAssemblies = [];
 
     private readonly IEventAggregator _eventAggregator;
 
@@ -41,8 +41,6 @@ public class AssemblyLoader
         _instantiatedAssemblies.Clear();
 
         _context.Unload();
-        _context = null;
-
         _context = new HostAssemblyLoadContext();
 
         return Task.CompletedTask;
@@ -50,21 +48,19 @@ public class AssemblyLoader
 
     public void LoadAssembly(string path)
     {
-        using (var memoryStream = File.OpenRead(path))
+        using var memoryStream = File.OpenRead(path);
+        var assembly = _context.LoadFromStream(memoryStream);
+
+        foreach (var type in assembly.GetTypes())
         {
-            var assembly = _context.LoadFromStream(memoryStream);
-
-            foreach (var type in assembly.GetTypes())
+            if (type.IsClass == false || type.IsAbstract || typeof(IGamemode).IsAssignableFrom(type) == false)
             {
-                if (type.IsClass == false || type.IsAbstract || typeof(IGamemode).IsAssignableFrom(type) == false)
-                {
-                    continue;
-                }
-
-                var gamemode = (IGamemode) Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
-
-                _instantiatedAssemblies.Add(gamemode);
+                continue;
             }
+
+            var gamemode = (IGamemode)Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null)!;
+
+            _instantiatedAssemblies.Add(gamemode);
         }
     }
 

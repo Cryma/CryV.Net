@@ -46,18 +46,21 @@ public class PlayerUpdatePayload : IPayload
     public int PedData { get; set; }
 
     [ProtoMember(12)]
-    public int VehicleId { get; set; }
+    public int? VehicleId { get; set; }
 
     [ProtoMember(13)]
     public int Seat { get; set; }
 
+    // Empty construct is needed due to reflection
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public PlayerUpdatePayload()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
     }
 
     public PlayerUpdatePayload(int id, Vector3 position, Vector3 velocity, float heading, float fingerPointingPitch, float fingerPointingHeading,
         Vector3 aimTarget, int speed, ulong model, ulong weaponModel, bool isJumping, bool isClimbing, bool isClimbingLadder, bool isRagdoll,
-        bool isAiming, bool isEnteringVehicle, bool isInVehicle, int vehicleId, int seat, bool isLeavingVehicle, bool isFingerPointing)
+        bool isAiming, bool isEnteringVehicle, bool isInVehicle, int? vehicleId, int seat, bool isLeavingVehicle, bool isFingerPointing)
     {
         Id = id;
         Position = position;

@@ -28,7 +28,7 @@ namespace CryV.Net.Server.Blazor.Api
 
         // GET api/<VehiclesController>/5
         [HttpGet("{id}")]
-        public IServerVehicle Get(int id)
+        public IServerVehicle? Get(int id)
         {
             return _vehicleManager.GetVehicle(id);
         }

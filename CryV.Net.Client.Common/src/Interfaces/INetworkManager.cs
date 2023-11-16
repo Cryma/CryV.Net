@@ -10,9 +10,9 @@ public interface INetworkManager : IHostedService
 
     bool IsConnected { get; }
 
-    NetStatistics Statistics { get; }
+    NetStatistics? Statistics { get; }
 
-    IPEndPoint EndPoint { get; }
+    IPEndPoint? EndPoint { get; }
 
     int Ping { get; }
 

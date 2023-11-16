@@ -20,7 +20,7 @@ public class VehiclePool : IVehiclePool
         return _vehicleManager.GetVehicles();
     }
 
-    public IServerVehicle CreateVehicle(Vector3 position, Vector3 rotation, ulong model, string numberPlate = null)
+    public IServerVehicle CreateVehicle(Vector3 position, Vector3 rotation, ulong model, string? numberPlate = null)
     {
         return _vehicleManager.AddVehicle(position, rotation, model, numberPlate);
     }

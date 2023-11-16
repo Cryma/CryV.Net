@@ -12,6 +12,6 @@ public interface IClientVehicle : ISharedVehicle, IDisposable
 
     bool IsAttachedTrailer { get; set; }
 
-    VehicleUpdatePayload LastSentUpdatePayload { get; set; }
+    VehicleUpdatePayload? LastSentUpdatePayload { get; set; }
 
 }

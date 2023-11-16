@@ -55,7 +55,7 @@ public partial class Vehicle
 
     private float _engineHealth = 1000.0f;
 
-    public string NumberPlate
+    public string? NumberPlate
     {
         get => _numberPlate;
         set
@@ -65,7 +65,7 @@ public partial class Vehicle
         }
     }
 
-    private string _numberPlate;
+    private string? _numberPlate;
 
     public ulong Model
     {
@@ -283,7 +283,7 @@ public partial class Vehicle
 
     private bool _isSirenActive;
 
-    public int TrailerId
+    public int? TrailerId
     {
         get => _trailerId;
         set
@@ -293,6 +293,6 @@ public partial class Vehicle
         }
     }
 
-    private int _trailerId = -1;
+    private int? _trailerId;
 
 }

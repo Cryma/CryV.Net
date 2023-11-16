@@ -23,9 +23,9 @@ public partial class LocalPlayer : IHostedService
         set => LocalPlayerHelper.LocalId = value;
     }
 
-    private CancellationTokenSource _cancellationTokenSource;
+    private CancellationTokenSource? _cancellationTokenSource;
 
-    private PlayerUpdatePayload _lastPlayerPayload;
+    private PlayerUpdatePayload? _lastPlayerPayload;
 
     private readonly IEventAggregator _eventAggregator;
     private readonly INetworkManager _networkManager;
@@ -86,7 +86,7 @@ public partial class LocalPlayer : IHostedService
 
     private async Task Sync()
     {
-        while (_cancellationTokenSource.IsCancellationRequested == false)
+        while (_cancellationTokenSource?.IsCancellationRequested == false)
         {
             await Task.Delay(TimeSpan.FromMilliseconds(50), _cancellationTokenSource.Token);
 
@@ -125,7 +125,7 @@ public partial class LocalPlayer : IHostedService
         _networkManager.Send(transformPayload, DeliveryMethod.Unreliable);
     }
 
-    private int GetDesiredVehicleId()
+    private int? GetDesiredVehicleId()
     {
         var ped = Elements.LocalPlayer.Character;
 
@@ -167,6 +167,6 @@ public partial class LocalPlayer : IHostedService
 
         LocalPlayerHelper.SetVehicle(null);
 
-        return -1;
+        return null;
     }
 }

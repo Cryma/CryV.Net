@@ -12,7 +12,7 @@ namespace CryV.Net.Client.Console;
 public partial class GameConsole
 {
 
-    private NativeHelper.NativeTick _syncedEntitiesCallback;
+    private NativeHelper.NativeTick? _syncedEntitiesCallback;
 
     private void CommandOutputText(GameConsole gameConsole, params string[] arguments)
     {
@@ -185,8 +185,7 @@ public partial class GameConsole
         var vehicle = LocalPlayer.Character.GetVehiclePedIsIn();
 
         var trailer = vehicle.GetTrailer();
-
-        if (trailer == null)
+        if (trailer is null)
         {
             PrintLine("There is no trailer attached.");
 

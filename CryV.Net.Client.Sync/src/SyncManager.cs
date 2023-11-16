@@ -20,9 +20,9 @@ public class SyncManager : ISyncManager
 {
 
 
-    private readonly List<IClientVehicle> _syncVehicles = new();
+    private readonly List<IClientVehicle> _syncVehicles = [];
 
-    private IVehicleManager _vehicleManager;
+    private IVehicleManager? _vehicleManager;
     private readonly IEventAggregator _eventAggregator;
     private readonly INetworkManager _networkManager;
     private readonly ILogger _logger;
@@ -64,7 +64,7 @@ public class SyncManager : ISyncManager
 
     private Task OnSyncAdd(NetworkEvent<AddSyncPayload> obj)
     {
-        var vehicle = _vehicleManager.GetVehicle(obj.Payload.EntityId);
+        var vehicle = _vehicleManager!.GetVehicle(obj.Payload.EntityId);
 
         if (vehicle == null)
         {
@@ -87,8 +87,7 @@ public class SyncManager : ISyncManager
 
     private Task OnSyncRemove(NetworkEvent<RemoveSyncPayload> obj)
     {
-        var vehicle = _vehicleManager.GetVehicle(obj.Payload.EntityId);
-
+        var vehicle = _vehicleManager!.GetVehicle(obj.Payload.EntityId) ?? throw new InvalidOperationException("Could not get vehicle to remove sync for from NetworkManager!");
         if (_syncVehicles.Contains(vehicle) == false)
         {
             _logger.LogInformation("Tried to remove vehicle {VehicleId} from sync list that is not in it!", vehicle.Id);
@@ -146,11 +145,11 @@ public class SyncManager : ISyncManager
         var roofState = nativeVehicle.GetConvertibleRoofState();
         var siren = nativeVehicle.Siren;
 
-        var trailerId = -1;
+        int? trailerId = null;
         var nativeTrailer = nativeVehicle.GetTrailer();
-        if (nativeTrailer != null)
+        if (nativeTrailer is not null)
         {
-            var trailer = _vehicleManager.GetVehicle(nativeTrailer);
+            var trailer = _vehicleManager!.GetVehicle(nativeTrailer);
             if (trailer != null)
             {
                 trailerId = trailer.Id;

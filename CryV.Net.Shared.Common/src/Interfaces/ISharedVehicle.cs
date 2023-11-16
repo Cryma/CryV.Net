@@ -5,7 +5,7 @@ namespace CryV.Net.Shared.Common.Interfaces;
 public interface ISharedVehicle : ISharedEntity
 {
     float EngineHealth { get; set; }
-    string NumberPlate { get; set; }
+    string? NumberPlate { get; set; }
     bool EngineState { get; set; }
     byte CurrentGear { get; set; }
     float CurrentRPM { get; set; }

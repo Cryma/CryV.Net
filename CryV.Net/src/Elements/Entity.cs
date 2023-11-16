@@ -77,10 +77,8 @@ public abstract class Entity
 
     public bool IsEntityPlayingAnim(string animDict, string animName, int taskFlag)
     {
-        using (var converter = new StringConverter())
-        {
-            return CryVNative.Native_Entity_IsEntityPlayingAnim(CryVNative.Plugin, Handle, converter.StringToPointer(animDict), converter.StringToPointer(animName), taskFlag);
-        }
+        using var converter = new StringConverter();
+        return CryVNative.Native_Entity_IsEntityPlayingAnim(CryVNative.Plugin, Handle, converter.StringToPointer(animDict), converter.StringToPointer(animName), taskFlag);
     }
 
     public bool IsEntityDead()
@@ -115,7 +113,7 @@ public abstract class Entity
         Handle = 0;
     }
 
-    protected bool Equals(Entity other)
+    protected bool Equals(Entity? other)
     {
         if (ReferenceEquals(other, null))
         {
@@ -125,7 +123,7 @@ public abstract class Entity
         return _handle == other._handle;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

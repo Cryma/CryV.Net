@@ -8,8 +8,8 @@ public static class NativeHelper
     public delegate void NativeTick(float deltaTime);
     public delegate void KeyboardTick(ConsoleKey key, char character, bool isPressed);
 
-    public static event NativeTick OnNativeTick;
-    public static event KeyboardTick OnKeyboardTick;
+    public static event NativeTick? OnNativeTick;
+    public static event KeyboardTick? OnKeyboardTick;
 
     private static DateTime _lastTick = DateTime.UtcNow;
 

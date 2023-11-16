@@ -8,6 +8,7 @@
     <StartupObject />
     <Configurations>Debug;Release;PedMirror</Configurations>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

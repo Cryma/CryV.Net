@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using CryV.Net.Elements;
 
 namespace CryV.Net.Client.Players;
@@ -77,6 +76,11 @@ public partial class Player
 
     private void UpdateWeaponOnFoot(bool isNativePedAiming)
     {
+        if (_aimProp is null || _followProp is null)
+        {
+            return;
+        }
+
         if (isNativePedAiming == false || _ticks % 100 == 0)
         {
             if (Speed == 0)
@@ -93,14 +97,14 @@ public partial class Player
 
     private void UpdateAimProp()
     {
-        if (_aimProp == null)
+        if (_aimProp is null)
         {
             _aimProp = new Prop(3120582510, AimTarget);
             _aimProp.SetEntityCollision(false);
             _aimProp.SetEntityAlpha(0);
         }
 
-        if (_aimProp != null && _aimProp.DoesExist())
+        if (_aimProp is not null && _aimProp.DoesExist())
         {
             _aimProp.Position = AimTarget;
         }
@@ -108,14 +112,14 @@ public partial class Player
 
     private void UpdateFollowProp()
     {
-        if (_followProp == null)
+        if (_followProp is null)
         {
             _followProp = new Prop(3120582510, Position + Velocity * 3.0f);
             _followProp.SetEntityCollision(false);
             _followProp.SetEntityAlpha(0);
         }
 
-        if (_followProp != null && _followProp.DoesExist())
+        if (_followProp is not null && _followProp.DoesExist())
         {
             _followProp.Position = Position + Velocity * 3.0f;
         }

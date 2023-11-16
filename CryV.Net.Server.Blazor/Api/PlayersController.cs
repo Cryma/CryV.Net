@@ -19,7 +19,7 @@ namespace CryV.Net.Server.Blazor.Api
 
         // GET api/<PlayersController>/5
         [HttpGet("{id}")]
-        public IServerPlayer Get(int id)
+        public IServerPlayer? Get(int id)
         {
             return _playerManager.GetPlayer(id);
         }

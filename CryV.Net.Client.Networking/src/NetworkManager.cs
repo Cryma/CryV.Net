@@ -22,15 +22,15 @@ public class NetworkManager : INetworkManager
 
     public bool IsConnected => _peer != null && _peer.ConnectionState == ConnectionState.Connected;
 
-    public NetStatistics Statistics => _peer.Statistics;
+    public NetStatistics? Statistics => _peer?.Statistics;
 
-    public IPEndPoint EndPoint => _peer.EndPoint;
+    public IPEndPoint? EndPoint => _peer?.EndPoint;
 
     public int Ping => _peer?.Ping ?? -1;
 
-    private NetPeer _peer;
+    private NetPeer? _peer;
 
-    private CancellationTokenSource _cancellationTokenSource;
+    private CancellationTokenSource? _cancellationTokenSource;
 
     private readonly EventBasedNetListener _listener = new();
     private readonly NetManager _netManager;
@@ -62,13 +62,13 @@ public class NetworkManager : INetworkManager
 
     private void OnNetworkReceive(NetPeer peer, NetPacketReader reader, byte channel, DeliveryMethod deliverymethod)
     {
-        var type = (PayloadType) reader.GetByte();
+        var type = (PayloadType)reader.GetByte();
 
-        var payloadObjectType = PayloadHandler.GetPayloadByType(type);
+        var payloadObjectType = PayloadHandler.GetPayloadByType(type) ?? throw new InvalidOperationException("Could not get payload by type: " + type);
         var payload = PayloadHandler.DeserializePayload(payloadObjectType, reader.GetRemainingBytes());
 
         var eventType = typeof(NetworkEvent<>).MakeGenericType(payloadObjectType);
-        var eventInstance = (IEvent) FormatterServices.GetUninitializedObject(eventType);
+        var eventInstance = (IEvent)FormatterServices.GetUninitializedObject(eventType);
 
         var payloadProperty = eventType.GetProperty("Payload", BindingFlags.Public | BindingFlags.Instance);
         if (payloadProperty == null)
@@ -103,11 +103,11 @@ public class NetworkManager : INetworkManager
             return;
         }
 
-        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource?.Cancel();
 
         _eventAggregator.Publish(new LocalPlayerDisconnectedEvent());
 
-        _peer.Disconnect();
+        _peer?.Disconnect();
         _peer = null;
     }
 
@@ -120,12 +120,17 @@ public class NetworkManager : INetworkManager
 
         var data = PayloadHandler.SerializePayload(payload).Prepend((byte)payload.PayloadType).ToArray();
 
+        if (_peer == null)
+        {
+            throw new InvalidOperationException("Trying to send payload to peer that is null!");
+        }
+
         _peer.Send(data, deliveryMethod);
     }
 
     private async Task Tick()
     {
-        while (_cancellationTokenSource.IsCancellationRequested == false)
+        while (_cancellationTokenSource?.IsCancellationRequested == false)
         {
             try
             {

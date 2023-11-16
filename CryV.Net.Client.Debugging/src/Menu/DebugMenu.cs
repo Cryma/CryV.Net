@@ -91,7 +91,7 @@ public class DebugMenu : IHostedService
             PrintVector(vehicle.Position, "Vehicle Position");
             PrintVector(vehicle.Rotation, "Vehicle Rotation");
 
-            if (trailer != null)
+            if (trailer is not null)
             {
                 _line++;
                 PrintLine("Vehicle Trailer: " + trailer.Handle);
@@ -110,18 +110,18 @@ public class DebugMenu : IHostedService
         {
             _line++;
 
-            PrintLine("Packet loss: " + _networkManager.Statistics.PacketLossPercent + "%");
-            PrintLine("Packet loss total: " + _networkManager.Statistics.PacketLoss);
+            PrintLine("Packet loss: " + _networkManager.Statistics?.PacketLossPercent + "%");
+            PrintLine("Packet loss total: " + _networkManager.Statistics?.PacketLoss);
 
             _line++;
 
-            PrintLine("Bytes received: " + _networkManager.Statistics.BytesReceived);
-            PrintLine("Bytes sent: " + _networkManager.Statistics.BytesSent);
+            PrintLine("Bytes received: " + _networkManager.Statistics?.BytesReceived);
+            PrintLine("Bytes sent: " + _networkManager.Statistics?.BytesSent);
 
             _line++;
 
-            PrintLine("Packets received: " + _networkManager.Statistics.PacketsReceived);
-            PrintLine("Packets sent: " + _networkManager.Statistics.PacketsSent);
+            PrintLine("Packets received: " + _networkManager.Statistics?.PacketsReceived);
+            PrintLine("Packets sent: " + _networkManager.Statistics?.PacketsSent);
         }
 #endif
 

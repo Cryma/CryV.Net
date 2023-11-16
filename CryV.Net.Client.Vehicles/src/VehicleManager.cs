@@ -100,7 +100,7 @@ public class VehicleManager : IVehicleManager
         vehicle.Dispose();
     }
 
-    public IClientVehicle GetVehicle(int vehicleId)
+    public IClientVehicle? GetVehicle(int vehicleId)
     {
         if (_vehicles.TryGetValue(vehicleId, out var vehicle) == false)
         {
@@ -110,7 +110,7 @@ public class VehicleManager : IVehicleManager
         return vehicle;
     }
 
-    public IClientVehicle GetVehicle(Elements.Vehicle vehicle)
+    public IClientVehicle? GetVehicle(Elements.Vehicle vehicle)
     {
         foreach (var veh in _vehicles.Values)
         {

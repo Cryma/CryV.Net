@@ -9,12 +9,10 @@ public static class Gameplay
 
     public static void TerminateAllScriptsWithThisName(string scriptName)
     {
-        using (var converter = new StringConverter())
-        {
-            var namePointer = converter.StringToPointer(scriptName);
+        using var converter = new StringConverter();
+        var namePointer = converter.StringToPointer(scriptName);
 
-            CryVNative.Native_Misc_TerminateAllScriptsWithThisName(CryVNative.Plugin, namePointer);
-        }
+        CryVNative.Native_Misc_TerminateAllScriptsWithThisName(CryVNative.Plugin, namePointer);
     }
 
     public static void UseFreemodeMapBehaviour(bool enabled)

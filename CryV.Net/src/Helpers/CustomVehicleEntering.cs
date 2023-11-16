@@ -31,8 +31,8 @@ public static class CustomVehicleEntering
         }
     }
 
-    private static readonly List<string> _seatBones = new()
-    {
+    private static readonly List<string> _seatBones =
+    [
         "seat_dside_r",
         "seat_dside_r1",
         "seat_dside_r2",
@@ -50,7 +50,7 @@ public static class CustomVehicleEntering
         "seat_pside_r5",
         "seat_pside_r6",
         "seat_pside_r7"
-    };
+    ];
 
     public static void EnterAsDriver()
     {
@@ -60,7 +60,7 @@ public static class CustomVehicleEntering
         }
 
         var vehicle = GetClosestVehicle(LocalPlayer.Character.Position);
-        if (vehicle == null || vehicle.DoesExist() == false || vehicle.EngineHealth < 0 || vehicle.IsVehicleSeatFree(VehicleSeat.Driver) == false)
+        if (vehicle is null || vehicle.DoesExist() == false || vehicle.EngineHealth < 0 || vehicle.IsVehicleSeatFree(VehicleSeat.Driver) == false)
         {
             return;
         }
@@ -76,7 +76,7 @@ public static class CustomVehicleEntering
         }
 
         var vehicle = GetClosestVehicle(LocalPlayer.Character.Position);
-        if (vehicle == null || vehicle.DoesExist() == false || vehicle.EngineHealth < 0)
+        if (vehicle is null || vehicle.DoesExist() == false || vehicle.EngineHealth < 0)
         {
             return;
         }
@@ -170,9 +170,9 @@ public static class CustomVehicleEntering
         }
     }
 
-    private static Vehicle GetClosestVehicle(Vector3 position, float maxDistance = 15.0f)
+    private static Vehicle? GetClosestVehicle(Vector3 position, float maxDistance = 15.0f)
     {
-        Vehicle closestVehicle = null;
+        Vehicle? closestVehicle = null;
         foreach (var vehicleEntity in EntityPool.GetEntities().Where(x => x.GetType() == typeof(Vehicle)))
         {
             var vehicle = (Vehicle) vehicleEntity;

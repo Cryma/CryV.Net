@@ -54,7 +54,7 @@ public partial class Player : IClientPlayer
 
     public bool IsFingerPointing { get; set; }
 
-    public IClientVehicle Vehicle { get; set; }
+    public IClientVehicle? Vehicle { get; set; }
 
     public int Seat { get; set; }
 
@@ -62,19 +62,21 @@ public partial class Player : IClientPlayer
 
     private static float _interpolationFactor = 3.0f;
 
-    private Prop _aimProp;
-    private Prop _followProp;
+    private Prop? _aimProp;
+    private Prop? _followProp;
 
     private int _ticks;
 
     private PlayerUpdatePayload _lastPayload;
 
-    private readonly List<ISubscription> _eventSubscriptions = new();
+    private readonly List<ISubscription> _eventSubscriptions = [];
 
     private readonly IEventAggregator _eventAggregator;
     private readonly IVehicleManager _vehicleManager;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public Player(IEventAggregator eventAggregator, IVehicleManager vehicleManager, PlayerUpdatePayload payload)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
         _eventAggregator = eventAggregator;
         _vehicleManager = vehicleManager;
@@ -96,7 +98,7 @@ public partial class Player : IClientPlayer
             ReadPayload(update.Payload);
 
             return Task.CompletedTask;
-        }/*, x => Task.FromResult(x.Payload.Id == Id)*/));
+        }));
 
         ThreadHelper.RunAsync(() =>
         {
@@ -161,8 +163,7 @@ public partial class Player : IClientPlayer
         if (IsClimbingLadder)
         {
             var animationName = GetLadderClimbingAnimationName();
-
-            if (NativePed.IsEntityPlayingAnim("laddersbase", animationName, 3) == false)
+            if (animationName != null && NativePed.IsEntityPlayingAnim("laddersbase", animationName, 3) == false)
             {
                 NativePed.ClearPedTasks();
                 Streaming.LoadAnimationDictionary("laddersbase");
@@ -306,7 +307,7 @@ public partial class Player : IClientPlayer
         }
     }
 
-    private string GetLadderClimbingAnimationName()
+    private string? GetLadderClimbingAnimationName()
     {
         if (Math.Abs(Velocity.Z) < 0.5)
         {
@@ -333,6 +334,8 @@ public partial class Player : IClientPlayer
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+
         foreach (var subscription in _eventSubscriptions)
         {
             subscription.Dispose();

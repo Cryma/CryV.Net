@@ -7,8 +7,8 @@ namespace CryV.Net.Helpers;
 public static class ThreadHelper
 {
 
-    private static Thread _mainThread;
-    private static NativeTaskScheduler _nativeTaskScheduler;
+    private static Thread? _mainThread;
+    private static NativeTaskScheduler? _nativeTaskScheduler;
 
     internal static void SetMainThread(Thread thread)
     {
@@ -19,6 +19,11 @@ public static class ThreadHelper
 
     public static Task RunAsync(Action action)
     {
+        if (_nativeTaskScheduler == null)
+        {
+            ArgumentNullException.ThrowIfNull(nameof(_nativeTaskScheduler));
+        }
+
         if (Thread.CurrentThread == _mainThread)
         {
             try
@@ -33,11 +38,16 @@ public static class ThreadHelper
             }
         }
 
-        return Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.DenyChildAttach, _nativeTaskScheduler);
+        return Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.DenyChildAttach, _nativeTaskScheduler!);
     }
 
     public static Task<T> RunAsync<T>(Func<T> action)
     {
+        if (_nativeTaskScheduler == null)
+        {
+            ArgumentNullException.ThrowIfNull(nameof(_nativeTaskScheduler));
+        }
+
         if (Thread.CurrentThread == _mainThread)
         {
             try
@@ -50,7 +60,7 @@ public static class ThreadHelper
             }
         }
 
-        return Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.DenyChildAttach, _nativeTaskScheduler);
+        return Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.DenyChildAttach, _nativeTaskScheduler!);
     }
 
     public static void Work()

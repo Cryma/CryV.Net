@@ -21,13 +21,13 @@ public partial class GameConsole : IHostedService
     public bool IsVisible { get; private set; }
 
     private string _input = string.Empty;
-    private readonly List<string> _output = new();
+    private readonly List<string> _output = [];
     private int _outputLines = 5;
     private bool _blinkState;
     private DateTime _lastBlinkUpdate = DateTime.UtcNow;
     private int _cursorIndex;
 
-    private readonly List<string> _inputHistory = new();
+    private readonly List<string> _inputHistory = [];
     private int _currentHistoryIndex = -1;
 
     private const float _backgroundInputHeight = 18.0f;
@@ -63,6 +63,10 @@ public partial class GameConsole : IHostedService
             while (true)
             {
                 var input = System.Console.ReadLine();
+                if (input == null)
+                {
+                    continue;
+                }
 
                 await ThreadHelper.RunAsync(() => HandleCommand(input));
             }

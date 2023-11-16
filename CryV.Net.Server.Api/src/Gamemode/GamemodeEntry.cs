@@ -15,7 +15,7 @@ public class GamemodeEntry
 
     public string BasePath { get; }
 
-    public List<FileEntry> ClientsideFiles = new();
+    public List<FileEntry> ClientsideFiles = [];
 
     public GamemodeEntry(IGamemode gamemodeInstance, string basePath)
     {
@@ -38,18 +38,16 @@ public class GamemodeEntry
         {
             var relativeFilePath = clientFile.Remove(0, filePath.Length + 1);
 
-            using (var sha = SHA256.Create())
+            using var sha = SHA256.Create();
+            var hash = sha.ComputeHash(File.ReadAllBytes(clientFile));
+
+            var stringBuilder = new StringBuilder();
+            foreach (var element in hash)
             {
-                var hash = sha.ComputeHash(File.ReadAllBytes(clientFile));
-
-                var stringBuilder = new StringBuilder();
-                foreach (var element in hash)
-                {
-                    stringBuilder.Append(element.ToString("x2"));
-                }
-
-                ClientsideFiles.Add(new FileEntry(relativeFilePath, stringBuilder.ToString()));
+                stringBuilder.Append(element.ToString("x2"));
             }
+
+            ClientsideFiles.Add(new FileEntry(relativeFilePath, stringBuilder.ToString()));
         }
     }
 

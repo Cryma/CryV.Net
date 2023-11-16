@@ -7,6 +7,7 @@
     <OutputType>Exe</OutputType>
     <StartupObject />
     <Configurations>Debug;Release;PedMirror</Configurations>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PedMirror|AnyCPU'">

@@ -11,7 +11,7 @@ public interface IServerPlayer : ISharedPlayer, IDisposable
     
     ConnectionState ConnectionState { get; set; }
 
-    IServerVehicle Vehicle { get; set; }
+    IServerVehicle? Vehicle { get; set; }
 
     NetPeer Peer { get; }
 

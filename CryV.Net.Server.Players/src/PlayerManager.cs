@@ -84,7 +84,7 @@ public class PlayerManager : IPlayerManager
         _eventAggregator.Publish(new PlayerDisconnectedEvent(player));
     }
 
-    public IServerPlayer GetPlayer(int playerId)
+    public IServerPlayer? GetPlayer(int playerId)
     {
         if (_players.TryGetValue(playerId, out var player) == false)
         {
@@ -94,7 +94,7 @@ public class PlayerManager : IPlayerManager
         return player;
     }
 
-    public IServerPlayer GetPlayer(NetPeer peer)
+    public IServerPlayer? GetPlayer(NetPeer peer)
     {
         foreach (var player in _players.Values)
         {
@@ -109,16 +109,13 @@ public class PlayerManager : IPlayerManager
         return null;
     }
 
-    public ICollection<IServerPlayer> GetPlayers(Func<IServerPlayer, bool> filter = null, bool onlyConnected = true)
+    public ICollection<IServerPlayer> GetPlayers(Func<IServerPlayer, bool>? filter = null, bool onlyConnected = true)
     {
         var onlyConnectedFilter = onlyConnected
             ? new Func<IServerPlayer, bool>(x => x.ConnectionState == ConnectionState.Connected)
             : _ => true;
 
-        if (filter == null)
-        {
-            filter = _ => true;
-        }
+        filter ??= _ => true;
 
         return _players.Values.Where(onlyConnectedFilter).Where(filter).ToList();
     }

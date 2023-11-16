@@ -81,7 +81,7 @@ public class PlayerManager : IPlayerManager
         player.Dispose();
     }
 
-    public IClientPlayer GetPlayer(int playerId)
+    public IClientPlayer? GetPlayer(int playerId)
     {
         if (_players.TryGetValue(playerId, out var player) == false)
         {

@@ -18,14 +18,14 @@ namespace CryV.Net.Server.Api;
 public class GamemodeLoader : IHostedService
 {
 
-    private Script _script;
+    private Script? _script;
 
     private readonly IServiceProvider _serviceProvider;
     private readonly IEventAggregator _eventAggregator;
     private readonly IPlayerManager _playerManager;
     private readonly IVehicleManager _vehicleManager;
 
-    private readonly Dictionary<string, GamemodeEntry> _gamemodes = new();
+    private readonly Dictionary<string, GamemodeEntry> _gamemodes = [];
 
     private readonly DownloadServer _downloadServer;
 
@@ -82,7 +82,7 @@ public class GamemodeLoader : IHostedService
                         continue;
                     }
 
-                    var gamemode = (IGamemode) Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null);
+                    var gamemode = (IGamemode) Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, null, null)!;
 
                     _gamemodes.Add(gamemodeName, new GamemodeEntry(gamemode, potentialGamemode));
                 }

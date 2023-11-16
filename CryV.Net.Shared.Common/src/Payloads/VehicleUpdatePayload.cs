@@ -28,7 +28,7 @@ public class VehicleUpdatePayload : IPayload
     public float EngineHealth { get; set; }
 
     [ProtoMember(6)]
-    public string NumberPlate { get; set; }
+    public string? NumberPlate { get; set; }
 
     [ProtoMember(7)]
     public ulong Model { get; set; }
@@ -67,16 +67,19 @@ public class VehicleUpdatePayload : IPayload
     public int VehicleData { get; set; }
 
     [ProtoMember(19)]
-    public int TrailerId { get; set; }
+    public int? TrailerId { get; set; }
 
+    // Empty construct is needed due to reflection
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public VehicleUpdatePayload()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
     }
 
-    public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, float engineHealth, string numberPlate,
+    public VehicleUpdatePayload(int id, Vector3 position, Vector3 velocity, Vector3 rotation, float engineHealth, string? numberPlate,
         ulong model, bool engineState, byte currentGear, float currentRPM, float clutch, float turbo, float acceleration, float brake, float steeringAngle,
         int colorPrimary, int colorSecondary, bool isHornActive, bool isBurnout, bool roofUp, bool roofLowering, bool roofDown, bool roofRaising, bool siren,
-        int trailerId)
+        int? trailerId)
     {
         Id = id;
         Position = position;

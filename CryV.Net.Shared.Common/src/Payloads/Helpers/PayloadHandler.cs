@@ -19,7 +19,7 @@ public static class PayloadHandler
 
         foreach (var payload in payloads)
         {
-            var dummyPayload = (IPayload) Activator.CreateInstance(payload);
+            var dummyPayload = (IPayload) Activator.CreateInstance(payload)!;
 
             _payloadMapping.Add(dummyPayload.PayloadType, payload);
         }
@@ -32,23 +32,19 @@ public static class PayloadHandler
 
     public static IPayload DeserializePayload(Type type, byte[] data)
     {
-        using (var stream = new MemoryStream(data))
-        {
-            return (IPayload) Serializer.Deserialize(type, stream);
-        }
+        using var stream = new MemoryStream(data);
+        return (IPayload)Serializer.Deserialize(type, stream);
     }
 
     public static byte[] SerializePayload<TPayload>(TPayload payload) where TPayload : IPayload
     {
-        using (var stream = new MemoryStream())
-        {
-            Serializer.Serialize(stream, payload);
+        using var stream = new MemoryStream();
+        Serializer.Serialize(stream, payload);
 
-            return stream.ToArray();
-        }
+        return stream.ToArray();
     }
 
-    public static Type GetPayloadByType(PayloadType payloadType)
+    public static Type? GetPayloadByType(PayloadType payloadType)
     {
         if (_payloadMapping.TryGetValue(payloadType, out var type) == false)
         {

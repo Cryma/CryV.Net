@@ -67,7 +67,7 @@ public class NetworkManager : INetworkManager
     {
         var type = (PayloadType) reader.GetByte();
 
-        var payloadObjectType = PayloadHandler.GetPayloadByType(type);
+        var payloadObjectType = PayloadHandler.GetPayloadByType(type) ?? throw new InvalidOperationException("Could not get payload by type: " + type);
         var payload = PayloadHandler.DeserializePayload(payloadObjectType, reader.GetRemainingBytes());
 
         var eventType = typeof(NetworkEvent<>).MakeGenericType(payloadObjectType);

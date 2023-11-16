@@ -8,10 +8,6 @@ public class PlayerDisconnectedEvent : IEvent
     
     public IServerPlayer Player { get; set; }
 
-    public PlayerDisconnectedEvent()
-    {
-    }
-
     public PlayerDisconnectedEvent(IServerPlayer player)
     {
         Player = player;

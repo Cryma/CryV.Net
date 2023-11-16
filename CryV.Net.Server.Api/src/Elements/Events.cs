@@ -10,8 +10,8 @@ namespace CryV.Net.Server.Api.Elements;
 public class Events : IEvents
 {
 
-    public event EventHandler<IServerPlayer> OnPlayerConnected;
-    public event EventHandler<IServerPlayer> OnPlayerDisconnected;
+    public event EventHandler<IServerPlayer>? OnPlayerConnected;
+    public event EventHandler<IServerPlayer>? OnPlayerDisconnected;
 
     private readonly IEventAggregator _eventAggregator;
     

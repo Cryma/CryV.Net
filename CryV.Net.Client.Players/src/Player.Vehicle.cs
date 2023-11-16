@@ -75,9 +75,9 @@ public partial class Player
 
         IsInVehicle = (payload.PedData & (int) PedData.IsInVehicle) > 0;
 
-        if (payload.VehicleId != -1)
+        if (payload.VehicleId != null)
         {
-            Vehicle = _vehicleManager.GetVehicle(payload.VehicleId);
+            Vehicle = _vehicleManager.GetVehicle(payload.VehicleId.Value);
         }
 
         IsLeavingVehicle = (payload.PedData & (int) PedData.IsLeavingVehicle) > 0;

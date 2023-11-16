@@ -11,27 +11,23 @@ public static class Utility
 
     internal static void Log(string message)
     {
-        using (var converter = new StringConverter())
-        {
-            var messagePointer = converter.StringToPointer(message);
+        using var converter = new StringConverter();
+        var messagePointer = converter.StringToPointer(message);
 
-            CryVNative.Native_Utility_Log(CryVNative.Plugin, messagePointer);
-        }
+        CryVNative.Native_Utility_Log(CryVNative.Plugin, messagePointer);
     }
 
     public static void Wait(int ms)
     {
-        CryVNative.Native_Misc_Wait(CryVNative.Plugin, 0);
+        CryVNative.Native_Misc_Wait(CryVNative.Plugin, ms);
     }
 
     public static ulong GetHashKey(string name)
     {
-        using (var converter = new StringConverter())
-        {
-            var namePointer = converter.StringToPointer(name);
+        using var converter = new StringConverter();
+        var namePointer = converter.StringToPointer(name);
 
-            return CryVNative.Native_Misc_GetHashKey(CryVNative.Plugin, namePointer);
-        }
+        return CryVNative.Native_Misc_GetHashKey(CryVNative.Plugin, namePointer);
     }
 
     public static void FreeObject(IntPtr pointer)
@@ -51,7 +47,7 @@ public static class Utility
 
     public static string GetInstallDirectory()
     {
-        return PluginWrapper.GetInstallDirectory();
+        return PluginWrapper.GetInstallDirectory() ?? throw new InvalidOperationException("Install directory is null!");
     }
 
     public static uint Joaat(string data)

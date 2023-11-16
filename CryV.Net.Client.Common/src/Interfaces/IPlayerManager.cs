@@ -8,6 +8,6 @@ public interface IPlayerManager : IHostedService
 
     void AddPlayer(PlayerUpdatePayload payload);
     void RemovePlayer(int playerId);
-    IClientPlayer GetPlayer(int playerId);
+    IClientPlayer? GetPlayer(int playerId);
 
 }

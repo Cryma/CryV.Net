@@ -8,9 +8,9 @@ namespace CryV.Net.Helpers;
 
 internal class StringConverter : IDisposable
 {
-    private readonly List<IntPtr> _convertedStrings = new();
+    private readonly List<IntPtr> _convertedStrings = [];
 
-    public static string PointerToString(IntPtr pointer, bool freePointer = true)
+    public static string? PointerToString(IntPtr pointer, bool freePointer = true)
     {
         if (pointer == IntPtr.Zero)
         {
@@ -37,11 +37,6 @@ internal class StringConverter : IDisposable
 
     public static IntPtr StringToPointerUnsafe(string text)
     {
-        if (text == null)
-        {
-            return IntPtr.Zero;
-        }
-
         var bufferSize = Encoding.UTF8.GetByteCount(text) + 1;
 
         var buffer = new byte[bufferSize];
@@ -56,11 +51,6 @@ internal class StringConverter : IDisposable
 
     public IntPtr StringToPointer(string text)
     {
-        if (text == null)
-        {
-            return IntPtr.Zero;
-        }
-
         var pointer = StringToPointerUnsafe(text);
 
         _convertedStrings.Add(pointer);

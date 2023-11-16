@@ -18,12 +18,10 @@ public static class World
             return;
         }
 
-        using (var converter = new StringConverter())
-        {
-            var weatherPointer = converter.StringToPointer(weatherName);
+        using var converter = new StringConverter();
+        var weatherPointer = converter.StringToPointer(weatherName);
 
-            CryVNative.Native_Misc_SetWeatherTypeNow(CryVNative.Plugin, weatherPointer);
-        }
+        CryVNative.Native_Misc_SetWeatherTypeNow(CryVNative.Plugin, weatherPointer);
     }
 
     public static List<Ped> GetAllPeds(bool includeSelf = true)
@@ -138,7 +136,7 @@ public static class World
         CryVNative.Native_Ped_SetScenarioPedDensityMultiplierThisFrame(CryVNative.Plugin, p1, p2);
     }
 
-    private static string ConvertWeatherTypeToName(WeatherType weatherType)
+    private static string? ConvertWeatherTypeToName(WeatherType weatherType)
     {
         if(Enum.IsDefined(typeof(WeatherType), weatherType) == false)
         {

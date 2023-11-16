@@ -62,17 +62,20 @@ public class Vehicle : Entity
         set => CryVNative.Native_Vehicle_SetVehicleUndriveable(CryVNative.Plugin, Handle, value == false);
     }
 
-    public string NumberPlate
+    public string? NumberPlate
     {
         get => StringConverter.PointerToString(CryVNative.Native_Vehicle_GetVehicleNumberPlateText(CryVNative.Plugin, Handle), false);
         set
         {
-            using (var converter = new StringConverter())
+            if (value == null)
             {
-                var stringPointer = converter.StringToPointer(value);
-
-                CryVNative.Native_Vehicle_SetVehicleNumberPlateText(CryVNative.Plugin, Handle, stringPointer);
+                return;
             }
+
+            using var converter = new StringConverter();
+            var stringPointer = converter.StringToPointer(value);
+
+            CryVNative.Native_Vehicle_SetVehicleNumberPlateText(CryVNative.Plugin, Handle, stringPointer);
         }
     }
 
@@ -114,7 +117,7 @@ public class Vehicle : Entity
     {
     }
 
-    public Vehicle(ulong model, Vector3 position, Vector3 rotation, Vector3 velocity, int colorPrimary, int colorSecondary, string numberPlate) : base(0)
+    public Vehicle(ulong model, Vector3 position, Vector3 rotation, Vector3 velocity, int colorPrimary, int colorSecondary, string? numberPlate) : base(0)
     {
         CreateVehicle(model, position, rotation);
         SetVehicleColours(colorPrimary, colorSecondary);
@@ -216,7 +219,7 @@ public class Vehicle : Entity
         return StructConverter.PointerToStruct<Vector3>(CryVNative.Native_Entity_GetWorldPositionOfEntityBone(CryVNative.Plugin, Handle, boneIndex));
     }
 
-    public Vehicle GetTrailer()
+    public Vehicle? GetTrailer()
     {
         var vehicle = 0;
 
@@ -257,12 +260,10 @@ public class Vehicle : Entity
 
     public int GetBoneIndexByName(string boneName)
     {
-        using (var converter = new StringConverter())
-        {
-            var bonePointer = converter.StringToPointer(boneName);
+        using var converter = new StringConverter();
+        var bonePointer = converter.StringToPointer(boneName);
 
-            return CryVNative.Native_Entity_GetEntityBoneIndexByName(CryVNative.Plugin, Handle, bonePointer);
-        }
+        return CryVNative.Native_Entity_GetEntityBoneIndexByName(CryVNative.Plugin, Handle, bonePointer);
     }
 
     private void CreateVehicle(ulong model, Vector3 position, Vector3 rotation)

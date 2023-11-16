@@ -15,8 +15,8 @@ namespace CryV.Net.Client.Cleanup;
 public class Cleanup : IHostedService
 {
 
-    private static readonly List<string> _gameplayScripts = new()
-    {
+    private static readonly List<string> _gameplayScripts =
+    [
         "abigail1",
         "abigail2",
         "achievement_controller",
@@ -765,7 +765,7 @@ public class Cleanup : IHostedService
         "yoga",
         "replay_controller",
         "selector"
-    };
+    ];
 
     private readonly ILogger _logger;
 

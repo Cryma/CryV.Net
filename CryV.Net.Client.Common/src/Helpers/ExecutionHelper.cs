@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace CryV.Net.Client.Common.Helpers;
@@ -8,9 +7,9 @@ public static class ExecutionHelper
 {
 
     //private static readonly ConcurrentDictionary<string, Action> _executions = new ConcurrentDictionary<string, Action>();
-    private static readonly List<string> _executions = new();
+    private static readonly List<string> _executions = [];
 
-    public static void Execute(string key, bool state, Action onBegin = null, Action onTick = null, Action onReset = null)
+    public static void Execute(string key, bool state, Action? onBegin = null, Action? onTick = null, Action? onReset = null)
     {
         if (state)
         {
@@ -18,13 +17,13 @@ public static class ExecutionHelper
             {
                 if (_executions.Contains(key) == false)
                 {
-                    onBegin();
+                    onBegin?.Invoke();
 
                     _executions.Add(key);
                 }
             }
 
-            onTick();
+            onTick?.Invoke();
 
             return;
         }
@@ -33,12 +32,7 @@ public static class ExecutionHelper
         {
             if (_executions.Remove(key))
             {
-                if (onReset == null)
-                {
-                    return;
-                }
-
-                onReset();
+                onReset?.Invoke();
             }
         }
     }

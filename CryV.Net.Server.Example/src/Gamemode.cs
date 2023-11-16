@@ -29,12 +29,12 @@ public class Gamemode : IGamemode
         _logger.LogInformation("Started example gamemode!");
     }
 
-    private void OnPlayerConnected(object sender, IServerPlayer e)
+    private void OnPlayerConnected(object? sender, IServerPlayer e)
     {
         _logger.LogInformation("Player {PlayerId} connected!", e.Id);
     }
 
-    private void OnPlayerDisconnected(object sender, IServerPlayer e)
+    private void OnPlayerDisconnected(object? sender, IServerPlayer e)
     {
         _logger.LogInformation("Player {PlayerId} disconnected!", e.Id);
     }

@@ -176,13 +176,11 @@ public class Ped : Entity
 
     public void TaskMoveNetwork(string task, float multiplier, bool p3, string animDict, int flags)
     {
-        using (var converter = new StringConverter())
-        {
-            var taskPointer = converter.StringToPointer(task);
-            var animDictPointer = converter.StringToPointer(animDict);
+        using var converter = new StringConverter();
+        var taskPointer = converter.StringToPointer(task);
+        var animDictPointer = converter.StringToPointer(animDict);
 
-            CryVNative.Native_Brain_TaskMoveNetwork(CryVNative.Plugin, Handle, taskPointer, multiplier, p3, animDictPointer, flags);
-        }
+        CryVNative.Native_Brain_TaskMoveNetwork(CryVNative.Plugin, Handle, taskPointer, multiplier, p3, animDictPointer, flags);
     }
 
     public void TaskAimGunAtCoord(Vector3 coordinates, int time, bool p5, bool p6)
@@ -299,11 +297,9 @@ public class Ped : Entity
     public void TaskPlayAnim(string animDictionary, string animationName, float speed, float speedMultiplier, int duration, uint flag, float playbackRate,
         bool lockX, bool lockY, bool lockZ)
     {
-        using (var converter = new StringConverter())
-        {
-            CryVNative.Native_Brain_TaskPlayAnim(CryVNative.Plugin, Handle, converter.StringToPointer(animDictionary), converter.StringToPointer(animationName),
-                speed, speedMultiplier, duration, (int) flag, playbackRate, lockX, lockY, lockZ);
-        }
+        using var converter = new StringConverter();
+        CryVNative.Native_Brain_TaskPlayAnim(CryVNative.Plugin, Handle, converter.StringToPointer(animDictionary), converter.StringToPointer(animationName),
+            speed, speedMultiplier, duration, (int)flag, playbackRate, lockX, lockY, lockZ);
     }
 
     public void ClearPedTasksImmediately()
@@ -367,32 +363,26 @@ public class Ped : Entity
 
     public void _0xD5BB4025AE449A4E(string p1, float p2)
     {
-        using (var converter = new StringConverter())
-        {
-            var p1Pointer = converter.StringToPointer(p1);
+        using var converter = new StringConverter();
+        var p1Pointer = converter.StringToPointer(p1);
 
-            CryVNative.Native_Brain_SetTaskPropertyFloat(CryVNative.Plugin, Handle, p1Pointer, p2);
-        }
+        CryVNative.Native_Brain_SetTaskPropertyFloat(CryVNative.Plugin, Handle, p1Pointer, p2);
     }
 
     public void _0xB0A6CFD2C69C1088(string p1, bool p2)
     {
-        using (var converter = new StringConverter())
-        {
-            var p1Pointer = converter.StringToPointer(p1);
+        using var converter = new StringConverter();
+        var p1Pointer = converter.StringToPointer(p1);
 
-            CryVNative.Native_Brain_SetTaskPropertyBool(CryVNative.Plugin, Handle, p1Pointer, p2);
-        }
+        CryVNative.Native_Brain_SetTaskPropertyBool(CryVNative.Plugin, Handle, p1Pointer, p2);
     }
 
     public void _0xD01015C7316AE176(string p1)
     {
-        using (var converter = new StringConverter())
-        {
-            var p1Pointer = converter.StringToPointer(p1);
+        using var converter = new StringConverter();
+        var p1Pointer = converter.StringToPointer(p1);
 
-            CryVNative.Native_Brain__0xD01015C7316AE176(CryVNative.Plugin, Handle, p1Pointer);
-        }
+        CryVNative.Native_Brain__0xD01015C7316AE176(CryVNative.Plugin, Handle, p1Pointer);
     }
 
     public bool MemoryIsPedInVehicle()

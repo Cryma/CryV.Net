@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Numerics;
 using CryV.Net.Server.Common.Events;
 using CryV.Net.Server.Common.Interfaces;
@@ -56,7 +57,7 @@ public class Player : IServerPlayer
 
     public bool IsFingerPointing { get; set; }
 
-    public IServerVehicle Vehicle { get; set; }
+    public IServerVehicle? Vehicle { get; set; }
 
     public NetPeer Peer { get; }
 
@@ -89,7 +90,7 @@ public class Player : IServerPlayer
     public PlayerUpdatePayload GetPayload()
     {
         return new PlayerUpdatePayload(Id, Position, Velocity, Rotation.Z, FingerPointingPitch, FingerPointingHeading, AimTarget, Speed, Model,
-            WeaponModel, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll, IsAiming, IsEnteringVehicle, IsInVehicle, Vehicle?.Id ?? -1, Seat,
+            WeaponModel, IsJumping, IsClimbing, IsClimbingLadder, IsRagdoll, IsAiming, IsEnteringVehicle, IsInVehicle, Vehicle?.Id, Seat,
             IsLeavingVehicle, IsFingerPointing);
     }
 
@@ -106,9 +107,9 @@ public class Player : IServerPlayer
         Speed = payload.Speed;
         Seat = payload.Seat;
 
-        if (payload.VehicleId != -1)
+        if (payload.VehicleId != null)
         {
-            Vehicle = _vehicleManager.GetVehicle(payload.VehicleId);
+            Vehicle = _vehicleManager.GetVehicle(payload.VehicleId.Value) ?? throw new InvalidOperationException("Could not get vehicle with id: " + payload.VehicleId.Value);
         }
 
         IsJumping = (payload.PedData & (int) PedData.IsJumping) > 0;
@@ -119,6 +120,11 @@ public class Player : IServerPlayer
         var isEnteringVehicle = (payload.PedData & (int) PedData.IsEnteringVehicle) > 0;
         if (isEnteringVehicle && IsEnteringVehicle == false)
         {
+            if (Vehicle == null)
+            {
+                throw new InvalidOperationException("Player is trying to enter vehicle that is null!");
+            }
+
             _eventAggregator.Publish(new PlayerEntersVehicleEvent(this, Vehicle, (VehicleSeat) Seat));
         }
 
